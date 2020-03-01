@@ -1,0 +1,7 @@
+{
+    "name": "nvd.codes",
+    "private": true,
+    "workspaces": [
+        "packages/nvd-codes"
+    ]
+}
