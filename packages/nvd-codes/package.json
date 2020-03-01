@@ -1,0 +1,68 @@
+{
+  "name": "nvd-codes",
+  "private": true,
+  "description": "My personal blog",
+  "version": "0.1.0",
+  "author": "Nick Van Dyck",
+  "dependencies": {
+    "babel-plugin-styled-components": "1.10.7",
+    "gatsby": "2.19.23",
+    "gatsby-image": "2.2.41",
+    "gatsby-plugin-feed": "2.3.27",
+    "gatsby-plugin-google-analytics": "2.1.36",
+    "gatsby-plugin-manifest": "2.2.42",
+    "gatsby-plugin-offline": "3.0.35",
+    "gatsby-plugin-react-helmet": "3.1.22",
+    "gatsby-plugin-sharp": "2.4.5",
+    "gatsby-plugin-styled-components": "3.1.19",
+    "gatsby-plugin-typescript": "2.1.27",
+    "gatsby-remark-copy-linked-files": "2.1.37",
+    "gatsby-remark-images": "3.1.44",
+    "gatsby-remark-prismjs": "3.3.31",
+    "gatsby-remark-responsive-iframe": "2.2.32",
+    "gatsby-remark-smartypants": "2.1.21",
+    "gatsby-source-filesystem": "2.1.48",
+    "gatsby-transformer-remark": "2.6.53",
+    "gatsby-transformer-sharp": "2.3.16",
+    "prismjs": "1.19.0",
+    "react": "16.13.0",
+    "react-dom": "16.13.0",
+    "react-helmet": "5.2.1",
+    "styled-components": "5.0.1",
+    "timeago.js": "4.0.2"
+  },
+  "devDependencies": {
+    "@nvd/tsconfig": "1.0.0",
+    "@types/react-helmet": "5.0.15",
+    "@types/styled-components": "5.0.1",
+    "@typescript-eslint/eslint-plugin": "2.21.0",
+    "@typescript-eslint/parser": "2.21.0",
+    "eslint": "6.8.0",
+    "eslint-config-prettier": "6.10.0",
+    "eslint-plugin-import": "2.20.1",
+    "eslint-plugin-prettier": "3.1.2",
+    "eslint-plugin-react": "7.18.3",
+    "eslint-plugin-react-hooks": "2.5.0",
+    "grommet-icons": "4.4.0",
+    "prettier": "1.19.1",
+    "ts-node": "8.6.2",
+    "typescript": "3.8.3"
+  },
+  "license": "MIT",
+  "scripts": {
+    "build": "gatsby build",
+    "develop": "gatsby develop",
+    "format": "prettier --write \"**/*.{js,jsx,json,md}\"",
+    "start": "npm run develop",
+    "serve": "gatsby serve",
+    "clean": "gatsby clean",
+    "test": "echo \"Write tests! -> https://gatsby.dev/unit-testing\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/gatsbyjs/gatsby-starter-default"
+  },
+  "bugs": {
+    "url": "https://github.com/gatsbyjs/gatsby/issues"
+  }
+}
