@@ -1,0 +1,51 @@
+version: "3.4"
+services:
+
+  ui:
+    build:
+      dockerfile: Dockerfile
+      context: packages/nvd-codes
+    command: yarn develop --host=0.0.0.0
+    environment:
+      GATSBY_PROJECT_API: http://localhost:7000
+      CONTENT_FOLDER: /content
+    volumes:
+      - ./content:/content
+      - ./packages/nvd-codes:/app
+      - /app/node_modules
+    ports:
+      - "5000:8000"
+
+  proxy:
+    build:
+      dockerfile: ../docker-func/Dockerfile
+      context: packages/proxy
+    command: func start --cors http://localhost:5000
+    environment:
+      AZURE_FUNCTION_PROXY_DISABLE_LOCAL_CALL: "true"
+      AzureWebJobsStorage: "UseDevelopmentStorage=true"
+      FUNCTIONS_WORKER_RUNTIME: dotnet
+      PROJECT_API: http://project:7071
+    volumes:
+      - ./packages/proxy:/app
+    ports:
+      - "7000:7071"
+
+  project:
+    build:
+      dockerfile: ../../../docker-func/Dockerfile
+      context: packages/projects-api/src/ProjectsApi
+    command: func start --dotnet
+    environment:
+      AzureWebJobsStorage: "UseDevelopmentStorage=true"
+      FUNCTIONS_WORKER_RUNTIME: dotnet
+    secrets:
+      - GITHUB_TOKEN
+    volumes:
+      - ./packages/projects-api/src/ProjectsApi:/app
+    ports:
+      - "7001:7071"
+
+secrets:
+  GITHUB_TOKEN:
+    file: .secrets/github_token

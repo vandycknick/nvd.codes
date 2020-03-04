@@ -1,6 +1,8 @@
 /* eslint-disable @typescript-eslint/camelcase */
 require("ts-node").register({ files: true })
 
+const CONTENT_FOLDER = process.env.CONTENT_FOLDER
+
 module.exports = {
   siteMetadata: {
     title: `Nick's Blog`,
@@ -32,14 +34,14 @@ module.exports = {
     {
       resolve: `gatsby-source-filesystem`,
       options: {
-        path: `${__dirname}/../../content/posts`,
+        path: `${CONTENT_FOLDER}/posts`,
         name: `posts`,
       },
     },
     {
       resolve: `gatsby-source-filesystem`,
       options: {
-        path: `${__dirname}/../../content/assets`,
+        path: `${CONTENT_FOLDER}/assets`,
         name: `assets`,
       },
     },

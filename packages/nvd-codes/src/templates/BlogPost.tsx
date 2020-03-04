@@ -10,7 +10,8 @@ import styled from "styled-components"
 import { Calendar, Edit } from "grommet-icons"
 import Time from "../components/Common/Time"
 
-import "../styles/prism-theme.css"
+import "./prism-theme.css"
+import { Tags, Tag } from "../components/Bulma/Tag"
 
 const pageQuery = graphql`
   query BlogPostBySlug($slug: String!) {
@@ -83,6 +84,14 @@ const PostContents = styled.section.attrs({ className: "content" })`
   }
 `
 
+const ArticleFooter = styled.footer`
+    margin-top: 40px;
+    border-top: 1px solid #ebebeb;
+    padding: 40px 0 0;
+    display flex;
+    justify-content: center;
+`
+
 interface BlogPostProps {
   data: any
   pageContext: any
@@ -109,7 +118,15 @@ const BlogPost: React.FC<BlogPostProps> = ({ data, pageContext }) => {
           </BlogPostSubtitle>
         </header>
         <PostContents dangerouslySetInnerHTML={{ __html: post.html }} />
-        {/* <ArticleFooter tags={post.node.frontmatter.categories} /> */}
+        <ArticleFooter>
+          <Tags size="normal">
+            {post.frontmatter.categories.map((tag: any) => (
+              <Tag color="dark" key={tag}>
+                {tag}
+              </Tag>
+            ))}
+          </Tags>
+        </ArticleFooter>
       </Section>
       <nav>
         <ul

@@ -1,9 +1,16 @@
 ROOT	:= $(shell pwd)
 
+INFRA	:= $(ROOT)/packages/nvd-codes-infra
+
+setup:
+
+
 dev:
+	CONTENT_FOLDER=$(shell pwd)/content \
 	yarn --cwd packages/nvd-codes develop
 
 build:
+	CONTENT_FOLDER=$(shell pwd)/content \
 	yarn --cwd packages/nvd-codes build
 
 serve:
@@ -12,18 +19,23 @@ serve:
 clean:
 	yarn --cwd packages/nvd-codes clean
 
+infra-up:
+	cd $(INFRA) && \
+		pipenv run \
+			pulumi up --yes --suppress-outputs
+
 infra-preview:
-	cd packages/infra && \
+	cd $(INFRA) && \
 		pipenv run \
 			pulumi preview
 
 infra-output:
-	cd packages/infra && \
+	cd $(INFRA) && \
 		pipenv run \
 			pulumi stack output --json
 
 deploy: build
-	cd packages/infra && \
+	cd $(INFRA) && \
 		pipenv run \
 			pulumi stack output --json | \
 			jq -r '.www_storage_connection_string' | \

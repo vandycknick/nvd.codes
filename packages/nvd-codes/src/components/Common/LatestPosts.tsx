@@ -7,6 +7,7 @@ import Paragraph from "../Bulma/Paragraph"
 // import { Tag } from "../Bulma/Tag"
 import { Subtitle, Title } from "../Bulma/Title"
 import { Link } from "gatsby"
+import { Tag } from "../Bulma/Tag"
 
 type LatestPostsProps = {
   posts: any[]
@@ -35,7 +36,7 @@ const LatestsPostsList: React.FC<LatestPostsProps> = ({ posts }) => (
         >
           <Link to={l.node.fields.slug}>{l.node.frontmatter.title}</Link>
           <Fragment>
-            {/* {index === 0 && (
+            {index === 0 && (
               <Tag
                 size="small"
                 color="primary"
@@ -45,7 +46,7 @@ const LatestsPostsList: React.FC<LatestPostsProps> = ({ posts }) => (
               >
                 Latest
               </Tag>
-            )} */}
+            )}
           </Fragment>
         </Subtitle>
         <Paragraph
