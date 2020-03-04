@@ -1,0 +1,17 @@
+version: "3.4"
+services:
+
+  ui:
+    build:
+      dockerfile: Dockerfile
+      context: packages/nvd-codes
+    command: yarn develop --host=0.0.0.0
+    environment:
+      CONTENT_FOLDER: /content
+      GATSBY_PROJECT_API: https://api.nvd.codes
+    volumes:
+      - ./content:/content
+      - ./packages/nvd-codes:/app
+      - /app/node_modules
+    ports:
+      - "5000:8000"

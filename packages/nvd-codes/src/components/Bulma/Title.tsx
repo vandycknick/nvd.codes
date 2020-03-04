@@ -1,18 +1,18 @@
 import React from "react"
-import styled, { css, CSSProp, StyledComponent } from "styled-components"
+import styled, { css, StyledComponent } from "styled-components"
 
 type TitleProps = {
   size?: "1" | "2" | "3" | "4" | "5" | "6"
   spaced?: boolean
   shadow?: "green" | "red" | "yellow" | "purple"
   as?: keyof JSX.IntrinsicElements | React.ComponentType<any>
-  css?: CSSProp
+  className?: string
 }
 
 type SubtitleProps = {
   size?: "1" | "2" | "3" | "4" | "5" | "6"
   as?: keyof JSX.IntrinsicElements | React.ComponentType<any>
-  css?: CSSProp
+  className?: string
 }
 
 const titleAttrs = (props: TitleProps): { className: string } => {

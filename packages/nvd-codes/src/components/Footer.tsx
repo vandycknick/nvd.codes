@@ -10,7 +10,7 @@ const Footer: React.FC = () => (
     <div className="container">
       <div className="columns is-variable is-8 is-marginless">
         <div className="column is-4 is-size-7 content">
-          <h6>Copyright 2019</h6>
+          <h6>Copyright 2020</h6>
           <p>
             This work is licensed under a
             <a href="https://creativecommons.org/licenses/by/4.0/">
@@ -23,16 +23,16 @@ const Footer: React.FC = () => (
           <h6>Disclaimer</h6>
           <p>
             Opinions expressed here are my own and not necessarily those of
-            people I work with, friends, family, etc. Unless I'm quoting
-            someone, they're just my own rants and views.
+            people I work with, friends, family, etc. Unless I&#39;m quoting
+            someone, they&#39;re just my own rants and views.
           </p>
         </div>
         <div className="column is-4 is-size-7 content">
           <h6>Technologies</h6>
           <p>
             This website is a serverless web application fully hosted on Azure.
-            I'm using Azure Functions to host front and backend. Have a look at
-            the
+            I&#39;m using Azure Functions to host front and backend. Have a look
+            at the
             <a href="https://github.com/nickvdyck/nvd.codes"> source code </a>
             if you want more information.
           </p>

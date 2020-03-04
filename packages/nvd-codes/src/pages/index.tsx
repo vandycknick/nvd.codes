@@ -15,6 +15,9 @@ import Paragraph from "../components/Bulma/Paragraph"
 import TextRoulette from "../components/Common/TextRoulette"
 import { LinkButton } from "../components/Bulma/Button"
 import LatestPosts from "../components/Common/LatestPosts"
+import useAsync from "../lib/useAsync"
+import { getProjectActivities } from "../lib/projects"
+import LatestActivities from "../components/Common/LatestActivities"
 
 const heroParagraphStyles = css`
   margin: 1.5rem 0rem;
@@ -73,6 +76,8 @@ interface IndexPageProps {
 const IndexPage: React.FC<IndexPageProps> = ({ data }) => {
   const { site, allMarkdownRemark } = data
   const latest = allMarkdownRemark.edges.slice(0, 2)
+
+  const { pending, value } = useAsync(getProjectActivities)
 
   return (
     <Layout>
@@ -180,6 +185,13 @@ const IndexPage: React.FC<IndexPageProps> = ({ data }) => {
             </Columns>
           </div>
         </Hero.Body>
+        {pending === false && value !== undefined && (
+          <Hero color="light">
+            <Hero.Body>
+              <LatestActivities activity={value} />
+            </Hero.Body>
+          </Hero>
+        )}
       </Hero>
     </Layout>
   )

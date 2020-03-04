@@ -4,11 +4,12 @@ url = "https://pypi.org/simple"
 verify_ssl = true
 
 [dev-packages]
+black = "==19.10b0"
 
 [packages]
 pulumi = ">=1.0.0"
-pulumi-azure = "*"
-black = "*"
+pulumi-azure = ">=1.0.0"
+pulumi-cloudflare = "*"
 
 [requires]
 python_version = "3.8"
