@@ -1,7 +1,7 @@
 import React from "react"
 import { graphql } from "gatsby"
 import { css } from "styled-components"
-import { Globe, Github, Twitter } from "grommet-icons"
+import { FaGithubAlt, FaTwitter, FaGlobeEurope } from "react-icons/fa"
 
 import Layout from "../components/Layout"
 import SEO from "../components/Common/SEO"
@@ -69,6 +69,12 @@ const pageQuery = graphql`
   }
 `
 
+const iconStyles = css`
+  width: 24px;
+  height: 24px;
+  margin-right: 10px;
+`
+
 interface IndexPageProps {
   data: any
 }
@@ -126,12 +132,7 @@ const IndexPage: React.FC<IndexPageProps> = ({ data }) => {
                     size="large"
                     color="white"
                   >
-                    <Globe
-                      color="black"
-                      css={`
-                        margin-right: 10px;
-                      `}
-                    />
+                    <FaGlobeEurope css={iconStyles} />
                     Web
                   </LinkButton>
                   <LinkButton
@@ -139,12 +140,7 @@ const IndexPage: React.FC<IndexPageProps> = ({ data }) => {
                     size="large"
                     color="white"
                   >
-                    <Github
-                      color="black"
-                      css={`
-                        margin-right: 10px;
-                      `}
-                    />
+                    <FaGithubAlt css={iconStyles} />
                     Code
                   </LinkButton>
                   <LinkButton
@@ -152,12 +148,7 @@ const IndexPage: React.FC<IndexPageProps> = ({ data }) => {
                     size="large"
                     color="white"
                   >
-                    <Twitter
-                      color="black"
-                      css={`
-                        margin-right: 10px;
-                      `}
-                    />
+                    <FaTwitter css={iconStyles} />
                     Twitter
                   </LinkButton>
                 </Paragraph>

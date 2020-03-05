@@ -1,27 +1,16 @@
 import React, { Fragment } from "react"
-import { Article } from "grommet-icons"
+import { Link } from "gatsby"
+import { FaRegNewspaper } from "react-icons/fa"
 import * as timeago from "timeago.js"
 
 import { Column, Columns } from "../Bulma/Columns"
 import Paragraph from "../Bulma/Paragraph"
-// import { Tag } from "../Bulma/Tag"
 import { Subtitle, Title } from "../Bulma/Title"
-import { Link } from "gatsby"
 import { Tag } from "../Bulma/Tag"
 
 type LatestPostsProps = {
   posts: any[]
 }
-
-const LatestsPostsListEmpty: React.FC = () => (
-  <Fragment>
-    <Paragraph>
-      Nothing new to see!
-      <br />
-      🕵️‍♂️
-    </Paragraph>
-  </Fragment>
-)
 
 const LatestsPostsList: React.FC<LatestPostsProps> = ({ posts }) => (
   <Columns centered>
@@ -69,16 +58,15 @@ const LatestsPostsList: React.FC<LatestPostsProps> = ({ posts }) => (
 const LatestPosts: React.FC<LatestPostsProps> = ({ posts }) => (
   <Fragment>
     <Title as="h3" size="4" shadow="yellow" spaced>
-      Latest Writings
-      <Article
-        color="black"
+      Latest Posts
+      <FaRegNewspaper
         css={`
           margin-left: 10px;
         `}
       />
     </Title>
     {posts.length === 0 ? (
-      <LatestsPostsListEmpty />
+      "Nothing to see"
     ) : (
       <LatestsPostsList posts={posts} />
     )}

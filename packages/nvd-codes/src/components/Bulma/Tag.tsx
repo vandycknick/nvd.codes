@@ -19,6 +19,7 @@ type TagProps = {
 
 type TagsProps = {
   size?: "normal"
+  centered?: boolean
 }
 
 type ColorMap = Record<
@@ -174,6 +175,10 @@ const Tags = styled.span<TagsProps>`
   display: flex;
   flex-wrap: wrap;
   justify-content: flex-start;
+
+  ${(props: TagsProps) => props.centered && css`
+      justify-content: center;
+  `}
 
   ${Tag} {
     margin-bottom: 0.5rem;

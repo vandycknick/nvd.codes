@@ -7,11 +7,11 @@ import SEO from "../components/Common/SEO"
 import Section from "../components/Bulma/Section"
 import { Title } from "../components/Bulma/Title"
 import styled from "styled-components"
-import { Calendar, Edit } from "grommet-icons"
 import Time from "../components/Common/Time"
 
 import "./prism-theme.css"
 import { Tags, Tag } from "../components/Bulma/Tag"
+import { FaRegCalendarAlt, FaRegEdit } from "react-icons/fa"
 
 const pageQuery = graphql`
   query BlogPostBySlug($slug: String!) {
@@ -111,9 +111,9 @@ const BlogPost: React.FC<BlogPostProps> = ({ data, pageContext }) => {
         <header className="has-text-centered">
           <Title>{post.frontmatter.title}</Title>
           <BlogPostSubtitle>
-            <Calendar />
+            <FaRegCalendarAlt />
             <Time dateTime={post.frontmatter.date} />
-            <Edit />
+            <FaRegEdit />
             <a href={post.fields.editUrl}>suggest edit</a>
           </BlogPostSubtitle>
         </header>

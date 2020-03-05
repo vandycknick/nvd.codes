@@ -1,10 +1,13 @@
-import { graphql, Link } from "gatsby"
 import React from "react"
+import { graphql, Link } from "gatsby"
+import { FaRegCalendarAlt } from "react-icons/fa"
+
 import Section from "../components/Bulma/Section"
 import { Columns, Column } from "../components/Bulma/Columns"
 import Time from "../components/Common/Time"
 import Layout from "../components/Layout"
 import SEO from "../components/Common/SEO"
+import { Tags, Tag } from "../components/Bulma/Tag"
 
 const pageQuery = graphql`
   query {
@@ -44,34 +47,47 @@ const Posts: React.FC<PostsProps> = ({ data }) => {
           <Column size="8">
             {posts.map((post: any) => (
               <div className="box" key={post.node.id}>
-                <article className="media">
-                  <div className="media-content content has-text-centered">
-                    <p className="title is-3">{post.node.frontmatter.title}</p>
-                    <p className="subtitle is-6 is-italic">
-                      <Time dateTime={post.node.frontmatter.date} />
-                    </p>
-                    <p className="description">
-                      {post.node.frontmatter.description}
-                    </p>
-                    <Link to={post.node.fields.slug} className="button is-link">
-                      Continue Reading
-                    </Link>
-                    <hr />
-                    <div className="level">
-                      <div className="level-left">
-                        {post.node.frontmatter.categories.length > 0 && (
-                          <span>
-                            {/* <Tag /> */}
-                            <span>
-                              {post.node.frontmatter.categories.join(", ")}
-                            </span>
-                          </span>
-                        )}
-                      </div>
-                      <div className="level-right"></div>
+                <Link to={post.node.fields.slug}>
+                  <article className="media">
+                    <div className="media-content content has-text-centered">
+                      <p className="title is-3">
+                        {post.node.frontmatter.title}
+                      </p>
+                      <p className="subtitle is-6 is-italic">
+                        <FaRegCalendarAlt
+                          css={`
+                            margin-right: 10px;
+                            padding-top: 2px;
+                          `}
+                        />
+                        <Time dateTime={post.node.frontmatter.date} />
+                      </p>
+                      <p
+                        css={`
+                          color: #4a4a4a;
+                        `}
+                      >
+                        {post.node.frontmatter.description}
+                      </p>
+                      <hr />
+                      <Columns>
+                        <Column>
+                          {post.node.frontmatter.categories.length > 0 && (
+                            <Tags centered>
+                              {post.node.frontmatter.categories.map(
+                                (category: string) => (
+                                  <Tag size="small" color="dark" key={category}>
+                                    {category}
+                                  </Tag>
+                                ),
+                              )}
+                            </Tags>
+                          )}
+                        </Column>
+                      </Columns>
                     </div>
-                  </div>
-                </article>
+                  </article>
+                </Link>
               </div>
             ))}
           </Column>
