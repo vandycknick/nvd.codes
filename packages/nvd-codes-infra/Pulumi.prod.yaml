@@ -1,0 +1,11 @@
+config:
+  azure:location: westeurope
+  cloudflare:apiToken:
+    secure: AAABAMCnt+LRfjOGa+SJlcolo/kv0FfUqQCsLGnqnQoOS3HahT1YsRPXP5ZxM6TJhaAAsVi992Y5pegWuoyZ/+9vEDAjLWcE
+  cloudflare:email:
+    secure: AAABADBDf15TQp/7U7yQsI8YW+2tr5jKuWElv5BG0Lh05+aQeUsXcxyUzNLr07WNqzSardsL/EQ=
+  nvd-codes-infra:domain: nvd.codes
+  nvd-codes-infra:github_token:
+    secure: AAABAFYxI8qbRA3u35P7MHgYgK6cPSG0B0FIzRxAyuPeFx+V101FrWyEOSJILm3asDnMwHpJER0Wc1dBIt6Zx5OoQHxYB3VH
+  nvd-codes-infra:zone_id:
+    secure: AAABAKCuy0al979iNezkKTaXEHWzFiMNh3wPqxAsutybdn6alJT6XR+2xh1pSaX1brUp3JbMHgLBjkkpvm1yqA==

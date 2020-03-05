@@ -28,6 +28,7 @@
     "react": "16.13.0",
     "react-dom": "16.13.0",
     "react-helmet": "5.2.1",
+    "react-icons": "3.9.0",
     "styled-components": "5.0.1",
     "timeago.js": "4.0.2"
   },
@@ -43,7 +44,6 @@
     "eslint-plugin-prettier": "3.1.2",
     "eslint-plugin-react": "7.18.3",
     "eslint-plugin-react-hooks": "2.5.0",
-    "grommet-icons": "4.4.0",
     "prettier": "1.19.1",
     "ts-node": "8.6.2",
     "typescript": "3.8.3"

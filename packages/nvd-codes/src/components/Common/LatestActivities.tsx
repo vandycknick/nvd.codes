@@ -1,6 +1,6 @@
-import { History } from "grommet-icons"
 import React from "react"
 import styled, { css } from "styled-components"
+import { MdHistory } from "react-icons/md"
 import * as timeago from "timeago.js"
 
 import { Activity } from "../../lib/projects"
@@ -43,7 +43,7 @@ const LatestActivities: React.FC<LatestActivitiesProps> = ({ activity }) => (
         </Title>
         <Columns centered isMultiline className="has-text-centered">
           <Column size="half">
-            <History color="black" />
+            <MdHistory size="30" />
           </Column>
           <Column size="full">
             <CommitLink href={activity.latestCommit.url}>

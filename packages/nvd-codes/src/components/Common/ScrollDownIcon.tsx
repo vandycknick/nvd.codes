@@ -1,6 +1,6 @@
 import React from "react"
 import { css, keyframes } from "styled-components"
-import { FormDown } from "grommet-icons"
+import { FaAngleDown } from "react-icons/fa"
 
 const bounce = keyframes`
     0%, 20%, 50%, 80%, 100% {
@@ -26,7 +26,7 @@ const scrollToBottom = (): void =>
   window.scrollTo(0, document.body.scrollHeight)
 
 const ScrollDownIcon: React.FC = () => (
-  <FormDown color="black" css={styles} onClick={scrollToBottom} />
+  <FaAngleDown css={styles} onClick={scrollToBottom} />
 )
 
 export default ScrollDownIcon
