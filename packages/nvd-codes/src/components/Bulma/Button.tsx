@@ -55,7 +55,6 @@ const buttonGroupAttrs = (props: ButtonGroupProps): { className: string } => {
   return { className }
 }
 
-// tslint:disable-next-line: max-line-length
 const ButtonGroup: StyledComponent<
   "div",
   any,

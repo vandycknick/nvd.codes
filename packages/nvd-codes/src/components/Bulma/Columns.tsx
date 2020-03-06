@@ -8,26 +8,29 @@ type ColumnsProps = {
   isMultiline?: boolean
 }
 
+type Sizes =
+  | "1"
+  | "2"
+  | "3"
+  | "4"
+  | "5"
+  | "6"
+  | "7"
+  | "8"
+  | "9"
+  | "10"
+  | "11"
+  | "12"
+  | "three-quarters"
+  | "two-thirds"
+  | "half"
+  | "one-third"
+  | "one-quarter"
+  | "full"
+
 type ColumnProps = {
-  size?:
-    | "1"
-    | "2"
-    | "3"
-    | "4"
-    | "5"
-    | "6"
-    | "7"
-    | "8"
-    | "9"
-    | "10"
-    | "11"
-    | "12"
-    | "three-quarters"
-    | "two-thirds"
-    | "half"
-    | "one-third"
-    | "one-quarter"
-    | "full"
+  size?: Sizes
+  offset?: Sizes
   hasTextCentered?: boolean
   isFlex?: boolean
 }
@@ -46,6 +49,8 @@ const columnAttrs = (props: ColumnProps): { className: string } => {
   let className = "column"
 
   if (props.size) className = `${className} is-${props.size}`
+
+  if (props.offset) className = `${className} is-offset-${props.offset}`
 
   if (props.hasTextCentered) className = `${className} has-text-centered`
 

@@ -61,7 +61,6 @@ exports.onCreateNode = ({ node, actions, getNode }) => {
     const value = createFilePath({ node, getNode, trailingSlash: false })
     const parentNode = getNode(node.parent)
 
-    console.log(value);
     const parsed = path.parse(value);
     const splitted = parsed.name.split('-')
     const part = splitted.slice(0, 3);

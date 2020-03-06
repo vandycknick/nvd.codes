@@ -1,5 +1,7 @@
 import React from "react"
 import { graphql, Link } from "gatsby"
+import { FaRegCalendarAlt, FaRegEdit } from "react-icons/fa"
+import "./prism-theme.css"
 
 import Layout from "../components/Layout"
 import SEO from "../components/Common/SEO"
@@ -9,9 +11,10 @@ import { Title } from "../components/Bulma/Title"
 import styled from "styled-components"
 import Time from "../components/Common/Time"
 
-import "./prism-theme.css"
 import { Tags, Tag } from "../components/Bulma/Tag"
-import { FaRegCalendarAlt, FaRegEdit } from "react-icons/fa"
+import Divider from "../components/Bulma/Divider"
+import { Button } from "../components/Bulma/Button"
+import { Columns, Column } from "../components/Bulma/Columns"
 
 const pageQuery = graphql`
   query BlogPostBySlug($slug: String!) {
@@ -84,13 +87,12 @@ const PostContents = styled.section.attrs({ className: "content" })`
   }
 `
 
-const ArticleFooter = styled.footer`
-    margin-top: 40px;
-    border-top: 1px solid #ebebeb;
-    padding: 40px 0 0;
-    display flex;
-    justify-content: center;
+const ArticleTags = styled(Tags)`
+  display flex;
+  justify-content: center;
 `
+
+const LinkButton = Button.withComponent(Link)
 
 interface BlogPostProps {
   data: any
@@ -118,41 +120,42 @@ const BlogPost: React.FC<BlogPostProps> = ({ data, pageContext }) => {
           </BlogPostSubtitle>
         </header>
         <PostContents dangerouslySetInnerHTML={{ __html: post.html }} />
-        <ArticleFooter>
-          <Tags size="normal">
-            {post.frontmatter.categories.map((tag: any) => (
-              <Tag color="dark" key={tag}>
-                {tag}
-              </Tag>
-            ))}
-          </Tags>
-        </ArticleFooter>
+        <Divider
+          text="TAGS"
+          css={`
+            margin-top: 4rem;
+          `}
+        />
+        <ArticleTags size="normal">
+          {post.frontmatter.categories.map((tag: any) => (
+            <Tag color="dark" key={tag}>
+              {tag}
+            </Tag>
+          ))}
+        </ArticleTags>
       </Section>
-      <nav>
-        <ul
-          style={{
-            display: `flex`,
-            flexWrap: `wrap`,
-            justifyContent: `space-between`,
-            listStyle: `none`,
-            padding: 0,
-          }}
-        >
-          <li>
+      <nav
+        className="container"
+        css={`
+          padding: 0 1.5rem 3rem 1.5rem;
+        `}
+      >
+        <Columns>
+          <Column size="1">
             {previous && (
-              <Link to={previous.fields.slug} rel="prev">
-                ← {previous.frontmatter.title}
-              </Link>
+              <LinkButton to={previous.fields.slug} rel="prev">
+                Previous
+              </LinkButton>
             )}
-          </li>
-          <li>
+          </Column>
+          <Column size="1" offset="10">
             {next && (
-              <Link to={next.fields.slug} rel="next">
-                {next.frontmatter.title} →
-              </Link>
+              <LinkButton to={next.fields.slug} rel="next">
+                Next
+              </LinkButton>
             )}
-          </li>
-        </ul>
+          </Column>
+        </Columns>
       </nav>
     </Layout>
   )

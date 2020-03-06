@@ -1,9 +1,8 @@
+.PHONY: clean dev build serve
+.DEFAULT_GOAL: build
+
 ROOT	:= $(shell pwd)
-
 INFRA	:= $(ROOT)/packages/nvd-codes-infra
-
-setup:
-
 
 dev:
 	CONTENT_FOLDER=$(shell pwd)/content \
@@ -34,7 +33,7 @@ infra-output:
 		pipenv run \
 			pulumi stack output --json
 
-deploy: build
+deploy: clean build
 	cd $(INFRA) && \
 		pipenv run \
 			pulumi stack output --json | \
