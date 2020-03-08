@@ -1,13 +1,8 @@
-import os
-
-from pathlib import Path
 from pulumi import asset, export, Output, Config
 from pulumi_azure import core, storage, appservice
 
 from infra.utils import get_sas
 from infra.api.project import ProjectApi
-
-current_file_path = os.path.dirname(os.path.realpath(__file__))
 
 
 class Proxy:
@@ -19,6 +14,7 @@ def create_proxy(
     resource_group: core.ResourceGroup,
     plan: appservice.Plan,
     project_api: ProjectApi,
+    path: str,
     config: Config,
 ):
     proxy_storage_account = storage.Account(
@@ -35,15 +31,12 @@ def create_proxy(
         container_access_type="private",
     )
 
-    proxy_folder = Path(current_file_path, "../../../proxy/proxies.json",).resolve()
     zip_blob = storage.ZipBlob(
         "proxy-zipblob",
         storage_account_name=proxy_storage_account.name,
         storage_container_name=proxy_container.name,
         type="block",
-        content=asset.AssetArchive(
-            {"proxies.json": asset.FileAsset(str(proxy_folder))}
-        ),
+        content=asset.AssetArchive({".": asset.FileArchive(path)}),
     )
 
     signed_blob_url = Output.all(
