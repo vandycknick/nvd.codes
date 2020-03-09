@@ -3,38 +3,41 @@ services:
 
   ui:
     build:
-      dockerfile: Dockerfile
-      context: packages/nvd-codes
+      dockerfile: docker/Dockerfile.gatsby
+      context: .
     command: yarn develop --host=0.0.0.0
     environment:
-      GATSBY_PROJECT_API: http://localhost:7000
       CONTENT_FOLDER: /content
+      GATSBY_PROJECT_API: http://localhost:7000
     volumes:
       - ./content:/content
-      - ./packages/nvd-codes:/app
-      - /app/node_modules
+      - ./src:/app/src
+      - ./gatsby-browser.js:/app/gatsby-browser.js
+      - ./gatsby-config.js:/app/gatsby-config.js
+      - ./gatsby-node.js:/app/gatsby-node.js
+      - ./tsconfig.json:/app/tsconfig.json
     ports:
       - "5000:8000"
 
   proxy:
     build:
-      dockerfile: ../docker-func/Dockerfile
-      context: packages/proxy
-    command: func start --cors http://localhost:5000
+      dockerfile: docker/Dockerfile.functions
+      context: .
+    command: func start --dotnet --cors http://localhost:5000
     environment:
       AZURE_FUNCTION_PROXY_DISABLE_LOCAL_CALL: "true"
       AzureWebJobsStorage: "UseDevelopmentStorage=true"
       FUNCTIONS_WORKER_RUNTIME: dotnet
       PROJECT_API: http://project:7071
     volumes:
-      - ./packages/proxy:/app
+      - ./functions/Proxy:/app
     ports:
       - "7000:7071"
 
   project:
     build:
-      dockerfile: ../../../docker-func/Dockerfile
-      context: packages/projects-api/src/ProjectsApi
+      dockerfile: docker/Dockerfile.functions
+      context: .
     command: func start --dotnet
     environment:
       AzureWebJobsStorage: "UseDevelopmentStorage=true"
@@ -42,7 +45,7 @@ services:
     secrets:
       - GITHUB_TOKEN
     volumes:
-      - ./packages/projects-api/src/ProjectsApi:/app
+      - ./functions/ProjectsApi:/app
     ports:
       - "7001:7071"
 
