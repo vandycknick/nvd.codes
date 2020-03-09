@@ -14,9 +14,9 @@ config = Config(name="nvd-codes-infra")
 current_file_path = path.dirname(path.realpath(__file__))
 project_api_fallback = Path(
     current_file_path,
-    "../../projects-api/.build/bin/ProjectsApi/Release/netcoreapp3.1/publish",
+    "../../.build/bin/ProjectsApi/Release/netcoreapp3.1/publish",
 ).resolve()
-proxy_fallback = Path(current_file_path, "../../proxy").resolve()
+proxy_fallback = Path(current_file_path, "../../.build/bin/Proxy/Release/netcoreapp3.1/publish").resolve()
 
 
 def setup():

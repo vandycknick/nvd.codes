@@ -2,21 +2,27 @@
 .DEFAULT_GOAL: build
 
 ROOT	:= $(shell pwd)
-INFRA	:= $(ROOT)/packages/nvd-codes-infra
+INFRA	:= $(ROOT)/infra
 
 dev:
-	CONTENT_FOLDER=$(shell pwd)/content \
-	yarn --cwd packages/nvd-codes develop
+	yarn develop
+
+lint:
+	yarn lint
 
 build:
-	CONTENT_FOLDER=$(shell pwd)/content \
-	yarn --cwd packages/nvd-codes build
+	yarn build
+	dotnet publish -c Release
 
 serve:
-	yarn --cwd packages/nvd-codes serve
+	yarn serve
 
 clean:
-	yarn --cwd packages/nvd-codes clean
+	yarn clean
+	dotnet clean -c Debug
+	dotnet clean -c Release
+	rm -rf functions/ProjectsApi/bin
+	rm -rf functions/ProjectsApi/obj
 
 infra-up:
 	cd $(INFRA) && \

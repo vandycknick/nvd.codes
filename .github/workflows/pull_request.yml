@@ -30,12 +30,10 @@ jobs:
           ${{ runner.os }}-yarn-
 
     - name: Install dependencies packages/nvd-codes
-      working-directory: packages/nvd-codes
       run: yarn
 
     - name: Lint
-      working-directory: packages/nvd-codes
-      run: yarn lint
+      run: make lint
 
   build:
     name: Build
@@ -52,14 +50,19 @@ jobs:
         dotnet-version: '3.1.101'
 
     - name: Build api
-      working-directory: packages/projects-api
       run: dotnet publish -c Release
 
     - uses: actions/upload-artifact@v1
-      name: Upload Artifact Projects Api
+      name: Upload Artefact Projects Api
       with:
         name: projects-api
-        path: packages/projects-api/.build/bin/ProjectsApi/Release/netcoreapp3.1/publish/
+        path: .build/bin/ProjectsApi/Release/netcoreapp3.1/publish/
+
+    - uses: actions/upload-artifact@v1
+      name: Upload Artefact Proxy
+      with:
+        name: proxy
+        path: .build/bin/Proxy/Release/netcoreapp3.1/publish/
 
   preview:
     name: Preview
@@ -78,6 +81,10 @@ jobs:
       with:
         name: projects-api
 
+    - uses: actions/download-artifact@v1
+      with:
+        name: proxy
+
     - name: Install pipenv
       run: python3 -m pip install pipenv
 
@@ -85,7 +92,7 @@ jobs:
       run: |
         pipenv update
         pipenv run /usr/bin/pulumi-action --non-interactive preview -s staging
-      working-directory: packages/nvd-codes-infra
+      working-directory: infra
       env:
         ARM_CLIENT_ID: ${{ secrets.ARM_CLIENT_ID }}
         ARM_CLIENT_SECRET: ${{ secrets.ARM_CLIENT_SECRET }}
@@ -94,3 +101,4 @@ jobs:
         PULUMI_ACCESS_TOKEN: ${{ secrets.PULUMI_ACCESS_TOKEN }}
         PULUMI_CI: pr
         PROJECT_API_FOLDER: /home/runner/work/nvd.codes/nvd.codes/projects-api
+        PROXY_FOLDER: /home/runner/work/nvd.codes/nvd.codes/proxy

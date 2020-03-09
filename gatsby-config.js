@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/camelcase */
 require("ts-node").register({ files: true })
 
-const CONTENT_FOLDER = process.env.CONTENT_FOLDER
+const CONTENT_FOLDER = process.env.CONTENT_FOLDER || "content"
 
 module.exports = {
   siteMetadata: {
