@@ -61,15 +61,15 @@ exports.onCreateNode = ({ node, actions, getNode }) => {
     const value = createFilePath({ node, getNode, trailingSlash: false })
     const parentNode = getNode(node.parent)
 
-    const parsed = path.parse(value);
-    const splitted = parsed.name.split('-')
-    const part = splitted.slice(0, 3);
+    const parsed = path.parse(value)
+    const splitted = parsed.name.split("-")
+    // const part = splitted.slice(0, 3)
     const name = splitted.slice(3)
 
     createNodeField({
       name: `slug`,
       node,
-      value: `/post/${name.join('-')}`,
+      value: `/post/${name.join("-")}`,
     })
 
     createNodeField({

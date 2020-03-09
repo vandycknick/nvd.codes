@@ -1,22 +1,19 @@
-import os
-
-from pathlib import Path
 from pulumi import asset, export, Output, Config
 from pulumi_azure import core, storage, appservice
 
 from infra.utils import get_sas
 
-current_file_path = os.path.dirname(os.path.realpath(__file__))
-
 
 class ProjectApi:
-    def __init__(self, app: appservice.FunctionApp):
+    def __init__(
+        self, app: appservice.FunctionApp,
+    ):
         self.app = app
 
 
 def create_project_api(
-    resource_group: core.ResourceGroup, plan: appservice.Plan, config: Config
-):
+    resource_group: core.ResourceGroup, plan: appservice.Plan, path: str, config: Config
+) -> ProjectApi:
     project_api_storage_account = storage.Account(
         "projectapisa",
         resource_group_name=resource_group.name,
@@ -31,16 +28,12 @@ def create_project_api(
         container_access_type="private",
     )
 
-    projects_api_folder = Path(
-        current_file_path,
-        "../../../projects-api/.build/bin/ProjectsApi/Release/netcoreapp3.1/publish",
-    ).resolve()
     zip_blob = storage.ZipBlob(
         "project-api-zipblob",
         storage_account_name=project_api_storage_account.name,
         storage_container_name=project_api_container.name,
         type="block",
-        content=asset.AssetArchive({".": asset.FileArchive(str(projects_api_folder))}),
+        content=asset.AssetArchive({".": asset.FileArchive(path)}),
     )
 
     signed_blob_url = Output.all(

@@ -1,0 +1,104 @@
+name: PullRequest
+
+on:
+  - pull_request
+
+jobs:
+  test:
+    name: Test
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+      with:
+        fetch-depth: 1
+
+    - name: Setup Node
+      uses: actions/setup-node@v1
+      with:
+        node-version: '12.x'
+
+    - name: Get yarn cache directory path
+      id: yarn-cache-dir-path
+      run: echo "::set-output name=dir::$(yarn cache dir)"
+
+    - uses: actions/cache@v1
+      id: yarn-cache # use this to check for `cache-hit` (`steps.yarn-cache.outputs.cache-hit != 'true'`)
+      with:
+        path: ${{ steps.yarn-cache-dir-path.outputs.dir }}
+        key: ${{ runner.os }}-yarn-${{ hashFiles('**/yarn.lock') }}
+        restore-keys: |
+          ${{ runner.os }}-yarn-
+
+    - name: Install dependencies packages/nvd-codes
+      run: yarn
+
+    - name: Lint
+      run: make lint
+
+  build:
+    name: Build
+    needs: Test
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+      with:
+        fetch-depth: 1
+
+    - name: Setup .NET Core SDK
+      uses: actions/setup-dotnet@v1
+      with:
+        dotnet-version: '3.1.101'
+
+    - name: Build api
+      run: dotnet publish -c Release
+
+    - uses: actions/upload-artifact@v1
+      name: Upload Artefact Projects Api
+      with:
+        name: projects-api
+        path: .build/bin/ProjectsApi/Release/netcoreapp3.1/publish/
+
+    - uses: actions/upload-artifact@v1
+      name: Upload Artefact Proxy
+      with:
+        name: proxy
+        path: .build/bin/Proxy/Release/netcoreapp3.1/publish/
+
+  preview:
+    name: Preview
+    needs: Build
+    runs-on: ubuntu-latest
+    container:
+      image: pulumi/actions
+      options: --entrypoint /bin/bash
+
+    steps:
+    - uses: actions/checkout@v2
+      with:
+        fetch-depth: 1
+
+    - uses: actions/download-artifact@v1
+      with:
+        name: projects-api
+
+    - uses: actions/download-artifact@v1
+      with:
+        name: proxy
+
+    - name: Install pipenv
+      run: python3 -m pip install pipenv
+
+    - name: Pulumi Preview
+      run: |
+        pipenv update
+        pipenv run /usr/bin/pulumi-action --non-interactive preview -s staging
+      working-directory: infra
+      env:
+        ARM_CLIENT_ID: ${{ secrets.ARM_CLIENT_ID }}
+        ARM_CLIENT_SECRET: ${{ secrets.ARM_CLIENT_SECRET }}
+        ARM_TENANT_ID: ${{ secrets.ARM_TENANT_ID }}
+        ARM_SUBSCRIPTION_ID: ${{ secrets.ARM_SUBSCRIPTION_ID }}
+        PULUMI_ACCESS_TOKEN: ${{ secrets.PULUMI_ACCESS_TOKEN }}
+        PULUMI_CI: pr
+        PROJECT_API_FOLDER: /home/runner/work/nvd.codes/nvd.codes/projects-api
+        PROXY_FOLDER: /home/runner/work/nvd.codes/nvd.codes/proxy

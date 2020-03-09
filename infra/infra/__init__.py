@@ -1,3 +1,6 @@
+from os import path, environ
+from pathlib import Path
+
 from pulumi import Config, export, FileArchive, Output
 from pulumi_azure import core, cdn, storage, appservice
 
@@ -8,8 +11,18 @@ from infra.cloudflare import create_dns_record
 
 config = Config(name="nvd-codes-infra")
 
+current_file_path = path.dirname(path.realpath(__file__))
+project_api_fallback = Path(
+    current_file_path,
+    "../../.build/bin/ProjectsApi/Release/netcoreapp3.1/publish",
+).resolve()
+proxy_fallback = Path(current_file_path, "../../.build/bin/Proxy/Release/netcoreapp3.1/publish").resolve()
+
 
 def setup():
+    project_api_dir = environ.get("PROJECT_API_FOLDER", str(project_api_fallback))
+    proxy_dir = environ.get("PROXY_FOLDER", str(proxy_fallback))
+
     resource_group = core.ResourceGroup("nvd-codes-rg")
 
     www_storage_account = storage.Account(
@@ -43,8 +56,8 @@ def setup():
         sku={"tier": "Dynamic", "size": "Y1"},
     )
 
-    project_api = create_project_api(resource_group, api_plan, config)
-    proxy = create_proxy(resource_group, api_plan, project_api, config)
+    project_api = create_project_api(resource_group, api_plan, project_api_dir, config)
+    proxy = create_proxy(resource_group, api_plan, project_api, proxy_dir, config)
 
     domain = config.require("domain")
     env = config.get("environment") or ""
