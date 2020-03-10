@@ -44,4 +44,4 @@ deploy: clean build
 		pipenv run \
 			pulumi stack output --json | \
 			jq -r '.www_storage_connection_string' | \
-			dotnet run -p $(ROOT)/tools/AzureStaticFilesUploader -- --cwd $(ROOT)/packages/nvd-codes/public
+			dotnet run -p $(ROOT)/tools/AzureStaticFilesUploader -- --cwd $(ROOT)/public
