@@ -23,6 +23,8 @@ clean:
 	dotnet clean -c Release
 	rm -rf functions/ProjectsApi/bin
 	rm -rf functions/ProjectsApi/obj
+	rm -rf functions/Proxy/bin
+	rm -rf functions/Proxy/obj
 
 infra-up:
 	cd $(INFRA) && \
