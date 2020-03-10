@@ -7,18 +7,18 @@ categories: [dotnet, aspnet, docker, secrets]
 
 Docker Secrets are a way to share secrets securely and only with the container that needs access to them. First introduced in Docker Swarm version 1.13, secrets are encrypted during transit and at rest. This makes them a great way to distribute connection strings, passwords, certs or other sensitive information.
 
-But I don't use Docker Swarm and am also not really planning to use Docker Swarm. No worries neither do I, I mostly use Docker Secrets for development purposes and `docker-compose` makes it possible to get access to this functionality.
+I don't use Docker Swarm nor am I planning to use it anytime soon. And that is were `docker-compose` comes into the story, with `docker-compose` we can leverage this feature for development without tacking a dependency on Docker Swarm.
 
 ## How to use Docker secrets with docker-compose
 
-For example image the following project. We have `docker-compose.yml` file and a our secret right next to it.
+For example, imagine the following project. We have a `docker-compose.yml` file and our secret right next to it.
 
 ```bash
 ├── docker-compose.yml
 └── my-little-secret.txt
 ```
 
-In the example below we define a new secret called `super_secret` that references our secret file `my-little-secret.txt`. We can then give specific containers access to our secret.
+We define a new secret called `super_secret` that references our secret file `my-little-secret.txt`. We can then give specific containers access to that secret.
 
 ```yml
 version: "3.6"
@@ -36,9 +36,9 @@ secrets:
     file: ./my-little-secret.txt
 ```
 
-The secret file can contain whatever you want, I personally prefer to keep it 1 to 1, where each file contains the value of secret. This makes it easier to scope certain secrets to specific containers
+The secret file can contain whatever you want, I prefer to keep it 1 to 1, where each file contains the value of a secret. This makes it easier to scope certain secrets to specific containers
 
-For example imagine our `my-little-secret.txt` file contained the following secret:
+For example, imagine our `my-little-secret.txt` file contained the following secret:
 
 ```txt
 please-do-not-tell
@@ -54,9 +54,9 @@ please-do-not-tell
 
 ## Configure ASP.NET Core to read Docker secrets
 
-When you give a service access to a certain secret you essentially give it access to an in-memory file. As you could see in the example above those files are exposed inside the container at the following path `/run/secrets`. This means your application needs to know how to read the secret from the file to be able to use the application.
+When you give a service/container access to a certain secret you essentially give it access to an in-memory file. As you could see in the example above those files are exposed inside the container straight from the filesystem `/run/secrets`. This means your application needs to know how to read the secret from the file to be able to use the application.
 
-There are quite a few ways we can solve this problem, it should not be too difficult to hand roll our own solution here. With an ASP.NET Core Configuration Provider and a bit of elbow grease we could get something up and running. But the ASP.NET Core team already got you covered here in the form of a Configuration extension package. The `Microsoft.Extension.Configuration.KeyPerFile` nuget package contains exactly the functionality we need in this case.
+There are quite a few ways we can solve this problem, it should not be too difficult to hand roll our solution here. With an ASP.NET Core Configuration Provider and a bit of elbow grease, we could get something up and running. But the ASP.NET Core team already got you covered here in the form of a Configuration extension package. `Microsoft.Extension.Configuration.KeyPerFile` nuget package contains exactly the functionality we need in this case.
 
 A simple nuget install in your project or adding the following in your `csproj` should yet you up and running in no time.
 
@@ -76,6 +76,6 @@ This package uses a directory's files as configuration key/values:
 ```
 
 ## Conclusion
-Docker Secrets can be used without Docker Swarm and can be pretty useful for development purposes. Just adding some extra configuration into your `docker-compose.yml` it is possible to give containers access to specific secrets. That in combination with ASP.NET `KeyPerFile` nuget package makes it really easy to get those secrets injected into your application.
+Docker Secrets can be used without Docker Swarm and can be pretty useful for development purposes. Just adding some extra configuration into your `docker-compose.yml` it is possible to give containers access to specific secrets. That in combination with ASP.NET `KeyPerFile` nuget package makes it easy to get those secrets injected into your application.
 
-You might be wondering when or why you would use this instead of using `.env`, `.envrc` files or any other ASP.NET configuration method. I personally use this for my personal project where for example I have a single location on my PC to share common secrets among my projects. This way I know that I just need to look into a single location to update or rotate any secret.
+You might be wondering when or why you would use this instead of using `.env`, `.envrc` files or any other ASP.NET configuration method. I use this for my project where for example I have a single location on my PC to share common secrets among my projects. This way I know that I just need to look into a single location to update or rotate any secret.
