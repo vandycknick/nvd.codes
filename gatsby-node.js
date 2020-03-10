@@ -8,7 +8,7 @@ const { createFilePath } = require(`gatsby-source-filesystem`)
 exports.createPages = async ({ graphql, actions }) => {
   const { createPage } = actions
 
-  const blogPost = path.resolve(`./src/templates/BlogPost.tsx`)
+  const blogPost = path.resolve(`./src/templates/blogPost.tsx`)
   const result = await graphql(
     `
       {
@@ -20,6 +20,7 @@ exports.createPages = async ({ graphql, actions }) => {
             node {
               fields {
                 slug
+                published
               }
               frontmatter {
                 title
@@ -47,8 +48,8 @@ exports.createPages = async ({ graphql, actions }) => {
       component: blogPost,
       context: {
         slug: post.node.fields.slug,
-        previous,
-        next,
+        previous: previous && previous.fields.published ? previous : null,
+        next: next && next.fields.published ? next : null,
       },
     })
   })
@@ -65,6 +66,14 @@ exports.onCreateNode = ({ node, actions, getNode }) => {
     const splitted = parsed.name.split("-")
     // const part = splitted.slice(0, 3)
     const name = splitted.slice(3)
+
+    // Every article is considered published by default
+    // unless published is explicitly set to false
+    createNodeField({
+      name: `published`,
+      node,
+      value: !(node.frontmatter.published === false),
+    })
 
     createNodeField({
       name: `slug`,
