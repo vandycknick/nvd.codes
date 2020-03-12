@@ -16,6 +16,25 @@ import Divider from "../components/Bulma/Divider"
 import { Button } from "../components/Bulma/Button"
 import { Columns, Column } from "../components/Bulma/Columns"
 
+interface BlogPostBySlugQuery {
+  site: { siteMetadata: { title: string } }
+  markdownRemark: {
+    id: string
+    excerpt: string
+    html: string
+    frontmatter: {
+      title: string
+      date: string
+      description: string
+      categories: string[]
+    }
+    fields: {
+      editUrl: string
+      readingTime: { text: string }
+    }
+  }
+}
+
 const pageQuery = graphql`
   query BlogPostBySlug($slug: String!) {
     site {
@@ -98,8 +117,11 @@ const ArticleTags = styled(Tags)`
 const LinkButton = Button.withComponent(Link)
 
 interface BlogPostProps {
-  data: any
-  pageContext: any
+  data: BlogPostBySlugQuery
+  pageContext: {
+    previous?: { fields: { slug: string } }
+    next?: { fields: { slug: string } }
+  }
 }
 
 const BlogPost: React.FC<BlogPostProps> = ({ data, pageContext }) => {
@@ -132,7 +154,7 @@ const BlogPost: React.FC<BlogPostProps> = ({ data, pageContext }) => {
           `}
         />
         <ArticleTags size="normal">
-          {post.frontmatter.categories.map((tag: any) => (
+          {post.frontmatter.categories.map(tag => (
             <Tag color="dark" key={tag}>
               {tag}
             </Tag>

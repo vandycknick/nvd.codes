@@ -27,13 +27,4 @@ interface Commit {
   repositoryName: string
 }
 
-const getProjectActivities = async (): Promise<Activity> => {
-  const response = await fetch(
-    `${process.env.GATSBY_PROJECT_API}/project/activities`,
-  )
-  const activities = await response.json()
-  return activities
-}
-
 export { Project, RepositoryLanguage, Activity, Commit }
-export { getProjectActivities }
