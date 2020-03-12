@@ -2,6 +2,7 @@ import React from "react"
 import { graphql } from "gatsby"
 import { css } from "styled-components"
 import { FaGithubAlt, FaTwitter, FaGlobeEurope } from "react-icons/fa"
+import useSWR from "swr"
 
 import Layout from "../components/Layout"
 import SEO from "../components/Common/SEO"
@@ -15,9 +16,8 @@ import Paragraph from "../components/Bulma/Paragraph"
 import TextRoulette from "../components/Common/TextRoulette"
 import { LinkButton } from "../components/Bulma/Button"
 import LatestPosts from "../components/Common/LatestPosts"
-import useAsync from "../lib/useAsync"
-import { getProjectActivities } from "../lib/projects"
 import LatestActivities from "../components/Common/LatestActivities"
+import { Activity } from "../domain/projects"
 
 const heroParagraphStyles = css`
   margin: 1.5rem 0rem;
@@ -83,11 +83,17 @@ interface IndexPageProps {
   data: any
 }
 
+const fetchJSON = <T,>(url: string): Promise<T> =>
+  fetch(url).then(res => res.json())
+
 const IndexPage: React.FC<IndexPageProps> = ({ data }) => {
   const { site, allMarkdownRemark } = data
   const latest = allMarkdownRemark.edges.slice(0, 2)
 
-  const { pending, value } = useAsync(getProjectActivities)
+  const { data: activity, error } = useSWR<Activity>(
+    `${process.env.GATSBY_PROJECT_API}/project/activities`,
+    fetchJSON,
+  )
 
   return (
     <Layout>
@@ -180,10 +186,10 @@ const IndexPage: React.FC<IndexPageProps> = ({ data }) => {
             </Columns>
           </div>
         </Hero.Body>
-        {pending === false && value !== undefined && (
+        {activity !== undefined && error === undefined && (
           <Hero color="light">
             <Hero.Body>
-              <LatestActivities activity={value} />
+              <LatestActivities activity={activity} />
             </Hero.Body>
           </Hero>
         )}

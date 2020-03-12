@@ -8,6 +8,7 @@ dev:
 	yarn develop
 
 lint:
+	yarn type-check
 	yarn lint
 
 build:

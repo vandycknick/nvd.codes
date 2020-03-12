@@ -3,7 +3,7 @@ import styled, { css } from "styled-components"
 import { MdHistory } from "react-icons/md"
 import * as timeago from "timeago.js"
 
-import { Activity } from "../../lib/projects"
+import { Activity } from "../../domain/projects"
 import { Column, Columns } from "../Bulma/Columns"
 import Paragraph from "../Bulma/Paragraph"
 import { Title } from "../Bulma/Title"
