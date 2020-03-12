@@ -7,20 +7,22 @@ categories: [dotnet, aspnet, docker, secrets]
 
 Docker Secrets are a way to share secrets securely and only with the container that needs access to them. First introduced in Docker Swarm version 1.13, secrets are encrypted during transit and at rest. This makes them a great way to distribute connection strings, passwords, certs or other sensitive information.
 
-I don't use Docker Swarm nor am I planning to use it anytime soon. And that is were `docker-compose` comes into the story, with `docker-compose` we can leverage this feature for development without tacking a dependency on Docker Swarm.
+I don't use Docker Swarm nor am I planning to use it anytime soon. And that is were `docker-compose` comes into the story, with `docker-compose` we can leverage this feature for development without ever needing Docker Swarm.
 
 ## How to use Docker secrets with docker-compose
 
-For example, imagine the following project. We have a `docker-compose.yml` file and our secret right next to it.
+For example, imagine the following project. We have a `docker-compose.yml` file and right next to it we have a file that contains our secret.
 
 ```bash
 ├── docker-compose.yml
 └── my-little-secret.txt
 ```
+To use this in our `docker-compose.yml` file there are 2 things we need to do:
 
-We define a new secret called `super_secret` that references our secret file `my-little-secret.txt`. We can then give specific containers access to that secret.
+1. Define a new top-level secret under the secrets key, give it a name and a reference to our file. In the example, you see that the `file` key contains a reference to our file `my-little-secret.txt`
+2. Add a reference to our secrets for the container that needs access to it.
 
-```yml
+```yml{8-9,11-13}
 version: "3.6"
 
 services:
@@ -28,15 +30,15 @@ services:
   web:
     image: ubuntu
     entrypoint: "cat /run/secrets/super_secret"
-    secrets:
+    secrets: # (2)
       - super_secret
 
-secrets:
+secrets: # (1)
   super_secret:
     file: ./my-little-secret.txt
 ```
 
-The secret file can contain whatever you want, I prefer to keep it 1 to 1, where each file contains the value of a secret. This makes it easier to scope certain secrets to specific containers
+The secret file can technically contain whatever you want and your application can then handle whatever logic you need to consume those values. But I prefer to keep this mapping 1 to 1, where each file contains the value of a secret. It makes it easier to scope certain secrets to specific containers and you kinda create a file-based key-value store. It will also make consuming secrets in ASP.NET easier as you will see later.
 
 For example, imagine our `my-little-secret.txt` file contained the following secret:
 
