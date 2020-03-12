@@ -1,6 +1,6 @@
 import React from "react"
 import { graphql, Link } from "gatsby"
-import { FaRegCalendarAlt, FaRegEdit } from "react-icons/fa"
+import { FaRegCalendarAlt, FaRegEdit, FaRegClock } from "react-icons/fa"
 import "./prism-theme.css"
 
 import Layout from "../components/Layout"
@@ -35,6 +35,9 @@ const pageQuery = graphql`
       }
       fields {
         editUrl
+        readingTime {
+          text
+        }
       }
     }
   }
@@ -50,11 +53,11 @@ const BlogPostSubtitle = styled.h2.attrs({ className: "subtitle is-6" })`
     top: 0.125em;
     position: relative;
 
-    margin-right: 10px;
+    margin-right: 5px;
   }
 
   svg:not(:first-child) {
-    margin-left: 10px;
+    margin-left: 20px;
   }
 
   a {
@@ -117,6 +120,8 @@ const BlogPost: React.FC<BlogPostProps> = ({ data, pageContext }) => {
             <Time dateTime={post.frontmatter.date} />
             <FaRegEdit />
             <a href={post.fields.editUrl}>suggest edit</a>
+            <FaRegClock />
+            <span>~{post.fields.readingTime.text}</span>
           </BlogPostSubtitle>
         </header>
         <PostContents dangerouslySetInnerHTML={{ __html: post.html }} />
