@@ -8,6 +8,7 @@ import Time from "../components/Common/Time"
 import Layout from "../components/Layout"
 import SEO from "../components/Common/SEO"
 import { Tags, Tag } from "../components/Bulma/Tag"
+import truncate from "../utils/truncate"
 
 const pageQuery = graphql`
   query {
@@ -70,7 +71,7 @@ const Posts: React.FC<PostsProps> = ({ data }) => {
                           color: #4a4a4a;
                         `}
                       >
-                        {post.node.frontmatter.description}
+                        {truncate(post.node.frontmatter.description)}
                       </p>
                       <hr />
                       <Columns>
