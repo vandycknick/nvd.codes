@@ -127,6 +127,7 @@ interface BlogPostProps {
 const BlogPost: React.FC<BlogPostProps> = ({ data, pageContext }) => {
   const post = data.markdownRemark
   const { previous, next } = pageContext
+  const contents = `<p>${post.frontmatter.description}</p>${post.html}`
 
   return (
     <Layout>
@@ -146,7 +147,7 @@ const BlogPost: React.FC<BlogPostProps> = ({ data, pageContext }) => {
             <span>~{post.fields.readingTime.text}</span>
           </BlogPostSubtitle>
         </header>
-        <PostContents dangerouslySetInnerHTML={{ __html: post.html }} />
+        <PostContents dangerouslySetInnerHTML={{ __html: contents }} />
         <Divider
           text="TAGS"
           css={`

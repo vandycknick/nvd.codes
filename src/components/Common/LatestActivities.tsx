@@ -8,6 +8,7 @@ import { Column, Columns } from "../Bulma/Columns"
 import Paragraph from "../Bulma/Paragraph"
 import { Title } from "../Bulma/Title"
 import { Tag } from "../Bulma/Tag"
+import { fromTablet } from "./mediaQuery"
 
 type LatestActivitiesProps = {
   activity: Activity
@@ -16,6 +17,8 @@ type LatestActivitiesProps = {
 const CommitLink = styled.a`
   color: #3d588f !important;
   box-shadow: inset 0 -1px 0 0 rgba(0, 0, 0, 0.1);
+  word-break: break-word;
+  white-space: pre-wrap;
 `
 
 const cssFromBackgroundColor = (background: string): any => {
@@ -88,6 +91,11 @@ const LatestActivities: React.FC<LatestActivitiesProps> = ({ activity }) => (
                 className="is-size-7"
                 css={`
                   padding-bottom: 2rem;
+                  padding-right: 1rem;
+
+                  ${fromTablet`
+                    padding-right: 2rem;
+                  `}
                 `}
               >
                 {repo.description}

@@ -1,13 +1,14 @@
 ---
+id: 62D25687-99DC-472C-938B-2CBDE93420AA
 title: Docker secrets in ASP.NET Core
-description: A quick introduction to docker secrets, how to use them with docker-compose and how to get access to them in ASP.NET Core.
+description: In this post, I want to show you a simple and different way to share secrets to your application. What are docker secrets and how can I start using them in my ASP.NET Core application? Keep reading 😄.
 date: 2020-03-10 20:00:00 +01:00
 categories: [dotnet, aspnet, docker, secrets]
 ---
 
-Docker Secrets are a way to share secrets securely and only with the container that needs access to them. First introduced in Docker Swarm version 1.13, secrets are encrypted during transit and at rest. This makes them a great way to distribute connection strings, passwords, certs or other sensitive information.
+## What are docker secrets?
 
-I don't use Docker Swarm nor am I planning to use it anytime soon. And that is were `docker-compose` comes into the story, with `docker-compose` we can leverage this feature for development without ever needing Docker Swarm.
+In its most simple form, they are just a way to share secrets securely and only with a docker container that needs access to then. They were first introduced in Docker Swarm version 1.13, secrets are encrypted during transit and at rest. This makes them a great way to distribute connection strings, passwords, certs or other sensitive information. Now you might be wondering, can I than only use them with Docker Swarm? And that is were `docker-compose` comes into the story, with `docker-compose` we can leverage this feature for development without ever needing Docker Swarm.
 
 ## How to use Docker secrets with docker-compose
 
@@ -19,8 +20,8 @@ For example, imagine the following project. We have a `docker-compose.yml` file 
 ```
 To use this in our `docker-compose.yml` file there are 2 things we need to do:
 
-1. Define a new top-level secret under the secrets key, give it a name and a reference to our file. In the example, you see that the `file` key contains a reference to our file `my-little-secret.txt`
-2. Add a reference to our secrets for the container that needs access to it.
+1. Define a new top-level secret under the secrets key, give it a name and a reference to our file. In the example, you will see that the `file` key contains a reference `my-little-secret.txt`
+2. Next up you can add a reference to that secret for any containers that need access to it.
 
 ```yml{8-9,11-13}
 version: "3.6"
@@ -38,7 +39,7 @@ secrets: # (1)
     file: ./my-little-secret.txt
 ```
 
-The secret file can technically contain whatever you want and your application can then handle whatever logic you need to consume those values. But I prefer to keep this mapping 1 to 1, where each file contains the value of a secret. It makes it easier to scope certain secrets to specific containers and you kinda create a file-based key-value store. It will also make consuming secrets in ASP.NET easier as you will see later.
+This secret file can contain whatever you prefer, and it is up to your application to interpret in whatever way it seems fit. If you like to use JSON or YAML to store multiple secrets in one file then this is possible. What I prefer to do is to limit this to one secret per file, this way you simulate a key-value store based on your file system. This makes it easier to scope certain secrets to specific containers and makes sure that you abide by the rules of least privilege. It will also make it easier to consume your secrets in ASP.NET easier as you will see later.
 
 For example, imagine our `my-little-secret.txt` file contained the following secret:
 
@@ -68,7 +69,7 @@ A simple nuget install in your project or adding the following in your `csproj` 
 ...
 ```
 
-This package uses a directory's files as configuration key/values:
+This package uses files inside a given directory as configuration key/values.
 
 ```csharp
 .ConfigureAppConfiguration((hostingContext, config) =>

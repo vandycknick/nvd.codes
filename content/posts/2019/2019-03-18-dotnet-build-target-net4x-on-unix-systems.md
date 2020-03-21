@@ -1,6 +1,6 @@
 ---
 title: How to target net4x on Unix based systems with dotnet build
-description: .NET Core and Mono has made it easy for us as developers to run applications on multiple platforms. But targeting multiple runtimes can sometimes still prove to be quite difficult...
+description: .NET Core and Mono has made it easy for us as developers to run applications on multiple platforms. But targeting multiple runtimes can sometimes still prove to be quite difficult.
 date: 2019-03-18 21:00:00 +01:00
 categories: [dotnet, dotnet core, mono, unix, build]
 ---

@@ -3,6 +3,7 @@ import { Link } from "gatsby"
 import { FaRegNewspaper } from "react-icons/fa"
 import * as timeago from "timeago.js"
 
+import truncate from "../../utils/truncate"
 import { Column, Columns } from "../Bulma/Columns"
 import Paragraph from "../Bulma/Paragraph"
 import { Subtitle, Title } from "../Bulma/Title"
@@ -24,19 +25,6 @@ const LatestsPostsList: React.FC<LatestPostsProps> = ({ posts }) => (
           `}
         >
           <Link to={l.node.fields.slug}>{l.node.frontmatter.title}</Link>
-          <Fragment>
-            {index === 0 && (
-              <Tag
-                size="small"
-                color="primary"
-                css={`
-                  margin-left: 10px;
-                `}
-              >
-                Latest
-              </Tag>
-            )}
-          </Fragment>
         </Subtitle>
         <Paragraph
           className="is-italic"
@@ -48,8 +36,19 @@ const LatestsPostsList: React.FC<LatestPostsProps> = ({ posts }) => (
           published {timeago.format(l.node.frontmatter.date)}
         </Paragraph>
         <Paragraph className="is-size-7">
-          {l.node.frontmatter.description}
+          {truncate(l.node.frontmatter.description)}
         </Paragraph>
+        {index === 0 && (
+          <Tag
+            size="small"
+            color="primary"
+            css={`
+              margin-left: 10px;
+            `}
+          >
+            Latest
+          </Tag>
+        )}
       </Column>
     ))}
   </Columns>
@@ -65,11 +64,7 @@ const LatestPosts: React.FC<LatestPostsProps> = ({ posts }) => (
         `}
       />
     </Title>
-    {posts.length === 0 ? (
-      "Nothing to see"
-    ) : (
-      <LatestsPostsList posts={posts} />
-    )}
+    {posts.length === 0 ? "Nothing to see" : <LatestsPostsList posts={posts} />}
   </Fragment>
 )
 

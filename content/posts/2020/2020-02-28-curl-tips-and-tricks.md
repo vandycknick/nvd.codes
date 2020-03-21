@@ -1,21 +1,20 @@
 ---
 title: cURL tips and tricks
-description: A list of tips and tricks that I have accumulated over the years of learning curl.
+description: In this post, I want to show you a list of cURL tips and tricks that I have accumulated of the years of using and learning cURL. Platform agnostic, cURL is easily accessible for every developer and well worth grasping its basic usage.
 date: 2020-02-28 20:00:00 +01:00
 categories: [sysadmin, tools, tips]
 ---
 
-cURL<cite>[1][1]</cite> (or curl as I will refer to it for the rest of the article) is amazing. While pretty daunting and hard to learn at first, I think it's an amazing tool to learn and a great asset in your toolbox. This is a write up of curl basics to advanced tricks that I learned over the years of hunting blog posts, StackOverflow articles, ...
+cURL<cite>[1][1]</cite> (or curl as I will refer to it for the rest of the article) is an incredible tool and a worthy asset in your developer toolkit. Like every great craftsman, you as a developer deserve great tools. Granted curl can be daunting and seemingly tough to learn at first, I promise you its worth your investment. This is a write up of basic to more advanced tips and tricks that I accumulated of the years of reading blog posts, curl man pages, StackOverflow, ...
 
 ## The basics 📓
-Let's start with some basic commands to get data from the server and also let's figure out how we can send data. Feel free to execute these commands step by step while you go through this article.
+Let's start with some basic commands to get data from the server and also let's figure out how we can send data. Feel free to execute these commands step by step while you go through the article.
 
-First of let's try sending a simple GET request.
+First of let's try a simple GET request.
 ```sh
 curl https:/httpbin.org/get
 ```
-
-You should get a response quite similar to this one:
+If all goes well you should be presented with a response quite similar to this one:
 
 ```
 {
