@@ -5,7 +5,7 @@ ROOT	:= $(shell pwd)
 INFRA	:= $(ROOT)/infra
 
 dev:
-	yarn develop
+	GATSBY_PROJECT_API=https://api.nvd.codes yarn develop
 
 lint:
 	yarn type-check
