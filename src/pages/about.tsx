@@ -61,7 +61,7 @@ const About: React.FC<AboutProps> = ({ data }) => (
           css={`
             margin-top: 1rem;
           `}
-          href="https://api.nvd.codes/resume/resume.pdf"
+          href="https://resume.nvd.codes/resume.pdf"
           color="primary"
           rounded
         >
