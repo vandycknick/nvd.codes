@@ -13,17 +13,18 @@ config = Config(name="nvd-codes-infra")
 
 current_file_path = path.dirname(path.realpath(__file__))
 project_api_fallback = Path(
-    current_file_path,
-    "../../.build/bin/ProjectsApi/Release/netcoreapp3.1/publish",
+    current_file_path, "../../.build/bin/ProjectsApi/Release/netcoreapp3.1/publish",
 ).resolve()
-proxy_fallback = Path(current_file_path, "../../.build/bin/Proxy/Release/netcoreapp3.1/publish").resolve()
+proxy_fallback = Path(
+    current_file_path, "../../.build/bin/Proxy/Release/netcoreapp3.1/publish"
+).resolve()
 
 
 def setup():
     project_api_dir = environ.get("PROJECT_API_FOLDER", str(project_api_fallback))
     proxy_dir = environ.get("PROXY_FOLDER", str(proxy_fallback))
 
-    resource_group = core.ResourceGroup("nvd-codes-rg")
+    resource_group = core.ResourceGroup("nvd-codes")
 
     www_storage_account = storage.Account(
         "wwwsa",
@@ -31,10 +32,8 @@ def setup():
         account_replication_type="LRS",
         account_tier="Standard",
         account_kind="StorageV2",
-    )
-
-    static_website = StorageStaticWebsite(
-        "www-static", account_name=www_storage_account.name
+        enable_https_traffic_only=False,
+        static_website={"indexDocument": "index.html",},
     )
 
     www_cdn = cdn.Profile(
@@ -45,8 +44,8 @@ def setup():
         "www-cdn-ep",
         resource_group_name=resource_group.name,
         profile_name=www_cdn.name,
-        origin_host_header=static_website.hostname,
-        origins=[{"name": "blobstorage", "hostName": static_website.hostname}],
+        origin_host_header=www_storage_account.primary_web_host,
+        origins=[{"name": "blobstorage", "hostName": www_storage_account.primary_web_host}],
     )
 
     api_plan = appservice.Plan(
@@ -86,4 +85,3 @@ def setup():
     export(
         "www_storage_connection_string", www_storage_account.primary_connection_string
     )
-

@@ -31,12 +31,14 @@ def create_proxy(
         container_access_type="private",
     )
 
-    zip_blob = storage.ZipBlob(
+    zip_blob = storage.Blob(
         "proxy-zipblob",
         storage_account_name=proxy_storage_account.name,
         storage_container_name=proxy_container.name,
-        type="block",
-        content=asset.AssetArchive({".": asset.FileArchive(path)}),
+        type="Block",
+        source=asset.AssetArchive(
+            {".": asset.FileArchive(path)}
+        ),
     )
 
     signed_blob_url = Output.all(

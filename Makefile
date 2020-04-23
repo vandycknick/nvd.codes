@@ -32,19 +32,12 @@ infra-up:
 		pipenv run \
 			pulumi up --yes --suppress-outputs
 
-infra-preview:
-	cd $(INFRA) && \
-		pipenv run \
-			pulumi preview
-
-infra-output:
-	cd $(INFRA) && \
-		pipenv run \
-			pulumi stack output --json
-
+.PHONY: deploy
 deploy: clean build
-	cd $(INFRA) && \
-		pipenv run \
-			pulumi stack output --json | \
+	@echo ""
+	@echo "\033[0;32mDeploying Assets \033[0m"
+	@echo "\033[0;32m------------------- \033[0m"
+	@cd $(INFRA) && \
+			(pipenv run pulumi stack output -s prod --json | \
 			jq -r '.www_storage_connection_string' | \
-			dotnet run -p $(ROOT)/tools/AzureStaticFilesUploader -- --cwd $(ROOT)/public
+			pipenv run python infra/static/upload.py --container '$$web' --cwd $(ROOT)/public)
