@@ -28,12 +28,14 @@ def create_project_api(
         container_access_type="private",
     )
 
-    zip_blob = storage.ZipBlob(
+    zip_blob = storage.Blob(
         "project-api-zipblob",
         storage_account_name=project_api_storage_account.name,
         storage_container_name=project_api_container.name,
-        type="block",
-        content=asset.AssetArchive({".": asset.FileArchive(path)}),
+        type="Block",
+        source=asset.AssetArchive(
+            {".": asset.FileArchive(path)}
+        ),
     )
 
     signed_blob_url = Output.all(
