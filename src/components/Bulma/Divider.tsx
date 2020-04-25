@@ -1,4 +1,5 @@
-import styled, { css } from "styled-components"
+import { css } from "@emotion/core"
+import styled from "@emotion/styled"
 
 interface DividerProps {
   text?: string
@@ -12,13 +13,13 @@ const Divider = styled.div<DividerProps>`
   margin: 2rem 0;
   text-align: center;
 
-  ${props =>
-    props.text &&
+  ${({ text }) =>
+    text &&
     css`
       &::after {
         background: #fff;
         color: #b5b5b5;
-        content: "${props.text}";
+        content: "${text}";
         display: inline-block;
         font-size: 0.75rem;
         padding: 0.4rem 0.8rem;

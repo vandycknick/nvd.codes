@@ -1,24 +1,19 @@
-import styled, { CSSProp, StyledComponent } from "styled-components"
+import React from "react"
+import cs from "classnames"
 
 type ParagraphProps = {
   hasTextCentered?: boolean
-  css?: CSSProp
   className?: string
 }
 
-const paragraphAttrs = (props: ParagraphProps): { className: string } => {
-  let className = ""
-
-  if (props.hasTextCentered) className = `${className} has-text-centered`
-
-  return { className }
-}
-
-const Paragraph: StyledComponent<
-  "p",
-  any,
-  ParagraphProps,
-  never
-> = styled.p.attrs<ParagraphProps>(paragraphAttrs)``
+const Paragraph: React.FC<ParagraphProps> = ({
+  className,
+  hasTextCentered,
+  children,
+}) => (
+  <p className={cs({ "has-text-centered": hasTextCentered }, className)}>
+    {children}
+  </p>
+)
 
 export default Paragraph

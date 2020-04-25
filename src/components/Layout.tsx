@@ -1,29 +1,31 @@
 import React from "react"
-import styled, { createGlobalStyle } from "styled-components"
+import { css, Global } from "@emotion/core"
 
 import Header from "./Header"
 import Footer from "./Footer"
 import "./Layout.scss"
 
-const GlobalStyle = createGlobalStyle`
-    #gatsby-focus-wrapper {
-        display: flex;
-        flex-direction: column;
-        min-height: 100vh;
-        padding-top: 3.25rem;
-    }
-`
-
-const Main = styled.main`
-  flex: 1;
-`
-
 const Layout: React.FC = ({ children }) => {
   return (
     <>
-      <GlobalStyle />
+      <Global
+        styles={css`
+          #gatsby-focus-wrapper {
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+            padding-top: 3.25rem;
+          }
+        `}
+      />
       <Header />
-      <Main>{children}</Main>
+      <main
+        css={css`
+          flex: 1;
+        `}
+      >
+        {children}
+      </main>
       <Footer />
     </>
   )

@@ -1,5 +1,7 @@
 import React from "react"
-import styled, { css, StyledComponent } from "styled-components"
+import { css } from "@emotion/core"
+import styled from "@emotion/styled"
+import cs from "classnames"
 
 type TitleProps = {
   size?: "1" | "2" | "3" | "4" | "5" | "6"
@@ -15,64 +17,36 @@ type SubtitleProps = {
   className?: string
 }
 
-const titleAttrs = (props: TitleProps): { className: string } => {
-  let className = "title"
-
-  if (props.size) className = `${className} is-${props.size}`
-
-  if (props.spaced) className = `${className} is-spaced`
-
-  return { className }
-}
-
-const subtitleAttrs = (props: SubtitleProps): { className: string } => {
-  let className = "subtitle"
-
-  if (props.size) className = `${className} is-${props.size}`
-
-  return { className }
-}
-
-const TitleStyles: StyledComponent<
-  "h1",
-  any,
-  TitleProps,
-  never
-> = styled.h1.attrs<TitleProps>(titleAttrs)`
-
+const InternalTitle = styled.h1<TitleProps>`
     span {
         display: inline-flex;
 
-        ${(props: TitleProps) =>
-          props.shadow &&
+        ${({ shadow }) =>
+          shadow &&
           css`
             padding-bottom: 5px;
           `}
 
-        ${(props: TitleProps) =>
-          props.shadow &&
-          props.shadow === "green" &&
+        ${({ shadow }) =>
+          shadow === "green" &&
           css`
             box-shadow: inset 0 -2px 0 rgba(35, 209, 153, 0.2);
           `}
 
-        ${(props: TitleProps) =>
-          props.shadow &&
-          props.shadow === "red" &&
+        ${({ shadow }) =>
+          shadow === "red" &&
           css`
             box-shadow: inset 0 -2px 0 rgba(255, 74, 110, 0.2);
           `}
 
-        ${(props: TitleProps) =>
-          props.shadow &&
-          props.shadow === "yellow" &&
+        ${({ shadow }) =>
+          shadow === "yellow" &&
           css`
             box-shadow: inset 0 -2px 0 rgba(255, 221, 87, 0.2);
           `}
 
-        ${(props: TitleProps) =>
-          props.shadow &&
-          props.shadow === "purple" &&
+        ${({ shadow }) =>
+          shadow === "purple" &&
           css`
             box-shadow: inset 0 -2px 0 rgba(184, 107, 255, 0.2);
           `}
@@ -85,26 +59,24 @@ const TitleStyles: StyledComponent<
             position: relative;
         }
     }
-
 `
 
-const SubtitleStyles: StyledComponent<
-  "h2",
-  any,
-  SubtitleProps,
-  never
-> = styled.h2.attrs<SubtitleProps>(subtitleAttrs)``
-
-const Title: React.FC<TitleProps> = props => (
-  <TitleStyles {...props}>
-    <span>{props.children}</span>
-  </TitleStyles>
+const Title: React.FC<TitleProps> = ({ children, ...props }) => (
+  <InternalTitle
+    className={cs("title", {
+      [`is-${props.size}`]: !!props.size,
+      "is-spaced": props.spaced,
+    })}
+    {...props}
+  >
+    <span>{children}</span>
+  </InternalTitle>
 )
 
-const Subtitle: React.FC<SubtitleProps> = props => (
-  <SubtitleStyles {...props}>
-    <span>{props.children}</span>
-  </SubtitleStyles>
+const Subtitle: React.FC<SubtitleProps> = ({ children, className, size }) => (
+  <h2 className={cs("subtitle", { [`is-${size}`]: !!size }, className)}>
+    <span>{children}</span>
+  </h2>
 )
 
 export { Title, Subtitle }

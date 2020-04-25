@@ -1,4 +1,6 @@
 import React from "react"
+import { css } from "@emotion/core"
+import styled from "@emotion/styled"
 import { graphql, Link } from "gatsby"
 import { FaRegCalendarAlt, FaRegEdit, FaRegClock } from "react-icons/fa"
 import "./prism-theme.css"
@@ -8,7 +10,6 @@ import SEO from "../components/Common/SEO"
 
 import Section from "../components/Bulma/Section"
 import { Title } from "../components/Bulma/Title"
-import styled from "styled-components"
 import Time from "../components/Common/Time"
 
 import { Tags, Tag } from "../components/Bulma/Tag"
@@ -62,7 +63,7 @@ const pageQuery = graphql`
   }
 `
 
-const BlogPostSubtitle = styled.h2.attrs({ className: "subtitle is-6" })`
+const BlogPostSubtitle = styled.h2`
   display: inline-flex;
   align-self: center;
 
@@ -84,7 +85,7 @@ const BlogPostSubtitle = styled.h2.attrs({ className: "subtitle is-6" })`
   }
 `
 
-const PostContents = styled.section.attrs({ className: "content" })`
+const PostContents = styled.section`
   margin-top: 50px;
 
   h1,
@@ -114,7 +115,7 @@ const ArticleTags = styled(Tags)`
   justify-content: center;
 `
 
-const LinkButton = Button.withComponent(Link)
+const LinkButton = styled(Button)``.withComponent(Link)
 
 interface BlogPostProps {
   data: BlogPostBySlugQuery
@@ -135,10 +136,10 @@ const BlogPost: React.FC<BlogPostProps> = ({ data, pageContext }) => {
         title={post.frontmatter.title}
         description={post.frontmatter.description || post.excerpt}
       />
-      <Section as="article" className="container">
+      <Section className="container">
         <header className="has-text-centered">
           <Title>{post.frontmatter.title}</Title>
-          <BlogPostSubtitle>
+          <BlogPostSubtitle className="subtitle is-6">
             <FaRegCalendarAlt />
             <Time dateTime={post.frontmatter.date} />
             <FaRegEdit />
@@ -147,15 +148,18 @@ const BlogPost: React.FC<BlogPostProps> = ({ data, pageContext }) => {
             <span>~{post.fields.readingTime.text}</span>
           </BlogPostSubtitle>
         </header>
-        <PostContents dangerouslySetInnerHTML={{ __html: contents }} />
+        <PostContents
+          className="content"
+          dangerouslySetInnerHTML={{ __html: contents }}
+        />
         <Divider
           text="TAGS"
-          css={`
+          css={css`
             margin-top: 4rem;
           `}
         />
         <ArticleTags size="normal">
-          {post.frontmatter.categories.map(tag => (
+          {post.frontmatter.categories.map((tag) => (
             <Tag color="dark" key={tag}>
               {tag}
             </Tag>
@@ -164,7 +168,7 @@ const BlogPost: React.FC<BlogPostProps> = ({ data, pageContext }) => {
       </Section>
       <nav
         className="container"
-        css={`
+        css={css`
           padding: 0 1.5rem 3rem 1.5rem;
         `}
       >

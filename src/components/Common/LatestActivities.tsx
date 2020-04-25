@@ -1,5 +1,6 @@
 import React from "react"
-import styled, { css } from "styled-components"
+import { css, SerializedStyles } from "@emotion/core"
+import styled from "@emotion/styled"
 import { MdHistory } from "react-icons/md"
 import * as timeago from "timeago.js"
 
@@ -21,7 +22,7 @@ const CommitLink = styled.a`
   white-space: pre-wrap;
 `
 
-const cssFromBackgroundColor = (background: string): any => {
+const cssFromBackgroundColor = (background: string): SerializedStyles => {
   let color = background
 
   if (color.length < 5) {
@@ -54,7 +55,7 @@ const LatestActivities: React.FC<LatestActivitiesProps> = ({ activity }) => (
             </CommitLink>
             <Paragraph
               className="is-size-7"
-              css={`
+              css={css`
                 margin-top: 1rem;
               `}
             >
@@ -70,12 +71,12 @@ const LatestActivities: React.FC<LatestActivitiesProps> = ({ activity }) => (
           Latest repos
         </Title>
         <Columns isMultiline className="is-marginless">
-          {activity.projects.map(repo => (
+          {activity.projects.map((repo) => (
             <Column key={repo.id} size="half" className="is-paddingless">
               <Title
                 as="h6"
                 size="6"
-                css={`
+                css={css`
                   margin-bottom: 0.5rem !important;
                 `}
               >
@@ -89,7 +90,7 @@ const LatestActivities: React.FC<LatestActivitiesProps> = ({ activity }) => (
               </Title>
               <Paragraph
                 className="is-size-7"
-                css={`
+                css={css`
                   padding-bottom: 2rem;
                   padding-right: 1rem;
 

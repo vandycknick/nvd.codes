@@ -1,4 +1,5 @@
 import React, { useState, useCallback } from "react"
+import { css } from "@emotion/core"
 
 import Navbar from "./Bulma/Navbar"
 
@@ -12,20 +13,20 @@ const Header: React.FC = () => {
     (event: React.MouseEvent<Element, MouseEvent>) => {
       event.preventDefault()
       event.stopPropagation()
-      setIsActive(isActive => !isActive)
+      setIsActive((isActive) => !isActive)
     },
     [],
   )
   const closeMenu = useCallback(() => setIsActive(false), [])
 
   return (
-    <>
+    <header>
       <GlobalEvent type="click" listener={closeMenu} />
+      {console.log("going to render header")}
       <Navbar
-        as="header"
         isSticky
         color="dark"
-        css={`
+        css={css`
           box-shadow: 0px 1px 10px 0px rgba(0, 0, 0, 0.75);
         `}
       >
@@ -43,7 +44,7 @@ const Header: React.FC = () => {
           </Navbar.Menu>
         </div>
       </Navbar>
-    </>
+    </header>
   )
 }
 

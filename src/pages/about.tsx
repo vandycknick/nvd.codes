@@ -1,4 +1,6 @@
 import React from "react"
+import { css } from "@emotion/core"
+
 import Layout from "../components/Layout"
 import Section from "../components/Bulma/Section"
 import Header from "../components/Bulma/Header"
@@ -31,21 +33,15 @@ const About: React.FC<AboutProps> = ({ data }) => (
   <Layout>
     <SEO title="About" />
     <Section className="container" hasContent>
-      <Header
-        css={`
-          margin-bottom: 5rem;
-        `}
-        hasTextCentered
-      >
+      <Header hasTextCentered>
         <Title shadow="green">About Nick Van Dyck</Title>
         <Image
           src={data.avatar.childImageSharp.fixed.src}
-          css={`
-            margin: 2.5rem auto;
+          css={css`
+            margin: 2.5rem auto !important;
           `}
           size="128x128"
           rounded
-          centered
         />
         <Paragraph>
           I’m an enthusiastic and passionate senior software engineer with over
@@ -58,7 +54,7 @@ const About: React.FC<AboutProps> = ({ data }) => (
           source or personal projects, read books or watch a good movie.
         </Paragraph>
         <LinkButton
-          css={`
+          css={css`
             margin-top: 1rem;
           `}
           href="https://resume.nvd.codes/resume.pdf"

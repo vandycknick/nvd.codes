@@ -1,4 +1,5 @@
-import styled, { css } from "styled-components"
+import { css } from "@emotion/core"
+import styled from "@emotion/styled"
 
 type TagProps = {
   color?:
@@ -88,16 +89,16 @@ const Tag = styled.span<TagProps>`
   padding-left: 0.75em;
   padding-right: 0.75em;
   white-space: nowrap;
-  ${(props: TagProps) => {
-    const color = tagColorPallet[props.color ?? "default"]
+  ${({ color }) => {
+    const colorPallet = tagColorPallet[color ?? "default"]
     return css`
-      background-color: ${color.background};
-      color: ${color.color};
+      background-color: ${colorPallet.background};
+      color: ${colorPallet.color};
     `
   }}
 
-  ${(props: TagProps) => {
-    switch (props.size) {
+  ${({ size }) => {
+    switch (size) {
       case "small":
         return css`
           font-size: 0.6rem;
@@ -123,13 +124,13 @@ const Tag = styled.span<TagProps>`
     }
   }}
 
-  ${(props: TagProps) =>
-    props.rounded &&
+  ${({ rounded }) =>
+    rounded &&
     css`
       border-radius: 290486px;
     `}
 
-  ${(props: TagProps) =>
+  ${(props) =>
     props.delete &&
     css`
       margin-left: 1px;
@@ -176,9 +177,11 @@ const Tags = styled.span<TagsProps>`
   flex-wrap: wrap;
   justify-content: flex-start;
 
-  ${(props: TagsProps) => props.centered && css`
+  ${(props: TagsProps) =>
+    props.centered &&
+    css`
       justify-content: center;
-  `}
+    `}
 
   ${Tag} {
     margin-bottom: 0.5rem;

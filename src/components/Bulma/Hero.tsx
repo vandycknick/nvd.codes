@@ -1,4 +1,5 @@
-import styled, { StyledComponent } from "styled-components"
+import React from "react"
+import cs from "classnames"
 
 type HeroProps = {
   color?:
@@ -13,27 +14,27 @@ type HeroProps = {
   hasGradient?: boolean
 }
 
-const heroAttrs = (props: HeroProps): { className: string } => {
-  let className = "hero"
+const Hero: React.FC<HeroProps> = ({ children, color, size, hasGradient }) => (
+  <section
+    className={cs("hero", {
+      [`is-${color}`]: !!color,
+      [`is-${size}`]: !!size,
+      "is-bold": hasGradient,
+    })}
+  >
+    {children}
+  </section>
+)
 
-  if (props.color) className = `${className} is-${props.color}`
-
-  if (props.size) className = `${className} is-${props.size}`
-
-  if (props.hasGradient) className = `${className} is-bold`
-
-  return { className }
-}
-
-const Hero: StyledComponent<
-  "section",
-  any,
-  HeroProps,
-  never
-> = styled.section.attrs<HeroProps>(heroAttrs)``
-const HeroHead = styled.div.attrs({ className: "hero-head" })``
-const HeroBody = styled.div.attrs({ className: "hero-body" })``
-const HeroFoot = styled.div.attrs({ className: "hero-foot" })``
+const HeroHead: React.FC = ({ children }) => (
+  <div className="hero-head">{children}</div>
+)
+const HeroBody: React.FC = ({ children }) => (
+  <div className="hero-body">{children}</div>
+)
+const HeroFoot: React.FC = ({ children }) => (
+  <div className="hero-foot">{children}</div>
+)
 
 const HeroWrapper = Object.assign(Hero, {
   Head: HeroHead,

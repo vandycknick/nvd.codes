@@ -1,26 +1,28 @@
-import styled, { CSSProp, StyledComponent } from "styled-components"
+import React from "react"
+import styled from "@emotion/styled"
+import cs from "classnames"
 
 type SectionProps = {
   hasContent?: boolean
   hasTextCentered?: boolean
-  css?: CSSProp
+  className?: string
 }
 
-const sectionProps = (props: SectionProps): { className: string } => {
-  let className = "section"
+const Section: React.FC<SectionProps> = ({
+  children,
+  className,
+  hasContent,
+  hasTextCentered,
+}) => (
+  <section
+    className={cs(
+      "section",
+      { content: hasContent, "has-text-centered": hasTextCentered },
+      className,
+    )}
+  >
+    {children}
+  </section>
+)
 
-  if (props.hasContent) className = `${className} content`
-
-  if (props.hasTextCentered) className = `${className} has-text-centered`
-
-  return { className }
-}
-
-const Section: StyledComponent<
-  "section",
-  any,
-  SectionProps,
-  never
-> = styled.section.attrs<SectionProps>(sectionProps)``
-
-export default Section
+export default styled(Section)``

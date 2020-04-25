@@ -1,8 +1,10 @@
-import styled, { CSSProp, StyledComponent } from "styled-components"
+import React from "react"
+import styled from "@emotion/styled"
+import cs from "classnames"
 
 type ButtonGroupProps = {
   centered?: boolean
-  css?: CSSProp
+  className?: string
 }
 
 type ButtonProps = {
@@ -24,51 +26,71 @@ type ButtonProps = {
   inverted?: boolean
   rounded?: boolean
   loading?: boolean
-  css?: CSSProp
+  className?: string
 }
 
-const buttonAttrs = (props: ButtonProps): { className: string } => {
-  let className = "button"
+const ButtonGroup: React.FC<ButtonGroupProps> = ({
+  className,
+  children,
+  centered,
+}) => (
+  <div className={cs("buttons", { "is-centered": centered }, className)}>
+    {children}
+  </div>
+)
 
-  if (props.color) className = `${className} is-${props.color}`
+const Button: React.FC<ButtonProps> = ({ className, children, ...props }) => (
+  <button
+    className={cs(
+      "button",
+      {
+        [`is-${props.color}`]: !!props.color,
+        [`is-${props.size}}`]: !!props.size,
+        "is-fullwidth": props.fullwidth,
+        "is-outlined": props.outlined,
+        "is-inverted": props.inverted,
+        "is-rounded": props.rounded,
+        "is-loading": props.loading,
+      },
+      className,
+    )}
+  >
+    {children}
+  </button>
+)
 
-  if (props.size) className = `${className} is-${props.size}}`
-
-  if (props.fullwidth) className = `${className} is-fullwidth`
-
-  if (props.outlined) className = `${className} is-outlined`
-
-  if (props.inverted) className = `${className} is-inverted`
-
-  if (props.rounded) className = `${className} is-rounded`
-
-  if (props.loading) className = `${className} is-loading`
-
-  return { className }
-}
-
-const buttonGroupAttrs = (props: ButtonGroupProps): { className: string } => {
-  let className = "buttons"
-
-  if (props.centered) className = `${className} is-centered`
-
-  return { className }
-}
-
-const ButtonGroup: StyledComponent<
-  "div",
-  any,
-  ButtonGroupProps,
-  never
-> = styled.div.attrs<ButtonGroupProps>(buttonGroupAttrs)``
-
-const Button: StyledComponent<
-  "button",
-  any,
-  ButtonProps,
-  never
-> = styled.button.attrs<ButtonProps>(buttonAttrs)``
-
-const LinkButton = Button.withComponent("a")
+const LinkButton: React.FC<
+  ButtonProps & React.AnchorHTMLAttributes<HTMLAnchorElement>
+> = ({
+  className,
+  children,
+  color,
+  size,
+  fullwidth,
+  outlined,
+  inverted,
+  rounded,
+  loading,
+  ...rest
+}) => (
+  <a
+    className={cs(
+      "button",
+      {
+        [`is-${color}`]: !!color,
+        [`is-${size}}`]: !!size,
+        "is-fullwidth": fullwidth,
+        "is-outlined": outlined,
+        "is-inverted": inverted,
+        "is-rounded": rounded,
+        "is-loading": loading,
+      },
+      className,
+    )}
+    {...rest}
+  >
+    {children}
+  </a>
+)
 
 export { ButtonGroup, Button, LinkButton }

@@ -1,5 +1,6 @@
 import React, { AnimationEvent, MouseEvent } from "react"
-import styled, { keyframes } from "styled-components"
+import { keyframes } from "@emotion/core"
+import styled from "@emotion/styled"
 
 const roulette = keyframes`
 0% {
@@ -110,7 +111,7 @@ interface TextRouletteProps {
 const TextRoulette: React.FC<TextRouletteProps> = ({ messages, ...rest }) => (
   <Roulette {...rest}>
     <ul onClick={triggerAnimation} onAnimationEnd={onAnimationEnd}>
-      {messages.map(m => (
+      {messages.map((m) => (
         <li key={m}>{m}</li>
       ))}
     </ul>

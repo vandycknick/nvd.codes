@@ -1,4 +1,5 @@
 import React, { Fragment } from "react"
+import { css } from "@emotion/core"
 import { Link } from "gatsby"
 import { FaRegNewspaper } from "react-icons/fa"
 import * as timeago from "timeago.js"
@@ -19,16 +20,16 @@ const LatestsPostsList: React.FC<LatestPostsProps> = ({ posts }) => (
       <Column key={l.node.excerpt} size="one-third">
         <Subtitle
           as="div"
-          size="5"
-          css={`
-            margin-bottom: 5px;
+          size="6"
+          css={css`
+            margin-bottom: 5px !important;
           `}
         >
           <Link to={l.node.fields.slug}>{l.node.frontmatter.title}</Link>
         </Subtitle>
         <Paragraph
           className="is-italic"
-          css={`
+          css={css`
             margin-bottom: 10px;
             font-size: 0.65rem !important;
           `}
@@ -42,7 +43,7 @@ const LatestsPostsList: React.FC<LatestPostsProps> = ({ posts }) => (
           <Tag
             size="small"
             color="primary"
-            css={`
+            css={css`
               margin-left: 10px;
             `}
           >
@@ -59,7 +60,7 @@ const LatestPosts: React.FC<LatestPostsProps> = ({ posts }) => (
     <Title as="h3" size="4" shadow="yellow" spaced>
       Latest Posts
       <FaRegNewspaper
-        css={`
+        css={css`
           margin-left: 10px;
         `}
       />
