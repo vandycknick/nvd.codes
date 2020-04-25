@@ -1,11 +1,14 @@
-import styled, { CSSProp, StyledComponent } from "styled-components"
+import React from "react"
+import cs from "classnames"
+import styled from "@emotion/styled"
+
 import { isMobile } from "../Common/mediaQuery"
 
 type ColumnsProps = {
   centered?: boolean
-  css?: CSSProp
   reversedOrder?: "mobile"
   isMultiline?: boolean
+  className?: string
 }
 
 type Sizes =
@@ -33,48 +36,60 @@ type ColumnProps = {
   offset?: Sizes
   hasTextCentered?: boolean
   isFlex?: boolean
+  className?: string
 }
 
-const columnsAttrs = (props: ColumnsProps): { className: string } => {
-  let className = "columns"
+const InnerColumns: React.FC<ColumnsProps> = ({
+  children,
+  className,
+  centered,
+  isMultiline,
+}) => (
+  <div
+    className={cs(
+      "columns",
+      {
+        "is-centered": centered,
+        "is-multiline": isMultiline,
+      },
+      className,
+    )}
+  >
+    {children}
+  </div>
+)
 
-  if (props.centered) className = `${className} is-centered`
-
-  if (props.isMultiline) className = `${className} is-multiline`
-
-  return { className }
-}
-
-const columnAttrs = (props: ColumnProps): { className: string } => {
-  let className = "column"
-
-  if (props.size) className = `${className} is-${props.size}`
-
-  if (props.offset) className = `${className} is-offset-${props.offset}`
-
-  if (props.hasTextCentered) className = `${className} has-text-centered`
-
-  if (props.isFlex) className = `${className} is-flex`
-
-  return { className }
-}
-
-const Columns: StyledComponent<
-  "div",
-  {},
-  ColumnsProps,
-  never
-> = styled.div.attrs<ColumnsProps>(columnsAttrs)`
-  ${(props: ColumnsProps) =>
-    props.reversedOrder === "mobile" &&
+const Columns = styled(InnerColumns)`
+  ${({ reversedOrder }) =>
+    reversedOrder === "mobile" &&
     isMobile`
         display: flex;
         flex-direction: column-reverse;
     `}
 `
 
-const Column: StyledComponent<"div", {}, ColumnProps, never> = styled.div.attrs<
-  ColumnProps
->(columnAttrs)``
+const Column: React.FC<ColumnProps> = ({
+  children,
+  className,
+  size,
+  offset,
+  hasTextCentered,
+  isFlex,
+}) => (
+  <div
+    className={cs(
+      "column",
+      {
+        [`is-${size}`]: !!size,
+        [`is-offset-${offset}`]: !!offset,
+        "has-text-centered": hasTextCentered,
+        "is-flex": isFlex,
+      },
+      className,
+    )}
+  >
+    {children}
+  </div>
+)
 
 export { Columns, Column }

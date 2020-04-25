@@ -1,11 +1,13 @@
 import React, { MouseEvent, ReactChild } from "react"
-import styled, { css, CSSProp, StyledComponent } from "styled-components"
+import styled from "@emotion/styled"
+import { css } from "@emotion/core"
+import cs from "classnames"
 
 type NavbarProps = {
   isSticky?: boolean
   hasShadow?: boolean
-  css?: CSSProp
   color?: "dark"
+  className?: string
 }
 
 type BurgerProps = {
@@ -19,28 +21,33 @@ type MenuProps = {
   children: ReactChild | ReactChild[]
 }
 
-const navAttrs = (props: NavbarProps): { className: string } => {
-  let className = "navbar"
+const InternalNavbar: React.FC<NavbarProps> = ({
+  children,
+  className,
+  ...props
+}) => (
+  <nav
+    className={cs(
+      "navbar",
+      {
+        "is-fixed-top": props.isSticky,
+        "has-shadow": props.hasShadow,
+        [`is-${props.color}`]: !!props.color,
+      },
+      className,
+    )}
+  >
+    {children}
+  </nav>
+)
 
-  if (props.isSticky) className = `${className} is-fixed-top`
+const Navbar = styled(InternalNavbar)()
 
-  if (props.hasShadow) className = `${className} has-shadow`
-
-  if (props.color) className = `${className} is-${props.color}`
-
-  return { className }
-}
-
-const Navbar: StyledComponent<
-  "nav",
-  any,
-  NavbarProps,
-  never
-> = styled.nav.attrs<NavbarProps>(navAttrs)``
-
-const Brand: StyledComponent<"div", any, any, never> = styled.div.attrs({
-  className: "navbar-brand",
-})``
+const Brand: React.FC = ({ children, ...props }) => (
+  <div className="navbar-brand" {...props}>
+    {children}
+  </div>
+)
 
 const Burger: React.FC<BurgerProps> = ({ isActive: active, onClick }) => (
   <a
@@ -56,7 +63,7 @@ const Burger: React.FC<BurgerProps> = ({ isActive: active, onClick }) => (
   </a>
 )
 
-const MenuWrapper: StyledComponent<"div", any, MenuProps, never> = styled.div`
+const MenuWrapper = styled.div`
   ${(props: MenuProps) =>
     props.color &&
     props.color === "dark" &&

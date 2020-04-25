@@ -1,4 +1,5 @@
 import React from "react"
+import { css } from "@emotion/core"
 import { graphql, Link } from "gatsby"
 import { FaRegCalendarAlt } from "react-icons/fa"
 
@@ -59,7 +60,7 @@ const Posts: React.FC<PostsProps> = ({ data }) => {
                       </p>
                       <p className="subtitle is-6 is-italic">
                         <FaRegCalendarAlt
-                          css={`
+                          css={css`
                             margin-right: 10px;
                             padding-top: 2px;
                           `}
@@ -67,7 +68,7 @@ const Posts: React.FC<PostsProps> = ({ data }) => {
                         <Time dateTime={post.node.frontmatter.date} />
                       </p>
                       <p
-                        css={`
+                        css={css`
                           color: #4a4a4a;
                         `}
                       >

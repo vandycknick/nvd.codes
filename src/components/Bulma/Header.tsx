@@ -1,20 +1,12 @@
-import styled, { css, StyledComponent } from "styled-components"
+import styled from "@emotion/styled"
 
 type HeaderProps = {
   hasTextCentered?: boolean
 }
 
-const Header: StyledComponent<
-  "header",
-  never,
-  HeaderProps,
-  never
-> = styled.header`
-  ${(props: HeaderProps) =>
-    props.hasTextCentered &&
-    css`
-      text-align: center !important;
-    `}
+const Header = styled.header<HeaderProps>`
+  ${({ hasTextCentered }) =>
+    hasTextCentered && "text-align: center !important;"}
 `
 
 export default Header

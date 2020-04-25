@@ -1,37 +1,24 @@
 import React from "react"
-import styled, { css } from "styled-components"
+import cs from "classnames"
 
-type FigureProps = FigureStyleProps & {
+type FigureProps = {
   src: string
   alt?: string
   rounded?: boolean
-}
-
-type FigureStyleProps = {
   size?: "16x16" | "24x24" | "32x32" | "48x38" | "64x64" | "96x96" | "128x128"
-  centered?: boolean
+  className?: string
 }
 
-const figureStyleAttrs = (props: FigureStyleProps): { className: string } => {
-  let className = "image"
-
-  if (props.size) className = `${className} is-${props.size}`
-
-  return { className }
-}
-
-const FigureStyle = styled.picture.attrs<FigureStyleProps>(figureStyleAttrs)`
-  ${(props: FigureStyleProps) =>
-    props.centered &&
-    css`
-      margin: auto;
-    `}
-`
-
-const Figure: React.FC<FigureProps> = ({ src, alt, rounded, ...rest }) => (
-  <FigureStyle {...rest}>
-    <img src={src} alt={alt} className={`${rounded ? "is-rounded" : ""}`} />
-  </FigureStyle>
+const Figure: React.FC<FigureProps> = ({
+  src,
+  alt,
+  rounded,
+  size,
+  className,
+}) => (
+  <figure className={cs("image", { [`is-${size}`]: !!size }, className)}>
+    <img src={src} alt={alt} className={cs({ "is-rounded": rounded })} />
+  </figure>
 )
 
 export default Figure

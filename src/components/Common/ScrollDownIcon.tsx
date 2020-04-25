@@ -1,5 +1,5 @@
 import React from "react"
-import { css, keyframes } from "styled-components"
+import { css, keyframes } from "@emotion/core"
 import { FaAngleDown } from "react-icons/fa"
 
 const bounce = keyframes`

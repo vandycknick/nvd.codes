@@ -1,6 +1,6 @@
 import React from "react"
 import { graphql } from "gatsby"
-import { css } from "styled-components"
+import { css } from "@emotion/core"
 import { FaGithubAlt, FaTwitter, FaGlobeEurope } from "react-icons/fa"
 import useSWR from "swr"
 
@@ -84,7 +84,7 @@ interface IndexPageProps {
 }
 
 const fetchJSON = <T,>(url: string): Promise<T> =>
-  fetch(url).then(res => res.json())
+  fetch(url).then((res) => res.json())
 
 const IndexPage: React.FC<IndexPageProps> = ({ data }) => {
   const { site, allMarkdownRemark } = data
@@ -176,7 +176,7 @@ const IndexPage: React.FC<IndexPageProps> = ({ data }) => {
             </Columns>
             <Columns
               centered
-              css={`
+              css={css`
                 margin-top: 3rem;
               `}
             >

@@ -1,12 +1,13 @@
 import React from "react"
-import styled from "styled-components"
-
-const FooterWrapper = styled.footer.attrs({ className: "footer" })`
-  padding: 1rem 1.5rem;
-`
+import { css } from "@emotion/core"
 
 const Footer: React.FC = () => (
-  <FooterWrapper>
+  <footer
+    className="footer"
+    css={css`
+      padding: 1rem 1.5rem;
+    `}
+  >
     <div className="container">
       <div className="columns is-variable is-8 is-marginless">
         <div className="column is-4 is-size-7 content">
@@ -45,7 +46,7 @@ const Footer: React.FC = () => (
         </a>
       </p>
     </div>
-  </FooterWrapper>
+  </footer>
 )
 
 export default Footer

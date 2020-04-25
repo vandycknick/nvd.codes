@@ -1,21 +1,30 @@
-import { css, FlattenSimpleInterpolation } from "styled-components"
+import { css, SerializedStyles, Interpolation } from "@emotion/core"
 import { desktop, tablet } from "./variables"
 
-const isMobile = (...args: any[]): FlattenSimpleInterpolation => css`
+const isMobile = (
+  template: TemplateStringsArray,
+  ...args: Array<Interpolation>
+): SerializedStyles => css`
   @media screen and (max-width: ${tablet}px) {
-    ${css(args[0], ...args.slice(1))}
+    ${css(template, ...args)}
   }
 `
 
-const fromTablet = (...args: any[]): FlattenSimpleInterpolation => css`
+const fromTablet = (
+  template: TemplateStringsArray,
+  ...args: Array<Interpolation>
+): SerializedStyles => css`
   @media screen and (min-width: ${tablet}px) {
-    ${css(args[0], ...args.slice(1))}
+    ${css(template, ...args)}
   }
 `
 
-const fromDesktop = (...args: any[]): FlattenSimpleInterpolation => css`
+const fromDesktop = (
+  template: TemplateStringsArray,
+  ...args: Array<Interpolation>
+): SerializedStyles => css`
   @media screen and (min-width: ${desktop}px) {
-    ${css(args[0], ...args.slice(1))}
+    ${css(template, ...args)}
   }
 `
 
