@@ -75,7 +75,6 @@ module.exports = {
         ],
       },
     },
-    `gatsby-plugin-sass`,
     `gatsby-plugin-typescript`,
     `gatsby-plugin-emotion`,
     `gatsby-plugin-react-helmet`,

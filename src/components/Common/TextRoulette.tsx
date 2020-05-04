@@ -1,6 +1,7 @@
-import React, { AnimationEvent, MouseEvent } from "react"
-import { keyframes } from "@emotion/core"
-import styled from "@emotion/styled"
+import React, { useState, useCallback, ReactChild } from "react"
+import { css, keyframes } from "@emotion/core"
+
+import { styled } from "src/components/Tokens"
 
 const roulette = keyframes`
 0% {
@@ -60,14 +61,22 @@ const roulette = keyframes`
 }
 `
 
-const Roulette = styled.div`
+type RouletteProps = {
+  spin: boolean
+}
+
+const Roulette = styled.div<RouletteProps>`
   margin-bottom: 0px !important;
   vertical-align: bottom;
   display: inline-block;
-  height: 40px;
-  width: 100%;
+  height: 35px;
+  width: 160px;
   overflow: hidden;
   position: relative;
+
+  &:hover {
+    cursor: pointer;
+  }
 
   ul {
     position: absolute;
@@ -76,46 +85,60 @@ const Roulette = styled.div`
     left: 0;
     list-style: none;
     width: 100%;
-    animation: ${roulette} 12s ease 1500ms;
+
+    ${({ spin }) =>
+      spin &&
+      css`
+        animation-name: ${roulette};
+        animation-duration: 12s;
+        animation-direction: ease;
+        animation-fill-mode: 1500ms;
+      `}
   }
 
   li {
     margin: 0;
     padding: 0;
     margin-bottom: 10px;
+    width: 100%;
+    height: 30px;
+    text-align: center;
   }
 `
-
-let animationName = ""
-
-const onAnimationEnd = (event: AnimationEvent): void => {
-  if (!animationName)
-    animationName =
-      window.getComputedStyle(event.target as Element).animationName || ""
-
-  const li = event.target as HTMLLIElement
-  li.style.animationName = "none"
-}
-
-const triggerAnimation = (event: MouseEvent<HTMLUListElement>): void => {
-  const ul = event.currentTarget
-
-  if (ul.style.animationName === "none") ul.style.animationName = animationName
-}
-
 interface TextRouletteProps {
-  messages: string[]
+  messages: ReactChild[]
   className?: string
 }
 
-const TextRoulette: React.FC<TextRouletteProps> = ({ messages, ...rest }) => (
-  <Roulette {...rest}>
-    <ul onClick={triggerAnimation} onAnimationEnd={onAnimationEnd}>
-      {messages.map((m) => (
-        <li key={m}>{m}</li>
-      ))}
-    </ul>
-  </Roulette>
-)
+const getKey = (child: ReactChild | null): string => {
+  if (child === null) {
+    return "null"
+  }
 
-export default TextRoulette
+  if (typeof child === "string") {
+    return child
+  }
+
+  if (typeof child === "number") {
+    return child.toString()
+  }
+
+  return getKey(child.key)
+}
+
+const TextRoulette: React.FC<TextRouletteProps> = ({ messages, className }) => {
+  const [spin, setSpin] = useState(true)
+  const startSpin = useCallback(() => setSpin(() => true), [])
+  const stopSpin = useCallback(() => setSpin(() => false), [])
+  return (
+    <Roulette className={className} spin={spin}>
+      <ul onClick={startSpin} onAnimationEnd={stopSpin}>
+        {messages.map((m) => (
+          <li key={getKey(m)}>{m}</li>
+        ))}
+      </ul>
+    </Roulette>
+  )
+}
+
+export { TextRoulette }

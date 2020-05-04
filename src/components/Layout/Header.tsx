@@ -1,0 +1,62 @@
+import React, { useState, useCallback } from "react"
+import { css } from "@emotion/core"
+
+import {
+  Navbar,
+  NavbarContent,
+  NavbarBrand,
+  NavbarMenu,
+  Burger,
+} from "src/components/Common/Navbar"
+import { Doodle } from "src/components/Common/Doodle"
+import { NavLink } from "src/components/Common/Navlink"
+import Logo from "src/components/Common/Logo"
+import { GlobalEvent } from "src/components/Common/GlobalEvent"
+import { isMobile } from "src/components/Common/mediaQuery"
+
+const Header: React.FC = () => {
+  const [isActive, setIsActive] = useState(false)
+  const toggleMenu = useCallback(
+    (event: React.MouseEvent<Element, MouseEvent>) => {
+      event.preventDefault()
+      event.stopPropagation()
+      setIsActive((isActive) => !isActive)
+    },
+    [],
+  )
+  const closeMenu = useCallback(() => setIsActive(false), [])
+
+  return (
+    <header>
+      <GlobalEvent type="click" listener={closeMenu} />
+      <Navbar>
+        <NavbarContent>
+          <NavbarBrand>
+            <Logo
+              css={css`
+                width: 160px;
+              `}
+            />
+          </NavbarBrand>
+          <NavbarMenu open={isActive}>
+            <NavLink to="/">Home</NavLink>
+            <NavLink to="/blog">Blog</NavLink>
+            <NavLink to="/about">About</NavLink>
+          </NavbarMenu>
+          <Burger
+            isActive={isActive}
+            onClick={toggleMenu}
+            css={css`
+              align-self: center;
+              display: none;
+              ${isMobile`display: block;`}
+            `}
+          />
+        </NavbarContent>
+      </Navbar>
+      <Doodle />
+    </header>
+  )
+}
+
+export default Header
