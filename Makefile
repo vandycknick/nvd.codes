@@ -3,13 +3,25 @@
 
 ROOT	:= $(shell pwd)
 INFRA	:= $(ROOT)/infra
+NPM_BIN := $(shell yarn bin)
 
 dev:
-	GATSBY_PROJECT_API=https://api.nvd.codes yarn develop
+	GATSBY_PROJECT_API=https://api.nvd.codes $(NPM_BIN)/gatsby develop
 
-lint:
-	yarn type-check
-	yarn lint
+check:
+
+#   "scripts": {
+#     "build": "gatsby build",
+#     "clean": "gatsby clean",
+#     "develop": "gatsby develop",
+#     "format": "prettier --write \"**/*.{js,jsx,json,md}\"",
+#     "lint": "eslint --ignore-path .gitignore .",
+#     "start": "npm run develop",
+#     "serve": "gatsby serve",
+#     "type-check": "tsc --noEmit",
+#     "test": "echo \"Write tests! -> https://gatsby.dev/unit-testing\" && exit 1"
+#   },
+	$(NPM_BIN)/eslint . --ext .ts --ext .tsx --ext .js --ext .json --ignore-path .gitignore
 
 build:
 	yarn build
@@ -19,7 +31,7 @@ serve:
 	yarn serve
 
 clean:
-	yarn clean
+	$(NPM_BIN)/gatsby clean
 	dotnet clean -c Debug
 	dotnet clean -c Release
 	rm -rf functions/ProjectsApi/bin

@@ -9,7 +9,6 @@ const DoodleWrapper = styled.div`
     css`
       display: flex;
       background-color: ${theme.background};
-      height: 60px;
     `}
 `
 
@@ -18,7 +17,7 @@ const Doodle: React.FC = () => (
     <css-doodle click-to-update>
       {`
           :doodle {
-            @grid: 1x 60/100vw 10rem;
+            @grid: 1x 60/100vw 2rem;
           }
 
           :hover {
@@ -32,7 +31,7 @@ const Doodle: React.FC = () => (
             ${colors.yellow[400]},
             ${colors.teal[300]}, ${colors.teal[600]}, ${colors.teal[800]}
           );
-          height: @rand(10%, 20%);
+          height: @rand(15%, 45%);
           margin: 0 .2rem;
         `}
     </css-doodle>

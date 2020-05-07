@@ -17,6 +17,11 @@ const Layout: React.FC = ({ children }) => {
         styles={css`
           ${normalize}
 
+          html {
+            font-size: 15px;
+            line-height: 1.5;
+          }
+
           body {
             font-family: ${fontFamily.body};
             font-size: ${fontSize.base};
