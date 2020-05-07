@@ -1,5 +1,5 @@
 import React from "react"
-import { css, SerializedStyles } from "@emotion/core"
+import { css } from "@emotion/core"
 import { useTheme } from "emotion-theming"
 import useSWR from "swr"
 import * as timeago from "timeago.js"
@@ -45,21 +45,21 @@ type LatestActivitiesProps = {
   className?: string
 }
 
-const cssFromBackgroundColor = (background: string): SerializedStyles => {
-  let color = background
+// const cssFromBackgroundColor = (background: string): SerializedStyles => {
+//   let color = background
 
-  if (color.length < 5) {
-    color += color.slice(1)
-  }
-  color =
-    parseInt(color.replace("#", "0x"), 16) > 0xffffff / 2 ? "#333" : "#fff"
+//   if (color.length < 5) {
+//     color += color.slice(1)
+//   }
+//   color =
+//     parseInt(color.replace("#", "0x"), 16) > 0xffffff / 2 ? "#333" : "#fff"
 
-  return css`
-    background-color: ${background};
-    color: ${color};
-    margin-left: 10px;
-  `
-}
+//   return css`
+//     background-color: ${background};
+//     color: ${color};
+//     margin-left: 10px;
+//   `
+// }
 
 const LatestActivities: React.FC<LatestActivitiesProps> = ({ className }) => {
   const { data: activity, error } = useSWR<Activity>(

@@ -28,4 +28,28 @@ const fromDesktop = (
   }
 `
 
-export { isMobile, fromTablet, fromDesktop }
+const fromDesktopLarge = (
+  template: TemplateStringsArray,
+  ...args: Array<Interpolation>
+): SerializedStyles => css`
+  @media screen and (min-width: ${screens.lg}) {
+    ${css(template, ...args)}
+  }
+`
+
+const fromDesktopWideScreen = (
+  template: TemplateStringsArray,
+  ...args: Array<Interpolation>
+): SerializedStyles => css`
+  @media screen and (min-width: ${screens.xl}) {
+    ${css(template, ...args)}
+  }
+`
+
+export {
+  isMobile,
+  fromTablet,
+  fromDesktop,
+  fromDesktopLarge,
+  fromDesktopWideScreen,
+}

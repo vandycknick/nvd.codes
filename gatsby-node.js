@@ -74,7 +74,6 @@ exports.onCreateNode = ({ node, actions, getNode }) => {
 
     const parsed = path.parse(value)
     const splitted = parsed.name.split("-")
-    // const part = splitted.slice(0, 3)
     const name = splitted.slice(3)
 
     // Every article is considered published by default
