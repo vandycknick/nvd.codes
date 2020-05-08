@@ -13,6 +13,9 @@ import { NavLink } from "src/components/Common/Navlink"
 import Logo from "src/components/Common/Logo"
 import { GlobalEvent } from "src/components/Common/GlobalEvent"
 import { isMobile } from "src/components/Common/mediaQuery"
+import { Link } from "gatsby"
+
+const NavbarBrandWithLink = NavbarBrand.withComponent(Link)
 
 const Header: React.FC = () => {
   const [isActive, setIsActive] = useState(false)
@@ -31,13 +34,13 @@ const Header: React.FC = () => {
       <GlobalEvent type="click" listener={closeMenu} />
       <Navbar>
         <NavbarContent>
-          <NavbarBrand>
+          <NavbarBrandWithLink to="/">
             <Logo
               css={css`
                 width: 160px;
               `}
             />
-          </NavbarBrand>
+          </NavbarBrandWithLink>
           <NavbarMenu open={isActive}>
             <NavLink to="/">Home</NavLink>
             <NavLink to="/blog">Blog</NavLink>

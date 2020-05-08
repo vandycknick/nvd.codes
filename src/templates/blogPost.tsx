@@ -1,15 +1,14 @@
 import React from "react"
 import { graphql } from "gatsby"
-import "./prism-theme.css"
 
-import Layout from "../components/Layout"
-import SEO from "../components/Common/SEO"
+import Layout from "src/components/Layout"
+import SEO from "src/components/Common/SEO"
+import { Post } from "src/components/BlogPost/Post"
 
 interface BlogPostBySlugQuery {
   site: { siteMetadata: { title: string } }
   markdownRemark: {
     id: string
-    excerpt: string
     html: string
     frontmatter: {
       title: string
@@ -33,7 +32,6 @@ const pageQuery = graphql`
     }
     markdownRemark(fields: { slug: { eq: $slug } }) {
       id
-      excerpt(pruneLength: 160)
       html
       frontmatter {
         title
@@ -62,16 +60,22 @@ interface BlogPostProps {
 const BlogPost: React.FC<BlogPostProps> = ({ data, pageContext }) => {
   const post = data.markdownRemark
   const { previous, next } = pageContext
-  const contents = `<p>${post.frontmatter.description}</p>${post.html}`
-  console.log(previous, next)
-
   return (
     <Layout>
       <SEO
         title={post.frontmatter.title}
-        description={post.frontmatter.description || post.excerpt}
+        description={post.frontmatter.description}
       />
-      <div dangerouslySetInnerHTML={{ __html: contents }} />
+      <Post
+        title={post.frontmatter.title}
+        date={post.frontmatter.date}
+        editUrl={post.fields.editUrl}
+        readingTime={post.fields.readingTime.text}
+        description={post.frontmatter.description}
+        content={post.html}
+        nextPage={next?.fields.slug ?? null}
+        previousPage={previous?.fields.slug ?? null}
+      />
     </Layout>
   )
 }
