@@ -5,40 +5,34 @@ ROOT	:= $(shell pwd)
 INFRA	:= $(ROOT)/infra
 NPM_BIN := $(shell yarn bin)
 
+.PHONY: dev
 dev:
 	GATSBY_PROJECT_API=https://api.nvd.codes $(NPM_BIN)/gatsby develop
 
+.PHONY: check
 check:
-
-#   "scripts": {
-#     "build": "gatsby build",
-#     "clean": "gatsby clean",
-#     "develop": "gatsby develop",
-#     "format": "prettier --write \"**/*.{js,jsx,json,md}\"",
-#     "lint": "eslint --ignore-path .gitignore .",
-#     "start": "npm run develop",
-#     "serve": "gatsby serve",
-#     "type-check": "tsc --noEmit",
-#     "test": "echo \"Write tests! -> https://gatsby.dev/unit-testing\" && exit 1"
-#   },
+	${NPM_BIN}/tsc --noEmit
 	$(NPM_BIN)/eslint . --ext .ts --ext .tsx --ext .js --ext .json --ignore-path .gitignore
 
+.PHONY: build
 build:
-	yarn build
+	${NPM_BIN}/gatsby build
 	dotnet publish -c Release
 
+.PHONY: serve
 serve:
-	yarn serve
+	${NPM_BIN}/gatsby serve
 
+.PHONY: clean
 clean:
 	$(NPM_BIN)/gatsby clean
-	dotnet clean -c Debug
-	dotnet clean -c Release
+	rm -rf .build
 	rm -rf functions/ProjectsApi/bin
 	rm -rf functions/ProjectsApi/obj
 	rm -rf functions/Proxy/bin
 	rm -rf functions/Proxy/obj
 
+.PHONY: infra-up
 infra-up:
 	cd $(INFRA) && \
 		pipenv run \

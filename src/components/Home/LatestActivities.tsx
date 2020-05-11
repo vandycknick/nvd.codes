@@ -67,7 +67,6 @@ const LatestActivities: React.FC<LatestActivitiesProps> = ({ className }) => {
     fetchJSON,
   )
   const theme = useTheme<Theme>()
-  console.log(activity, error)
   return (
     <div
       className={className}

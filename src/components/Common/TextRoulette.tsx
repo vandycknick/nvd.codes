@@ -70,7 +70,7 @@ const Roulette = styled.div<RouletteProps>`
   vertical-align: bottom;
   display: inline-block;
   height: 35px;
-  width: 160px;
+  width: 200px;
   overflow: hidden;
   position: relative;
 
