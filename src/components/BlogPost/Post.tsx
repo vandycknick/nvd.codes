@@ -1,9 +1,11 @@
 import React from "react"
 import { css } from "@emotion/core"
 
-import { PrismTheme } from "src/components/BlogPost/Prism"
+import { Content } from "src/components/BlogPost/Content"
 import { Heading } from "src/components/Common/Heading"
 import { spacing } from "src/components/Tokens"
+import Time from "../Common/Time"
+import { Span } from "../Common/Span"
 
 type PostProps = {
   title: string
@@ -16,7 +18,13 @@ type PostProps = {
   previousPage: string | null
 }
 
-const Post: React.FC<PostProps> = ({ content, title }) => (
+const Post: React.FC<PostProps> = ({
+  content,
+  date,
+  editUrl,
+  readingTime,
+  title,
+}) => (
   <article
     css={css`
       display: flex;
@@ -26,7 +34,9 @@ const Post: React.FC<PostProps> = ({ content, title }) => (
     <header
       css={css`
         display: flex;
-        justify-content: center;
+        flex-direction: column;
+        align-items: center;
+        padding-bottom: ${spacing[16]};
       `}
     >
       <Heading
@@ -37,8 +47,13 @@ const Post: React.FC<PostProps> = ({ content, title }) => (
       >
         {title}
       </Heading>
+      <div>
+        <Time dateTime={date} />
+        <a href={editUrl}>suggest edit</a>
+        <Span>{readingTime}</Span>
+      </div>
     </header>
-    <PrismTheme dangerouslySetInnerHTML={{ __html: content }} />
+    <Content dangerouslySetInnerHTML={{ __html: content }} />
   </article>
 )
 

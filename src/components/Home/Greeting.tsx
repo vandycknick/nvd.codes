@@ -7,12 +7,40 @@ import { Span } from "src/components/Common/Span"
 import { TextRoulette } from "src/components/Common/TextRoulette"
 import { OSDetect } from "src/components/Common/OSDetect"
 import { Paragraph } from "src/components/Common/Paragraph"
-import { spacing, colors, Theme } from "src/components/Tokens"
+import { colors, styled, spacing, Theme } from "src/components/Tokens"
 import { Globe } from "src/components/Home/Globe"
 import { Github } from "src/components/Home/Github"
 import { Twitter } from "src/components/Home/Twitter"
 
-const Greeting: React.FC = () => {
+type GreetingProps = {
+  githubUrl: string
+  twitterUrl: string
+  siteUrl: string
+}
+
+const IconLink = styled.a`
+  ${({ theme }) => css`
+    display: flex;
+    align-items: center;
+    text-decoration: none;
+    color: ${theme.onBackground};
+    margin: 0 ${spacing[2]};
+
+    &:hover {
+      color: ${theme.primary};
+
+      svg {
+        fill: ${theme.primary};
+      }
+    }
+  `}
+`
+
+const Greeting: React.FC<GreetingProps> = ({
+  githubUrl,
+  twitterUrl,
+  siteUrl,
+}) => {
   const theme = useTheme<Theme>()
   return (
     <section
@@ -62,34 +90,40 @@ const Greeting: React.FC = () => {
       <div
         css={css`
           display: flex;
-          margin: ${spacing[5]} 0;
           align-items: center;
+          padding: ${spacing[5]} ${spacing[2]};
         `}
       >
-        <Globe width={20} height={20} color={theme.onBackground} />
-        <Span
-          css={css`
-            margin: 0 ${spacing[3]};
-          `}
-        >
-          Web
-        </Span>
-        <Github width={20} height={20} color={theme.onBackground} />
-        <Span
-          css={css`
-            margin: 0 ${spacing[3]};
-          `}
-        >
-          Github
-        </Span>
-        <Twitter width={24} height={24} color={theme.onBackground} />
-        <Span
-          css={css`
-            margin: 0 ${spacing[3]};
-          `}
-        >
-          Twitter
-        </Span>
+        <IconLink href={siteUrl}>
+          <Globe width={20} height={20} color={theme.onBackground} />
+          <Span
+            css={css`
+              margin: 0 ${spacing[3]};
+            `}
+          >
+            Web&nbsp;&nbsp;&nbsp;&nbsp;
+          </Span>
+        </IconLink>
+        <IconLink href={githubUrl}>
+          <Github width={20} height={20} color={theme.onBackground} />
+          <Span
+            css={css`
+              margin: 0 ${spacing[3]};
+            `}
+          >
+            Github&nbsp;
+          </Span>
+        </IconLink>
+        <IconLink href={twitterUrl}>
+          <Twitter width={24} height={24} color={theme.onBackground} />
+          <Span
+            css={css`
+              margin: 0 ${spacing[3]};
+            `}
+          >
+            Twitter
+          </Span>
+        </IconLink>
       </div>
     </section>
   )

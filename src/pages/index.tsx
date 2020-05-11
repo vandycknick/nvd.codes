@@ -96,11 +96,19 @@ const adaptQueryToPosts = (query: IndexPageProps["data"]): Post[] =>
     description: edge.node.frontmatter.description,
   }))
 
+const adaptQueryToSocialUrls = (
+  query: IndexPageProps["data"],
+): { githubUrl: string; siteUrl: string; twitterUrl: string } => ({
+  githubUrl: query.site.siteMetadata.profiles.github.url,
+  siteUrl: query.site.siteMetadata.profiles.site.url,
+  twitterUrl: query.site.siteMetadata.profiles.twitter.url,
+})
+
 const IndexPage: React.FC<IndexPageProps> = ({ data }) => {
   return (
     <Layout>
       <SEO title="Home" />
-      <Greeting />
+      <Greeting {...adaptQueryToSocialUrls(data)} />
       <RecentBlogPosts
         css={css`
           margin: ${spacing[6]} 0;
