@@ -7,7 +7,7 @@ import SEO from "src/components/Common/SEO"
 import { Paragraph } from "src/components/Common/Paragraph"
 import { LinkButton } from "src/components/Common/Buttons"
 import { Heading } from "src/components/Common/Heading"
-import { Image } from "src/components/Layout/Image"
+import { Image } from "src/components/Common/Image"
 import { spacing } from "src/components/Tokens"
 
 const pageQuery = graphql`

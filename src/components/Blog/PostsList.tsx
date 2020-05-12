@@ -18,7 +18,7 @@ import {
   fromTablet,
   fromDesktopWideScreen,
 } from "src/components/Common/mediaQuery"
-import { Tag } from "src/components/Layout/Tag"
+import { Tag } from "src/components/Common/Tag"
 import { Span } from "src/components/Common/Span"
 import Time from "../Common/Time"
 

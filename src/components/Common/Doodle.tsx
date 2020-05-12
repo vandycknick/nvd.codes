@@ -1,21 +1,45 @@
-import React from "react"
+import React, { Suspense } from "react"
 import { css } from "@emotion/core"
-import "css-doodle"
 
-import { styled, colors } from "src/components/Tokens"
+import { colors, Theme } from "src/components/Tokens"
+import { useTheme } from "emotion-theming"
 
-const DoodleWrapper = styled.div`
-  ${({ theme }) =>
-    css`
-      display: flex;
-      background-color: ${theme.background};
-    `}
-`
+type CSSDoodleProps = {
+  className?: string
+  clickToUpdate?: boolean
+}
 
-const Doodle: React.FC = () => (
-  <DoodleWrapper>
-    <css-doodle click-to-update>
-      {`
+const CSSDoodle = React.lazy(async () => {
+  const CSSDoodleInternal: React.FC<CSSDoodleProps> = ({
+    children,
+    className,
+    clickToUpdate,
+  }) => (
+    <css-doodle class={className} click-to-update={!!clickToUpdate}>
+      {children}
+    </css-doodle>
+  )
+  await import("css-doodle")
+
+  return { default: CSSDoodleInternal }
+})
+
+const Doodle: React.FC = () => {
+  const theme = useTheme<Theme>()
+  const isClient = typeof window !== "undefined"
+
+  return (
+    <>
+      {isClient && (
+        <Suspense fallback={<div />}>
+          <CSSDoodle
+            css={css`
+              display: flex;
+              background-color: ${theme.background};
+            `}
+            clickToUpdate={true}
+          >
+            {`
           :doodle {
             @grid: 1x 60/100vw 2rem;
           }
@@ -34,8 +58,11 @@ const Doodle: React.FC = () => (
           height: @rand(15%, 45%);
           margin: 0 .2rem;
         `}
-    </css-doodle>
-  </DoodleWrapper>
-)
+          </CSSDoodle>
+        </Suspense>
+      )}
+    </>
+  )
+}
 
 export { Doodle }
