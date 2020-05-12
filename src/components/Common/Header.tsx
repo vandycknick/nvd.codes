@@ -1,5 +1,5 @@
 import React, { useState, useCallback } from "react"
-import { css } from "@emotion/core"
+import { css, Global } from "@emotion/core"
 
 import {
   Navbar,
@@ -32,7 +32,23 @@ const Header: React.FC = () => {
   return (
     <header>
       <GlobalEvent type="click" listener={closeMenu} />
-      <Navbar>
+      {isActive && (
+        <Global
+          styles={css`
+            body {
+              overflow: hidden;
+            }
+          `}
+        />
+      )}
+      <Navbar
+        css={css`
+          ${isActive &&
+          css`
+            position: fixed;
+          `}
+        `}
+      >
         <NavbarContent>
           <NavbarBrandWithLink to="/">
             <Logo
