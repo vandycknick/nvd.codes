@@ -15,6 +15,7 @@ const Navbar = styled.div`
     box-shadow: ${borders.shadow.lg};
     box-shadow: #000000bf 0px 1px 10px 0px;
     height: ${navBarHeight};
+    width: 100%;
     position: relative;
     z-index: 2;
   `}
