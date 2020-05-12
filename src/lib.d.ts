@@ -3,6 +3,8 @@ declare module "normalize.css" {
   export default styles
 }
 
+declare module "css-doodle" {}
+
 declare namespace JSX {
   interface IntrinsicElements {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any

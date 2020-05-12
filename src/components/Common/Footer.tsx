@@ -28,4 +28,4 @@ const Footer: React.FC = () => (
   </FooterWrapper>
 )
 
-export default Footer
+export { Footer }
