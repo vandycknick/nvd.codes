@@ -74,7 +74,9 @@ namespace ProjectsApi.Services
                     Id = r.Id.Value,
                     Name = r.Name,
                     NameWithOwner = r.NameWithOwner,
-                    Description = r.Description,
+                    Description = r.Description ?? "",
+                    UpdatedAt = r.UpdatedAt,
+                    Stars = r.Stargazers(null, null, null, null, null).TotalCount,
                     Url = r.Url,
                     PrimaryLanguage = new ProjectLanguage(
                         r.Select(p => p.PrimaryLanguage != null ? p.PrimaryLanguage.Name : null).SingleOrDefault(),

@@ -2,10 +2,8 @@ import React from "react"
 import { css } from "@emotion/core"
 import { useTheme } from "emotion-theming"
 
-import { Card } from "src/components/Common/Card"
 import { Heading } from "src/components/Common/Heading"
 import { Span } from "src/components/Common/Span"
-import { NavButton } from "src/components/Common/Buttons"
 import {
   colors,
   fontWeight,
@@ -13,13 +11,16 @@ import {
   Theme,
   fontSize,
 } from "src/components/Tokens"
-import { getMonthPrefix } from "src/utils/time"
+import Time from "../Common/Time"
+import { NavButton } from "../Common/Buttons"
+import { fromTablet } from "../Common/mediaQuery"
 
 type Post = {
   slug: string
   date: Date
   title: string
   description: string
+  readingTime: string
 }
 
 type LatestPostsProps = {
@@ -30,7 +31,12 @@ type LatestPostsProps = {
 const RecentBlogPosts: React.FC<LatestPostsProps> = ({ className, posts }) => {
   const theme = useTheme<Theme>()
   return (
-    <Card className={className}>
+    <div
+      className={className}
+      css={css`
+        padding: 0 ${spacing[4]};
+      `}
+    >
       <Heading
         as="h4"
         size="3xl"
@@ -45,56 +51,64 @@ const RecentBlogPosts: React.FC<LatestPostsProps> = ({ className, posts }) => {
         css={css`
           list-style-type: none;
           padding: 0;
+          display: flex;
+          flex-direction: column;
+          justify-content: space-between;
+
+          ${fromTablet`flex-direction: row;`}
         `}
       >
         {posts.map((post) => (
           <li
             key={post.title}
             css={css`
-              display: flex;
-              margin: ${spacing[4]} 0;
+              ${fromTablet`width: 32%;`}
             `}
           >
-            <div
+            <a
+              href={post.slug}
               css={css`
                 display: flex;
-                font-weight: ${fontWeight.bold};
                 flex-direction: column;
-                justify-content: center;
-                align-items: center;
-                padding: ${spacing[2]};
-                border-right: 5px solid ${theme.onSurface};
+                margin: ${spacing[4]} 0;
+                text-decoration: none;
               `}
             >
-              <Span>{getMonthPrefix(post.date)}</Span>
-              <Span>{post.date.getDay()}</Span>
-              <Span>{post.date.getUTCFullYear()}</Span>
-            </div>
-            <div
-              css={css`
-                padding: 0 ${spacing[4]};
-                display: flex;
-                flex-direction: column;
-              `}
-            >
-              <Span
+              <Heading
+                as="h5"
                 css={css`
                   font-size: ${fontSize.lg};
                   font-weight: ${fontWeight.bold};
-                  padding-bottom: ${spacing[2]};
                 `}
               >
                 {post.title}
-              </Span>
+              </Heading>
               <Span
                 css={css`
                   color: ${colors.grey[300]};
                   font-size: ${fontSize.sm};
+                  padding: ${spacing[2]} 0;
                 `}
               >
                 {post.description}
               </Span>
-            </div>
+              <div
+                css={css`
+                  font-size: ${fontSize.sm};
+                  color: ${theme.onBackground};
+                `}
+              >
+                <Time dateTime={post.date} />
+                <Span
+                  css={css`
+                    padding: 0 ${spacing[2]};
+                  `}
+                >
+                  •
+                </Span>
+                <Span>{post.readingTime}</Span>
+              </div>
+            </a>
           </li>
         ))}
       </ul>
@@ -103,9 +117,9 @@ const RecentBlogPosts: React.FC<LatestPostsProps> = ({ className, posts }) => {
           padding: ${spacing[4]} 0;
         `}
       >
-        <NavButton to="/blog">All Articles</NavButton>
+        <NavButton to="/blog">All Posts</NavButton>
       </div>
-    </Card>
+    </div>
   )
 }
 

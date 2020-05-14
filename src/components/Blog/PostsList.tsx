@@ -145,10 +145,10 @@ const PostsList: React.FC<PostsListProps> = ({ className, posts }) => {
                   css={css`
                     display: block;
                     box-sizing: border-box;
-                    color: ${colors.teal[600]};
+                    color: ${theme.primaryLight};
 
                     &:hover {
-                      color: ${colors.teal[800]};
+                      color: ${theme.primaryLighter};
                     }
                   `}
                 >

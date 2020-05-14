@@ -19,7 +19,7 @@ const fromTablet = (
   }
 `
 
-const fromDesktop = (
+const fromTabletLandscape = (
   template: TemplateStringsArray,
   ...args: Array<Interpolation>
 ): SerializedStyles => css`
@@ -28,7 +28,7 @@ const fromDesktop = (
   }
 `
 
-const fromDesktopLarge = (
+const fromDesktop = (
   template: TemplateStringsArray,
   ...args: Array<Interpolation>
 ): SerializedStyles => css`
@@ -49,7 +49,7 @@ const fromDesktopWideScreen = (
 export {
   isMobile,
   fromTablet,
+  fromTabletLandscape,
   fromDesktop,
-  fromDesktopLarge,
   fromDesktopWideScreen,
 }

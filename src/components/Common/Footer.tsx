@@ -6,8 +6,8 @@ import { Container } from "src/components/Common/Container"
 
 const FooterWrapper = styled.footer`
   ${({ theme }) => css`
-    background-color: ${theme.surface};
-    color: ${theme.onSurface};
+    background-color: ${theme.navigation};
+    color: ${theme.onNavigation};
     padding: ${spacing[2]};
   `}
 `

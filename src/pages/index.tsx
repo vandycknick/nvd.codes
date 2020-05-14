@@ -8,6 +8,7 @@ import { Greeting } from "src/components/Home/Greeting"
 import { RecentBlogPosts, Post } from "src/components/Home/RecentBlogPosts"
 import { LatestActivities } from "src/components/Home/LatestActivities"
 import { spacing } from "src/components/Tokens"
+import { Divider } from "src/components/Common/Divider"
 
 const pageQuery = graphql`
   query {
@@ -41,6 +42,9 @@ const pageQuery = graphql`
         node {
           fields {
             slug
+            readingTime {
+              text
+            }
           }
           frontmatter {
             date
@@ -80,7 +84,7 @@ interface IndexPageProps {
     allMarkdownRemark: {
       edges: {
         node: {
-          fields: { slug: string }
+          fields: { slug: string; readingTime: { text: string } }
           frontmatter: { date: string; title: string; description: string }
         }
       }[]
@@ -94,6 +98,7 @@ const adaptQueryToPosts = (query: IndexPageProps["data"]): Post[] =>
     date: new Date(edge.node.frontmatter.date),
     title: edge.node.frontmatter.title,
     description: edge.node.frontmatter.description,
+    readingTime: edge.node.fields.readingTime.text,
   }))
 
 const adaptQueryToSocialUrls = (
@@ -109,12 +114,14 @@ const IndexPage: React.FC<IndexPageProps> = ({ data }) => {
     <Layout>
       <SEO title="Home" />
       <Greeting {...adaptQueryToSocialUrls(data)} />
+      <Divider />
       <RecentBlogPosts
         css={css`
           margin: ${spacing[6]} 0;
         `}
         posts={adaptQueryToPosts(data)}
       />
+      <Divider />
       <LatestActivities
         css={css`
           margin: ${spacing[6]} 0;
