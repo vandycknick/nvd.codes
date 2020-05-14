@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using Newtonsoft.Json;
 
@@ -12,7 +13,7 @@ namespace ProjectsApi.Domain
         public string Description { get; set; }
         public string Url { get; set; }
         public ProjectLanguage PrimaryLanguage { get; set; }
+        public DateTimeOffset UpdatedAt { get; set; }
         public int Stars { get; set; }
-        public List<string> Languages { get; set; }
     }
 }

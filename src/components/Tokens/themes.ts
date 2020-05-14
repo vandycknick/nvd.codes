@@ -27,13 +27,13 @@ const darkTheme: Theme = {
   primaryLight: colors.teal[500],
   primaryLighter: colors.teal[300],
 
-  navigation: "#303030",
+  navigation: colors.grey[800],
   onNavigation: colors.white,
 
   background: colors.grey[900],
   onBackground: colors.white,
 
-  surface: colors.grey[800],
+  surface: colors.grey[700],
   onSurface: colors.white,
 }
 

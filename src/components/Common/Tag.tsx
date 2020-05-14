@@ -4,6 +4,7 @@ import {
   borderRadius,
   fontSize,
   spacing,
+  fontWeight,
 } from "src/components/Tokens"
 
 const Tag = styled.span`
@@ -11,8 +12,9 @@ const Tag = styled.span`
   justify-content: center;
   color: ${colors.white};
   background-color: ${colors.teal[800]};
-  border-radius: ${borderRadius.md};
+  border-radius: ${borderRadius.lg};
   font-size: ${fontSize.xs};
+  font-weight: ${fontWeight.bold};
   padding: ${spacing[1]} ${spacing[2]};
 
   &:not(:last-child) {
