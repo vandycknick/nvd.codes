@@ -33,7 +33,7 @@ jobs:
       run: yarn
 
     - name: Lint
-      run: make lint
+      run: make check
 
   build:
     name: Build
