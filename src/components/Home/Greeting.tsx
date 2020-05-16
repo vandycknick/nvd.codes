@@ -8,9 +8,9 @@ import { TextRoulette } from "src/components/Common/TextRoulette"
 import { OSDetect } from "src/components/Common/OSDetect"
 import { Paragraph } from "src/components/Common/Paragraph"
 import { colors, styled, spacing, Theme } from "src/components/Tokens"
-import { Globe } from "src/components/Home/Globe"
-import { Github } from "src/components/Home/Github"
-import { Twitter } from "src/components/Home/Twitter"
+import { Globe } from "src/components/Home/Icons/Globe"
+import { Github } from "src/components/Home/Icons/Github"
+import { Twitter } from "src/components/Home/Icons/Twitter"
 
 type GreetingProps = {
   githubUrl: string
