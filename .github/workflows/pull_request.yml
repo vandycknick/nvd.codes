@@ -91,7 +91,7 @@ jobs:
     - name: Pulumi Preview
       run: |
         pipenv update
-        pipenv run /usr/bin/pulumi-action --non-interactive preview -s staging
+        pipenv run /usr/bin/pulumi-action --non-interactive preview --suppress-outputs -s prod
       working-directory: infra
       env:
         ARM_CLIENT_ID: ${{ secrets.ARM_CLIENT_ID }}
