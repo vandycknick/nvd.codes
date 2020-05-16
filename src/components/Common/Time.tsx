@@ -1,7 +1,7 @@
 import React from "react"
 
 type TimeProps = {
-  dateTime: string
+  dateTime: string | Date
 }
 
 const months = [
@@ -19,14 +19,17 @@ const months = [
   "Dev",
 ]
 
-const parseDate = (dateString: string): string => {
-  const date = new Date(dateString)
+const parseDate = (dateTime: string | Date): string => {
+  const date = new Date(dateTime)
   const month = months[date.getMonth()]
-  return `${month} ${date.getDate()}, ${date.getFullYear()}`
+  return `${date.getDate()} ${month} ${date.getFullYear()}`
 }
 
+const stringify = (dateTime: string | Date): string =>
+  typeof dateTime === "string" ? dateTime : dateTime.toString()
+
 const Time: React.FC<TimeProps> = ({ dateTime }) => (
-  <time dateTime={dateTime}>{parseDate(dateTime)}</time>
+  <time dateTime={stringify(dateTime)}>{parseDate(dateTime)}</time>
 )
 
 export default Time

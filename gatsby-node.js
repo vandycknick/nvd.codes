@@ -5,6 +5,16 @@ const path = require(`path`)
 // eslint-disable-next-line @typescript-eslint/no-var-requires
 const { createFilePath } = require(`gatsby-source-filesystem`)
 
+exports.onCreateWebpackConfig = ({ actions, getConfig }) => {
+  const config = getConfig()
+  const contextSrc = path.join(config.context, "src")
+  actions.setWebpackConfig({
+    resolve: {
+      alias: { src: contextSrc },
+    },
+  })
+}
+
 exports.createPages = async ({ graphql, actions }) => {
   const { createPage } = actions
 
@@ -64,7 +74,6 @@ exports.onCreateNode = ({ node, actions, getNode }) => {
 
     const parsed = path.parse(value)
     const splitted = parsed.name.split("-")
-    // const part = splitted.slice(0, 3)
     const name = splitted.slice(3)
 
     // Every article is considered published by default

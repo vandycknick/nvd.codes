@@ -5,7 +5,7 @@ const CONTENT_FOLDER = process.env.CONTENT_FOLDER || "content"
 
 module.exports = {
   siteMetadata: {
-    title: `Nick's Blog`,
+    title: `Nick Van Dyck (@nickvandyck)`,
     author: {
       name: `Nick Van Dyck`,
       summary: `Coder, hacker.`,
@@ -75,9 +75,8 @@ module.exports = {
         ],
       },
     },
-    `gatsby-plugin-sass`,
     `gatsby-plugin-typescript`,
-    `gatsby-plugin-styled-components`,
+    `gatsby-plugin-emotion`,
     `gatsby-plugin-react-helmet`,
     {
       resolve: `gatsby-source-filesystem`,
@@ -86,8 +85,8 @@ module.exports = {
         path: `${__dirname}/src/images`,
       },
     },
-    `gatsby-transformer-sharp`,
     `gatsby-plugin-sharp`,
+    `gatsby-transformer-sharp`,
     {
       resolve: `gatsby-plugin-google-analytics`,
       options: {

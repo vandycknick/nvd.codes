@@ -3,12 +3,17 @@
   "extends": [
     "eslint:recommended",
     "plugin:react/recommended",
+    "plugin:json/recommended",
+    "plugin:jest/recommended",
     "plugin:import/typescript",
     "plugin:@typescript-eslint/recommended",
     "prettier/@typescript-eslint",
+    "prettier",
+    "prettier/react",
     "plugin:prettier/recommended"
   ],
   "plugins": [
+    "json",
     "react",
     "react-hooks"
   ],
@@ -28,11 +33,11 @@
     }
   },
   "rules": {
-    "no-undef": "off", // https://github.com/typescript-eslint/typescript-eslint/issues/342,
+    "no-console": "error",
+    "no-undef": "off",
     "react/prop-types": "off",
-    "react/jsx-no-bind": "error",
     "react-hooks/rules-of-hooks": "error",
-    "react-hooks/exhaustive-deps": "warn",
+    "react-hooks/exhaustive-deps": "error",
     "@typescript-eslint/explicit-function-return-type": [
       "error",
       {
@@ -40,14 +45,7 @@
         "allowTypedFunctionExpressions": true,
         "allowHigherOrderFunctions": true
       }
-    ],
-    "@typescript-eslint/prefer-interface": [
-      "off"
-    ],
-    "@typescript-eslint/no-use-before-define": [
-      "off"
-    ],
-    "@typescript-eslint/interface-name-prefix": "off"
+    ]
   },
   "overrides": [
     {

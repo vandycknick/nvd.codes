@@ -3,30 +3,36 @@
 
 ROOT	:= $(shell pwd)
 INFRA	:= $(ROOT)/infra
+NPM_BIN := $(shell yarn bin)
 
+.PHONY: dev
 dev:
-	GATSBY_PROJECT_API=https://api.nvd.codes yarn develop
+	GATSBY_PROJECT_API=https://api.nvd.codes $(NPM_BIN)/gatsby develop
 
-lint:
-	yarn type-check
-	yarn lint
+.PHONY: check
+check:
+	${NPM_BIN}/tsc --noEmit
+	$(NPM_BIN)/eslint . --ext .ts --ext .tsx --ext .js --ext .json --ignore-path .gitignore
 
+.PHONY: build
 build:
-	yarn build
+	${NPM_BIN}/gatsby build
 	dotnet publish -c Release
 
+.PHONY: serve
 serve:
-	yarn serve
+	${NPM_BIN}/gatsby serve
 
+.PHONY: clean
 clean:
-	yarn clean
-	dotnet clean -c Debug
-	dotnet clean -c Release
+	$(NPM_BIN)/gatsby clean
+	rm -rf .build
 	rm -rf functions/ProjectsApi/bin
 	rm -rf functions/ProjectsApi/obj
 	rm -rf functions/Proxy/bin
 	rm -rf functions/Proxy/obj
 
+.PHONY: infra-up
 infra-up:
 	cd $(INFRA) && \
 		pipenv run \

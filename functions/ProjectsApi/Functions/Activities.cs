@@ -31,7 +31,6 @@ namespace ProjectsApi.Functions
             {
                 LatestCommit = commit,
                 Projects = projects,
-                Hello = "world",
             });
         }
     }

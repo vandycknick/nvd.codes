@@ -6,9 +6,10 @@
     "esModuleInterop": true,
     "jsx": "react",
     "lib": [
-      "dom",
+      "dom"
     ],
     "module": "commonjs",
+    "baseUrl": "./"
   },
   "include": [
     "./src/**/*"

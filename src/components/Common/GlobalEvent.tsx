@@ -19,4 +19,4 @@ const GlobalEvent: React.FC<GlobalEventProps> = ({ type, listener }) => {
   return null
 }
 
-export default GlobalEvent
+export { GlobalEvent }
