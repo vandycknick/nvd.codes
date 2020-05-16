@@ -74,7 +74,14 @@ const Layout: React.FC = ({ children }) => {
       <ThemeProvider theme={darkTheme}>
         <Header />
         <Main>
-          <Container>{children}</Container>
+          <Container
+            css={css`
+              width: 100%;
+              max-width: 100%;
+            `}
+          >
+            {children}
+          </Container>
         </Main>
         <Footer />
       </ThemeProvider>
