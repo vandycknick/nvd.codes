@@ -1,14 +1,10 @@
-import { styled, spacing } from "src/components/Tokens"
+import { styled, spacing, colors } from "src/components/Tokens"
 
 const PrismTheme = styled.div`
   .gatsby-highlight {
-    code[class*="language-"] {
-      color: #abb2bf;
-    }
-
     code[class*="language-"],
     pre[class*="language-"] {
-      color: #abb2bf;
+      color: ${colors.white};
       background: none;
       font-family: Consolas, Monaco, "Andale Mono", "Ubuntu Mono", monospace;
       text-align: left;
@@ -59,11 +55,11 @@ const PrismTheme = styled.div`
     .token.prolog,
     .token.doctype,
     .token.cdata {
-      color: #5c6370;
+      color: ${colors.grey[400]};
     }
 
     .token.punctuation {
-      color: #abb2bf;
+      color: ${colors.white};
     }
 
     .token.selector,
@@ -162,7 +158,7 @@ const PrismTheme = styled.div`
     }
 
     .gatsby-highlight-code-line {
-      background-color: #272b33;
+      background-color: #2c2c2f;
       display: block;
       margin-right: -1em;
       margin-left: -1em;
@@ -175,7 +171,7 @@ const PrismTheme = styled.div`
      * Add back the container background-color, border-radius, padding, margin
      * and overflow that we removed from <pre>.
      */
-    background-color: #383e49;
+    background-color: ${colors.grey[700]};
     border-radius: 0.3em;
     margin-bottom: ${spacing[4]};
     padding: 1em;

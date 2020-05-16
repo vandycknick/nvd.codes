@@ -6,13 +6,7 @@ import { FluidObject } from "gatsby-image"
 
 import { Heading } from "src/components/Common/Heading"
 import { Card } from "src/components/Common/Card"
-import {
-  colors,
-  spacing,
-  Theme,
-  borderRadius,
-  fontSize,
-} from "src/components/Tokens"
+import { spacing, Theme, borderRadius, fontSize } from "src/components/Tokens"
 import { Paragraph } from "src/components/Common/Paragraph"
 import {
   fromTablet,
