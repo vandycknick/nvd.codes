@@ -272,7 +272,12 @@ const LatestActivities: React.FC<LatestActivitiesProps> = ({ className }) => {
     fetchJSON,
   )
   return (
-    <div className={className}>
+    <div
+      className={className}
+      css={css`
+        padding: 0 ${spacing[4]};
+      `}
+    >
       <Heading as="h4" size="3xl" weight="bold">
         Online Activity
       </Heading>

@@ -50,6 +50,14 @@ const Content = styled(PrismTheme)`
       }
     }
 
+    details {
+      padding-bottom: ${spacing[4]};
+
+      summary {
+        padding-bottom: ${spacing[2]};
+      }
+    }
+
     code {
       background: ${theme.onBackground};
       color: ${theme.background};
