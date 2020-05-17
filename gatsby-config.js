@@ -98,10 +98,11 @@ module.exports = {
       resolve: `gatsby-plugin-manifest`,
       options: {
         name: `nvd.codes`,
-        short_name: `Nick Van Dyck's personal website and blog`,
-        start_url: `/`,
-        background_color: `#663399`,
-        theme_color: `#663399`,
+        short_name: `NvdCodes`,
+        description: `Nick Van Dyck's personal website and blog`,
+        start_url: `/?source=pwa`,
+        background_color: `#35363a`,
+        theme_color: `#35363a`,
         display: `minimal-ui`,
         icon: `src/images/icon.png`, // This path is relative to the root of the site.
       },

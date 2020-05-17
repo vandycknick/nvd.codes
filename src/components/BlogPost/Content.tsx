@@ -44,6 +44,8 @@ const Content = styled(PrismTheme)`
 
     a {
       color: ${colors.teal[500]};
+      overflow-wrap: break-word;
+      word-wrap: break-word;
 
       &:hover {
         color: ${colors.teal[700]};
@@ -64,6 +66,8 @@ const Content = styled(PrismTheme)`
       border-radius: 5px;
       padding: 2px;
       font-size: 14px;
+      overflow-wrap: break-word;
+      word-wrap: break-word;
     }
   `}
 `

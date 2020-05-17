@@ -78,6 +78,7 @@ const Layout: React.FC = ({ children }) => {
             css={css`
               width: 100%;
               max-width: 100%;
+              overflow-x: hidden;
             `}
           >
             {children}
