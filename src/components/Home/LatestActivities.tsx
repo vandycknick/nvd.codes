@@ -131,7 +131,7 @@ const OnlineActivity: React.FC<OnlineActivityProps> = ({ activity }) => {
                 activity.latestCommit.pushedDate,
               )} in ${activity.latestCommit.repositoryName}`}
             </Span>
-            <Span>{activity.latestCommit.message}</Span>
+            <Span>{activity.latestCommit.message.split("\n")[0]}</Span>
           </div>
         </div>
         <a
@@ -285,6 +285,7 @@ const LatestActivities: React.FC<LatestActivitiesProps> = ({ className }) => {
         css={css`
           display: flex;
           flex-direction: column;
+          padding: ${spacing[8]} 0 ${spacing[6]} 0;
 
           ${fromTablet`
             flex-direction: row;
