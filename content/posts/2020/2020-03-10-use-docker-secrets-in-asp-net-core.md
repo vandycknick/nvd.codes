@@ -9,7 +9,7 @@ featuredImage: ../../assets/2020-03-10-use-docker-secrets-in-asp-net-core/cover.
 
 ## What are docker secrets?
 
-In its most simple form, they are just a way to share secrets securely and only with a docker container that needs access to then. They were first introduced in Docker Swarm version 1.13, secrets are encrypted during transit and at rest. This makes them a great way to distribute connection strings, passwords, certs or other sensitive information. Now you might be wondering, can I than only use them with Docker Swarm? And that is were `docker-compose` comes into the story, with `docker-compose` we can leverage this feature for development without ever needing Docker Swarm.
+In its most simple form, they are just a way to share secrets securely and only with a docker container that needs access to them. They were first introduced in Docker Swarm version 1.13, secrets are encrypted during transit and at rest. This makes them a great way to distribute connection strings, passwords, certs or other sensitive information. Now you might be wondering, can I than only use them with Docker Swarm? And that is were `docker-compose` comes into the story, with `docker-compose` we can leverage this feature for development without ever needing Docker Swarm.
 
 ## How to use Docker secrets with docker-compose
 

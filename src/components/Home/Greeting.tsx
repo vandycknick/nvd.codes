@@ -50,7 +50,14 @@ const Greeting: React.FC<GreetingProps> = ({
         align-items: center;
       `}
     >
-      <Heading weight="normal">Hi 👋</Heading>
+      <Heading
+        css={css`
+          padding-top: ${spacing[6]};
+        `}
+        weight="normal"
+      >
+        Hi 👋
+      </Heading>
       <Heading as="h2" size="4xl" weight="extrabold">
         I&#39;m <Span shadow="yellow">Nick</Span>
       </Heading>
@@ -69,7 +76,7 @@ const Greeting: React.FC<GreetingProps> = ({
             `⌨️ 🧙‍♂️`,
             <OSDetect windows="Code ninja 🐱‍👤" unix="Code ninja" key="4" />,
             `Web Developer`,
-            <OSDetect windows="🐱‍👓" unix="☕ lover" key="6" />,
+            <OSDetect windows="🐱‍👓" unix="☕    lover" key="6" />,
           ]}
         />
       </Heading>

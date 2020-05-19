@@ -37,4 +37,23 @@ const darkTheme: Theme = {
   onSurface: colors.white,
 }
 
-export { darkTheme }
+const lightTheme: Theme = {
+  transparent: "transparent",
+
+  primary: colors.teal[700],
+  onPrimary: colors.white,
+
+  primaryLight: colors.teal[500],
+  primaryLighter: colors.teal[300],
+
+  navigation: colors.grey[800],
+  onNavigation: colors.white,
+
+  background: colors.white,
+  onBackground: colors.black,
+
+  surface: colors.grey[700],
+  onSurface: colors.white,
+}
+
+export { darkTheme, lightTheme }

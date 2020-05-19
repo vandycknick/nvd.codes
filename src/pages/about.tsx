@@ -45,7 +45,7 @@ const About: React.FC<AboutProps> = ({ data }) => (
       <Heading
         css={css`
           align-self: center;
-          padding-bottom: ${spacing[5]};
+          padding: ${spacing[3]};
         `}
         size="4xl"
       >
