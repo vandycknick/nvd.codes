@@ -179,15 +179,33 @@ const OnlineActivity: React.FC<OnlineActivityProps> = ({ activity }) => {
                 display: flex;
                 flex-direction: column;
                 padding-left: ${spacing[5]};
+                width: 100%;
               `}
             >
               <Span
                 css={css`
-                  font-weight: ${fontWeight.bold};
-                  font-size: ${fontSize.lg};
+                  display: flex;
+                  justify-content: space-between;
+                  align-items: center;
                 `}
               >
-                {project.name}
+                <Span
+                  css={css`
+                    font-weight: ${fontWeight.bold};
+                    font-size: ${fontSize.lg};
+                  `}
+                >
+                  {project.name}
+                </Span>
+                <Tag
+                  css={css`
+                    ${cssFromBackgroundColor(project.primaryLanguage.color)}
+                    align-items: center;
+                    font-size: 0.5rem;
+                  `}
+                >
+                  {project.primaryLanguage.name}
+                </Tag>
               </Span>
               <Span
                 css={css`
@@ -204,21 +222,6 @@ const OnlineActivity: React.FC<OnlineActivityProps> = ({ activity }) => {
                 `}
               >
                 {truncate(project.description || "", 12)}
-              </Span>
-              <Span
-                css={css`
-                  padding: ${spacing[2]} 0;
-                `}
-              >
-                <Tag
-                  css={css`
-                    ${cssFromBackgroundColor(project.primaryLanguage.color)}
-                    align-items: center;
-                    font-size: 0.6rem;
-                  `}
-                >
-                  {project.primaryLanguage.name}
-                </Tag>
               </Span>
             </div>
           </div>

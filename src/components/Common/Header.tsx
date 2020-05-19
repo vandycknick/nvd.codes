@@ -8,7 +8,6 @@ import {
   NavbarMenu,
   Burger,
 } from "src/components/Common/Navbar"
-import { Doodle } from "src/components/Common/Doodle"
 import { NavLink } from "src/components/Common/Navlink"
 import Logo from "src/components/Common/Logo"
 import { GlobalEvent } from "src/components/Common/GlobalEvent"
@@ -73,7 +72,6 @@ const Header: React.FC = () => {
           />
         </NavbarContent>
       </Navbar>
-      <Doodle />
     </header>
   )
 }
