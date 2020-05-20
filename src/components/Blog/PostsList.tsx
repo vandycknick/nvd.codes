@@ -58,11 +58,7 @@ const PostsList: React.FC<PostsListProps> = ({ className, posts }) => {
 
             ${fromTablet`
                   width: 50%;
-                  padding-right: ${spacing[2]};
-
-                  &:nth-child(2n) {
-                    padding-left: ${spacing[2]};
-                  }
+                  padding: ${spacing[2]};
               `}
 
             ${fromDesktopWideScreen`width: 33%`}
@@ -84,7 +80,7 @@ const PostsList: React.FC<PostsListProps> = ({ className, posts }) => {
                   `}
                 >
                   <img
-                    src={post.cover.src}
+                    src={post.cover.base64 || post.cover.src}
                     srcSet={post.cover.srcSet}
                     sizes={post.cover.sizes}
                     css={css`

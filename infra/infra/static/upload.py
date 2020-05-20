@@ -2,12 +2,20 @@ import os
 import sys
 import stat
 import argparse
+import mimetypes
 
 from pathlib import Path
 from azure.storage.blob import BlobServiceClient, ContentSettings
 
-MAX_AGE = "public, max-age=31536000"
+ONE_MINUTE = 60
+ONE_HOUR = 60 * ONE_MINUTE
+ONE_DAY = 24 * ONE_HOUR
+
 NO_CACHE = "no-cache"
+ONE_MIN_CACHE = "public, max-age={}".format(ONE_MINUTE)
+ONE_DAY_CACHE = "public, max-age={}".format(ONE_DAY)
+MAX_AGE_CACHE = "public, max-age=31536000"
+
 
 
 def is_input_redirected() -> bool:
@@ -21,22 +29,6 @@ def is_input_redirected() -> bool:
             return True
         else:
             return False
-
-
-content_types_map = {
-    ".js": "application/javascript",
-    ".json": "application/json",
-    ".css": "text/css",
-    ".htm": "text/html",
-    ".html": "text/html",
-    ".xml": "text/xml",
-}
-
-
-def get_content_type_for_file(filename: str, fallback="text/plain") -> str:
-    extension = Path(filename).suffix
-    return content_types_map.get(extension, fallback)
-
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(
@@ -74,11 +66,15 @@ if __name__ == "__main__":
 
         print("Uploading file: {0}".format(file))
 
-        content_type = get_content_type_for_file(relative)
-        content_settings = ContentSettings(content_type=content_type)
+        (content_type, content_encoding) = mimetypes.guess_type(file)
+        content_settings = ContentSettings(content_type=content_type or "application/octet-stream")
 
         if content_type == "application/javascript" or content_type == "text/css":
-            content_settings.cache_control = MAX_AGE
+            content_settings.cache_control = MAX_AGE_CACHE
+        elif content_type =="text/html" or content_type == "application/json":
+            content_settings.cache_control = ONE_MIN_CACHE
+        elif content_type == "image/jpeg":
+            content_settings.cache_control = ONE_DAY_CACHE
         else:
             content_settings.cache_control = NO_CACHE
 
