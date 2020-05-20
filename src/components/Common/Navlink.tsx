@@ -17,13 +17,15 @@ const NavLinkItem = styled(Link)`
   ${({ theme }) => css`
     font-family: ${fontFamily.headings};
     font-weight: ${fontWeight.bold};
-    font-size: ${fontSize.base};
+    font-size: ${fontSize.xl};
     color: ${theme.onNavigation};
     display: flex;
     align-items: center;
     text-decoration: none;
     padding: ${spacing[4]};
     box-sizing: border-box;
+
+    ${fromTablet`font-size: ${fontSize.base};`}
 
     &:hover {
       color: ${theme.primaryLighter};

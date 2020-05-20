@@ -77,6 +77,7 @@ type OnlineActivityProps = {
 const cardColStyles = css`
   margin-bottom: ${spacing[4]};
   padding: 0;
+  min-height: 200px;
   ${fromTablet`width: 49%;`}
   ${fromDesktop`width: 32%;`}
 `
@@ -88,6 +89,7 @@ const OnlineActivity: React.FC<OnlineActivityProps> = ({ activity }) => {
       <Card css={cardColStyles}>
         <div
           css={css`
+            flex: 1;
             display: flex;
             height: 100%;
             align-items: center;
@@ -158,6 +160,7 @@ const OnlineActivity: React.FC<OnlineActivityProps> = ({ activity }) => {
           <div
             css={css`
               display: flex;
+              flex: 1;
               height: 100%;
               align-items: center;
               padding: ${spacing[3]} ${spacing[5]};

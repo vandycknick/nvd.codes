@@ -46,6 +46,22 @@ def setup():
         profile_name=www_cdn.name,
         origin_host_header=www_storage_account.primary_web_host,
         origins=[{"name": "blobstorage", "hostName": www_storage_account.primary_web_host}],
+        global_delivery_rule={
+            "modify_response_header_action": [
+                # CSP header not configured due to issue with rule value length that has a max of 100 chars
+                { "action": "Overwrite", "name": "Feature-Policy", "value": "accelerometer 'none'; camera 'none'; geolocation 'none'; gyroscope 'none'; microphone 'none';˝" },
+                { "action": "Overwrite", "name": "Referrer-Policy", "value": "strict-origin-when-cross-origin" },
+                { "action": "Overwrite", "name": "Strict-Transport-Security", "value": "max-age=31536000; includeSubDomains" },
+                { "action": "Overwrite", "name": "X-Frame-Options", "value": "SAMEORIGIN" },
+                { "action": "Overwrite", "name": "X-Content-Type-Options", "value": "nosniff" },
+                # Can't apply this yet because of 100 chars limit
+                #  {
+                #     "action": "Overwrite",
+                #     "name": "Report-To",
+                #     "value": json.dumps({"group":"default","max_age":10886400,"endpoints":[{"url":"https://nvdcodes.report-uri.com/a/d/g"}],"include_subdomains":True})
+                # },
+            ]
+        }
     )
 
     api_plan = appservice.Plan(
