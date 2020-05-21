@@ -30,7 +30,7 @@ exports.createPages = async ({ graphql, actions }) => {
             node {
               fields {
                 slug
-                published
+                draft
               }
               frontmatter {
                 title
@@ -58,8 +58,8 @@ exports.createPages = async ({ graphql, actions }) => {
       component: blogPost,
       context: {
         slug: post.node.fields.slug,
-        previous: previous && previous.fields.published ? previous : null,
-        next: next && next.fields.published ? next : null,
+        previous: previous && previous.fields.draft === false ? previous : null,
+        next: next && next.fields.draft === false ? next : null,
       },
     })
   })
@@ -76,12 +76,10 @@ exports.onCreateNode = ({ node, actions, getNode }) => {
     const splitted = parsed.name.split("-")
     const name = splitted.slice(3)
 
-    // Every article is considered published by default
-    // unless published is explicitly set to false
     createNodeField({
-      name: `published`,
+      name: `draft`,
       node,
-      value: !(node.frontmatter.published === false),
+      value: !!node.frontmatter.draft,
     })
 
     createNodeField({

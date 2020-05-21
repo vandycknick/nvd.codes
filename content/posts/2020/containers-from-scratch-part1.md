@@ -4,7 +4,7 @@ title: 'Containers From Scratch: Introduction'
 description: Hello world
 date: 2020-04-20 20:00:00 +01:00
 categories: [containers, docker, linux]
-published: false
+draft: true
 ---
 
 ## Outline
