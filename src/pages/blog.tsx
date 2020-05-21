@@ -14,7 +14,7 @@ const pageQuery = graphql`
   query {
     allMarkdownRemark(
       sort: { fields: [frontmatter___date], order: DESC }
-      filter: { fields: { published: { eq: true } } }
+      filter: { fields: { draft: { eq: false } } }
     ) {
       edges {
         node {
