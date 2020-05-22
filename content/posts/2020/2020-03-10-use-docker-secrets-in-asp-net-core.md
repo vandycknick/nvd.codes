@@ -1,10 +1,10 @@
 ---
-id: 62D25687-99DC-472C-938B-2CBDE93420AA
+id: ae6e05e8-1a5a-4881-99ed-4ff3093758d8
 title: Docker secrets in ASP.NET Core
 description: In this post, I want to show you a simple and different way to share secrets to your application. What are docker secrets and how can I start using them in my ASP.NET Core application? Keep reading 😄.
 date: 2020-03-10 20:00:00 +01:00
 categories: [dotnet, aspnet, docker, secrets]
-featuredImage: ../../assets/2020-03-10-use-docker-secrets-in-asp-net-core/cover.jpg
+cover: ../../assets/2020-03-10-use-docker-secrets-in-asp-net-core/cover.jpg
 ---
 
 ## What are docker secrets?
@@ -24,7 +24,7 @@ To use this in our `docker-compose.yml` file there are 2 things we need to do:
 1. Define a new top-level secret under the secrets key, give it a name and a reference to our file. In the example, you will see that the `file` key contains a reference `my-little-secret.txt`
 2. Next up you can add a reference to that secret for any containers that need access to it.
 
-```yml{8-9,11-13}
+```yml
 version: "3.6"
 
 services:
@@ -44,7 +44,7 @@ This secret file can contain whatever you prefer, and it is up to your applicati
 
 For example, imagine our `my-little-secret.txt` file contained the following secret:
 
-```txt
+```
 please-do-not-tell
 ```
 
