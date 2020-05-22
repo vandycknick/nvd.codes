@@ -25,6 +25,7 @@ class MyDocument extends Document<DocumentProps> {
     return (
       <Html lang="en">
         <Head>
+          <link rel="shortcut icon" href="/favicon.png" />
           <style
             data-emotion-css={this.props.ids.join(" ")}
             dangerouslySetInnerHTML={{ __html: this.props.css }}

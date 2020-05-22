@@ -274,7 +274,7 @@ const renderOnlineActivity = ({
 
 const LatestActivities: React.FC<LatestActivitiesProps> = ({ className }) => {
   const { data: activity, error } = useSWR<Activity>(
-    `${process.env.NEXT_PUBLIC_PROJECTS_API}/project/activities`,
+    `${process.env.NEXT_PUBLIC_PROJECTS_API}/api/project/activities`,
     fetchJSON,
   )
   return (
