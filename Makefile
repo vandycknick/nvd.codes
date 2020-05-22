@@ -16,8 +16,7 @@ check:
 
 .PHONY: build
 build:
-	${NPM_BIN}/gatsby build
-	dotnet publish -c Release
+	yarn build
 
 .PHONY: serve
 serve:
@@ -39,11 +38,11 @@ infra-up:
 			pulumi up --yes --suppress-outputs
 
 .PHONY: deploy
-deploy: clean build
+deploy:
 	@echo ""
 	@echo "\033[0;32mDeploying Assets \033[0m"
 	@echo "\033[0;32m------------------- \033[0m"
 	@cd $(INFRA) && \
 			(pipenv run pulumi stack output -s prod --json | \
-			jq -r '.www_storage_connection_string' | \
-			pipenv run python infra/static/upload.py --container '$$web' --cwd $(ROOT)/public)
+			jq -r '.web_app_connection_string' | \
+			pipenv run python infra/upload.py --container '$$web' --cwd $(ROOT)/src/web/out)

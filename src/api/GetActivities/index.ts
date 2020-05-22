@@ -1,4 +1,7 @@
 import { AzureFunction, Context } from "@azure/functions"
+
+import "./function.json"
+
 import getLatestCommit from "./getLatestCommit"
 import getLatestRepositories from "./getLatestRepositories"
 

@@ -4,7 +4,7 @@
     "src/*"
   ],
   "scripts": {
-    "build": "yarn workspace web build",
+    "build": "yarn workspace web build && yarn workspace api build",
     "dev": "yarn concurrently -n web,api -c red,cyan 'yarn dev-web' 'yarn dev-api'",
     "dev-web": "yarn workspace web dev",
     "dev-api": "concurrently -n dev,watch 'yarn workspace api dev' 'yarn workspace api watch'"

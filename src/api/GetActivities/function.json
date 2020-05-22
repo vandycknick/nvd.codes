@@ -14,5 +14,5 @@
       "name": "res"
     }
   ],
-  "scriptFile": "../.dist/GetActivities/index.js"
+  "scriptFile": "./index.js"
 }
