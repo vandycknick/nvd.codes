@@ -1,0 +1,9 @@
+{
+  "extends": "@nvd/tsconfig",
+  "compilerOptions": {
+    "target": "es6",
+    "resolveJsonModule": true,
+    "outDir": ".dist",
+    "rootDir": ".",
+  }
+}

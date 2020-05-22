@@ -1,9 +1,8 @@
-# Gatsby
-public
-.cache
-
 # Node
 node_modules/
+
+out
+.dist
 
 # Dotnet
 bin/

@@ -1,5 +1,0 @@
-.build
-.secrets
-node_modules
-.cache
-public

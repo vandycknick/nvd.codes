@@ -1,0 +1,21 @@
+{
+  "name": "api",
+  "private": true,
+  "version": "1.0.0",
+  "main": "index.js",
+  "license": "MIT",
+  "scripts": {
+    "build": "tsc",
+    "watch": "tsc -w",
+    "dev": "yarn build && func start"
+  },
+  "dependencies": {
+    "node-fetch": "^2.6.0"
+  },
+  "devDependencies": {
+    "@azure/functions": "^1.2.0",
+    "@nvd/tsconfig": "^1.0.0",
+    "@types/node-fetch": "^2.5.7",
+    "typescript": "^3.9.3"
+  }
+}
