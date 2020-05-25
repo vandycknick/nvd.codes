@@ -45,8 +45,8 @@ pulumi-preview:
 		pipenv run \
 			pulumi preview
 
-.PHONY: infra-up
-infra-up:
+.PHONY: pulumi-up
+pulumi-up:
 	cd $(INFRA) && \
 		pipenv run \
 			pulumi up --yes --suppress-outputs
