@@ -7,19 +7,6 @@ categories: [dotnet, dotnet core, mono, unix, build]
 cover: ../../assets/2019-03-18-dotnet-build-target-net4x-on-unix-systems/cover.jpg
 ---
 
-<details><summary>TLDR</summary>
-Step 1. Add the following lines to your `csproj` file:
-
-```xml
-<PackageReference Include="Microsoft.NETFramework.ReferenceAssemblies" Version="1.0.0">
-  <PrivateAssets>all</PrivateAssets>
-  <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
-</PackageReference>
-```
-
-Step 2. Profit 💰
-</details>
-
 .NET Core and Mono has made it easy for us as developers to run applications on multiple platforms. But targeting multiple runtimes can sometimes still prove to be quite difficult. On a decent windows dev machine adding a `net4x` moniker should be pretty straightforward but on a unix based system you might run into the following issue:
 
 ```
@@ -135,4 +122,4 @@ Another way of doing this is by adding a reference to the `Microsoft.NETFramewor
 
 ### Conclusion
 
-Doing multi runtime and cross-platform .NET development is not always as easy as it should be. You need to make sure you have the right reference assemblies laid out on disk or know what magic keywords to add to your csproj file. In the end, you can always use `msbuild` shipped with mono or .net too by running it just for the `net4x` target framework, but that's like an extra command to type and think about. Let me know if you have other ways of approaching this in the comments.
+Doing multi runtime and cross-platform .NET development is not always as easy as it should be. You need to make sure you have the right reference assemblies laid out on disk or know what magic keywords to add in your csproj file. Alternatively it's always possible to use `msbuild` that's shipped with mono directly and it will make sure you have the right references setup. But for some people (me included) this breaks their flow and prefer to use one command to rule them all. These are the tricks I came up with to overcome this issue, let me know if you have other ways of approaching this in the comments below.
