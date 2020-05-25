@@ -1,35 +1,43 @@
-.PHONY: clean dev build serve
 .DEFAULT_GOAL: build
 
 ROOT	:= $(shell pwd)
-INFRA	:= $(ROOT)/infra
 NPM_BIN := $(shell yarn bin)
 
-.PHONY: dev
-dev:
-	GATSBY_PROJECT_API=https://api.nvd.codes $(NPM_BIN)/gatsby develop
+INFRA	:= $(ROOT)/infra
+API_PROJECT := $(ROOT)/src/api
+WEB_PROJECT := $(ROOT)/src/web
 
-.PHONY: check
-check:
-	${NPM_BIN}/tsc --noEmit
-	$(NPM_BIN)/eslint . --ext .ts --ext .tsx --ext .js --ext .json --ignore-path .gitignore
-
-.PHONY: build
-build:
-	yarn build
-
-.PHONY: serve
-serve:
-	${NPM_BIN}/gatsby serve
+.PHONY: install
+install:
+	yarn --frozen-lockfile
 
 .PHONY: clean
 clean:
-	$(NPM_BIN)/gatsby clean
-	rm -rf .build
-	rm -rf functions/ProjectsApi/bin
-	rm -rf functions/ProjectsApi/obj
-	rm -rf functions/Proxy/bin
-	rm -rf functions/Proxy/obj
+	@rm -rf {src,libs}/*/.dist || true
+	@rm -rf **/*.log || true
+
+.PHONY: dev
+dev:
+	@yarn concurrently -n web,api -c red,cyan "$(MAKE) dev-web" "$(MAKE) dev-api"
+
+.PHONY: dev-web
+dev-web:
+	@yarn workspace web dev
+
+.PHONY: dev-api
+dev-api:
+	@yarn concurrently -n dev,watch "yarn workspace api dev" "yarn workspace api watch"
+
+.PHONY: check
+check:
+	$(NPM_BIN)/tsc -p $(API_PROJECT) --noEmit
+	$(NPM_BIN)/tsc -p $(WEB_PROJECT) --noEmit
+	$(NPM_BIN)/eslint . --ext .ts --ext .tsx --ext .js --ext .json --ignore-path .gitignore
+
+.PHONY: build
+build: clean
+	yarn workspace web build
+	yarn workspace api build
 
 .PHONY: infra-up
 infra-up:
@@ -45,4 +53,4 @@ deploy:
 	@cd $(INFRA) && \
 			(pipenv run pulumi stack output -s prod --json | \
 			jq -r '.web_app_connection_string' | \
-			pipenv run python infra/upload.py --container '$$web' --cwd $(ROOT)/src/web/out)
+			pipenv run python infra/upload.py --container '$$web' --cwd $(ROOT)/src/web/.dist)

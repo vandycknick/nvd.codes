@@ -3,11 +3,11 @@ import { css } from "@emotion/core"
 import { useTheme } from "emotion-theming"
 import { GetStaticProps, GetStaticPaths } from "next"
 import ErrorPage from "next/error"
-
-import { Post } from "domain/blog"
+import { Post } from "@nvd.codes/domain"
 
 import SEO from "components/Common/SEO"
 import { Content } from "components/BlogPost/Content"
+import { CommentList } from "components/BlogPost/CommentList"
 import { Heading } from "components/Common/Heading"
 import { spacing, Theme } from "components/Tokens"
 import Time from "components/Common/Time"
@@ -16,6 +16,7 @@ import { Calendar } from "components/BlogPost/Icons/Calendar"
 import { Edit } from "components/BlogPost/Icons/Edit"
 import { Time as TimeIcon } from "components/BlogPost/Icons/Time"
 import { getAllPosts } from "services/getAllPosts"
+import { Divider } from "components/Common/Divider"
 
 type BlogPostProps = {
   post?: Pick<
@@ -52,6 +53,7 @@ const BlogPost: React.FC<BlogPostProps> = ({ post }) => {
         css={css`
           display: flex;
           flex-direction: column;
+          padding-bottom: ${spacing[4]};
         `}
       >
         <header
@@ -129,6 +131,8 @@ const BlogPost: React.FC<BlogPostProps> = ({ post }) => {
         </header>
         <Content dangerouslySetInnerHTML={{ __html: post.content }} />
       </article>
+      <Divider />
+      <CommentList slug={post.slug} />
     </>
   )
 }

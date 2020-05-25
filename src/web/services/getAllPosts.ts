@@ -1,10 +1,11 @@
 import { promises } from "fs"
 import { join, dirname } from "path"
+import { Post } from "@nvd.codes/domain"
+
 const { readFile, writeFile, mkdir, unlink } = promises
 
 import { getAllSlugs } from "services/getAllSlugs"
 import { getPostBySlug } from "services/getPostBySlug"
-import { Post } from "domain/blog"
 
 export const BLOG_INDEX_CACHE = join(
   process.cwd(),
@@ -12,8 +13,13 @@ export const BLOG_INDEX_CACHE = join(
   "blog-index-cache.json",
 )
 
-export const purgePostsCache = async (): Promise<void> =>
-  unlink(BLOG_INDEX_CACHE)
+export const purgePostsCache = async (): Promise<void> => {
+  try {
+    await unlink(BLOG_INDEX_CACHE)
+  } catch (_) {
+    //** Not used */
+  }
+}
 
 export const getAllPosts = async <P extends keyof Post>(
   fields: P[] = [],

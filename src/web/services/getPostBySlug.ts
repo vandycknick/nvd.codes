@@ -3,9 +3,9 @@ import { join, basename, dirname } from "path"
 import matter from "gray-matter"
 import readingTime from "reading-time"
 import sharp from "sharp"
+import { Post } from "@nvd.codes/domain"
 const { readFile, mkdir } = promises
 
-import { Post } from "domain/blog"
 import { getAllSlugs, SlugInfo } from "services/getAllSlugs"
 import markdownToHtml from "services/markdownToHtml"
 

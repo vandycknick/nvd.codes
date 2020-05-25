@@ -1176,15 +1176,10 @@
     "@types/node" "*"
     form-data "^3.0.0"
 
-"@types/node@*":
+"@types/node@*", "@types/node@^14.0.4":
   version "14.0.5"
   resolved "https://registry.yarnpkg.com/@types/node/-/node-14.0.5.tgz#3d03acd3b3414cf67faf999aed11682ed121f22b"
   integrity sha512-90hiq6/VqtQgX8Sp0EzeIsv3r+ellbGj4URKj5j30tLlZvRUpnAe9YbYnjl3pJM93GyXU0tghHhvXHq+5rnCKA==
-
-"@types/node@^14.0.4":
-  version "14.0.4"
-  resolved "https://registry.yarnpkg.com/@types/node/-/node-14.0.4.tgz#43a63fc5edce226bed106b31b875165256271107"
-  integrity sha512-k3NqigXWRzQZVBDS5D1U70A5E8Qk4Kh+Ha/x4M8Bt9pF0X05eggfnC9+63Usc9Q928hRUIpIhTQaXsZwZBl4Ew==
 
 "@types/parse-json@^4.0.0":
   version "4.0.0"
@@ -4585,7 +4580,15 @@ js-tokens@^3.0.2:
   resolved "https://registry.yarnpkg.com/js-tokens/-/js-tokens-3.0.2.tgz#9866df395102130e38f7f996bceb65443209c25b"
   integrity sha1-mGbfOVECEw449/mWvOtlRDIJwls=
 
-js-yaml@^3.11.0, js-yaml@^3.13.1:
+js-yaml@^3.11.0:
+  version "3.14.0"
+  resolved "https://registry.yarnpkg.com/js-yaml/-/js-yaml-3.14.0.tgz#a7a34170f26a21bb162424d8adacb4113a69e482"
+  integrity sha512-/4IbIeHcD9VMHFqDR/gQ7EdZdLimOvW2DdcxFjdyyZ9NsbS+ccrXqVWDtab/lRl5AlUqmpBx8EhPaWR+OtY17A==
+  dependencies:
+    argparse "^1.0.7"
+    esprima "^4.0.0"
+
+js-yaml@^3.13.1:
   version "3.13.1"
   resolved "https://registry.yarnpkg.com/js-yaml/-/js-yaml-3.13.1.tgz#aff151b30bfdfa8e49e05da22e7415e9dfa37847"
   integrity sha512-YfbcO7jXDdyj0DGxYVSlSeQNHbD7XPWvrVWeVUujrQEoZzWJIRrCPoyk6kL6IAjAG2IolMK4T0hNUe0HOUs5Jw==
@@ -5028,7 +5031,7 @@ minimatch@^3.0.4:
   dependencies:
     brace-expansion "^1.1.7"
 
-minimist@^1.2.0, minimist@^1.2.5, minimist@~1.2.5:
+minimist@^1.2.0, minimist@^1.2.3, minimist@^1.2.5, minimist@~1.2.5:
   version "1.2.5"
   resolved "https://registry.yarnpkg.com/minimist/-/minimist-1.2.5.tgz#67d66014b66a6a8aaa0c083c5fd58df4e4e97602"
   integrity sha512-FM9nNUYrRBAELZQT3xeZQ7fmMOBg6nWNmJKTcgsJeaLstP/UODVpGsr5OhXhhXg6f+qtJ8uiZ+PUxkDWcgIXLw==
@@ -6194,14 +6197,14 @@ postcss@^7.0.0, postcss@^7.0.1, postcss@^7.0.14, postcss@^7.0.16, postcss@^7.0.2
     supports-color "^6.1.0"
 
 prebuild-install@^5.3.3:
-  version "5.3.3"
-  resolved "https://registry.yarnpkg.com/prebuild-install/-/prebuild-install-5.3.3.tgz#ef4052baac60d465f5ba6bf003c9c1de79b9da8e"
-  integrity sha512-GV+nsUXuPW2p8Zy7SarF/2W/oiK8bFQgJcncoJ0d7kRpekEA0ftChjfEaF9/Y+QJEc/wFR7RAEa8lYByuUIe2g==
+  version "5.3.4"
+  resolved "https://registry.yarnpkg.com/prebuild-install/-/prebuild-install-5.3.4.tgz#6982d10084269d364c1856550b7d090ea31fa293"
+  integrity sha512-AkKN+pf4fSEihjapLEEj8n85YIw/tN6BQqkhzbDc0RvEZGdkpJBGMUYx66AAMcPG2KzmPQS7Cm16an4HVBRRMA==
   dependencies:
     detect-libc "^1.0.3"
     expand-template "^2.0.3"
     github-from-package "0.0.0"
-    minimist "^1.2.0"
+    minimist "^1.2.3"
     mkdirp "^0.5.1"
     napi-build-utils "^1.0.1"
     node-abi "^2.7.0"

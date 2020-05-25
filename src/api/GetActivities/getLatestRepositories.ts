@@ -1,4 +1,6 @@
 import fetch from "node-fetch"
+import { Repository } from "@nvd.codes/domain"
+
 import config from "../config"
 
 const query = `
@@ -48,20 +50,6 @@ type GraphQLResponse = {
         }[]
       }
     }
-  }
-}
-
-type Repository = {
-  id: string
-  name: string
-  nameWithOwner: string
-  description: string
-  updatedAt: string
-  stars: number
-  url: string
-  primaryLanguage: {
-    name: string
-    color: string
   }
 }
 

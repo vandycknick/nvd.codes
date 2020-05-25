@@ -3,6 +3,7 @@ import { css, SerializedStyles } from "@emotion/core"
 import { useTheme } from "emotion-theming"
 import useSWR from "swr"
 import * as timeago from "timeago.js"
+import { Activity } from "@nvd.codes/domain"
 
 import {
   colors,
@@ -21,35 +22,6 @@ import { Span } from "components/Common/Span"
 import { Tag } from "components/Common/Tag"
 import { fetchJSON } from "utils/async"
 import truncate from "utils/truncate"
-
-interface Project {
-  id: string
-  name: string
-  description: string
-  url: string
-  stars: number
-  primaryLanguage: RepositoryLanguage
-  updatedAt: string
-}
-
-interface RepositoryLanguage {
-  name: string
-  color: string
-}
-
-interface Activity {
-  latestCommit: Commit
-  projects: Project[]
-}
-
-interface Commit {
-  id: string
-  url: string
-  message: string
-  messageHeadline: string
-  pushedDate: string
-  repositoryName: string
-}
 
 type LatestActivitiesProps = {
   className?: string

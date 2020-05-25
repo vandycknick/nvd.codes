@@ -71,7 +71,7 @@ const Content = styled.section`
     }
 
     pre {
-      // background-color: #46474a !important;
+      background: #191d21;
       border-radius: 5px;
       box-shadow: ${shadow.inner};
       margin-bottom: ${spacing[4]};

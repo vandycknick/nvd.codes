@@ -1,5 +1,5 @@
 import { getAllPosts } from "services/getAllPosts"
-import { Post } from "domain/blog"
+import { Post } from "@nvd.codes/domain"
 
 export const getLatestPosts = async <P extends keyof Post>(
   count = 1,

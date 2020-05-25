@@ -6,7 +6,6 @@ class HttpError extends Error {
 
 const fetchJSON = async <T>(url: string): Promise<T> => {
   const response = await fetch(url)
-
   if (!response.ok) {
     throw new HttpError(response.status, response.statusText)
   }
