@@ -9,9 +9,11 @@
     "watch": "tsc -w",
     "predev": "yarn clean && tsc && func extensions install",
     "dev": "cd .dist && func start",
-    "build": "yarn clean && tsc && cd .dist && yarn --production"
+    "copy-package": "cat package.json | jq 'del(.devDependencies, .scripts, .dependencies[\"@nvd.codes/domain\"])' > .dist/package.json",
+    "build": "yarn clean && tsc && yarn copy-package && cd .dist && yarn --production && rm local.settings.json"
   },
   "dependencies": {
+    "@nvd.codes/domain": "^1.0.0",
     "node-fetch": "^2.6.0"
   },
   "devDependencies": {

@@ -2,6 +2,7 @@ import React from "react"
 import { css } from "@emotion/core"
 import { useTheme } from "emotion-theming"
 import Link from "next/link"
+import { Post } from "@nvd.codes/domain"
 
 import { Heading } from "components/Common/Heading"
 import { Card } from "components/Common/Card"
@@ -11,7 +12,6 @@ import { fromTablet, fromDesktopWideScreen } from "components/Common/mediaQuery"
 import { Tag } from "components/Common/Tag"
 import { Span } from "components/Common/Span"
 import Time from "components/Common/Time"
-import { Post } from "domain/blog"
 
 type PostPreview = Pick<
   Post,

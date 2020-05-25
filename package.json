@@ -1,14 +1,9 @@
 {
   "private": true,
   "workspaces": [
+    "libs/*",
     "src/*"
   ],
-  "scripts": {
-    "build": "yarn workspace web build && yarn workspace api build",
-    "dev": "yarn concurrently -n web,api -c red,cyan 'yarn dev-web' 'yarn dev-api'",
-    "dev-web": "yarn workspace web dev",
-    "dev-api": "concurrently -n dev,watch 'yarn workspace api dev' 'yarn workspace api watch'"
-  },
   "devDependencies": {
     "@typescript-eslint/eslint-plugin": "^2.34.0",
     "@typescript-eslint/parser": "^2.34.0",

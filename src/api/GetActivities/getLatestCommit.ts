@@ -1,8 +1,10 @@
 import fetch from "node-fetch"
+import { Commit } from "@nvd.codes/domain"
+
 import config from "../config"
 
 const query = `
-query {
+query LatestCommit {
   viewer {
     repositories(first: 1, isFork: false, orderBy: {
       field: PUSHED_AT,direction: DESC
@@ -56,16 +58,7 @@ type GraphQLResponse = {
   }
 }
 
-type LatestCommit = {
-  id: string
-  url: string
-  message: string
-  messageHeadline: string
-  pushedDate: string
-  repositoryName: string
-}
-
-const getLatestCommit = async (): Promise<LatestCommit> => {
+const getLatestCommit = async (): Promise<Commit> => {
   const response = await fetch("https://api.github.com/graphql", {
     method: "POST",
     headers: {

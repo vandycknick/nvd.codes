@@ -2,8 +2,7 @@ import React from "react"
 import Link from "next/link"
 import { css } from "@emotion/core"
 import { useTheme } from "emotion-theming"
-
-import { Post } from "domain/blog"
+import { Post } from "@nvd.codes/domain"
 
 import { Heading } from "components/Common/Heading"
 import { Span } from "components/Common/Span"

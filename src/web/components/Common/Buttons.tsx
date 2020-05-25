@@ -2,7 +2,7 @@ import React from "react"
 import Link, { LinkProps } from "next/link"
 import { borderRadius, colors, spacing, styled } from "components/Tokens"
 
-const Button = styled.button`
+export const Button = styled.button`
   color: ${colors.white};
   background-color: ${colors.teal[700]};
   padding: ${spacing[2]};
@@ -11,16 +11,21 @@ const Button = styled.button`
 
   &:hover {
     background-color: ${colors.teal[800]};
+    cursor: pointer;
+  }
+
+  &[disabled] {
+    background-color: ${colors.teal[700]};
+    cursor: not-allowed;
+    opacity: 0.5;
   }
 `
 
-const LinkButton = Button.withComponent("a")
+export const LinkButton = Button.withComponent("a")
 
 type NavButtonProps = LinkProps
-const NavButton: React.FC<NavButtonProps> = ({ children, ...props }) => (
+export const NavButton: React.FC<NavButtonProps> = ({ children, ...props }) => (
   <Link {...props}>
     <LinkButton>{children}</LinkButton>
   </Link>
 )
-
-export { Button, LinkButton, NavButton }

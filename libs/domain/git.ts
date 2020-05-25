@@ -1,21 +1,17 @@
-export interface Project {
+export interface Repository {
   id: string
   name: string
+  nameWithOwner: string
   description: string
+  updatedAt: string
   url: string
   stars: number
-  languages: string[]
   primaryLanguage: RepositoryLanguage
 }
 
 export interface RepositoryLanguage {
   name: string
   color: string
-}
-
-export interface Activity {
-  latestCommit: Commit
-  projects: Project[]
 }
 
 export interface Commit {

@@ -3,16 +3,24 @@ import { css } from "@emotion/core"
 
 type ImageProps = {
   src: string
+  width?: number
+  height?: number
   alt?: string
   className?: string
 }
 
-const Image: React.FC<ImageProps> = ({ alt, className, src }) => (
+const Image: React.FC<ImageProps> = ({
+  alt,
+  className,
+  src,
+  width = 128,
+  height = 128,
+}) => (
   <figure
     className={className}
     css={css`
-      height: 128px;
-      width: 128px;
+      height: ${height}px;
+      width: ${width}px;
     `}
   >
     <img
@@ -23,6 +31,7 @@ const Image: React.FC<ImageProps> = ({ alt, className, src }) => (
         display: block;
         height: auto;
         width: 100%;
+        height: 100%;
       `}
     />
   </figure>
