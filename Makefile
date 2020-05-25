@@ -39,6 +39,12 @@ build: clean
 	yarn workspace web build
 	yarn workspace api build
 
+.PHONY: pulumi-preview
+pulumi-preview:
+	cd $(INFRA) && \
+		pipenv run \
+			pulumi preview
+
 .PHONY: infra-up
 infra-up:
 	cd $(INFRA) && \

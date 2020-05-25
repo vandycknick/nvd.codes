@@ -60,6 +60,7 @@ def create_api_app(
         app_settings={
             "FUNCTIONS_WORKER_RUNTIME": "node",
             "GITHUB_TOKEN": config.require("github_token"),
+            "ISSUE_QUERY": "user:nickvdyck repo:nvd.codes state:open label:comment",
             "WEBSITE_RUN_FROM_PACKAGE": signed_blob_url,
             "WEBSITE_NODE_DEFAULT_VERSION": "~12",
         },
