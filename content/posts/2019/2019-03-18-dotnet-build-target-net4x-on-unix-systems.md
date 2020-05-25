@@ -11,18 +11,13 @@ cover: ../../assets/2019-03-18-dotnet-build-target-net4x-on-unix-systems/cover.j
 Step 1. Add the following lines to your `csproj` file:
 
 ```xml
-<ItemGroup>
-  <PackageReference Include="Microsoft.NETFramework.ReferenceAssemblies" Version="1.0.0-alpha-5" PrivateAssets="all" />
-</ItemGroup>
+<PackageReference Include="Microsoft.NETFramework.ReferenceAssemblies" Version="1.0.0">
+  <PrivateAssets>all</PrivateAssets>
+  <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
+</PackageReference>
 ```
 
-Step 2. Add the Roslyn feed to your `nuget.config`
-
-```xml
-<add key="roslyntools" value="https://dotnet.myget.org/F/roslyn-tools/api/v3/index.json" />
-```
-
-Step 3. Profit 💰
+Step 2. Profit 💰
 </details>
 
 .NET Core and Mono has made it easy for us as developers to run applications on multiple platforms. But targeting multiple runtimes can sometimes still prove to be quite difficult. On a decent windows dev machine adding a `net4x` moniker should be pretty straightforward but on a unix based system you might run into the following issue:
@@ -127,20 +122,15 @@ Finally, we need to point the `FrameworkPathOverride` to the assemblies from thi
 </PropertyGroup>
 ```
 
-## 3. Use the Microsoft.NETFramework.ReferenceAssemblies package from the roslyntools MyGet feed
+## 3. Use the Microsoft.NETFramework.ReferenceAssemblies package from nuget
 
-Another way of doing this is by adding a reference to the `Microsoft.NETFramework.ReferenceAssemblies` from the [roslyntools MyGet feed](https://dotnet.myget.org/feed/roslyn-tools/package/nuget/Microsoft.NETFramework.ReferenceAssemblies). Personally this is my preferred method, because it is a simple, straightforward single include that does all the heavy lifting for you. Just add the following line to your `csrpoj` or `Directory.build.props`:
-
-```xml
-<ItemGroup>
-  <PackageReference Include="Microsoft.NETFramework.ReferenceAssemblies" Version="1.0.0-alpha-5" PrivateAssets="all" />
-</ItemGroup>
-```
-
-After that just add the feed to your `nuget.config` file:
+Another way of doing this is by adding a reference to the `Microsoft.NETFramework.ReferenceAssemblies` from [nuget](https://www.nuget.org/packages/Microsoft.NETFramework.ReferenceAssemblies/). Personally this is my preferred method, because it is a simple, straightforward single include that does all the heavy lifting for you. Just add the following line to your `csproj` or `Directory.build.props`:
 
 ```xml
-<add key="roslyntools" value="https://dotnet.myget.org/F/roslyn-tools/api/v3/index.json" />
+<PackageReference Include="Microsoft.NETFramework.ReferenceAssemblies" Version="1.0.0">
+  <PrivateAssets>all</PrivateAssets>
+  <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
+</PackageReference>
 ```
 
 ### Conclusion
