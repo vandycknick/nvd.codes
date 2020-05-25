@@ -27,7 +27,7 @@ const About: React.FC = () => (
       >
         About Me
       </Heading>
-      <Image src="/images/profile.jpg" />
+      <Image src="/images/profile.png" width={110} height={115} />
       <Paragraph
         css={css`
           text-align: center;
