@@ -1,8 +1,8 @@
 ---
-id: 62D25687-99DC-472C-938B-2CBDE93420AA
+id: 3b743007-a9a9-4872-abd8-72dadcf6766a
 title: 'Containers From Scratch: Prequel'
 description: Hello world
-date: 2020-04-20 20:00:00 +01:00
+date: 2020-04-20T20:00:00+01:00
 categories: [containers, docker, linux, system]
 draft: true
 ---

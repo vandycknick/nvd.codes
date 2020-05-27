@@ -1,8 +1,8 @@
 ---
-id: 62D25687-99DC-472C-938B-2CBDE93420AA
+id: 7f52a097-5c50-4c22-9374-c32b0ed65940
 title: 'Containers From Scratch: Introduction'
 description: Hello world
-date: 2020-04-20 20:00:00 +01:00
+date: 2020-04-20T20:00:00+01:00
 categories: [containers, docker, linux]
 draft: true
 ---
