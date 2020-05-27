@@ -2,7 +2,7 @@ from os import path, environ
 from pathlib import Path
 
 from pulumi import Config, export, FileArchive, Output
-from pulumi_azure import core, cdn, storage, appservice
+from pulumi_azure import appinsights, appservice, cdn, core, storage
 
 from infra.api import create_api_app
 from infra.cloudflare import create_dns_record
@@ -14,6 +14,12 @@ api_app_fallback = Path(current_file_path, "../src/api/.dist").resolve()
 api_app_dir = environ.get("API_APP_FOLDER", str(api_app_fallback))
 
 resource_group = core.ResourceGroup("nvd-codes")
+
+app_insights = appinsights.Insights(
+    "api-function-ai",
+    resource_group_name=resource_group.name,
+    location=resource_group.location,
+    application_type="web")
 
 web_app_storage_account = storage.Account(
     "webappsa",
@@ -81,6 +87,7 @@ api_plan = appservice.Plan(
 api_app = create_api_app(
     resource_group,
     api_plan,
+    app_insights,
     api_app_dir,
     config,
     [Output.concat("https://", web_cdn_endpoint.host_name), "https://nvd.codes"],

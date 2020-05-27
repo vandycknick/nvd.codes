@@ -1,5 +1,5 @@
 from pulumi import asset, export, Output, Config
-from pulumi_azure import core, appservice, storage
+from pulumi_azure import core, appservice, storage, appinsights
 
 from infra.utils import get_sas
 
@@ -7,6 +7,7 @@ from infra.utils import get_sas
 def create_api_app(
     resource_group: core.ResourceGroup,
     plan: appservice.Plan,
+    insights: appinsights.Insights,
     path: str,
     config: Config,
     origins=[],
@@ -58,6 +59,7 @@ def create_api_app(
             }
         },
         app_settings={
+            "APPINSIGHTS_INSTRUMENTATIONKEY": insights.instrumentation_key,
             "FUNCTIONS_WORKER_RUNTIME": "node",
             "GITHUB_TOKEN": config.require("github_token"),
             "ISSUE_QUERY": "user:nickvdyck repo:nvd.codes state:open label:comment",

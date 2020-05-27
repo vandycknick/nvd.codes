@@ -28,14 +28,14 @@ const getComments: AzureFunction = async function (context: Context) {
   const slug = getSlug(context)
 
   if (slug == null) {
-    context.log("No slug found in bindingData, returning 404")
+    context.log.info("No slug found in bindingData, returning 404")
     return notFound(context)
   }
 
   const commentsForPost = await getCommentsForPost(slug)
 
   if (commentsForPost == null) {
-    context.log(`No comments found on github with title ${slug}`)
+    context.log.info(`No comments found on github with title ${slug}`)
     return notFound(context)
   }
 
