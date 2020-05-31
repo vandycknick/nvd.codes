@@ -10,6 +10,7 @@ WEB_PROJECT := $(ROOT)/src/web
 .PHONY: install
 install:
 	yarn --frozen-lockfile
+	cd infra && pipenv install
 
 .PHONY: clean
 clean:
