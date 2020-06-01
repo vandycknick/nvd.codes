@@ -9,7 +9,14 @@ WEB_PROJECT := $(ROOT)/src/web
 
 .PHONY: install
 install:
+	@$(MAKE) install.yarn install.pulumi
+
+.PHONY: install.yarn
+install.yarn:
 	yarn --frozen-lockfile
+
+.PHONY: install.pulumi
+install.pulumi:
 	cd infra && pipenv install
 
 .PHONY: clean
@@ -50,7 +57,7 @@ pulumi-preview:
 pulumi-up:
 	cd $(INFRA) && \
 		pipenv run \
-			pulumi up --yes --suppress-outputs
+			pulumi up --yes --stack prod --suppress-outputs
 
 .PHONY: deploy
 deploy:
