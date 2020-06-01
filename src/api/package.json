@@ -10,7 +10,7 @@
     "predev": "yarn clean && tsc && func extensions install",
     "dev": "cd .dist && func start",
     "copy-package": "cat package.json | jq 'del(.devDependencies, .scripts, .dependencies[\"@nvd.codes/domain\"])' > .dist/package.json",
-    "build": "yarn clean && tsc && yarn copy-package && cd .dist && yarn --production && rm local.settings.json"
+    "build": "yarn clean && tsc && yarn copy-package && cd .dist && yarn --production && rm -f local.settings.json"
   },
   "dependencies": {
     "@nvd.codes/domain": "^1.0.0",
