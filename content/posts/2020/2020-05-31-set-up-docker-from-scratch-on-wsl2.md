@@ -7,9 +7,9 @@ categories: [wsl2, docker, linux]
 cover: ../../assets/2020-05-31-set-up-docker-from-scratch-on-wsl2/cover.jpg
 ---
 
-Just recently Microsoft released it's latest update to Windows and with it comes an update to WSL. Previously it was using a translation layer that translated Linux system calls into NT system calls. This allowed running unmodified native ELF binaries directly under Windows albeit with some restrictions. It's exactly those restrictions that made it impossible to run Docker natively on the subsystem. The reason for this is that for a good chunk of the API's to make namespaces, cgroups, ... work the implementation just wasn't there and seemed non-trivial to implement. This all changed as of WSL2 as Windows now ships with a full-fledged Linux kernel, using virtualization technologies to improve file system performance and adding full system call compatibility. 
+Just recently Microsoft released its latest update to Windows and with it comes an update to WSL. Previously it was using a translation layer that translated Linux system calls into NT system calls. This allowed running unmodified native ELF binaries directly under Windows albeit with some restrictions. It's exactly those restrictions that made it impossible to run Docker natively on the subsystem. The reason for this is that for a good chunk of the API's to make namespaces, cgroups, ... work the implementation just wasn't there and seemed non-trivial to implement. This all changed as of WSL2 as Windows now ships with a full-fledged Linux kernel, using virtualization technologies to improve file system performance and adding full system call compatibility. 
 
-To get Docker running natively under this new version, you can just install the latest Docker for Windows. The installer will guide you through the process and offer the option to use docker under WSL 2. The process is pretty straightforward and from my experience, it makes using docker under Windows all the more reliable and giving it that native feeling. The way it works is that the installer will create a new WSL instance under which it installs the whole docker toolchain. You can have a peek at this by running `wsl -l -v` which should print something similar like the following:
+To get Docker running natively under this recent version, you can just install the latest Docker for Windows. The installer will guide you through the process and offer the option to use docker under WSL 2. The process is straightforward and from my experience, it makes using docker under Windows even more reliable and giving it that native feeling. The way it works is that the installer will create a new WSL instance under which it installs the whole docker toolchain. You can have a peek at this by running `wsl -l -v` which should print something similar like the following:
 
 ```bash
 NAME                   STATE           VERSION
@@ -33,7 +33,7 @@ root        47  1.0  0.1 563128 20060 pts/1    Ssl+ 10:35   0:00 /mnt/wsl/docker
 username    54  0.0  0.0  10604  3296 pts/0    R+   10:35   0:00 ps aux
 ```
 
-But what if you want to run and manage your own setup without using `Docker on Windows`. Well, that's possible too! Remember we are running on a full Linux kernel now. So for whatever distro you are using at the moment, you can follow the standard docker installation instructions for that distribution. I'm mainly using Ubuntu so let me walk you through the process of setting this up. If you are running another distro have a look at the docker documentation here: [https://docs.docker.com/engine/install/](https://docs.docker.com/engine/install/)
+But what if you want to run and manage your own setup without using `Docker on Windows`. Well, that's possible too! Remember we are running on a full Linux kernel now. So, for whatever distro you are using now, you can follow the standard docker installation instructions for that distribution. I'm using Ubuntu so let me walk you through the process of setting this up. If you are running another distro have a look at the docker documentation here: [https://docs.docker.com/engine/install/](https://docs.docker.com/engine/install/)
 
 ## Installation
 
@@ -41,7 +41,7 @@ First let's update our packages and install some dependencies that are required 
 
 ```bash
 sudo apt update
-sudo apt install 
+sudo apt install \
     apt-transport-https \
     ca-certificates \
     curl \
@@ -55,7 +55,7 @@ Next, we will need to grab the official docker PGP key.
 curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -
 ```
 
-Have a look at the official docker installation docs to help you in verifying that the key you just installed is the correct one. In essence it just boils down to this:
+Have a look at the official docker installation docs to help you in verifying that the key you just installed is the correct one. It just boils down to this:
 
 ```bash
 sudo apt-key fingerprint 0EBFCD88
@@ -75,7 +75,7 @@ sudo add-apt-repository \
    stable"
 ```
 
-Ok that's all the setup and preparation work we needed to get done. Now let's get our hands dirty and install docker. If you prefer to install a specific version, than have a look at the official docs again. Those will explain what you need to change to the following command to install that specific version.
+Ok that's all the setup and preparation work we needed to get done. Now let's get our hands dirty and install docker. If you prefer to install a specific version, then have a look at the official docs again. Those will explain what you need to change to the following command to install that specific version.
 
 ```bash
 sudo apt-get update
@@ -108,7 +108,7 @@ After this, the last thing you need to do is to add your current user to the doc
 sudo usermod -aG docker $USER
 ```
 
-For this to take into effect we will need to restart our instance `wsl --terminate name-of-wsl-distro` or `wsl --shutdown` (caution this last one will shutdown all your WSL instances). 
+For this to take into effect we will need to restart our instance `wsl --terminate name-of-wsl-distro` or `wsl --shutdown` (caution this last one will shut down all your WSL instances). 
 
 You will notice that when you restart your WSL instance the docker daemon is not automatically started again. At the moment there isn't a recommended way to start the daemon on boot. The current recommendation [https://github.com/microsoft/WSL2-Linux-Kernel/issues/30#issuecomment-558241868](https://github.com/microsoft/WSL2-Linux-Kernel/issues/30#issuecomment-558241868) is to launch the daemon in your `.bashrc`
 
@@ -159,7 +159,7 @@ For more examples and ideas, visit:
  https://docs.docker.com/get-started/
 ```
 
-If you get a similar result as the one above then that means everything is working. But let's take it one step further and see if we can build an image and get a webserver up and running. Paste the following into a `Dockerfile`
+If you get a similar result as the one above, then that means everything is working. But let's take it one step further and see if we can build an image and get a webserver up and running. Paste the following into a `Dockerfile`
 
 ```docker
 FROM mcr.microsoft.com/dotnet/core/sdk:3.1
@@ -188,4 +188,4 @@ Congratulations you now have Docker running natively under WSL 2 on a Linux kern
 
 ## Summary
 
-In this post, I talked about what changed in WSL 2 to make docker run on this subsystem. To then briefly go through the Docker for Windows setup process, how you can get it running on WSL and how this works internally. I also showed you how to get docker up and running from scratch onto a new WSL instance. How to overcome any issues you might face when installing it from scratch and having it automatically start up when your WSL instance boots. This process can be scripted to save you time on your next setup and with help of `wsl --export` you can easily create an export that can be used as a backup.
+In this post, I talked about what changed in WSL 2 to make docker run on this subsystem. To then go through the Docker for Windows setup process briefly, how you can get it running on WSL and how this works internally. I also showed you how to get docker up and running from scratch onto a new WSL instance. How to overcome any issues you might face when installing it from scratch and having it automatically start up when your WSL instance boots. This process can be scripted to save you time on your next setup and with help of `wsl --export` you can easily create an export that can be used as a backup.
