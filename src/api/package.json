@@ -17,9 +17,9 @@
     "node-fetch": "^2.6.0"
   },
   "devDependencies": {
-    "@azure/functions": "^1.2.0",
+    "@azure/functions": "^1.2.2",
     "@nvd/tsconfig": "^1.0.0",
     "@types/node-fetch": "^2.5.7",
-    "typescript": "^3.9.3"
+    "typescript": "^3.9.5"
   }
 }
