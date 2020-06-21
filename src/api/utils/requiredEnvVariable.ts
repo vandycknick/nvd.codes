@@ -9,10 +9,10 @@ function requiredEnvVariable<T>(envName: string, allowedValues: T[]): T
 function requiredEnvVariable<T>(
   envName: string,
   allowedValues?: T[] | null | undefined,
-) {
+): T {
   // eslint-disable-next-line @typescript-eslint/ban-ts-comment
   // @ts-expect-error
-  const value = optionalEnvVariable<T>(envName, allowedValues)
+  const value: T = optionalEnvVariable<T>(envName, allowedValues)
 
   if (value == null) {
     throw new Error(`Required env variable ${envName} is not set`)
