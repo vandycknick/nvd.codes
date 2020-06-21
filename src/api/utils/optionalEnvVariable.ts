@@ -8,6 +8,7 @@ function optionalEnvVariable<T>(
   envName: string,
   allowedValues: T[] | null | undefined,
 ): T {
+  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
   // @ts-expect-error
   const value: T = process.env[envName]
 

@@ -83,7 +83,7 @@ type GraphQLResponse = {
         }
       }[]
     }
-    rateLimit: {}
+    rateLimit: Record<string, unknown>
   }
 }
 
