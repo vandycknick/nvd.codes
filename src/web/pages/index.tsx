@@ -23,7 +23,7 @@ const Home: React.FC<HomeProps> = ({ latestPosts }) => (
     <Greeting
       githubUrl="https://github.com/nickvdyck"
       siteUrl="https://nvd.codes"
-      twitterUrl="https://twitter.com/nickvandyck"
+      twitterUrl="https://twitter.com/vandycknick"
     />
     <Divider />
     <RecentBlogPosts
