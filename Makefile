@@ -19,6 +19,10 @@ install.yarn:
 install.pulumi:
 	cd infra && pipenv install
 
+.PHONY: dedupe
+dedupe:
+	npx yarn-deduplicate yarn.lock
+
 .PHONY: clean
 clean:
 	@rm -rf {src,libs}/*/.dist || true
