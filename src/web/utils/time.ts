@@ -13,6 +13,6 @@ const months = [
   "Dev",
 ]
 
-const getMonthPrefix = (date: Date): string => months[date.getMonth()]
+const getShortMonth = (date: Date): string => months[date.getMonth()]
 
-export { getMonthPrefix }
+export { getShortMonth }
