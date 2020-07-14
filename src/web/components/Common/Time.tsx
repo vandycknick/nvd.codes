@@ -1,28 +1,13 @@
 import React from "react"
+import { getShortMonth } from "utils/time"
 
 type TimeProps = {
   dateTime: string | Date
 }
 
-const months = [
-  "Jan",
-  "Feb",
-  "Mar",
-  "Apr",
-  "Mai",
-  "Jun",
-  "Jul",
-  "Aug",
-  "Sep",
-  "Oct",
-  "Nov",
-  "Dev",
-]
-
 const parseDate = (dateTime: string | Date): string => {
   const date = new Date(dateTime)
-  const month = months[date.getMonth()]
-  return `${date.getDate()} ${month} ${date.getFullYear()}`
+  return `${date.getDate()} ${getShortMonth(date)} ${date.getFullYear()}`
 }
 
 const stringify = (dateTime: string | Date): string =>
