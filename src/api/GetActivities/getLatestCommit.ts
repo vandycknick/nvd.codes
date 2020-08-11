@@ -7,10 +7,10 @@ const query = `
 query LatestCommit {
   viewer {
     repositories(first: 1, isFork: false, orderBy: {
-      field: PUSHED_AT,direction: DESC
+      field: PUSHED_AT, direction: DESC
     }, privacy: PUBLIC) {
       nodes {
-        object(expression: "master") {
+        object(expression: "HEAD") {
           __typename
           ... on Commit {
             history(first: 1) {
