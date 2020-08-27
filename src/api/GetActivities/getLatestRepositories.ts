@@ -43,7 +43,7 @@ type GraphQLResponse = {
             totalCount: number
           }
           url: string
-          primaryLanguage: {
+          primaryLanguage?: {
             name?: string
             color?: string
           }
@@ -78,8 +78,8 @@ const getLatestRepositories = async (take = 6): Promise<Repository[]> => {
       stars: repo.stars.totalCount,
       url: repo.url,
       primaryLanguage: {
-        name: repo.primaryLanguage.name ?? `¯\\_(ツ)_/¯`,
-        color: repo.primaryLanguage.color ?? "#ffffff",
+        name: repo.primaryLanguage?.name ?? `¯\\_(ツ)_/¯`,
+        color: repo.primaryLanguage?.color ?? "#ffffff",
       },
     }
   })
