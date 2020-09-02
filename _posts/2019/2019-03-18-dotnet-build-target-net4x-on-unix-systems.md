@@ -4,7 +4,7 @@ title: How to target net4x on Unix based systems with dotnet build
 description: .NET Core and Mono has made it easy for us as developers to run applications on multiple platforms. But targeting multiple runtimes can sometimes still prove to be quite difficult.
 date: 2019-03-18T21:00:00+01:00
 categories: [dotnet, dotnet core, mono, unix, build]
-cover: ../../assets/2019-03-18-dotnet-build-target-net4x-on-unix-systems/cover.jpg
+cover: ./assets/2019-03-18-dotnet-build-target-net4x-on-unix-systems/cover.jpg
 ---
 
 .NET Core and Mono has made it easy for us as developers to run applications on multiple platforms. But targeting multiple runtimes can sometimes still prove to be quite difficult. On a decent windows dev machine adding a `net4x` moniker should be pretty straightforward but on a unix based system you might run into the following issue:

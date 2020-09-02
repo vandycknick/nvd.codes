@@ -3,7 +3,7 @@ import { join, resolve, basename, parse, relative } from "path"
 
 const { readdir } = promises
 
-const postsDir = join(process.cwd(), "../../", "content/posts")
+const postsDir = join(process.cwd(), "../../", "_posts")
 
 async function getFiles(dir: string): Promise<string[]> {
   const dirents = await readdir(dir, { withFileTypes: true })

@@ -4,7 +4,7 @@ title: cURL tips and tricks
 description: In this post, I want to show you a list of cURL tips and tricks that I have accumulated of the years of using and learning cURL. Platform agnostic, cURL is easily accessible for every developer and well worth grasping its basic usage.
 date: 2020-02-28T20:00:00+01:00
 categories: [sysadmin, tools, tips]
-cover: ../../assets/2020-02-28-curl-tips-and-tricks/cover.jpg
+cover: ./assets/2020-02-28-curl-tips-and-tricks/cover.jpg
 ---
 
 cURL<cite>[1][1]</cite> (or curl as I will refer to it for the rest of the article) is an incredible tool and a worthy asset in your developer toolkit. Like every great craftsman, you as a developer deserve great tools. Granted curl can be daunting and seemingly tough to learn at first, I promise you its worth your investment. This is a write up of basic to more advanced tips and tricks that I accumulated of the years of reading blog posts, curl man pages, StackOverflow, ...
