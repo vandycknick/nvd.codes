@@ -1,38 +1,32 @@
 import { promises } from "fs"
-import { join, basename, dirname } from "path"
+import { join, dirname } from "path"
 import matter from "gray-matter"
 import readingTime from "reading-time"
-import sharp from "sharp"
 import { Post } from "@nvd.codes/domain"
-const { readFile, mkdir } = promises
+const { readFile } = promises
 
 import { getAllSlugs, SlugInfo } from "services/getAllSlugs"
 import markdownToHtml from "services/markdownToHtml"
+import parseImage from "services/parseImage"
+
+const IMAGES_DROP_LOCATION_ROOT = "static/images"
 
 const parseCoverImage = async (
   cover: string,
   slugInfo: SlugInfo,
 ): Promise<string> => {
   const coverFilePath = join(dirname(slugInfo.filePath), cover)
-  const coverFileName = basename(coverFilePath)
-  const dropLocation = join(
-    process.cwd(),
-    ".next",
-    "static",
-    "images",
-    slugInfo.slug,
-    coverFileName,
-  )
-
-  await mkdir(dirname(dropLocation), { recursive: true })
-  await sharp(coverFilePath).resize(500).jpeg().toFile(dropLocation)
-  return `/_next/static/images/${slugInfo.slug}/${coverFileName}`
+  const destination = join(IMAGES_DROP_LOCATION_ROOT, slugInfo.slug)
+  return parseImage(coverFilePath, destination)
 }
 
 const createPost = async (slugInfo: SlugInfo): Promise<Post> => {
   const fileContents = await readFile(slugInfo.filePath, "utf-8")
   const { data, content } = matter(fileContents)
-  const html = await markdownToHtml(content)
+  const html = await markdownToHtml(content, {
+    imagesRootPath: dirname(slugInfo.filePath),
+    imagesDestinationPath: join(IMAGES_DROP_LOCATION_ROOT, slugInfo.slug),
+  })
 
   const cover =
     data["cover"] != null

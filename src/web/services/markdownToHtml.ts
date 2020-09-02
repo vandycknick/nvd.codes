@@ -8,19 +8,32 @@ import remarkRetext from "remark-retext"
 import english from "retext-english"
 import equality from "retext-equality"
 import smartypants from "retext-smartypants"
+import rehypeImageOptimizer from "./rehypeImageOptimizer"
 
-const pipeline = unified()
-  .use(remarkParse)
-  // Any retext errors are ingored at the moment
-  .use(remarkRetext, unified().use(english).use(equality).use(smartypants))
-  .use(remarkSlug)
-  .use(remarkRehype)
-  .use(rehypeShiki, {
-    theme: "zeit",
-  })
-  .use(html)
+type MarkdownHtmlSettings = {
+  imagesRootPath: string
+  imagesDestinationPath: string
+}
 
-const markdownToHtml = async (markdown: string): Promise<string> => {
+const markdownToHtml = async (
+  markdown: string,
+  settings: MarkdownHtmlSettings,
+): Promise<string> => {
+  const pipeline = unified()
+    .use(remarkParse)
+    // Any retext errors are ingored at the moment
+    .use(remarkRetext, unified().use(english).use(equality).use(smartypants))
+    .use(remarkSlug)
+    .use(remarkRehype)
+    .use(rehypeImageOptimizer, {
+      rootpath: settings.imagesRootPath,
+      destination: settings.imagesDestinationPath,
+    })
+    .use(rehypeShiki, {
+      theme: "zeit",
+    })
+    .use(html)
+
   const result = await pipeline.process(markdown)
   return result.toString()
 }

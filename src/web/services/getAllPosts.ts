@@ -6,6 +6,7 @@ const { readFile, writeFile, mkdir, unlink } = promises
 
 import { getAllSlugs } from "services/getAllSlugs"
 import { getPostBySlug } from "services/getPostBySlug"
+import { noop } from "utils"
 
 export const BLOG_INDEX_CACHE = join(
   process.cwd(),
@@ -38,12 +39,7 @@ export const getAllPosts = async <P extends keyof Post>(
     console.log("Rebuilding posts catalog")
     posts = await Promise.all(slugs.map((slug) => getPostBySlug(slug.slug)))
     await mkdir(dirname(BLOG_INDEX_CACHE), { recursive: true })
-    await writeFile(
-      BLOG_INDEX_CACHE,
-      JSON.stringify(posts),
-      "utf8",
-      // eslint-disable-next-line @typescript-eslint/no-empty-function
-    ).catch(() => {})
+    await writeFile(BLOG_INDEX_CACHE, JSON.stringify(posts), "utf8").catch(noop)
   }
 
   return posts

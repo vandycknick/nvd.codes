@@ -7,37 +7,57 @@ declare module "!!raw-loader!*" {
 }
 
 declare module "remark-slug" {
-  function slug(): void
+  import { Plugin, Transformer } from "unified"
+  declare const slug: Plugin
   export = slug
 }
 
 declare module "rehype-shiki" {
-  function shiki({ theme: string }): void
+  import { Plugin } from "unified"
+  declare const shiki: Plugin<[{ theme: string }]>
   export = shiki
 }
 
 declare module "rehype-stringify" {
-  function html(): void
+  import { Plugin } from "unified"
+  declare const html: Plugin
   export = html
 }
 
 declare module "remark-retext" {
+  import { Plugin } from "unified"
   type UnifiedPipeline = () => void
-  function remarkRetext(pipeline: UnifiedPipeline): void
+  declare const remarkRetext: Plugin<[UnifiedPipeline]>
   export = remarkRetext
 }
 
 declare module "retext-english" {
-  function english(): void
+  import { Plugin } from "unified"
+  declare const enlish: Plugin
   export = english
 }
 
 declare module "retext-equality" {
-  function equality(): void
+  import { Plugin } from "unified"
+  declare const equality: Plugin
   export = equality
 }
 
 declare module "retext-smartypants" {
-  function smartypants(): void
+  import { Plugin } from "unified"
+  declare const smartypants: Plugin
   export = smartypants
+}
+
+declare module "hast-util-select" {
+  import { Node } from "uni"
+  interface HastNode {
+    type: string
+    tagName: string
+    properties: { [index: string]: string }
+    children: HastNode[]
+  }
+
+  type SelectAll = (selector: string, tree: Node) => HastNode[]
+  export const selectAll: SelectAll
 }
