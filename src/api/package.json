@@ -14,7 +14,7 @@
   },
   "dependencies": {
     "@nvd.codes/domain": "^1.0.0",
-    "node-fetch": "^2.6.0"
+    "node-fetch": "^2.6.1"
   },
   "devDependencies": {
     "@azure/functions": "^1.2.2",
