@@ -46,6 +46,10 @@ check:
 	$(NPM_BIN)/tsc -p $(WEB_PROJECT) --noEmit
 	$(NPM_BIN)/eslint . --ext .ts --ext .tsx --ext .js --ext .json --ignore-path .gitignore
 
+.PHONY: build.libs
+build.libs:
+	yarn workspace @nvd.codes/core tsc
+
 .PHONY: build
 build: clean
 	yarn workspace web build
