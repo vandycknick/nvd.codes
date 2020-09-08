@@ -49,9 +49,10 @@ check:
 .PHONY: build.libs
 build.libs:
 	yarn workspace @nvd.codes/core tsc
+	yarn workspace @nvd.codes/config tsc
 
 .PHONY: build
-build: clean
+build: clean build.libs
 	yarn workspace web build
 	yarn workspace api build
 

@@ -1,7 +1,7 @@
 import fetch from "node-fetch"
 import { Commit } from "@nvd.codes/core"
 
-import config from "../config"
+import { getConfig } from "../config"
 
 const query = `
 query LatestCommit {
@@ -59,6 +59,7 @@ type GraphQLResponse = {
 }
 
 const getLatestCommit = async (): Promise<Commit> => {
+  const config = getConfig()
   const response = await fetch("https://api.github.com/graphql", {
     method: "POST",
     headers: {

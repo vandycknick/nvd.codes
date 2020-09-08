@@ -1,6 +1,5 @@
 import { AzureFunction, Context } from "@azure/functions"
 
-import "./function.json"
 import getCommentsForPost from "./getCommentsForPost"
 
 const getSlug = (context: Context): string | undefined =>

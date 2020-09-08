@@ -1,7 +1,7 @@
 import fetch from "node-fetch"
 import { Repository } from "@nvd.codes/core"
 
-import config from "../config"
+import { getConfig } from "../config"
 
 const query = `
 query($take: Int) {
@@ -54,6 +54,7 @@ type GraphQLResponse = {
 }
 
 const getLatestRepositories = async (take = 6): Promise<Repository[]> => {
+  const config = getConfig()
   const response = await fetch("https://api.github.com/graphql", {
     method: "POST",
     headers: {

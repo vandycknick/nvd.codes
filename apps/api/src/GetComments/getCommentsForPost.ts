@@ -1,7 +1,7 @@
 import fetch from "node-fetch"
 import { PostComments } from "@nvd.codes/core"
 
-import config from "../config"
+import { getConfig } from "../config"
 
 const query = `
 query IssueComments($issueQuery: String!) {
@@ -90,6 +90,7 @@ type GraphQLResponse = {
 const getCommentsForPost = async (
   slug: string,
 ): Promise<PostComments | null> => {
+  const config = getConfig()
   const issueQuery = `${config.ISSUE_QUERY} ${slug}`
   const response = await fetch("https://api.github.com/graphql", {
     method: "POST",
