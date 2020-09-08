@@ -76,4 +76,4 @@ deploy:
 	@cd $(INFRA) && \
 			(pipenv run pulumi stack output -s prod --json | \
 			jq -r '.web_app_connection_string' | \
-			pipenv run python infra/upload.py --container '$$web' --cwd $(ROOT)/src/web/.dist)
+			pipenv run python infra/upload.py --container '$$web' --cwd $(WEB_PROJECT)/.dist)
