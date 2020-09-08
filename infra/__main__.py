@@ -10,7 +10,7 @@ from infra.cloudflare import create_dns_record
 config = Config(name="nvd-codes-infra")
 
 current_file_path = path.dirname(path.realpath(__file__))
-api_app_fallback = Path(current_file_path, "../src/api/.dist").resolve()
+api_app_fallback = Path(current_file_path, "../apps/api/.dist").resolve()
 api_app_dir = environ.get("API_APP_FOLDER", str(api_app_fallback))
 
 resource_group = core.ResourceGroup("nvd-codes")
