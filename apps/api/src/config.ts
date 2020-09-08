@@ -1,13 +1,10 @@
-import requiredEnvVariable from "./utils/requiredEnvVariable"
+import { ConfigBuilder } from "@nvd.codes/config"
 
-type AppConfig = {
-  GITHUB_TOKEN: string
-  ISSUE_QUERY: string
+const config = new ConfigBuilder().addEnvironmentVariables().build()
+
+const appConfig = {
+  GITHUB_TOKEN: config.getString("GITHUB_TOKEN"),
+  ISSUE_QUERY: config.getString("ISSUE_QUERY"),
 }
 
-const config: AppConfig = {
-  GITHUB_TOKEN: requiredEnvVariable("GITHUB_TOKEN"),
-  ISSUE_QUERY: requiredEnvVariable("ISSUE_QUERY"),
-}
-
-export default config
+export const getConfig = () => appConfig
