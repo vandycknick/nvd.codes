@@ -7,4 +7,6 @@ const appConfig = {
   ISSUE_QUERY: config.getString("ISSUE_QUERY"),
 }
 
-export const getConfig = () => appConfig
+type AppConfig = typeof appConfig
+
+export const getConfig = (): AppConfig => appConfig

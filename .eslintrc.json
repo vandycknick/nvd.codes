@@ -12,11 +12,7 @@
     "prettier/react",
     "plugin:prettier/recommended"
   ],
-  "plugins": [
-    "json",
-    "react",
-    "react-hooks"
-  ],
+  "plugins": ["json", "react", "react-hooks"],
   "settings": {
     "react": {
       "version": "latest"
@@ -50,10 +46,10 @@
   "overrides": [
     {
       "files": [
-        "src/setupTests.ts",
-        "src/**/*.test.ts",
-        "src/**/*.test.tsx",
-        "src/**/__mocks__ /**"
+        "**/*/setupTests.ts",
+        "**/*.test.ts",
+        "**/*.test.tsx",
+        "**/__mocks__ /**"
       ],
       "env": {
         "jest": true

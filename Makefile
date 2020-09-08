@@ -4,8 +4,8 @@ ROOT	:= $(shell pwd)
 NPM_BIN := $(shell yarn bin)
 
 INFRA	:= $(ROOT)/infra
-API_PROJECT := $(ROOT)/src/api
-WEB_PROJECT := $(ROOT)/src/web
+API_PROJECT := $(ROOT)/apps/api
+WEB_PROJECT := $(ROOT)/apps/web
 
 .PHONY: install
 install:
