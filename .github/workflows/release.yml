@@ -13,65 +13,68 @@ jobs:
     name: Test_Build_Release
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v2
-      with:
-        fetch-depth: 1
+      - uses: actions/checkout@v2
+        with:
+          fetch-depth: 1
 
-    - name: Setup Node
-      uses: actions/setup-node@v1
-      with:
-        node-version: '12.x'
+      - name: Setup Node
+        uses: actions/setup-node@v1
+        with:
+          node-version: "12.x"
 
-    - name: Get yarn cache directory path
-      id: yarn-cache-dir-path
-      run: echo "::set-output name=dir::$(yarn cache dir)"
+      - name: Get yarn cache directory path
+        id: yarn-cache-dir-path
+        run: echo "::set-output name=dir::$(yarn cache dir)"
 
-    - name: Yarn Cache
-      uses: actions/cache@v1
-      id: yarn-cache
-      with:
-        path: ${{ steps.yarn-cache-dir-path.outputs.dir }}
-        key: ${{ runner.os }}-yarn-${{ hashFiles('**/yarn.lock') }}
-        restore-keys: |
-          ${{ runner.os }}-yarn-
+      - name: Yarn Cache
+        uses: actions/cache@v1
+        id: yarn-cache
+        with:
+          path: ${{ steps.yarn-cache-dir-path.outputs.dir }}
+          key: ${{ runner.os }}-yarn-${{ hashFiles('**/yarn.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-yarn-
 
-    - name: Install yarn dependencies
-      run: make install.yarn
+      - name: Install yarn dependencies
+        run: make install.yarn
 
-    - name: Lint code
-      run: make check
+      - name: Build Libs
+        run: make build.libs
 
-    - name: Build api and web
-      run: make build
+      - name: Lint code
+        run: make check
 
-    - name: Setup Python
-      uses: actions/setup-python@v2
-      with:
-        python-version: '3.7'
-      if: github.ref == 'refs/heads/master' && github.event_name == 'push'
+      - name: Build api and web
+        run: make build
 
-    - uses: dschep/install-pipenv-action@v1
-      if: github.ref == 'refs/heads/master' && github.event_name == 'push'
+      - name: Setup Python
+        uses: actions/setup-python@v2
+        with:
+          python-version: "3.7"
+        if: github.ref == 'refs/heads/master' && github.event_name == 'push'
 
-    - name: Install Pulumi
-      run: |
-        curl -fsSL https://get.pulumi.com | sh
-        echo "::add-path::/home/runner/.pulumi/bin"
-      if: github.ref == 'refs/heads/master' && github.event_name == 'push'
+      - uses: dschep/install-pipenv-action@v1
+        if: github.ref == 'refs/heads/master' && github.event_name == 'push'
 
-    - name: Install dependencies
-      run: make install.pulumi
-      if: github.ref == 'refs/heads/master' && github.event_name == 'push'
+      - name: Install Pulumi
+        run: |
+          curl -fsSL https://get.pulumi.com | sh
+          echo "::add-path::/home/runner/.pulumi/bin"
+        if: github.ref == 'refs/heads/master' && github.event_name == 'push'
 
-    - name: Deploy
-      run: |
-        make pulumi-up
-        make deploy
-      env:
-        ARM_CLIENT_ID: ${{ secrets.ARM_CLIENT_ID }}
-        ARM_CLIENT_SECRET: ${{ secrets.ARM_CLIENT_SECRET }}
-        ARM_TENANT_ID: ${{ secrets.ARM_TENANT_ID }}
-        ARM_SUBSCRIPTION_ID: ${{ secrets.ARM_SUBSCRIPTION_ID }}
-        PULUMI_ACCESS_TOKEN: ${{ secrets.PULUMI_ACCESS_TOKEN }}
-        PULUMI_CI: pr
-      if: github.ref == 'refs/heads/master' && github.event_name == 'push'
+      - name: Install dependencies
+        run: make install.pulumi
+        if: github.ref == 'refs/heads/master' && github.event_name == 'push'
+
+      - name: Deploy
+        run: |
+          make pulumi-up
+          make deploy
+        env:
+          ARM_CLIENT_ID: ${{ secrets.ARM_CLIENT_ID }}
+          ARM_CLIENT_SECRET: ${{ secrets.ARM_CLIENT_SECRET }}
+          ARM_TENANT_ID: ${{ secrets.ARM_TENANT_ID }}
+          ARM_SUBSCRIPTION_ID: ${{ secrets.ARM_SUBSCRIPTION_ID }}
+          PULUMI_ACCESS_TOKEN: ${{ secrets.PULUMI_ACCESS_TOKEN }}
+          PULUMI_CI: pr
+        if: github.ref == 'refs/heads/master' && github.event_name == 'push'
