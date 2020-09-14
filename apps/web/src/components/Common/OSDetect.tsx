@@ -7,7 +7,9 @@ type OSDetectProps = {
 
 const OSDetect: React.FC<OSDetectProps> = ({ windows, unix }) => {
   const platform =
-    typeof window !== "undefined" ? navigator.platform : "unknown"
+    typeof window !== "undefined"
+      ? window.navigator.platform.toLowerCase()
+      : "unknown"
 
   switch (platform) {
     case "win32":
