@@ -19,7 +19,8 @@ app_insights = appinsights.Insights(
     "api-function-ai",
     resource_group_name=resource_group.name,
     location=resource_group.location,
-    application_type="web")
+    application_type="web",
+)
 
 web_app_storage_account = storage.Account(
     "webappsa",
@@ -27,6 +28,16 @@ web_app_storage_account = storage.Account(
     account_replication_type="LRS",
     account_tier="Standard",
     account_kind="StorageV2",
+    enable_https_traffic_only=False,
+    static_website={"indexDocument": "index.html",},
+)
+
+resume_app_storage_account = storage.Account(
+    "resumesa",
+    resource_group_name=resource_group.name,
+    account_tier="Standard",
+    account_kind="StorageV2",
+    account_replication_type="LRS",
     enable_https_traffic_only=False,
     static_website={"indexDocument": "index.html",},
 )
@@ -77,6 +88,20 @@ web_cdn_endpoint = cdn.Endpoint(
     },
 )
 
+resume_cdn = cdn.Profile(
+    "resume-cdn", resource_group_name=resource_group.name, sku="Standard_Microsoft"
+)
+
+resume_cdn_endpoint = cdn.Endpoint(
+    "resume-cdn-ep",
+    resource_group_name=resource_group.name,
+    profile_name=resume_cdn.name,
+    origin_host_header=resume_app_storage_account.primary_web_host,
+    origins=[
+        {"name": "blobstorage", "hostName": resume_app_storage_account.primary_web_host}
+    ],
+)
+
 api_plan = appservice.Plan(
     "api-plan",
     resource_group_name=resource_group.name,
@@ -101,6 +126,10 @@ web_dns_record = create_dns_record(
     env, domain, zone_id, web_cdn_endpoint.host_name, "cdnverify"
 )
 
+resume_dns_record = create_dns_record(
+    "resume", domain, zone_id, resume_cdn_endpoint.host_name, "cdnverify"
+)
+
 api_dns_record = create_dns_record(
     "api" if env == "" else f"api-{env}", domain, zone_id, api_app.default_hostname,
 )
@@ -118,3 +147,6 @@ export("api_app_name", api_app.name)
 export("web_cdn_endpoint", web_cdn_endpoint.host_name)
 
 export("web_app_connection_string", web_app_storage_account.primary_connection_string)
+export(
+    "resume_app_connection_string", resume_app_storage_account.primary_connection_string
+)

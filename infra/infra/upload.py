@@ -17,7 +17,6 @@ ONE_DAY_CACHE = "public, max-age={}".format(ONE_DAY)
 MAX_AGE_CACHE = "public, max-age=31536000"
 
 
-
 def is_input_redirected() -> bool:
     if os.isatty(sys.stdin.fileno()):
         return False
@@ -29,6 +28,7 @@ def is_input_redirected() -> bool:
             return True
         else:
             return False
+
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(
@@ -67,11 +67,13 @@ if __name__ == "__main__":
         print("Uploading file: {0}".format(file))
 
         (content_type, content_encoding) = mimetypes.guess_type(file)
-        content_settings = ContentSettings(content_type=content_type or "application/octet-stream")
+        content_settings = ContentSettings(
+            content_type=content_type or "application/octet-stream"
+        )
 
         if content_type == "application/javascript" or content_type == "text/css":
             content_settings.cache_control = MAX_AGE_CACHE
-        elif content_type =="text/html" or content_type == "application/json":
+        elif content_type == "text/html" or content_type == "application/json":
             content_settings.cache_control = ONE_MIN_CACHE
         elif content_type == "image/jpeg":
             content_settings.cache_control = ONE_DAY_CACHE

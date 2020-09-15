@@ -1,0 +1,11 @@
+{
+  "name": "resume",
+  "private": true,
+  "version": "1.0.0",
+  "main": "index.js",
+  "license": "MIT",
+  "scripts": {
+    "validate": "dotnet resume validate -f ../../_data/resume.json",
+    "build": "dotnet resume build -f ../../_data/resume.json -o .dist && cp .dist/resume.html .dist/index.html"
+  }
+}
