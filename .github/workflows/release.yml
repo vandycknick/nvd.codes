@@ -73,7 +73,7 @@ jobs:
 
       - name: Deploy
         run: |
-          make pulumi-up
+          make pulumi.up
           make deploy
         env:
           ARM_CLIENT_ID: ${{ secrets.ARM_CLIENT_ID }}
