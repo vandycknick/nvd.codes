@@ -1,3 +1,6 @@
+// eslint-disable-next-line @typescript-eslint/triple-slash-reference
+/// <reference path="../next-env.d.ts" />
+
 import express from "express"
 import { createProxyMiddleware } from "http-proxy-middleware"
 import next from "next"
