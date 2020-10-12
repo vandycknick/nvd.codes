@@ -21,6 +21,17 @@ module.exports = {
       },
     ],
   },
+  optimization: {
+    splitChunks: {
+      cacheGroups: {
+        commons: {
+          name: "commons",
+          chunks: "initial",
+          minChunks: 2,
+        },
+      },
+    },
+  },
   output: {
     filename: "[name]/index.js",
     path: path.resolve(__dirname, ".dist"),
