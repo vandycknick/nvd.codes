@@ -64,7 +64,7 @@ jobs:
       - name: Install Pulumi
         run: |
           curl -fsSL https://get.pulumi.com | sh
-          echo "::add-path::/home/runner/.pulumi/bin"
+          echo "/home/runner/.pulumi/bin" >> $GITHUB_PATH
         if: github.ref == 'refs/heads/master' && github.event_name == 'push'
 
       - name: Install infra dependencies
