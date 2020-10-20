@@ -75,7 +75,7 @@ sudo add-apt-repository \
    stable"
 ```
 
-Ok that's all the setup and preparation work we needed to get done. Now let's get our hands dirty and install docker. If you prefer to install a specific version, then have a look at the official docs again. Those will explain what you need to change to the following command to install that specific version.
+Ok, that's all the setup and preparation work we needed to get done. Now let's get our hands dirty and install docker. If you prefer to install a specific version, then have a look at the official docs again. Those will explain what you need to change to the following command to install that specific version.
 
 ```bash
 sudo apt-get update
@@ -126,7 +126,7 @@ service docker status > /dev/null || sudo service docker start
 
 ## Putting it all together
 
-Ok, you should be all set up now, let's try a few commands to check whether our setup is working. The default docker installation guides you into running the `hello-world` image, so let's give that a try:
+You should be all set up now, let's try a few commands to check whether our setup is working. The default docker installation guides you into running the `hello-world` image, so let's give that a try:
 
 ```bash
 $ docker run hello-world
