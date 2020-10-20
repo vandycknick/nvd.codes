@@ -23,6 +23,7 @@ const Layout: React.FC = ({ children }) => {
             -moz-osx-font-smoothing: grayscale;
             text-rendering: optimizeLegibility;
             -webkit-text-size-adjust: 100%;
+            overflow-y: scroll;
           }
 
           body {
