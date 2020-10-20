@@ -2,7 +2,7 @@
 id: e546368c-7b49-4ed5-9b6f-c0c998fe3e27
 title: Pulling images from GCR with Kubernetes
 description: In this post i go through the process of setting up a private container registry in Kubernetes.
-date: 2020-10-19T23:00:00+01:00
+date: 2020-10-19T21:00:00+01:00
 categories: [kubernetes, gcp, registry, containers]
 cover: ./assets/2020-10-19-gcr-with-kubernetes/cover.jpg
 ---
@@ -28,7 +28,7 @@ https://eu.gcr.io/v2/gcr-name/imagename/manifests/latest: 401 Unauthorized
   Normal   BackOff    2m38s (x42 over 12m)  kubelet, hostn     Back-off pulling image "eu.gcr.io/gcr-name/imagename"
 ```
 
-> I used the following command `kubectl describe pod pod-name` to describe the pod which includes a list of recent events.
+> The following `kubectl describe pod pod-name` describes the given pod which also includes a list of recent events.
 
 Going through these, it immediately becomes clear that the cluster does not have the right privileges to be able to pull this image from the registry. The thing is that Kubernetes does not use the docker client to log, which means that none of the default methods described in the [docs](https://cloud.google.com/container-registry/docs/advanced-authentication) will work. But luckily Kubernetes has a different trick up its sleeve and uses a concept called `ImagePullSecrets` to make sure it has the right credentials to authenticate with a private registry. These can be assigned to a single pod or a Kubernetes service account which in turn adds it to any pod created in its namespace.
 
