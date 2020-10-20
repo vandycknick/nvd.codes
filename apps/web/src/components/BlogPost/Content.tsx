@@ -60,6 +60,21 @@ const Content = styled.section`
       }
     }
 
+    blockquote {
+      font-style: italic;
+      border-width: 0 0 0 4px;
+      border-color: ${colors.teal[600]};
+      border-style: solid;
+      padding-left: ${spacing[8]};
+      margin-top: ${spacing[6]};
+      margin-bottom: ${spacing[6]};
+    }
+
+    blockquote p {
+      padding-top: ${spacing[2]};
+      padding-bottom: ${spacing[2]};
+    }
+
     code {
       background: ${theme.onBackground};
       color: ${theme.background};
