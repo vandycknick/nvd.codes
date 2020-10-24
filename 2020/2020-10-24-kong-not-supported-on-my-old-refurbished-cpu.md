@@ -1,7 +1,7 @@
 ---
 id: 0ae8916a-1a8b-44c4-8624-0e1404e717b1
 title: Kong not supported on my old refurbished CPU
-description: In this post I go through a problem I faced getting Kong API gateway up and running an older CPU. I show how to debug the issue and how to determine if your CPU is supported
+description: In this post I go through a problem I faced getting Kong API gateway up and running on an older CPU. I show how to debug the issue and how to determine if your CPU is supported
 date: 2020-10-24T22:30:00+02:00
 categories: [kong, api, proxy, cpu]
 cover: ./assets/2020-10-24-kong-not-supported-on-my-old-refurbished-cpu/cover.jpg
