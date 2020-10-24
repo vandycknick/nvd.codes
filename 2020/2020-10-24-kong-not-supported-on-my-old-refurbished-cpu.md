@@ -1,10 +1,10 @@
 ---
 id: 0ae8916a-1a8b-44c4-8624-0e1404e717b1
-title: Pulling images from GCR with Kubernetes
+title: Kong not supported on my old refurbished CPU
 description: In this post I go through a problem I faced getting Kong API gateway up and running an older CPU. I show how to debug the issue and how to determine if your CPU is supported
 date: 2020-10-24T22:30:00+02:00
 categories: [kong, api, proxy, cpu]
-cover: ./assets/2020-10-19-gcr-with-kubernetes/cover.jpg
+cover: ./assets/2020-10-24-kong-not-supported-on-my-old-refurbished-cpu/cover.jpg
 ---
 
 I recently ran into an issue getting Kong up and running as ingress proxy on a Kubernetes cluster. The service kept crashing and restarting, making the pods go into a `CrashLoopBackOff`. Digging through the logs nothing really obvious stood out, mainly because there were absolutely no logs present. As it turned out Kong already crashed even before it was able to output any logs. While describing the pod using `kubeclt describe pod pod-name` I noticed the container exited with a 132 exit code. What does a 132 exit code mean? It could be many things but the important question to ask is what does it mean in the context of Kong.
