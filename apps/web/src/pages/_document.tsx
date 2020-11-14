@@ -6,7 +6,7 @@ import Document, {
   NextScript,
   DocumentContext,
 } from "next/document"
-import { extractCritical } from "emotion-server"
+import { extractCritical } from "@emotion/server"
 import { GA_TRACKING_ID } from "services/gtag"
 
 type CriticalStyles = ReturnType<typeof extractCritical>
@@ -22,13 +22,14 @@ class MyDocument extends Document<DocumentProps> {
   }
 
   render(): JSX.Element {
+    const { ids, css } = this.props
     return (
       <Html lang="en">
         <Head>
           <link rel="shortcut icon" href="/favicon.png" />
           <style
-            data-emotion-css={this.props.ids.join(" ")}
-            dangerouslySetInnerHTML={{ __html: this.props.css }}
+            data-emotion-css={ids.join(" ")}
+            dangerouslySetInnerHTML={{ __html: css }}
           />
           <link
             href="https://fonts.googleapis.com/css?family=Montserrat:700|Noto+Sans:normal,700"

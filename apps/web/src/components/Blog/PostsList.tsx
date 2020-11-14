@@ -1,12 +1,12 @@
 import React from "react"
-import { css } from "@emotion/core"
-import { useTheme } from "emotion-theming"
+import { css, cx } from "@emotion/css"
+import { useTheme } from "@emotion/react"
 import Link from "next/link"
 import { Post } from "@nvd.codes/core"
 
 import { Heading } from "components/Common/Heading"
 import { Card } from "components/Common/Card"
-import { spacing, Theme, borderRadius, fontSize } from "components/Tokens"
+import { spacing, borderRadius, fontSize } from "components/Tokens"
 import { Paragraph } from "components/Common/Paragraph"
 import { fromTablet, fromDesktopWideScreen } from "components/Common/mediaQuery"
 import { Tag } from "components/Common/Tag"
@@ -30,24 +30,24 @@ export type PostsListProps = {
   posts: PostPreview[]
 }
 
-const ArticleCard = Card.withComponent("article")
-
 export const PostsList: React.FC<PostsListProps> = ({ className, posts }) => {
-  const theme = useTheme<Theme>()
+  const theme = useTheme()
   return (
     <section
-      className={className}
-      css={css`
-        display: flex;
-        flex-direction: row;
-        flex-wrap: wrap;
-        width: 100%;
-        padding: ${spacing[8]} 0;
-      `}
+      className={cx(
+        css`
+          display: flex;
+          flex-direction: row;
+          flex-wrap: wrap;
+          width: 100%;
+          padding: ${spacing[8]} 0;
+        `,
+        className,
+      )}
     >
       {posts.map((post) => (
         <div
-          css={css`
+          className={css`
             display: flex;
             flex-direction: column;
             box-sizing: border-box;
@@ -63,17 +63,22 @@ export const PostsList: React.FC<PostsListProps> = ({ className, posts }) => {
           `}
           key={post.id}
         >
-          <ArticleCard css={css`padding 0;`}>
+          <Card
+            as="article"
+            className={css`
+              padding: 0;
+            `}
+          >
             <Link href="/post/[slug]" as={`/post/${post.slug}`} passHref>
               <a
-                css={css`
+                className={css`
                   text-decoration: none;
                   color: ${theme.onSurface};
                 `}
               >
                 {post.cover && (
                   <div
-                    css={css`
+                    className={css`
                       position: relative;
                     `}
                   >
@@ -82,7 +87,7 @@ export const PostsList: React.FC<PostsListProps> = ({ className, posts }) => {
                       // src={post.cover.base64 || post.cover.src}
                       // srcSet={post.cover.srcSet}
                       // sizes={post.cover.sizes}
-                      css={css`
+                      className={css`
                         object-fit: cover;
                         height: 250px;
                         width: 100%;
@@ -92,7 +97,7 @@ export const PostsList: React.FC<PostsListProps> = ({ className, posts }) => {
                       `}
                     />
                     <div
-                      css={css`
+                      className={css`
                         position: absolute;
                         bottom: 0;
                         padding: ${spacing[4]};
@@ -102,13 +107,13 @@ export const PostsList: React.FC<PostsListProps> = ({ className, posts }) => {
                         {post.title}
                       </Heading>
                       <div
-                        css={css`
+                        className={css`
                           font-size: ${fontSize.sm};
                         `}
                       >
                         <Time dateTime={post.date} />
                         <Span
-                          css={css`
+                          className={css`
                             padding: 0 ${spacing[2]};
                           `}
                         >
@@ -120,7 +125,7 @@ export const PostsList: React.FC<PostsListProps> = ({ className, posts }) => {
                   </div>
                 )}
                 <div
-                  css={css`
+                  className={css`
                     padding: ${spacing[4]};
                   `}
                 >
@@ -131,7 +136,7 @@ export const PostsList: React.FC<PostsListProps> = ({ className, posts }) => {
                   </div>
                   <Paragraph>{post.description}</Paragraph>
                   <Span
-                    css={css`
+                    className={css`
                       display: block;
                       box-sizing: border-box;
                       color: ${theme.primaryLight};
@@ -146,7 +151,7 @@ export const PostsList: React.FC<PostsListProps> = ({ className, posts }) => {
                 </div>
               </a>
             </Link>
-          </ArticleCard>
+          </Card>
         </div>
       ))}
     </section>

@@ -1,5 +1,5 @@
 import React from "react"
-import { css } from "@emotion/core"
+import { css, cx } from "@emotion/css"
 
 type GithubProps = {
   className?: string
@@ -11,12 +11,14 @@ type GithubProps = {
 const Github: React.FC<GithubProps> = ({ className, width, height, color }) => (
   <svg
     viewBox="0 0 20 20"
-    className={className}
     width={width}
     height={height}
-    css={css`
-      ${color && `fill: ${color};`}
-    `}
+    className={cx(
+      className,
+      css`
+        ${color && `fill: ${color};`}
+      `,
+    )}
   >
     <path
       fillRule="evenodd"

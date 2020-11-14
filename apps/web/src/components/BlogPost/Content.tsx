@@ -1,7 +1,7 @@
-import { css } from "@emotion/core"
+import { css } from "@emotion/css"
+import styled from "@emotion/styled"
 
 import {
-  styled,
   fontFamily,
   spacing,
   fontWeight,

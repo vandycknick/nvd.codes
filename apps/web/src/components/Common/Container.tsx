@@ -1,4 +1,5 @@
-import styled from "../Tokens/styled"
+import styled from "@emotion/styled"
+
 import * as screens from "components/Tokens/screens"
 
 const Container = styled.div`

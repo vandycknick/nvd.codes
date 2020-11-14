@@ -1,7 +1,6 @@
 import React, { useState, useCallback, ReactChild } from "react"
-import { css, keyframes } from "@emotion/core"
-
-import { styled } from "components/Tokens"
+import { css, keyframes } from "@emotion/css"
+import styled from "@emotion/styled"
 
 const roulette = keyframes`
 0% {

@@ -1,5 +1,6 @@
+import styled from "@emotion/styled"
+
 import {
-  styled,
   colors,
   borderRadius,
   fontSize,

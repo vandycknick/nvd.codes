@@ -1,6 +1,5 @@
-import { css } from "@emotion/core"
-
-import { styled } from "components/Tokens"
+import { css } from "@emotion/css"
+import styled from "@emotion/styled"
 
 interface DividerProps {
   text?: string

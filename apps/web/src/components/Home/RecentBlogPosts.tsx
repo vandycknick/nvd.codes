@@ -1,12 +1,12 @@
 import React from "react"
 import Link from "next/link"
-import { css } from "@emotion/core"
-import { useTheme } from "emotion-theming"
+import { css, cx } from "@emotion/css"
+import { useTheme } from "@emotion/react"
 import { Post } from "@nvd.codes/core"
 
 import { Heading } from "components/Common/Heading"
 import { Span } from "components/Common/Span"
-import { colors, fontWeight, spacing, Theme, fontSize } from "components/Tokens"
+import { colors, fontWeight, spacing, fontSize } from "components/Tokens"
 import Time from "components/Common/Time"
 import { NavButton } from "components/Common/Buttons"
 import { fromTablet } from "components/Common/mediaQuery"
@@ -25,26 +25,28 @@ export const RecentBlogPosts: React.FC<LatestPostsProps> = ({
   className,
   posts,
 }) => {
-  const theme = useTheme<Theme>()
+  const theme = useTheme()
   return (
     <div
-      className={className}
-      css={css`
-        padding: 0 ${spacing[4]};
-      `}
+      className={cx(
+        className,
+        css`
+          padding: 0 ${spacing[4]};
+        `,
+      )}
     >
       <Heading
         as="h4"
         size="3xl"
         weight="bold"
-        css={css`
+        className={css`
           padding: ${spacing[2]} 0;
         `}
       >
         Recent Blog Posts
       </Heading>
       <ul
-        css={css`
+        className={css`
           list-style-type: none;
           padding: 0;
           display: flex;
@@ -57,13 +59,13 @@ export const RecentBlogPosts: React.FC<LatestPostsProps> = ({
         {posts.map((post) => (
           <li
             key={post.title}
-            css={css`
+            className={css`
               ${fromTablet`width: 32%;`}
             `}
           >
             <Link href="/post/[slug]" as={`/post/${post.slug}`} passHref>
               <a
-                css={css`
+                className={css`
                   display: flex;
                   flex-direction: column;
                   margin: ${spacing[4]} 0;
@@ -72,7 +74,7 @@ export const RecentBlogPosts: React.FC<LatestPostsProps> = ({
               >
                 <Heading
                   as="h5"
-                  css={css`
+                  className={css`
                     font-size: ${fontSize.lg};
                     font-weight: ${fontWeight.bold};
                   `}
@@ -80,7 +82,7 @@ export const RecentBlogPosts: React.FC<LatestPostsProps> = ({
                   {post.title}
                 </Heading>
                 <Span
-                  css={css`
+                  className={css`
                     color: ${colors.grey[300]};
                     font-size: ${fontSize.sm};
                     padding: ${spacing[2]} 0;
@@ -89,14 +91,14 @@ export const RecentBlogPosts: React.FC<LatestPostsProps> = ({
                   {post.description}
                 </Span>
                 <div
-                  css={css`
+                  className={css`
                     font-size: ${fontSize.sm};
                     color: ${theme.onBackground};
                   `}
                 >
                   <Time dateTime={post.date} />
                   <Span
-                    css={css`
+                    className={css`
                       padding: 0 ${spacing[2]};
                     `}
                   >
@@ -110,7 +112,7 @@ export const RecentBlogPosts: React.FC<LatestPostsProps> = ({
         ))}
       </ul>
       <div
-        css={css`
+        className={css`
           padding: ${spacing[4]} 0;
         `}
       >

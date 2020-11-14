@@ -1,10 +1,10 @@
-import { css, SerializedStyles, Interpolation } from "@emotion/core"
+import { css, CSSInterpolation } from "@emotion/css"
 import * as screens from "components/Tokens/screens"
 
 const isMobile = (
   template: TemplateStringsArray,
-  ...args: Array<Interpolation>
-): SerializedStyles => css`
+  ...args: CSSInterpolation[]
+): string => css`
   @media screen and (max-width: ${screens.sm}) {
     ${css(template, ...args)}
   }
@@ -12,8 +12,8 @@ const isMobile = (
 
 const fromTablet = (
   template: TemplateStringsArray,
-  ...args: Array<Interpolation>
-): SerializedStyles => css`
+  ...args: CSSInterpolation[]
+): string => css`
   @media screen and (min-width: ${screens.sm}) {
     ${css(template, ...args)}
   }
@@ -21,8 +21,8 @@ const fromTablet = (
 
 const fromTabletLandscape = (
   template: TemplateStringsArray,
-  ...args: Array<Interpolation>
-): SerializedStyles => css`
+  ...args: CSSInterpolation[]
+): string => css`
   @media screen and (min-width: ${screens.md}) {
     ${css(template, ...args)}
   }
@@ -30,8 +30,8 @@ const fromTabletLandscape = (
 
 const fromDesktop = (
   template: TemplateStringsArray,
-  ...args: Array<Interpolation>
-): SerializedStyles => css`
+  ...args: CSSInterpolation[]
+): string => css`
   @media screen and (min-width: ${screens.lg}) {
     ${css(template, ...args)}
   }
@@ -39,8 +39,8 @@ const fromDesktop = (
 
 const fromDesktopWideScreen = (
   template: TemplateStringsArray,
-  ...args: Array<Interpolation>
-): SerializedStyles => css`
+  ...args: CSSInterpolation[]
+): string => css`
   @media screen and (min-width: ${screens.xl}) {
     ${css(template, ...args)}
   }

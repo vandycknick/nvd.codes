@@ -1,12 +1,7 @@
-import { css } from "@emotion/core"
+import { css } from "@emotion/css"
+import styled from "@emotion/styled"
 
-import {
-  styled,
-  fontFamily,
-  fontSize,
-  fontWeight,
-  spacing,
-} from "components/Tokens"
+import { fontFamily, fontSize, fontWeight, spacing } from "components/Tokens"
 
 type Size = keyof typeof fontSize
 type Weight = keyof typeof fontWeight

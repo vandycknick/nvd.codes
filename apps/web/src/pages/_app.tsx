@@ -1,8 +1,8 @@
 import React, { useEffect } from "react"
 import { AppProps } from "next/app"
 import { useRouter } from "next/router"
-import { CacheProvider } from "@emotion/core"
-import { cache } from "emotion"
+import { CacheProvider } from "@emotion/react"
+import { cache } from "@emotion/css"
 
 import { pageView } from "services/gtag"
 import Layout from "components/Layout"

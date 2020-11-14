@@ -1,9 +1,10 @@
 import React from "react"
-import { css } from "@emotion/core"
+import { css } from "@emotion/css"
+import styled from "@emotion/styled"
+import { useTheme } from "@emotion/react"
 
-import { spacing, styled, Theme, fontSize } from "components/Tokens"
+import { spacing, fontSize } from "components/Tokens"
 import { Container } from "components/Common/Container"
-import { useTheme } from "emotion-theming"
 import { Span } from "./Span"
 
 const FooterWrapper = styled.footer`
@@ -15,11 +16,11 @@ const FooterWrapper = styled.footer`
 `
 
 const Footer: React.FC = () => {
-  const theme = useTheme<Theme>()
+  const theme = useTheme()
   return (
     <FooterWrapper>
       <Container
-        css={css`
+        className={css`
           display: flex;
           flex-direction: column;
           align-items: center;
@@ -28,7 +29,7 @@ const Footer: React.FC = () => {
         <p>
           <strong>nvd.codes</strong>&nbsp;is handcrafted with ❤️&nbsp;
           <a
-            css={css`
+            className={css`
               color: ${theme.onNavigation};
 
               &:hover {
@@ -41,7 +42,7 @@ const Footer: React.FC = () => {
           </a>
         </p>
         <Span
-          css={css`
+          className={css`
             font-size: ${fontSize.xs};
             padding: ${spacing[1]} 0;
           `}

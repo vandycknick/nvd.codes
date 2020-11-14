@@ -1,5 +1,5 @@
-import React from "react"
-import { css } from "@emotion/core"
+import React, { Fragment } from "react"
+import { css } from "@emotion/css"
 
 import SEO from "components/Common/SEO"
 import { PostsList, PostsListProps } from "components/Blog/PostsList"
@@ -15,17 +15,17 @@ type BlogProps = {
 
 const Blog: React.FC<BlogProps> = ({ postPreviews }) => {
   return (
-    <>
+    <Fragment>
       <SEO title="Blog" />
       <section
-        css={css`
+        className={css`
           display: flex;
           flex-direction: column;
           align-items: center;
         `}
       >
         <Heading
-          css={css`
+          className={css`
             padding: ${spacing[3]};
           `}
           size="4xl"
@@ -38,7 +38,7 @@ const Blog: React.FC<BlogProps> = ({ postPreviews }) => {
         </Paragraph>
       </section>
       <PostsList posts={postPreviews} />
-    </>
+    </Fragment>
   )
 }
 

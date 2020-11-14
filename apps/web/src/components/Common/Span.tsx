@@ -1,6 +1,7 @@
-import { css } from "@emotion/core"
+import { css } from "@emotion/css"
+import styled from "@emotion/styled"
 
-import { styled, colors } from "components/Tokens"
+import { colors } from "components/Tokens"
 
 type SpanProps = {
   shadow?: "teal" | "yellow" | "red"
