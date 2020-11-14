@@ -1,6 +1,6 @@
-import React from "react"
-import { css } from "@emotion/core"
-import { useTheme } from "emotion-theming"
+import React, { Fragment } from "react"
+import { css } from "@emotion/css"
+import { useTheme } from "@emotion/react"
 import { GetStaticProps, GetStaticPaths } from "next"
 import ErrorPage from "next/error"
 import { Post } from "@nvd.codes/core"
@@ -9,7 +9,7 @@ import SEO from "components/Common/SEO"
 import { Content } from "components/BlogPost/Content"
 import { CommentList } from "components/BlogPost/CommentList"
 import { Heading } from "components/Common/Heading"
-import { spacing, Theme } from "components/Tokens"
+import { spacing } from "components/Tokens"
 import Time from "components/Common/Time"
 import { Span } from "components/Common/Span"
 import { Calendar } from "components/BlogPost/Icons/Calendar"
@@ -40,24 +40,24 @@ type BlogPostParams = {
 }
 
 const BlogPost: React.FC<BlogPostProps> = ({ post }) => {
-  const theme = useTheme<Theme>()
+  const theme = useTheme()
 
   if (post == null) {
     return <ErrorPage statusCode={404} />
   }
 
   return (
-    <>
+    <Fragment>
       <SEO title={post.title} description={post.description} />
       <article
-        css={css`
+        className={css`
           display: flex;
           flex-direction: column;
           padding-bottom: ${spacing[4]};
         `}
       >
         <header
-          css={css`
+          className={css`
             display: flex;
             flex-direction: column;
             align-items: center;
@@ -65,7 +65,7 @@ const BlogPost: React.FC<BlogPostProps> = ({ post }) => {
           `}
         >
           <Heading
-            css={css`
+            className={css`
               padding: ${spacing[3]};
               text-align: center;
             `}
@@ -74,7 +74,7 @@ const BlogPost: React.FC<BlogPostProps> = ({ post }) => {
             {post.title}
           </Heading>
           <div
-            css={css`
+            className={css`
               display: flex;
               align-items: center;
               justify-content: space-between;
@@ -88,7 +88,7 @@ const BlogPost: React.FC<BlogPostProps> = ({ post }) => {
           >
             <Span>
               <Calendar
-                css={css`
+                className={css`
                   padding: 0 ${spacing[2]};
                 `}
                 width={20}
@@ -99,7 +99,7 @@ const BlogPost: React.FC<BlogPostProps> = ({ post }) => {
             </Span>
             <Span>
               <Edit
-                css={css`
+                className={css`
                   padding: 0 ${spacing[2]};
                 `}
                 width={20}
@@ -107,7 +107,7 @@ const BlogPost: React.FC<BlogPostProps> = ({ post }) => {
                 color={theme.onBackground}
               />
               <a
-                css={css`
+                className={css`
                   color: ${theme.onBackground};
                   text-decoration: none;
                 `}
@@ -118,7 +118,7 @@ const BlogPost: React.FC<BlogPostProps> = ({ post }) => {
             </Span>
             <Span>
               <TimeIcon
-                css={css`
+                className={css`
                   padding: 0 ${spacing[2]};
                 `}
                 width={20}
@@ -133,7 +133,7 @@ const BlogPost: React.FC<BlogPostProps> = ({ post }) => {
       </article>
       <Divider />
       <CommentList slug={post.slug} />
-    </>
+    </Fragment>
   )
 }
 

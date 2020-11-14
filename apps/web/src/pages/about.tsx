@@ -1,25 +1,24 @@
-import React from "react"
-import { css } from "@emotion/core"
+import React, { Fragment } from "react"
+import { css } from "@emotion/css"
 
 import SEO from "components/Common/SEO"
 import { Paragraph } from "components/Common/Paragraph"
 import { LinkButton } from "components/Common/Buttons"
 import { Heading } from "components/Common/Heading"
-import { Image } from "components/Common/Image"
 import { spacing } from "components/Tokens"
 
 const About: React.FC = () => (
-  <>
+  <Fragment>
     <SEO title="About" />
     <section
-      css={css`
+      className={css`
         display: flex;
         flex-direction: column;
         align-items: center;
       `}
     >
       <Heading
-        css={css`
+        className={css`
           align-self: center;
           padding: ${spacing[3]};
         `}
@@ -27,9 +26,8 @@ const About: React.FC = () => (
       >
         About Me
       </Heading>
-      <Image src="/images/profile.png" width={110} height={115} />
       <Paragraph
-        css={css`
+        className={css`
           text-align: center;
         `}
       >
@@ -46,7 +44,7 @@ const About: React.FC = () => (
         Resume 👨‍🎓
       </LinkButton>
     </section>
-  </>
+  </Fragment>
 )
 
 export default About

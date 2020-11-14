@@ -1,13 +1,14 @@
 import React from "react"
-import { css } from "@emotion/core"
-import { useTheme } from "emotion-theming"
+import { css } from "@emotion/css"
+import { useTheme } from "@emotion/react"
+import styled from "@emotion/styled"
 
 import { Heading } from "components/Common/Heading"
 import { Span } from "components/Common/Span"
 import { TextRoulette } from "components/Common/TextRoulette"
 import { OSDetect } from "components/Common/OSDetect"
 import { Paragraph } from "components/Common/Paragraph"
-import { colors, styled, spacing, Theme } from "components/Tokens"
+import { colors, spacing } from "components/Tokens"
 import { Globe } from "components/Home/Icons/Globe"
 import { Github } from "components/Home/Icons/Github"
 import { Twitter } from "components/Home/Icons/Twitter"
@@ -41,17 +42,17 @@ const Greeting: React.FC<GreetingProps> = ({
   twitterUrl,
   siteUrl,
 }) => {
-  const theme = useTheme<Theme>()
+  const theme = useTheme()
   return (
     <section
-      css={css`
+      className={css`
         display: flex;
         flex-direction: column;
         align-items: center;
       `}
     >
       <Heading
-        css={css`
+        className={css`
           padding-top: ${spacing[6]};
         `}
         weight="normal"
@@ -64,7 +65,7 @@ const Greeting: React.FC<GreetingProps> = ({
       <Heading
         as="h3"
         weight="normal"
-        css={css`
+        className={css`
           display: flex;
         `}
       >
@@ -81,7 +82,7 @@ const Greeting: React.FC<GreetingProps> = ({
         />
       </Heading>
       <Paragraph
-        css={css`
+        className={css`
           max-width: 500px;
           text-align: center;
           margin: ${spacing[0]} 0;
@@ -95,7 +96,7 @@ const Greeting: React.FC<GreetingProps> = ({
         Occasionally developing CLI tools and apps.
       </Paragraph>
       <div
-        css={css`
+        className={css`
           display: flex;
           align-items: center;
           padding: ${spacing[5]} ${spacing[2]};
@@ -104,7 +105,7 @@ const Greeting: React.FC<GreetingProps> = ({
         <IconLink href={siteUrl}>
           <Globe width={20} height={20} color={theme.onBackground} />
           <Span
-            css={css`
+            className={css`
               margin: 0 ${spacing[3]};
             `}
           >
@@ -114,7 +115,7 @@ const Greeting: React.FC<GreetingProps> = ({
         <IconLink href={githubUrl}>
           <Github width={20} height={20} color={theme.onBackground} />
           <Span
-            css={css`
+            className={css`
               margin: 0 ${spacing[3]};
             `}
           >
@@ -124,7 +125,7 @@ const Greeting: React.FC<GreetingProps> = ({
         <IconLink href={twitterUrl}>
           <Twitter width={24} height={24} color={theme.onBackground} />
           <Span
-            css={css`
+            className={css`
               margin: 0 ${spacing[3]};
             `}
           >

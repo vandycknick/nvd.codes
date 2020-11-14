@@ -1,16 +1,10 @@
 import React from "react"
-import { css } from "@emotion/core"
+import { css } from "@emotion/css"
+import { useTheme } from "@emotion/react"
 import Link from "next/link"
-import { useTheme } from "emotion-theming"
 import { useRouter } from "next/router"
 
-import {
-  spacing,
-  fontFamily,
-  fontWeight,
-  fontSize,
-  Theme,
-} from "components/Tokens"
+import { spacing, fontFamily, fontWeight, fontSize } from "components/Tokens"
 import { fromTablet } from "components/Common/mediaQuery"
 
 const borderSize = "5px"
@@ -20,12 +14,12 @@ interface NavLinkProps {
 }
 
 const NavLink: React.FC<NavLinkProps> = ({ to, children }) => {
-  const theme = useTheme<Theme>()
+  const theme = useTheme()
   const router = useRouter()
   return (
     <Link href={to}>
       <a
-        css={css`
+        className={css`
           font-family: ${fontFamily.headings};
           font-weight: ${fontWeight.bold};
           font-size: ${fontSize.xl};

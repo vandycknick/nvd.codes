@@ -1,6 +1,8 @@
 import React from "react"
 import Link, { LinkProps } from "next/link"
-import { borderRadius, colors, spacing, styled } from "components/Tokens"
+import styled from "@emotion/styled"
+
+import { borderRadius, colors, spacing } from "components/Tokens"
 
 export const Button = styled.button`
   color: ${colors.white};

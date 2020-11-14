@@ -1,6 +1,7 @@
 import React, { useState, useCallback } from "react"
 import Link from "next/link"
-import { css, Global } from "@emotion/core"
+import { css } from "@emotion/css"
+import { Global } from "@emotion/react"
 
 import {
   Navbar,
@@ -41,7 +42,7 @@ const Header: React.FC = () => {
         />
       )}
       <Navbar
-        css={css`
+        className={css`
           ${isActive &&
           css`
             position: fixed;
@@ -52,7 +53,7 @@ const Header: React.FC = () => {
           <Link href="/" passHref>
             <NavbarBrandLink>
               <Logo
-                css={css`
+                className={css`
                   width: 160px;
                 `}
               />
@@ -66,7 +67,7 @@ const Header: React.FC = () => {
           <Burger
             isActive={isActive}
             onClick={toggleMenu}
-            css={css`
+            className={css`
               align-self: center;
               display: none;
               ${isMobile`display: block;`}

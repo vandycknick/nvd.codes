@@ -1,6 +1,7 @@
-import { css } from "@emotion/core"
+import { css } from "@emotion/css"
+import styled from "@emotion/styled"
 
-import { styled, spacing } from "components/Tokens"
+import { spacing } from "components/Tokens"
 
 const Main = styled.main`
   ${({ theme }) => css`

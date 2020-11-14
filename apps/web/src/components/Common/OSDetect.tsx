@@ -1,4 +1,4 @@
-import React, { ReactNode } from "react"
+import React, { Fragment, ReactNode } from "react"
 
 type OSDetectProps = {
   windows: ReactNode
@@ -13,9 +13,9 @@ const OSDetect: React.FC<OSDetectProps> = ({ windows, unix }) => {
 
   switch (platform) {
     case "win32":
-      return <>{windows}</>
+      return <Fragment>{windows}</Fragment>
     default:
-      return <>{unix}</>
+      return <Fragment>{unix}</Fragment>
   }
 }
 

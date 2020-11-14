@@ -1,19 +1,13 @@
 import React from "react"
 import useSWR from "swr"
-import { css } from "@emotion/core"
+import { css } from "@emotion/css"
+import { useTheme } from "@emotion/react"
+import styled from "@emotion/styled"
 import { PostComments } from "@nvd.codes/core"
 import * as timeago from "timeago.js"
-import { useTheme } from "emotion-theming"
 
 import { fetchJSON } from "utils/async"
-import {
-  spacing,
-  colors,
-  fontWeight,
-  fontSize,
-  Theme,
-  styled,
-} from "components/Tokens"
+import { spacing, colors, fontWeight, fontSize } from "components/Tokens"
 import { Image } from "components/Common/Image"
 import { Span } from "components/Common/Span"
 import { Content } from "components/BlogPost/Content"
@@ -25,10 +19,10 @@ type CommentListProps = {
 }
 
 const WriteComment: React.FC<{ editUrl?: string }> = ({ editUrl }) => {
-  const theme = useTheme<Theme>()
+  const theme = useTheme()
   return (
     <div
-      css={css`
+      className={css`
         padding: ${spacing[4]} 0;
         display: flex;
       `}
@@ -38,7 +32,7 @@ const WriteComment: React.FC<{ editUrl?: string }> = ({ editUrl }) => {
         width={40}
         height={40}
         alt="@anonymous"
-        css={css`
+        className={css`
           display: none;
           padding: 0 ${spacing[4]} 0 0;
           img {
@@ -49,7 +43,7 @@ const WriteComment: React.FC<{ editUrl?: string }> = ({ editUrl }) => {
         `}
       />
       <div
-        css={css`
+        className={css`
           position: relative;
           flex: 1 1 auto;
           min-width: 1px;
@@ -77,7 +71,7 @@ const WriteComment: React.FC<{ editUrl?: string }> = ({ editUrl }) => {
         `}
       >
         <header
-          css={css`
+          className={css`
             background-color: ${colors.grey[800]};
             border-bottom: 1px solid ${colors.grey[300]};
             padding: ${spacing[2]} ${spacing[4]} 0 ${spacing[4]};
@@ -85,14 +79,14 @@ const WriteComment: React.FC<{ editUrl?: string }> = ({ editUrl }) => {
           `}
         >
           <div
-            css={css`
+            className={css`
               box-sizing: border-box;
               margin-bottom: -1px;
               background: transparent;
             `}
           >
             <Span
-              css={css`
+              className={css`
                 background: ${theme.background};
                 display: inline-block;
                 padding: ${spacing[2]} ${spacing[4]};
@@ -108,7 +102,7 @@ const WriteComment: React.FC<{ editUrl?: string }> = ({ editUrl }) => {
               Write
             </Span>
             <Span
-              css={css`
+              className={css`
                 display: inline-block;
                 padding: ${spacing[2]} ${spacing[4]};
 
@@ -122,7 +116,7 @@ const WriteComment: React.FC<{ editUrl?: string }> = ({ editUrl }) => {
           </div>
         </header>
         <div
-          css={css`
+          className={css`
             padding: ${spacing[4]};
           `}
         >
@@ -130,7 +124,7 @@ const WriteComment: React.FC<{ editUrl?: string }> = ({ editUrl }) => {
             placeholder="Sign in to comment"
             aria-label="comment"
             disabled
-            css={css`
+            className={css`
               background: ${colors.grey[800]};
               color: ${colors.white};
               padding: 8px;
@@ -150,7 +144,7 @@ const WriteComment: React.FC<{ editUrl?: string }> = ({ editUrl }) => {
           />
         </div>
         <footer
-          css={css`
+          className={css`
             display: flex;
             justify-content: flex-end;
             padding: 0 ${spacing[4]} ${spacing[4]} ${spacing[4]};
@@ -159,10 +153,10 @@ const WriteComment: React.FC<{ editUrl?: string }> = ({ editUrl }) => {
           <LinkButton
             href={editUrl}
             target="_blank"
-            css={css`
+            className={css`
               font-size: ${fontSize.xs};
             `}
-            disabled={editUrl == undefined || editUrl === ""}
+            // disabled={editUrl == undefined || editUrl === ""}
           >
             Open Github
           </LinkButton>
@@ -179,7 +173,7 @@ const CommentWrapper = styled.section`
 `
 
 export const CommentList: React.FC<CommentListProps> = ({ slug }) => {
-  const theme = useTheme<Theme>()
+  const theme = useTheme()
   const { data, error } = useSWR<PostComments>(
     `${process.env.NEXT_PUBLIC_COMMENTS_API}/api/comments/${slug}`,
     fetchJSON,
@@ -191,7 +185,7 @@ export const CommentList: React.FC<CommentListProps> = ({ slug }) => {
     return (
       <CommentWrapper>
         <div
-          css={css`
+          className={css`
             display: flex;
             justify-content: center;
             align-items: center;
@@ -209,7 +203,7 @@ export const CommentList: React.FC<CommentListProps> = ({ slug }) => {
     return (
       <CommentWrapper>
         <div
-          css={css`
+          className={css`
             display: flex;
             justify-content: center;
             align-items: center;
@@ -227,7 +221,7 @@ export const CommentList: React.FC<CommentListProps> = ({ slug }) => {
     <CommentWrapper>
       {data?.totalComments === 0 && (
         <div
-          css={css`
+          className={css`
             font-weight: ${fontWeight.bold};
           `}
         >
@@ -236,7 +230,7 @@ export const CommentList: React.FC<CommentListProps> = ({ slug }) => {
       )}
       {(data?.totalComments ?? 0) > 0 && (
         <ul
-          css={css`
+          className={css`
             margin: 0;
             padding: ${spacing[4]} 0;
           `}
@@ -244,7 +238,7 @@ export const CommentList: React.FC<CommentListProps> = ({ slug }) => {
           {data?.comments.map((comment) => (
             <li
               key={comment.id}
-              css={css`
+              className={css`
                 padding: ${spacing[4]} 0;
                 display: flex;
               `}
@@ -253,7 +247,7 @@ export const CommentList: React.FC<CommentListProps> = ({ slug }) => {
                 src={comment.author.avatarUrl}
                 width={40}
                 height={40}
-                css={css`
+                className={css`
                   display: none;
                   padding: 0 ${spacing[4]} 0 0;
 
@@ -261,7 +255,7 @@ export const CommentList: React.FC<CommentListProps> = ({ slug }) => {
                 `}
               />
               <article
-                css={css`
+                className={css`
                   position: relative;
                   flex: 1 1 auto;
                   min-width: 1px;
@@ -289,7 +283,7 @@ export const CommentList: React.FC<CommentListProps> = ({ slug }) => {
                 `}
               >
                 <div
-                  css={css`
+                  className={css`
                     background-color: ${colors.grey[800]};
                     border-bottom: 1px solid ${colors.grey[300]};
                     padding: ${spacing[2]} ${spacing[4]};
@@ -298,7 +292,7 @@ export const CommentList: React.FC<CommentListProps> = ({ slug }) => {
                 >
                   <a
                     href={`https://github.com/${comment.author.login}`}
-                    css={css`
+                    className={css`
                       color: ${theme.onBackground};
                       font-weight: ${fontWeight.bold};
                       text-decoration: none;
@@ -314,7 +308,7 @@ export const CommentList: React.FC<CommentListProps> = ({ slug }) => {
                   <Span>{timeago.format(comment.createdAt)}</Span>
                 </div>
                 <Content
-                  css={css`
+                  className={css`
                     padding: ${spacing[2]} ${spacing[4]};
                   `}
                   dangerouslySetInnerHTML={{ __html: comment.body }}

@@ -1,7 +1,8 @@
 import React from "react"
-import { css } from "@emotion/core"
+import { css } from "@emotion/css"
+import styled from "@emotion/styled"
 
-import { styled, spacing, shadow } from "components/Tokens"
+import { spacing, shadow } from "components/Tokens"
 import { Container } from "components/Common/Container"
 import * as borders from "components/Tokens/borders"
 import { fromTablet } from "components/Common/mediaQuery"

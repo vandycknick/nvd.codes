@@ -1,5 +1,5 @@
 import React from "react"
-import { css } from "@emotion/core"
+import { css, cx } from "@emotion/css"
 
 type ImageProps = {
   src: string
@@ -17,16 +17,18 @@ const Image: React.FC<ImageProps> = ({
   height = 128,
 }) => (
   <figure
-    className={className}
-    css={css`
-      height: ${height}px;
-      width: ${width}px;
-    `}
+    className={cx(
+      css`
+        height: ${height}px;
+        width: ${width}px;
+      `,
+      className,
+    )}
   >
     <img
       src={src}
       alt={alt}
-      css={css`
+      className={css`
         border-radius: 100%;
         display: block;
         height: auto;

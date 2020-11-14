@@ -1,6 +1,6 @@
-import React from "react"
-import { css, SerializedStyles } from "@emotion/core"
-import { useTheme } from "emotion-theming"
+import React, { Fragment } from "react"
+import { css, cx } from "@emotion/css"
+import { useTheme } from "@emotion/react"
 import useSWR from "swr"
 import * as timeago from "timeago.js"
 import { Activity } from "@nvd.codes/core"
@@ -9,7 +9,6 @@ import {
   colors,
   fontSize,
   spacing,
-  Theme,
   borderRadius,
   fontWeight,
 } from "components/Tokens"
@@ -27,7 +26,7 @@ type LatestActivitiesProps = {
   className?: string
 }
 
-const cssFromBackgroundColor = (background: string): SerializedStyles => {
+const cssFromBackgroundColor = (background: string): string => {
   let color = background
 
   if (color.length < 5) {
@@ -55,12 +54,12 @@ const cardColStyles = css`
 `
 
 const OnlineActivity: React.FC<OnlineActivityProps> = ({ activity }) => {
-  const theme = useTheme<Theme>()
+  const theme = useTheme()
   return (
-    <>
-      <Card css={cardColStyles}>
+    <Fragment>
+      <Card className={cardColStyles}>
         <div
-          css={css`
+          className={css`
             flex: 1;
             display: flex;
             height: 100%;
@@ -69,7 +68,7 @@ const OnlineActivity: React.FC<OnlineActivityProps> = ({ activity }) => {
           `}
         >
           <Span
-            css={css`
+            className={css`
               width: 30px;
               display: flex;
               padding: ${spacing[2]};
@@ -80,14 +79,14 @@ const OnlineActivity: React.FC<OnlineActivityProps> = ({ activity }) => {
             <CommitIcon width={30} height={30} color={theme.onSurface} />
           </Span>
           <div
-            css={css`
+            className={css`
               display: flex;
               flex-direction: column;
               padding: 0 ${spacing[5]};
             `}
           >
             <Span
-              css={css`
+              className={css`
                 font-weight: ${fontWeight.bold};
                 font-size: ${fontSize.lg};
               `}
@@ -95,7 +94,7 @@ const OnlineActivity: React.FC<OnlineActivityProps> = ({ activity }) => {
               Latest Commit
             </Span>
             <Span
-              css={css`
+              className={css`
                 color: ${colors.grey[300]};
                 font-size: ${fontSize.xs};
                 padding-bottom: ${spacing[3]};
@@ -110,7 +109,7 @@ const OnlineActivity: React.FC<OnlineActivityProps> = ({ activity }) => {
         </div>
         <a
           href={activity.latestCommit.url}
-          css={css`
+          className={css`
             display: flex;
             color: ${theme.primaryLight};
             background-color: ${colors.grey[800]};
@@ -128,9 +127,9 @@ const OnlineActivity: React.FC<OnlineActivityProps> = ({ activity }) => {
         </a>
       </Card>
       {activity?.projects.map((project) => (
-        <Card key={project.id} css={cardColStyles}>
+        <Card key={project.id} className={cardColStyles}>
           <div
-            css={css`
+            className={css`
               display: flex;
               flex: 1;
               height: 100%;
@@ -139,7 +138,7 @@ const OnlineActivity: React.FC<OnlineActivityProps> = ({ activity }) => {
             `}
           >
             <Span
-              css={css`
+              className={css`
                 width: 30px;
                 display: flex;
                 padding: ${spacing[2]};
@@ -150,7 +149,7 @@ const OnlineActivity: React.FC<OnlineActivityProps> = ({ activity }) => {
               <RepositoryIcon width={30} height={30} color={theme.onSurface} />
             </Span>
             <div
-              css={css`
+              className={css`
                 display: flex;
                 flex-direction: column;
                 padding-left: ${spacing[5]};
@@ -158,14 +157,14 @@ const OnlineActivity: React.FC<OnlineActivityProps> = ({ activity }) => {
               `}
             >
               <Span
-                css={css`
+                className={css`
                   display: flex;
                   justify-content: space-between;
                   align-items: center;
                 `}
               >
                 <Span
-                  css={css`
+                  className={css`
                     font-weight: ${fontWeight.bold};
                     font-size: ${fontSize.lg};
                   `}
@@ -173,7 +172,7 @@ const OnlineActivity: React.FC<OnlineActivityProps> = ({ activity }) => {
                   {project.name}
                 </Span>
                 <Tag
-                  css={css`
+                  className={css`
                     ${cssFromBackgroundColor(project.primaryLanguage.color)}
                     align-items: center;
                     font-size: 0.5rem;
@@ -183,7 +182,7 @@ const OnlineActivity: React.FC<OnlineActivityProps> = ({ activity }) => {
                 </Tag>
               </Span>
               <Span
-                css={css`
+                className={css`
                   color: ${colors.grey[300]};
                   font-size: ${fontSize.xs};
                 `}
@@ -191,7 +190,7 @@ const OnlineActivity: React.FC<OnlineActivityProps> = ({ activity }) => {
                 {`last updated ${timeago.format(project.updatedAt)}`}
               </Span>
               <Span
-                css={css`
+                className={css`
                   font-size: ${fontSize.sm};
                   padding-top: ${spacing[3]};
                 `}
@@ -202,7 +201,7 @@ const OnlineActivity: React.FC<OnlineActivityProps> = ({ activity }) => {
           </div>
           <a
             href={project.url}
-            css={css`
+            className={css`
               display: flex;
               color: ${theme.primaryLight};
               background-color: ${colors.grey[800]};
@@ -220,7 +219,7 @@ const OnlineActivity: React.FC<OnlineActivityProps> = ({ activity }) => {
           </a>
         </Card>
       ))}
-    </>
+    </Fragment>
   )
 }
 
@@ -251,16 +250,18 @@ const LatestActivities: React.FC<LatestActivitiesProps> = ({ className }) => {
   )
   return (
     <div
-      className={className}
-      css={css`
-        padding: 0 ${spacing[4]};
-      `}
+      className={cx(
+        className,
+        css`
+          padding: 0 ${spacing[4]};
+        `,
+      )}
     >
       <Heading as="h4" size="3xl" weight="bold">
         Online Activity
       </Heading>
       <div
-        css={css`
+        className={css`
           display: flex;
           flex-direction: column;
           padding: ${spacing[8]} 0 ${spacing[6]} 0;

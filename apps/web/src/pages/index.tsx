@@ -1,5 +1,5 @@
-import React from "react"
-import { css } from "@emotion/core"
+import React, { Fragment } from "react"
+import { css } from "@emotion/css"
 
 import SEO from "components/Common/SEO"
 import { Greeting } from "components/Home/Greeting"
@@ -18,7 +18,7 @@ interface HomeProps {
 }
 
 const Home: React.FC<HomeProps> = ({ latestPosts }) => (
-  <>
+  <Fragment>
     <SEO title="Home" />
     <Greeting
       githubUrl="https://github.com/nickvdyck"
@@ -27,18 +27,18 @@ const Home: React.FC<HomeProps> = ({ latestPosts }) => (
     />
     <Divider />
     <RecentBlogPosts
-      css={css`
+      className={css`
         margin: ${spacing[6]} 0;
       `}
       posts={latestPosts}
     />
     <Divider />
     <LatestActivities
-      css={css`
+      className={css`
         margin: ${spacing[6]} 0;
       `}
     />
-  </>
+  </Fragment>
 )
 
 export const getStaticProps: GetStaticProps<HomeProps> = async () => {
