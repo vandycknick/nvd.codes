@@ -1,7 +1,7 @@
 ---
 id: e546368c-7b49-4ed5-9b6f-c0c998fe3e27
 title: Pulling images from GCR with Kubernetes
-description: In this post i go through the process of setting up a private container registry in Kubernetes.
+description: In this post, I go through the process of connecting to a private google container registry (GCR) from Kubernetes. I show how to create a service account and how to configure to use these credentials to pull images from a given private registry.
 date: 2020-10-19T22:00:00+02:00
 categories: [kubernetes, gcp, registry, containers]
 cover: ./assets/2020-10-19-gcr-with-kubernetes/cover.jpg
