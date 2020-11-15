@@ -7,8 +7,9 @@
   "scripts": {
     "clean": "rm -rf ./.next",
     "dev": "ts-node --project tsconfig.server.json -r tsconfig-paths/register src/server.ts",
-    "build": "yarn clean && next build && next export -o .dist",
-    "start": "next start"
+    "build": "yarn clean && next build && next export -o .dist && yarn sitemap",
+    "start": "next start",
+    "sitemap": "ts-node --project tsconfig.server.json src/utils/createSitemap.ts"
   },
   "dependencies": {
     "@emotion/css": "^11.0.0",
@@ -48,6 +49,7 @@
     "retext-equality": "^5.5.0",
     "retext-smartypants": "^4.0.0",
     "sharp": "^0.26.2",
+    "sitemap": "^6.3.3",
     "ts-node": "^9.0.0",
     "tsconfig-paths": "^3.9.0",
     "typescript": "^4.0.5",
