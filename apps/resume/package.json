@@ -11,7 +11,7 @@
   "scripts": {
     "validate": "resume test",
     "serve": "resume serve -t nickvd",
-    "build": "yarn build.pdf && yarn build.html && yarn build.html2",
+    "build": "mkdir -p .dist && yarn build.pdf && yarn build.html && yarn build.html2",
     "build.pdf": "resume export -t nickvd .dist/resume.pdf",
     "build.html": "resume export -t nickvd .dist/resume.html",
     "build.html2": "resume export -t nickvd .dist/index.html"
