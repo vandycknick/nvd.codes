@@ -36,7 +36,7 @@ jobs:
             ${{ runner.os }}-yarn-
 
       - name: Install build dependencies
-        run: make install
+        run: make install.yarn
 
       - name: Build Libs
         run: make build.libs
