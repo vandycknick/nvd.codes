@@ -1,11 +1,19 @@
 {
-  "name": "resume",
+  "name": "@nvd.codes/resume",
   "private": true,
   "version": "1.0.0",
   "main": "index.js",
   "license": "MIT",
+  "dependencies": {
+    "jsonresume-theme-nickvd": "^1.0.0",
+    "resume-cli": "^2.0.0"
+  },
   "scripts": {
-    "validate": "dotnet resume validate -f ../../_data/resume.json",
-    "build": "dotnet resume build -f ../../_data/resume.json -o .dist && cp .dist/resume.html .dist/index.html"
+    "validate": "resume test",
+    "serve": "resume serve -t nickvd",
+    "build": "yarn build.pdf && yarn build.html && yarn build.html2",
+    "build.pdf": "resume export -t nickvd .dist/resume.pdf",
+    "build.html": "resume export -t nickvd .dist/resume.html",
+    "build.html2": "resume export -t nickvd .dist/index.html"
   }
 }

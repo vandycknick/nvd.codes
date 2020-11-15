@@ -22,11 +22,6 @@ jobs:
         with:
           node-version: "12.x"
 
-      - name: Setup .NET Core SDK
-        uses: actions/setup-dotnet@v1
-        with:
-          dotnet-version: '3.1.402'
-
       - name: Get yarn cache directory path
         id: yarn-cache-dir-path
         run: echo "::set-output name=dir::$(yarn cache dir)"
@@ -41,7 +36,7 @@ jobs:
             ${{ runner.os }}-yarn-
 
       - name: Install build dependencies
-        run: make install.yarn install.tools
+        run: make install
 
       - name: Build Libs
         run: make build.libs

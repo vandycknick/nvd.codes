@@ -1,5 +1,5 @@
 {
-  "name": "web",
+  "name": "@nvd.codes/web",
   "private": true,
   "version": "1.0.0",
   "main": "index.js",

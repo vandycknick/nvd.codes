@@ -10,6 +10,12 @@
       "options": {
         "parser": "json"
       }
+    },
+    {
+      "files": ["*.css"],
+      "options": {
+        "parser": "css"
+      }
     }
   ]
 }

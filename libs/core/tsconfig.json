@@ -1,7 +1,7 @@
 {
   "extends": "@nvd/tsconfig",
   "compilerOptions": {
-    "outDir": "dist",
+    "outDir": ".dist",
     "baseUrl": ".",
     "declaration": true
   },
