@@ -1,4 +1,4 @@
-import React, { Fragment } from "react"
+import React, { Fragment, ReactNode } from "react"
 import { css, injectGlobal } from "@emotion/css"
 import { ThemeProvider } from "@emotion/react"
 import normalize from "!!raw-loader!normalize.css"
@@ -61,7 +61,11 @@ ul {
 }
 `
 
-const Layout: React.FC = ({ children }) => {
+type LayoutProps = {
+  children?: ReactNode
+}
+
+const Layout = ({ children }: LayoutProps) => {
   return (
     <Fragment>
       <ThemeProvider theme={darkTheme}>
