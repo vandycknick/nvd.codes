@@ -44,7 +44,7 @@ const createPost = async (slugInfo: SlugInfo): Promise<Post> => {
     content: html,
     readingTime: readingTime(content).text,
     slug: slugInfo.slug,
-    editUrl: `https://github.com/nickvdyck/nvd.codes/edit/main/content/posts/${slugInfo.relativePath}`,
+    editUrl: `https://github.com/nickvdyck/nvd.codes/edit/main/_posts/${slugInfo.relativePath}`,
   }
 }
 
