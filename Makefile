@@ -36,11 +36,11 @@ dev:
 
 .PHONY: dev.web
 dev.web:
-	@yarn workspace web dev
+	@yarn workspace @nvd.codes/web dev
 
 .PHONY: dev.api
 dev.api:
-	@yarn concurrently -n dev,watch "yarn workspace api dev" "yarn workspace api watch"
+	@yarn concurrently -n dev,watch "yarn workspace @nvd.codes/api dev" "yarn workspace @nvd.codes/api watch"
 
 .PHONY: check
 check:

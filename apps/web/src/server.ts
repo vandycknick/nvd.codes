@@ -24,8 +24,7 @@ async function main(): Promise<void> {
 
   server.all("*", (req, res) => handle(req, res))
 
-  server.listen(port, (err) => {
-    if (err) throw err
+  server.listen(port, () => {
     // eslint-disable-next-line no-console
     console.log(`> Ready on http://localhost:${port}`)
   })
