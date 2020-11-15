@@ -34,14 +34,7 @@
     "react/prop-types": "off",
     "react-hooks/rules-of-hooks": "error",
     "react-hooks/exhaustive-deps": "error",
-    "@typescript-eslint/explicit-function-return-type": [
-      "error",
-      {
-        "allowExpressions": true,
-        "allowTypedFunctionExpressions": true,
-        "allowHigherOrderFunctions": true
-      }
-    ]
+    "@typescript-eslint/explicit-module-boundary-types": "off"
   },
   "overrides": [
     {
@@ -55,8 +48,7 @@
         "jest": true
       },
       "rules": {
-        "import/no-extraneous-dependencies": "off",
-        "@typescript-eslint/explicit-function-return-type": "off"
+        "import/no-extraneous-dependencies": "off"
       }
     }
   ]
