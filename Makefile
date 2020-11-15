@@ -11,11 +11,7 @@ RESUME_JSON		:= $(ROOT)/_data/resume.json
 
 .PHONY: install
 install:
-	@$(MAKE) install.yarn install.pulumi install.tools
-
-.PHONY: install.tools
-install.tools:
-	@dotnet tool restore
+	@$(MAKE) install.yarn install.pulumi
 
 .PHONY: install.yarn
 install.yarn:
@@ -51,18 +47,19 @@ check:
 	$(NPM_BIN)/tsc -p $(API_PROJECT) --noEmit
 	$(NPM_BIN)/tsc -p $(WEB_PROJECT) --noEmit
 	$(NPM_BIN)/eslint . --ext .ts --ext .tsx --ext .js --ext .json --ignore-path .gitignore
-	yarn workspace resume validate
+	yarn workspace @nvd.codes/resume validate
 
 .PHONY: build.libs
 build.libs:
 	yarn workspace @nvd.codes/core tsc
 	yarn workspace @nvd.codes/config tsc
+	yarn workspace jsonresume-theme-nickvd build
 
 .PHONY: build
 build: clean build.libs
-	yarn workspace web build
-	yarn workspace api build
-	yarn workspace resume build
+	yarn workspace @nvd.codes/web build
+	yarn workspace @nvd.codes/api build
+	yarn workspace @nvd.codes/resume build
 
 .PHONY: pulumi.preview
 pulumi.preview:

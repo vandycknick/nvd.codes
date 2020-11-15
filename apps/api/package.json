@@ -1,5 +1,5 @@
 {
-  "name": "api",
+  "name": "@nvd.codes/api",
   "private": true,
   "version": "1.0.0",
   "main": "index.js",
