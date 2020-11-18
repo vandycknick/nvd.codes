@@ -5,7 +5,7 @@ import express from "express"
 import { createProxyMiddleware } from "http-proxy-middleware"
 import next from "next"
 
-import { purgePostsCache } from "services/getAllPosts"
+import { purgePostsCache, watchAllPosts } from "services/getAllPosts"
 
 const port = 3000
 const app = next({ dev: true })
@@ -28,6 +28,8 @@ async function main(): Promise<void> {
     // eslint-disable-next-line no-console
     console.log(`> Ready on http://localhost:${port}`)
   })
+
+  watchAllPosts()
 }
 
 main()

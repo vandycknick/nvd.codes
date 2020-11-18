@@ -4,7 +4,7 @@ import { Post } from "@nvd.codes/core"
 
 const { readFile, writeFile, mkdir, unlink } = promises
 
-import { getAllSlugs } from "services/getAllSlugs"
+import { getAllSlugs, watchSlugs } from "services/getAllSlugs"
 import { getPostBySlug } from "services/getPostBySlug"
 import { noop } from "utils"
 
@@ -19,6 +19,34 @@ export const purgePostsCache = async (): Promise<void> => {
     await unlink(BLOG_INDEX_CACHE)
   } catch (_) {
     //** Not used */
+  }
+}
+
+export const watchAllPosts = async () => {
+  const watcher = watchSlugs()
+  process.on("exit", watcher.close)
+
+  while (watcher.open) {
+    let posts: Post[] | undefined = undefined
+    const slug = await watcher.next()
+
+    try {
+      posts = JSON.parse(await readFile(BLOG_INDEX_CACHE, "utf8"))
+    } catch (_) {
+      // Ignore errors here
+      continue
+    }
+    const post = await getPostBySlug(slug.slug)
+    const old = posts?.findIndex((p) => p.slug == post.slug)
+
+    if (old !== undefined && posts !== undefined) {
+      // eslint-disable-next-line no-console
+      console.log(`Updating post ${post.slug}`)
+      posts[old] = post
+      await writeFile(BLOG_INDEX_CACHE, JSON.stringify(posts), "utf8").catch(
+        noop,
+      )
+    }
   }
 }
 
