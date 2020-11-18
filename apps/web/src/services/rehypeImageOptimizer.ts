@@ -20,7 +20,7 @@ const rehypeImageOptimizer: Plugin<[RehypeImageOptimizerSettings]> = (
     const promises = images.map(async (image) => {
       const src = image.properties["src"]
       const imageFilePath = resolve(rootpath, src)
-      const updatedSrc = await parseImage(imageFilePath, destination)
+      const updatedSrc = await parseImage(imageFilePath, destination, 800)
 
       image.properties["src"] = updatedSrc
     })

@@ -1,5 +1,6 @@
 import { css } from "@emotion/css"
 import styled from "@emotion/styled"
+import { fromTablet } from "components/Common/mediaQuery"
 
 import {
   fontFamily,
@@ -50,6 +51,15 @@ const Content = styled.section`
       &:hover {
         color: ${colors.teal[700]};
       }
+    }
+
+    img {
+      display: block;
+      margin-left: auto;
+      margin-right: auto;
+      width: 100%;
+
+      ${fromTablet`width: auto;`}
     }
 
     details {
