@@ -1,7 +1,7 @@
 import { promises } from "fs"
 import { join, resolve, basename, parse, relative } from "path"
 import { watch } from "chokidar"
-import { Deferred } from "utils/async"
+import { Deferred } from "../utils/async"
 
 const { readdir } = promises
 
