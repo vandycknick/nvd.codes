@@ -108,8 +108,8 @@ There are a few more name servers that implement the same functionality to resol
 $ dig -4 txt in +short o-o.myaddr.l.google.com @ns1.google.com
 $ dig -6 txt in +short o-o.myaddr.l.google.com @ns1.google.com
 
-$dig -4 +short myip.opendns.com @resolver1.opendns.com
-$dig -6 +short myip.opendns.com @resolver1.opendns.com
+$ dig -4 +short myip.opendns.com @resolver1.opendns.com
+$ dig -6 +short myip.opendns.com @resolver1.opendns.com
 ```
 
 To make this easily accessible from your terminal it's possible to define an alias `publicip` to save a couple of keystrokes:
