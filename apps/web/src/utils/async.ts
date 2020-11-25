@@ -14,7 +14,7 @@ const fetchJSON = async <T>(url: string): Promise<T> => {
   return data
 }
 
-type Resolver<T> = (value?: T | PromiseLike<T> | undefined) => void
+type Resolver<T> = (value: T | PromiseLike<T>) => void
 type Rejector<T> = (reason?: T) => void
 
 class Deferred<T> implements Promise<T> {
