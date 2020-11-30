@@ -6,12 +6,19 @@ from infra.utils import get_sas
 
 def create_api_app(
     resource_group: core.ResourceGroup,
-    plan: appservice.Plan,
     insights: appinsights.Insights,
-    path: str,
+    app_source_dir: str,
     config: Config,
     origins=[],
 ) -> appservice.FunctionApp:
+    plan = appservice.Plan(
+        "api-app-plan",
+        resource_group_name=resource_group.name,
+        kind="functionapp",
+        reserved=True,
+        sku=appservice.PlanSkuArgs(tier="Dynamic", size="Y1",),
+    )
+
     api_storage_account = storage.Account(
         "apiappsa",
         resource_group_name=resource_group.name,
@@ -27,11 +34,11 @@ def create_api_app(
     )
 
     zip_blob = storage.Blob(
-        "api-zipblob",
+        "api-zip-blob",
         storage_account_name=api_storage_account.name,
         storage_container_name=api_container.name,
         type="Block",
-        source=asset.AssetArchive({".": asset.FileArchive(path)}),
+        source=asset.AssetArchive({".": asset.FileArchive(app_source_dir)}),
     )
 
     signed_blob_url = Output.all(
@@ -66,4 +73,5 @@ def create_api_app(
             "WEBSITE_RUN_FROM_PACKAGE": signed_blob_url,
             "WEBSITE_NODE_DEFAULT_VERSION": "~12",
         },
+        os_type="linux",
     )

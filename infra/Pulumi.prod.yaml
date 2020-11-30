@@ -5,6 +5,7 @@ config:
   cloudflare:email:
     secure: AAABADBDf15TQp/7U7yQsI8YW+2tr5jKuWElv5BG0Lh05+aQeUsXcxyUzNLr07WNqzSardsL/EQ=
   nvd-codes-infra:domain: nvd.codes
+  nvd-codes-infra:dns_proxied: true
   nvd-codes-infra:github_token:
     secure: AAABAFYxI8qbRA3u35P7MHgYgK6cPSG0B0FIzRxAyuPeFx+V101FrWyEOSJILm3asDnMwHpJER0Wc1dBIt6Zx5OoQHxYB3VH
   nvd-codes-infra:zone_id:
