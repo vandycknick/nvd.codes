@@ -1,7 +1,8 @@
 from pulumi_azure import storage
+from pulumi import Config
 
 
-def get_sas(args):
+def get_sas(args) -> str:
     blob_sas = storage.get_account_blob_container_sas(
         connection_string=args[1],
         start="2020-01-01",
@@ -17,3 +18,8 @@ def get_sas(args):
         },
     )
     return f"https://{args[0]}.blob.core.windows.net/{args[2]}/{args[3]}{blob_sas.sas}"
+
+
+def get_config() -> Config:
+    config = Config(name="nvd-codes-infra")
+    return config

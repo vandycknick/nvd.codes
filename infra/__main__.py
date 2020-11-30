@@ -3,9 +3,10 @@ from pathlib import Path
 
 from pulumi import Config, export, FileArchive, Output
 from pulumi_azure import appinsights, appservice, cdn, core, storage
+from pulumi_cloudflare import Record
 
-from infra.api import create_api_app
-from infra.cloudflare import create_dns_record
+from infra.functions import create_api_app
+from infra.cloudflare import create_cname_record
 
 config = Config(name="nvd-codes-infra")
 
@@ -16,7 +17,7 @@ api_app_dir = environ.get("API_APP_FOLDER", str(api_app_fallback))
 resource_group = core.ResourceGroup("nvd-codes")
 
 app_insights = appinsights.Insights(
-    "api-function-ai",
+    "function-app-insights",
     resource_group_name=resource_group.name,
     location=resource_group.location,
     application_type="web",
@@ -102,44 +103,43 @@ resume_cdn_endpoint = cdn.Endpoint(
     ],
 )
 
-api_plan = appservice.Plan(
-    "api-plan",
-    resource_group_name=resource_group.name,
-    kind="FunctionApp",
-    sku={"tier": "Dynamic", "size": "Y1"},
-)
-
 api_app = create_api_app(
-    resource_group,
-    api_plan,
-    app_insights,
-    api_app_dir,
-    config,
-    [Output.concat("https://", web_cdn_endpoint.host_name), "https://nvd.codes"],
+    resource_group=resource_group,
+    insights=app_insights,
+    app_source_dir=api_app_dir,
+    config=config,
+    origins=[
+        Output.concat("https://", web_cdn_endpoint.host_name),
+        "https://nvd.codes",
+    ],
 )
 
 domain = config.require("domain")
-env = config.get("environment") or ""
 zone_id = config.require("zone_id")
+proxied = config.require_bool("dns_proxied")
 
-web_dns_record = create_dns_record(
-    env, domain, zone_id, web_cdn_endpoint.host_name, "cdnverify"
+web_dns_record = create_cname_record(
+    name=None, zone_id=zone_id, value=web_cdn_endpoint.host_name, proxied=proxied
 )
 
-resume_dns_record = create_dns_record(
-    "resume", domain, zone_id, resume_cdn_endpoint.host_name, "cdnverify"
+www_dns_record = create_cname_record(
+    name="www", zone_id=zone_id, value="nvd.codes", proxied=True
 )
 
-api_dns_record = create_dns_record(
-    "api" if env == "" else f"api-{env}", domain, zone_id, api_app.default_hostname,
+resume_dns_record = create_cname_record(
+    name="resume", zone_id=zone_id, value=resume_cdn_endpoint.host_name, proxied=proxied
 )
 
-api_host_binding = appservice.CustomHostnameBinding(
-    "api-host-binding",
-    resource_group_name=resource_group.name,
-    app_service_name=api_app.name,
-    hostname=Output.concat(api_dns_record.main.name, ".", domain),
+api_dns_record = create_cname_record(
+    name="api", zone_id=zone_id, value=api_app.default_hostname, proxied=proxied
 )
+
+# api_host_binding = appservice.CustomHostnameBinding(
+#     "api-host-binding",
+#     resource_group_name=resource_group.name,
+#     app_service_name=api_app.name,
+#     hostname=api_dns_record.name,
+# )
 
 export("web_app_name", web_app_storage_account.name)
 export("api_app_name", api_app.name)
