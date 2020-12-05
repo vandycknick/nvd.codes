@@ -1,42 +1,13 @@
 import React from "react"
-import { css, cx } from "@emotion/css"
+import NextImage, { ImageProps } from "next/image"
 
-type ImageProps = {
-  src: string
-  width?: number
-  height?: number
-  alt?: string
-  className?: string
+export const Image = (props: ImageProps) => {
+  const { src, ...rest } = props
+  let updatedSrc = src
+
+  if (process.env.NODE_ENV === "production") {
+    updatedSrc = `https://image.nvd.codes${src}`
+  }
+
+  return <NextImage src={updatedSrc} {...rest} />
 }
-
-const Image: React.FC<ImageProps> = ({
-  alt,
-  className,
-  src,
-  width = 128,
-  height = 128,
-}) => (
-  <figure
-    className={cx(
-      css`
-        height: ${height}px;
-        width: ${width}px;
-      `,
-      className,
-    )}
-  >
-    <img
-      src={src}
-      alt={alt}
-      className={css`
-        border-radius: 100%;
-        display: block;
-        height: auto;
-        width: 100%;
-        height: 100%;
-      `}
-    />
-  </figure>
-)
-
-export { Image }

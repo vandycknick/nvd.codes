@@ -5,7 +5,7 @@ from pulumi import Config, export, FileArchive, Output
 from pulumi_azure import appinsights, appservice, cdn, core, storage
 from pulumi_cloudflare import Record
 
-from infra.functions import create_api_app
+from infra.functions import create_api_app, create_images_app
 from infra.cloudflare import create_cname_record
 
 config = Config(name="nvd-codes-infra")
@@ -13,6 +13,9 @@ config = Config(name="nvd-codes-infra")
 current_file_path = path.dirname(path.realpath(__file__))
 api_app_fallback = Path(current_file_path, "../apps/api/.dist").resolve()
 api_app_dir = environ.get("API_APP_FOLDER", str(api_app_fallback))
+
+images_app_fallback = Path(current_file_path, "../apps/images/.dist").resolve()
+images_app_dir = environ.get("IMAGES_APP_FOLDER", str(images_app_fallback))
 
 resource_group = core.ResourceGroup("nvd-codes")
 
@@ -114,24 +117,43 @@ api_app = create_api_app(
     ],
 )
 
+images_app = create_images_app(
+    resource_group=resource_group,
+    insights=app_insights,
+    app_source_dir=images_app_dir,
+    config=config,
+    origins=[
+        Output.concat("https://", web_cdn_endpoint.host_name),
+        "https://nvd.codes",
+    ],
+    image_storage_connection=web_app_storage_account.primary_connection_string,
+)
+
 domain = config.require("domain")
 zone_id = config.require("zone_id")
 proxied = config.require_bool("dns_proxied")
 
 web_dns_record = create_cname_record(
-    name=None, zone_id=zone_id, value=web_cdn_endpoint.host_name, proxied=proxied
+    name=None, zone_id=zone_id, value="www.nvd.codes", proxied=True
 )
 
 www_dns_record = create_cname_record(
-    name="www", zone_id=zone_id, value="nvd.codes", proxied=True
+    name="www", zone_id=zone_id, value=web_cdn_endpoint.host_name, proxied=proxied
 )
 
 resume_dns_record = create_cname_record(
-    name="resume", zone_id=zone_id, value=resume_cdn_endpoint.host_name, proxied=proxied
+    name="resume",
+    zone_id=zone_id,
+    value=resume_cdn_endpoint.host_name,
+    proxied=proxied,
 )
 
 api_dns_record = create_cname_record(
     name="api", zone_id=zone_id, value=api_app.default_hostname, proxied=proxied
+)
+
+images_dns_record = create_cname_record(
+    name="images", zone_id=zone_id, value=images_app.default_hostname, proxied=proxied
 )
 
 # api_host_binding = appservice.CustomHostnameBinding(

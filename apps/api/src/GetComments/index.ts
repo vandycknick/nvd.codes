@@ -1,44 +1,28 @@
-import { AzureFunction, Context } from "@azure/functions"
+import { Context } from "@azure/functions"
+import { HttpResponse, notFound, jsonResult } from "@nvd.codes/http"
 
 import getCommentsForPost from "./getCommentsForPost"
 
 const getSlug = (context: Context): string | undefined =>
   context.bindingData["slug"]
 
-const notFound = (context: Context): void => {
-  context.res = {
-    status: 404,
-    body: "Not Found",
-  }
-}
-
-const jsonResult = <T>(context: Context, json: T): void => {
-  context.res = {
-    status: 200,
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: json,
-  }
-}
-
-const getComments: AzureFunction = async function (context: Context) {
-  context.log("HTTP trigger function processed a request.")
+const getComments = async function (context: Context): Promise<HttpResponse> {
+  const { log } = context
   const slug = getSlug(context)
 
   if (slug == null) {
-    context.log.info("No slug found in bindingData, returning 404")
-    return notFound(context)
+    log.info("No slug found in bindingData, returning 404")
+    return notFound()
   }
 
   const commentsForPost = await getCommentsForPost(slug)
 
   if (commentsForPost == null) {
-    context.log.info(`No comments found on github with title ${slug}`)
-    return notFound(context)
+    log.info(`No comments found on github with title ${slug}`)
+    return notFound()
   }
 
-  return jsonResult(context, commentsForPost)
+  return jsonResult(commentsForPost)
 }
 
 export default getComments

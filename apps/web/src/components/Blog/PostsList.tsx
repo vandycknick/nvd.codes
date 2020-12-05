@@ -3,6 +3,7 @@ import { css, cx } from "@emotion/css"
 import { useTheme } from "@emotion/react"
 import Link from "next/link"
 import { Post } from "@nvd.codes/core"
+import Image from "next/image"
 
 import { Heading } from "components/Common/Heading"
 import { Card } from "components/Common/Card"
@@ -82,15 +83,12 @@ export const PostsList: React.FC<PostsListProps> = ({ className, posts }) => {
                       position: relative;
                     `}
                   >
-                    <img
+                    <Image
                       src={post.cover}
-                      // src={post.cover.base64 || post.cover.src}
-                      // srcSet={post.cover.srcSet}
-                      // sizes={post.cover.sizes}
+                      height={300}
+                      width={500}
+                      objectFit={"cover"}
                       className={css`
-                        object-fit: cover;
-                        height: 250px;
-                        width: 100%;
                         border-top-left-radius: ${borderRadius.md};
                         border-top-right-radius: ${borderRadius.md};
                         opacity: 0.5;

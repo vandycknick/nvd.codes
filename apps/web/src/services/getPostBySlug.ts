@@ -7,7 +7,7 @@ const { readFile } = promises
 
 import { getAllSlugs, SlugInfo } from "services/getAllSlugs"
 import markdownToHtml from "services/markdownToHtml"
-import parseImage from "services/parseImage"
+import copyImage from "services/parseImage"
 
 const IMAGES_DROP_LOCATION_ROOT = "static/images"
 
@@ -17,7 +17,7 @@ const parseCoverImage = async (
 ): Promise<string> => {
   const coverFilePath = join(dirname(slugInfo.filePath), cover)
   const destination = join(IMAGES_DROP_LOCATION_ROOT, slugInfo.slug)
-  return parseImage(coverFilePath, destination)
+  return copyImage(coverFilePath, destination)
 }
 
 const createPost = async (slugInfo: SlugInfo): Promise<Post> => {
