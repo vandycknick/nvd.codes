@@ -6,7 +6,7 @@
   "license": "MIT",
   "dependencies": {
     "jsonresume-theme-nickvd": "^1.0.0",
-    "resume-cli": "^2.2.2"
+    "resume-cli": "^3.0.0"
   },
   "scripts": {
     "validate": "resume test",

@@ -1,0 +1,7 @@
+{
+  "extends": "@nvd/tsconfig",
+  "compilerOptions": {
+    "target": "es6",
+    "module": "CommonJS"
+  }
+}

@@ -5,7 +5,7 @@
       "type": "httpTrigger",
       "direction": "in",
       "name": "req",
-      "route": "comments/{slug}",
+      "route": "_next/static/images/{*imagePath}",
       "methods": ["get"]
     },
     {

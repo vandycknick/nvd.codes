@@ -8,7 +8,7 @@ import * as timeago from "timeago.js"
 
 import { fetchJSON } from "utils/async"
 import { spacing, colors, fontWeight, fontSize } from "components/Tokens"
-import { Image } from "components/Common/Image"
+import { Image } from "components/BlogPost/Image"
 import { Span } from "components/Common/Span"
 import { Content } from "components/BlogPost/Content"
 import { LinkButton } from "components/Common/Buttons"

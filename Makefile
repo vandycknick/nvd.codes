@@ -3,6 +3,12 @@
 ROOT			:= $(shell pwd)
 NPM_BIN 		:= $(shell yarn bin)
 
+WATCH 			:= "0"
+WATCH_FLAGS 	:= $(if $(filter-out 1,$(WATCH)), "", "--watch")
+
+FIX 			:= "0"
+UPDATE_FLAGS 	:= $(if $(filter-out 1,$(FIX)), "", "--update-snapshot")
+
 INFRA			:= $(ROOT)/infra
 API_PROJECT 	:= $(ROOT)/apps/api
 WEB_PROJECT 	:= $(ROOT)/apps/web
@@ -40,6 +46,10 @@ dev.web:
 dev.api:
 	@yarn concurrently -n dev,watch "yarn workspace @nvd.codes/api dev" "yarn workspace @nvd.codes/api watch"
 
+.PHONY: dev.images
+dev.images:
+	@yarn concurrently -n dev,watch "yarn workspace @nvd.codes/images dev" "yarn workspace @nvd.codes/images watch"
+
 .PHONY: check
 check:
 	$(NPM_BIN)/tsc -p $(API_PROJECT) --noEmit
@@ -47,17 +57,32 @@ check:
 	$(NPM_BIN)/eslint . --ext .ts --ext .tsx --ext .js --ext .json --ignore-path .gitignore
 	yarn workspace @nvd.codes/resume validate
 
+.PHONY: test.unit
+test.unit:
+	NODE_ENV=test ${NPM_BIN}/jest --testPathIgnorePatterns '/(.dist|e2e)/'
+
+.PHONY: test.watch
+test.watch:
+	NODE_ENV=test ${NPM_BIN}/jest --testPathIgnorePatterns '/(.dist|e2e)/' --watch
+
+.PHONY: test.fix
+test.fix:
+	NODE_ENV=test ${NPM_BIN}/jest --testPathIgnorePatterns '/(.dist|e2e)/' --update-snapshot
+
+
 .PHONY: build.libs
 build.libs:
 	yarn workspace @nvd.codes/core tsc
 	yarn workspace @nvd.codes/config tsc
+	yarn workspace @nvd.codes/http tsc
 	yarn workspace jsonresume-theme-nickvd build
 
 .PHONY: build
 build: clean build.libs
-	yarn workspace @nvd.codes/web build
 	yarn workspace @nvd.codes/api build
+	yarn workspace @nvd.codes/images build
 	yarn workspace @nvd.codes/resume build
+	yarn workspace @nvd.codes/web build
 
 .PHONY: pulumi.preview
 pulumi.preview:
