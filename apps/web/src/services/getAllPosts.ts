@@ -71,7 +71,12 @@ export const getAllPosts = async <P extends keyof Post>(
   }
 
   return posts
-    .filter((post) => !post.draft)
+    .filter((post) => {
+      if (process.env.NODE_ENV === "production") {
+        return !post.draft
+      }
+      return true
+    })
     .map((post) =>
       fields.reduce((partial, field) => {
         partial[field] = post[field]
