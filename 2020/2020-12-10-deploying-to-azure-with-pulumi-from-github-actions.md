@@ -1,6 +1,6 @@
 ---
 id: 80f51e10-f79e-4718-8724-c80b53d94a9d
-title: Deploying to Azure with Pulumi from a Github Actions workflow
+title: Deploying to Azure with Pulumi from Github Actions
 description: Let's say we're building a new service and are tasked with spinning up the infrastructure required for it to run. It's already defined in code but how do I automate the deployment?
 date: 2020-12-10T22:30:00+02:00
 categories: [azure, github, github-actions, pulumi]
