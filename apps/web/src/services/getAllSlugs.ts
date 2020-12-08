@@ -80,5 +80,8 @@ const mapFileToSlug = (file: string) => {
 
 export const getAllSlugs = async (): Promise<SlugInfo[]> => {
   const files = await getFiles(postsDir)
-  return files.filter((file) => file.endsWith(".md")).map(mapFileToSlug)
+  return files
+    .filter((file) => !file.startsWith(join(postsDir, "drafts")))
+    .filter((file) => file.endsWith(".md"))
+    .map(mapFileToSlug)
 }

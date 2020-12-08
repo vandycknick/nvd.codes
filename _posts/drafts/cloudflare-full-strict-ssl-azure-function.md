@@ -1,4 +1,8 @@
-
+---
+id: 0cbad1a1-ae5a-47d2-884e-5a541f0d865d
+title: Cloudflare full strict ssl azure function
+draft: true
+---
 
 Create a origin certificate on cloudflare:
 
