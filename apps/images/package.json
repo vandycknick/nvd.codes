@@ -24,7 +24,7 @@
     "@azure/functions": "^1.2.2",
     "@nvd/tsconfig": "^1.0.0",
     "arg": "^5.0.0",
-    "copy-webpack-plugin": "^6.4.0",
+    "copy-webpack-plugin": "^7.0.0",
     "node-loader": "^1.0.2",
     "ts-loader": "^8.0.11",
     "typescript": "^4.1.2",
