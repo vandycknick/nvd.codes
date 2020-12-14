@@ -17,7 +17,7 @@
     "@emotion/server": "^11.0.0",
     "@emotion/styled": "^11.0.0",
     "@nvd.codes/core": "^1.0.0",
-    "next": "v10.0.4-canary.5",
+    "next": "^10.0.3",
     "next-seo": "^4.17.0",
     "normalize.css": "^8.0.1",
     "react": "^17.0.1",
