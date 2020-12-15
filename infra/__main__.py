@@ -56,7 +56,9 @@ web_cdn_endpoint = cdn.Endpoint(
     profile_name=web_cdn.name,
     origin_host_header=web_app_storage_account.primary_web_host,
     origins=[
-        {"name": "blobstorage", "hostName": web_app_storage_account.primary_web_host}
+        cdn.EndpointOriginArgs(
+            name="blobstorage", host_name=web_app_storage_account.primary_web_host
+        )
     ],
     global_delivery_rule={
         "modify_response_header_action": [
@@ -64,7 +66,7 @@ web_cdn_endpoint = cdn.Endpoint(
             {
                 "action": "Overwrite",
                 "name": "Feature-Policy",
-                "value": "accelerometer 'none'; camera 'none'; geolocation 'none'; gyroscope 'none'; microphone 'none';˝",
+                "value": "accelerometer 'none'; camera 'none'; geolocation 'none'; gyroscope 'none'; microphone 'none';",
             },
             {
                 "action": "Overwrite",
@@ -102,8 +104,14 @@ resume_cdn_endpoint = cdn.Endpoint(
     profile_name=resume_cdn.name,
     origin_host_header=resume_app_storage_account.primary_web_host,
     origins=[
-        {"name": "blobstorage", "hostName": resume_app_storage_account.primary_web_host}
+        cdn.EndpointOriginArgs(
+            name="blobstorage", host_name=resume_app_storage_account.primary_web_host
+        )
     ],
+)
+
+cdn_profile = cdn.Profile(
+    "cdn-profile", resource_group_name=resource_group.name, sku="Standard_Microsoft"
 )
 
 api_app = create_api_app(
@@ -127,6 +135,20 @@ images_app = create_images_app(
         "https://nvd.codes",
     ],
     image_storage_connection=web_app_storage_account.primary_connection_string,
+)
+
+images_cdn_endpoint = cdn.Endpoint(
+    "images-cdn-ep",
+    resource_group_name=resource_group.name,
+    profile_name=cdn_profile.name,
+    origin_host_header=images_app.default_hostname,
+    origins=[
+        cdn.EndpointOriginArgs(
+            name=images_app.default_hostname.apply(lambda h: h.replace(".", "-")),
+            host_name=images_app.default_hostname,
+        )
+    ],
+    querystring_caching_behaviour="UseQueryString",
 )
 
 domain = config.require("domain")
@@ -153,7 +175,7 @@ api_dns_record = create_cname_record(
 )
 
 images_dns_record = create_cname_record(
-    name="images", zone_id=zone_id, value=images_app.default_hostname, proxied=proxied
+    name="images", zone_id=zone_id, value=images_cdn_endpoint.host_name, proxied=proxied
 )
 
 # api_host_binding = appservice.CustomHostnameBinding(
