@@ -10,7 +10,7 @@ const months = [
   "Sep",
   "Oct",
   "Nov",
-  "Dev",
+  "Dec",
 ]
 
 const getShortMonth = (date: Date): string => months[date.getMonth()]
