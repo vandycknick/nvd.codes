@@ -4,10 +4,6 @@
   "version": "1.0.0",
   "main": "index.js",
   "license": "MIT",
-  "dependencies": {
-    "jsonresume-theme-nickvd": "^1.0.0",
-    "resume-cli": "^3.0.0"
-  },
   "scripts": {
     "validate": "resume test",
     "serve": "resume serve -t nickvd",
@@ -15,5 +11,9 @@
     "build.pdf": "resume export -t nickvd .dist/resume.pdf",
     "build.html": "resume export -t nickvd .dist/resume.html",
     "build.html2": "resume export -t nickvd .dist/index.html"
+  },
+  "dependencies": {
+    "jsonresume-theme-nickvd": "^1.0.0",
+    "resume-cli": "^3.0.0"
   }
 }
