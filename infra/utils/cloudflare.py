@@ -2,7 +2,7 @@ from pulumi import Output, ResourceOptions
 from pulumi_cloudflare import Record
 from typing import Optional
 
-from infra.utils import get_config
+from utils.config import get_config
 
 
 def create_cname_record(
