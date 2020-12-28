@@ -44,6 +44,9 @@ jobs:
       - name: Lint code
         run: make check
 
+      - name: Unit Test
+        run: make test.unit
+
       - name: Build api and web
         run: make build
 
