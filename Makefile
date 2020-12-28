@@ -109,8 +109,8 @@ deploy:
 	@cd $(INFRA) && \
 		(pipenv run pulumi stack output -s prod --json | \
 		jq -r '.web_app_connection_string' | \
-		pipenv run python infra/upload.py --container '$$web' --cwd $(WEB_PROJECT)/.dist)
+		pipenv run python utils/upload.py --container '$$web' --cwd $(WEB_PROJECT)/.dist)
 	@cd $(INFRA) && \
 		(pipenv run pulumi stack output -s prod --json | \
 		jq -r '.resume_app_connection_string' | \
-		pipenv run python infra/upload.py --container '$$web' --cwd $(RESUME_PROJECT)/.dist)
+		pipenv run python utils/upload.py --container '$$web' --cwd $(RESUME_PROJECT)/.dist)
