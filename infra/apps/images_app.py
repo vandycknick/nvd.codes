@@ -23,14 +23,14 @@ def create_images_app(
     )
 
     container = storage.Container(
-        "images-app-deployments",
+        "nvd-images-app-deployments",
         storage_account_name=storage_account.name,
         container_access_type="private",
         opts=ResourceOptions(aliases=[Alias(name="images-app-container")]),
     )
 
     zip_blob = storage.Blob(
-        "images-zip-blob",
+        "nvd-images-zip-blob",
         storage_account_name=storage_account.name,
         storage_container_name=container.name,
         type="Block",
@@ -38,7 +38,7 @@ def create_images_app(
     )
 
     secret = keyvault.Secret(
-        "images-depl",
+        "nvd-images-depl",
         key_vault_id=key_vault.id,
         value=signed_blob_read_url(zip_blob, storage_account),
     )
@@ -54,7 +54,7 @@ def create_images_app(
     ]
 
     function_app = appservice.FunctionApp(
-        "images-function-app",
+        "nvd-images-function-app",
         resource_group_name=resource_group.name,
         app_service_plan_id=plan.id,
         storage_account_name=storage_account.name,
@@ -82,7 +82,7 @@ def create_images_app(
     )
 
     images_app_policy = keyvault.AccessPolicy(
-        "images-app-policy",
+        "nvd-images-app-policy",
         key_vault_id=key_vault.id,
         tenant_id=function_app.identity.apply(
             lambda id: id.tenant_id or "11111111-1111-1111-1111-111111111111"

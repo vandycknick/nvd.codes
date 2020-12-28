@@ -9,23 +9,21 @@ def get_consumption_plan(
     resource_group_name: str,
 ) -> Tuple[appservice.Plan, storage.Account]:
     plan = appservice.Plan(
-        "functions-consumption-plan",
+        "nvd-funcs-consumption-plan",
         resource_group_name=resource_group_name,
         kind="functionapp",
         reserved=True,
         sku=appservice.PlanSkuArgs(tier="Dynamic", size="Y1",),
-        opts=ResourceOptions(aliases=[Alias(name="images-app-plan")]),
     )
 
     storage_account = storage.Account(
-        "functionsa",
+        "nvdfuncssa",
         resource_group_name=resource_group_name,
         account_kind="StorageV2",
         account_tier="Standard",
         account_replication_type="LRS",
         enable_https_traffic_only=True,
         min_tls_version="TLS1_2",
-        opts=ResourceOptions(aliases=[Alias(name="imagesappsa")]),
     )
 
     return plan, storage_account
