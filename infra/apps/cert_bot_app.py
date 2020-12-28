@@ -23,13 +23,13 @@ def create_cert_bot_app(
     )
 
     container = storage.Container(
-        "cert-bot-app-deployments",
+        "nvd-cert-bot-app-deployments",
         storage_account_name=storage_account.name,
         container_access_type="private",
     )
 
     zip_blob = storage.Blob(
-        "cert-bot-zip-blob",
+        "nvd-cert-bot-zip-blob",
         storage_account_name=storage_account.name,
         storage_container_name=container.name,
         type="Block",
@@ -37,7 +37,7 @@ def create_cert_bot_app(
     )
 
     secret = keyvault.Secret(
-        "cert-bot-depl",
+        "nvd-cert-bot-depl",
         key_vault_id=key_vault.id,
         value=signed_blob_read_url(zip_blob, storage_account),
     )
@@ -53,7 +53,7 @@ def create_cert_bot_app(
     ]
 
     function_app = appservice.FunctionApp(
-        "cert-bot-function-app",
+        "nvd-cert-bot-function-app",
         resource_group_name=resource_group.name,
         app_service_plan_id=plan.id,
         storage_account_name=storage_account.name,
@@ -101,7 +101,7 @@ def create_cert_bot_app(
     )
 
     cert_bot_app_policy = keyvault.AccessPolicy(
-        "cert-bot-app-policy",
+        "nvd-cert-bot-app-policy",
         key_vault_id=key_vault.id,
         tenant_id=function_app.identity.apply(
             lambda id: id.tenant_id or "11111111-1111-1111-1111-111111111111"

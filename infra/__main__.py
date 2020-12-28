@@ -136,7 +136,7 @@ resume_cdn_endpoint = cdn.Endpoint(
 )
 
 cdn_profile = cdn.Profile(
-    "cdn-profile", resource_group_name=resource_group.name, sku="Standard_Microsoft"
+    "nvd-cdn-profile", resource_group_name=resource_group.name, sku="Standard_Microsoft"
 )
 
 api_app = create_api_app(
@@ -170,7 +170,7 @@ cert_bot_app = create_cert_bot_app(
 )
 
 images_cdn_endpoint = cdn.Endpoint(
-    "images-cdn-ep",
+    "nvd-images-cdn-ep",
     resource_group_name=resource_group.name,
     profile_name=cdn_profile.name,
     origin_host_header=images_app.default_hostname,
@@ -188,7 +188,7 @@ zone_id = config.require("zone_id")
 proxied = config.require_bool("dns_proxied")
 
 web_dns_record = create_cname_record(
-    name=None, zone_id=zone_id, value="www.nvd.codes", proxied=True
+    name=None, zone_id=zone_id, value="www.nvd.codes", proxied=proxied
 )
 
 www_dns_record = create_cname_record(
@@ -216,11 +216,6 @@ images_dns_record = create_cname_record(
 #     app_service_name=api_app.name,
 #     hostname=api_dns_record.name,
 # )
-
-export("web_app_name", web_app_storage_account.name)
-export("api_app_name", api_app.name)
-
-export("web_cdn_endpoint", web_cdn_endpoint.host_name)
 
 export("web_app_connection_string", web_app_storage_account.primary_connection_string)
 export(
