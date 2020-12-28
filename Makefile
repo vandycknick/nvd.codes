@@ -107,10 +107,10 @@ deploy:
 	@echo "\033[0;32mDeploying Assets \033[0m"
 	@echo "\033[0;32m------------------- \033[0m"
 	@cd $(INFRA) && \
-		(pipenv run pulumi stack output -s prod --json | \
+		(pipenv run pulumi stack output -s prod --json --show-secrets | \
 		jq -r '.web_app_connection_string' | \
 		pipenv run python utils/upload.py --container '$$web' --cwd $(WEB_PROJECT)/.dist)
 	@cd $(INFRA) && \
-		(pipenv run pulumi stack output -s prod --json | \
+		(pipenv run pulumi stack output -s prod --json --show-secrets | \
 		jq -r '.resume_app_connection_string' | \
 		pipenv run python utils/upload.py --container '$$web' --cwd $(RESUME_PROJECT)/.dist)
