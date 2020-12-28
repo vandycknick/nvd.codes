@@ -26,11 +26,11 @@
     "@nvd/tsconfig": "^1.0.0",
     "@types/node-fetch": "^2.5.7",
     "@types/node-forge": "^0.9.5",
-    "azurite": "^3.9.0",
+    "azurite": "^3.10.0",
     "copy-webpack-plugin": "^7.0.0",
     "ts-loader": "^8.0.12",
     "typescript": "^4.1.3",
-    "webpack": "^5.10.3",
-    "webpack-cli": "^4.2.0"
+    "webpack": "^5.11.1",
+    "webpack-cli": "^4.3.0"
   }
 }
