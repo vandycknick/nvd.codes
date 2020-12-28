@@ -1,23 +1,46 @@
-from os import path, environ
-from pathlib import Path
-
 from pulumi import Config, export, FileArchive, Output
-from pulumi_azure import appinsights, appservice, cdn, core, storage
+from pulumi_azure import appinsights, appservice, cdn, core, storage, keyvault
+from pulumi_azuread import get_service_principal
 from pulumi_cloudflare import Record
 
-from infra.functions import create_api_app, create_images_app
-from infra.cloudflare import create_cname_record
+from apps import create_api_app, create_images_app, create_cert_bot_app
+from utils.cloudflare import create_cname_record
+from utils.config import get_config
 
-config = Config(name="nvd-codes-infra")
-
-current_file_path = path.dirname(path.realpath(__file__))
-api_app_fallback = Path(current_file_path, "../apps/api/.dist").resolve()
-api_app_dir = environ.get("API_APP_FOLDER", str(api_app_fallback))
-
-images_app_fallback = Path(current_file_path, "../apps/images/.dist").resolve()
-images_app_dir = environ.get("IMAGES_APP_FOLDER", str(images_app_fallback))
+config = get_config()
+current = core.get_client_config()
 
 resource_group = core.ResourceGroup("nvd-codes")
+
+cdn_sp = get_service_principal(display_name="Microsoft.Azure.Cdn")
+
+key_vault = keyvault.KeyVault(
+    "keyvault",
+    tenant_id=current.tenant_id,
+    resource_group_name=resource_group.name,
+    location=resource_group.location,
+    sku_name="standard",
+    soft_delete_enabled=True,
+    soft_delete_retention_days=7,
+    purge_protection_enabled=False,
+    access_policies=[
+        keyvault.KeyVaultAccessPolicyArgs(
+            tenant_id=current.tenant_id,
+            object_id=current.object_id,
+            key_permissions=["get", "list"],
+            secret_permissions=["get", "list", "set"],
+            storage_permissions=["get"],
+            certificate_permissions=["get", "list"],
+        ),
+        keyvault.KeyVaultAccessPolicyArgs(
+            tenant_id=current.tenant_id,
+            object_id=cdn_sp.object_id,
+            key_permissions=[],
+            secret_permissions=["get", "list"],
+            certificate_permissions=["get", "list"],
+        ),
+    ],
+)
 
 app_insights = appinsights.Insights(
     "function-app-insights",
@@ -29,10 +52,11 @@ app_insights = appinsights.Insights(
 web_app_storage_account = storage.Account(
     "webappsa",
     resource_group_name=resource_group.name,
-    account_replication_type="LRS",
     account_tier="Standard",
     account_kind="StorageV2",
-    enable_https_traffic_only=False,
+    account_replication_type="LRS",
+    enable_https_traffic_only=True,
+    min_tls_version="TLS1_2",
     static_website={"indexDocument": "index.html",},
 )
 
@@ -42,7 +66,8 @@ resume_app_storage_account = storage.Account(
     account_tier="Standard",
     account_kind="StorageV2",
     account_replication_type="LRS",
-    enable_https_traffic_only=False,
+    enable_https_traffic_only=True,
+    min_tls_version="TLS1_2",
     static_website={"indexDocument": "index.html",},
 )
 
@@ -117,24 +142,31 @@ cdn_profile = cdn.Profile(
 api_app = create_api_app(
     resource_group=resource_group,
     insights=app_insights,
-    app_source_dir=api_app_dir,
-    config=config,
+    key_vault=key_vault,
     origins=[
         Output.concat("https://", web_cdn_endpoint.host_name),
         "https://nvd.codes",
+        "https://www.nvd.codes",
     ],
 )
 
 images_app = create_images_app(
     resource_group=resource_group,
     insights=app_insights,
-    app_source_dir=images_app_dir,
-    config=config,
+    key_vault=key_vault,
     origins=[
         Output.concat("https://", web_cdn_endpoint.host_name),
         "https://nvd.codes",
+        "https://www.nvd.codes",
     ],
     image_storage_connection=web_app_storage_account.primary_connection_string,
+)
+
+cert_bot_app = create_cert_bot_app(
+    resource_group=resource_group,
+    insights=app_insights,
+    key_vault=key_vault,
+    origins=[],
 )
 
 images_cdn_endpoint = cdn.Endpoint(

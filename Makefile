@@ -50,6 +50,10 @@ dev.api:
 dev.images:
 	@yarn concurrently -n dev,watch "yarn workspace @nvd.codes/images dev" "yarn workspace @nvd.codes/images watch"
 
+.PHONY: dev.cert-bot
+dev.cert-bot:
+	@yarn concurrently -n dev,watch "yarn workspace @nvd.codes/cert-bot dev" "yarn workspace @nvd.codes/cert-bot watch"
+
 .PHONY: check
 check:
 	$(NPM_BIN)/tsc -p $(API_PROJECT) --noEmit
@@ -69,17 +73,18 @@ test.watch:
 test.fix:
 	NODE_ENV=test ${NPM_BIN}/jest --testPathIgnorePatterns '/(.dist|e2e)/' --update-snapshot
 
-
 .PHONY: build.libs
 build.libs:
 	yarn workspace @nvd.codes/core tsc
 	yarn workspace @nvd.codes/config tsc
 	yarn workspace @nvd.codes/http tsc
+	yarn workspace @nvd.codes/monad tsc
 	yarn workspace jsonresume-theme-nickvd build
 
 .PHONY: build
 build: clean build.libs
 	yarn workspace @nvd.codes/api build
+	yarn workspace @nvd.codes/cert-bot build
 	yarn workspace @nvd.codes/images build
 	yarn workspace @nvd.codes/resume build
 	yarn workspace @nvd.codes/web build
