@@ -9,6 +9,7 @@ black = "==19.10b0"
 [packages]
 pulumi = ">=2.0.0"
 pulumi-azure = ">=3.0.0"
+pulumi-azuread = ">=3.1.0"
 pulumi-cloudflare = ">=2.0.0"
 azure-storage-blob = ">=12.3.0"
 

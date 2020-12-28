@@ -3,6 +3,7 @@ node_modules/
 
 out
 .dist
+.tmp
 apps/resume/public
 
 # Dotnet
