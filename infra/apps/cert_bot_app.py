@@ -116,7 +116,7 @@ def create_cert_bot_app(
     system_topic = eventgrid.SystemTopic(
         "nvd-cb-sys-topic",
         resource_group_name=resource_group.name,
-        location=resource_group.location,
+        location="Global",
         source_arm_resource_id=resource_group.id,
         topic_type="Microsoft.Resources.ResourceGroups",
     )
