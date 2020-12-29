@@ -125,17 +125,17 @@ def create_cert_bot_app(
         "nvd-cb-func-subs",
         system_topic=system_topic.name,
         resource_group_name=resource_group.name,
+        # included_event_types=[],
         advanced_filter=eventgrid.EventSubscriptionAdvancedFilterArgs(
             string_contains=[
                 eventgrid.EventSubscriptionAdvancedFilterStringContainArgs(
-                    key="Subject",
-                    values=["/providers/Microsoft.Cdn/profiles/endpoints"],
+                    key="Subject", values=["/providers/Microsoft.Cdn/profiles"],
                 )
             ]
         ),
         azure_function_endpoint=eventgrid.EventSubscriptionAzureFunctionEndpointArgs(
             function_id=function_app.id.apply(
-                lambda id: f"{id}/functions/updatecertificates"
+                lambda id: f"{id}/functions/UpdateCertificates"
             )
         ),
     )
