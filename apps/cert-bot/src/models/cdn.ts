@@ -14,11 +14,11 @@ export type CustomHttpsParameters = {
 
 export type CertificateSourceParameters = {
   deleteRule: string
-  keyVaultName: string
-  oDataType: string
-  resourceGroup: string
+  vaultName: string
+  "@odata.type": string
+  resourceGroupName: string
   secretName: string
   secretVersion: string
-  subscriptionID: string
+  subscriptionId: string
   updateRule: string
 }

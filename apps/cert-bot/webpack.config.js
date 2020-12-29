@@ -10,6 +10,14 @@ module.exports = {
       __dirname,
       "./src/RenewCertificates/index.ts",
     ),
+    UpdateCdnCertificates: path.resolve(
+      __dirname,
+      "./src/UpdateCdnCertificates/index.ts",
+    ),
+    UpdateCertificates: path.resolve(
+      __dirname,
+      "./src/UpdateCertificates/index.ts",
+    ),
   },
   resolve: {
     extensions: [".ts", ".tsx", ".js", ".json"],

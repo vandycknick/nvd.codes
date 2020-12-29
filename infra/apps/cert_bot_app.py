@@ -1,6 +1,6 @@
 from pathlib import Path
 from pulumi import asset, Output
-from pulumi_azure import appservice, appinsights, core, keyvault, storage
+from pulumi_azure import appservice, appinsights, core, eventgrid, keyvault, storage
 
 from apps.consumption_plan import get_consumption_plan
 from utils.config import get_config
@@ -111,6 +111,33 @@ def create_cert_bot_app(
         ),
         secret_permissions=["get", "list", "set"],
         certificate_permissions=["get", "list", "import"],
+    )
+
+    system_topic = eventgrid.SystemTopic(
+        "nvd-cb-sys-topic",
+        resource_group_name=resource_group.name,
+        location=resource_group.location,
+        source_arm_resource_id=resource_group.id,
+        topic_type="Microsoft.Resources.ResourceGroups",
+    )
+
+    system_topic_function_subscription = eventgrid.SystemTopicEventSubscription(
+        "nvd-cb-func-subs",
+        system_topic=system_topic.name,
+        resource_group_name=resource_group.name,
+        advanced_filter=eventgrid.EventSubscriptionAdvancedFilterArgs(
+            string_contains=[
+                eventgrid.EventSubscriptionAdvancedFilterStringContainArgs(
+                    key="Subject",
+                    values=["/providers/Microsoft.Cdn/profiles/endpoints"],
+                )
+            ]
+        ),
+        azure_function_endpoint=eventgrid.EventSubscriptionAzureFunctionEndpointArgs(
+            function_id=function_app.id.apply(
+                lambda id: f"{id}/functions/updatecertificates"
+            )
+        ),
     )
 
     return function_app

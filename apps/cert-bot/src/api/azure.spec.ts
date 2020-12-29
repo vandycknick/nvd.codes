@@ -378,6 +378,7 @@ describe("createAzureApi", () => {
     // Then
     expect(resultOrError).toStrictEqual(
       Ok({
+        listResources: expect.any(Function),
         getCdnCustomDomainCertificate: expect.any(Function),
         setCdnCustomDomainCertificate: expect.any(Function),
         getKeyVaultCertificate: expect.any(Function),
@@ -482,10 +483,10 @@ describe("AzureApi", () => {
                   secretVersion: "456",
                   deleteRule: "deleteRule",
                   updateRule: "updateRule",
-                  keyVaultName: "keyVaultName",
-                  oDataType: "oDataType",
-                  resourceGroup,
-                  subscriptionID: subscriptionId,
+                  vaultName: "vaultName",
+                  "@odata.type": "oDataType",
+                  resourceGroupName: resourceGroup,
+                  subscriptionId,
                 },
               },
             },
@@ -598,7 +599,7 @@ describe("AzureApi", () => {
       const cdnEndpointName = "endpointName"
       const cdnCustomDomainName = "domainName"
 
-      const keyVaultName = "keyVaultName"
+      const vaultName = "keyVaultName"
       const secretName = "secretName"
       const secretVersion = "secretVersion"
 
@@ -619,13 +620,13 @@ describe("AzureApi", () => {
               certificateSource: "AzureKeyVault",
               certificateSourceParameters: {
                 deleteRule: "NoAction",
-                keyVaultName,
-                oDataType:
+                vaultName,
+                "@odata.type":
                   "#Microsoft.Azure.Cdn.Models.KeyVaultCertificateSourceParameters",
-                resourceGroup,
+                resourceGroupName: resourceGroup,
                 secretName,
                 secretVersion,
-                subscriptionID: subscriptionId,
+                subscriptionId,
                 updateRule: "NoAction",
               },
               protocolType: "ServerNameIndication",
@@ -643,7 +644,7 @@ describe("AzureApi", () => {
         cdnProfileName,
         cdnEndpointName,
         cdnCustomDomainName,
-        keyVaultName,
+        vaultName,
         secretName,
         secretVersion,
       )

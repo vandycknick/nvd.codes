@@ -22,6 +22,10 @@ export class Some<T> extends BaseOption<T> {
     super()
   }
 
+  andThen<U>(fn: (val: T) => Option<U>): Option<U> {
+    return fn(this.value)
+  }
+
   map<U>(fn: (value: T) => U): Option<U> {
     return new Some<U>(fn(this.value))
   }
@@ -41,6 +45,10 @@ export class None<T> extends BaseOption<T> {
   }
 
   readonly type = "None" as const
+
+  andThen<U>(_fn: (val: T) => Option<U>): Option<U> {
+    return new None()
+  }
 
   map<U>(_fn: (value: T) => U): Option<U> {
     return new None<U>()

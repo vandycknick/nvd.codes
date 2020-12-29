@@ -7,6 +7,7 @@ describe("getAccountKey", () => {
 
   beforeEach(() => {
     azureApi = {
+      listResources: jest.fn(),
       getCdnCustomDomainCertificate: jest.fn(),
       setCdnCustomDomainCertificate: jest.fn(),
       getKeyVaultCertificate: jest.fn(),

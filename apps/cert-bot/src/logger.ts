@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 export interface Logger {
-  (...args: any[]): void
+  // (...args: any[]): void
 
   error(...args: any[]): void
 

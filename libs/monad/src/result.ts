@@ -22,6 +22,10 @@ export class Ok<T, E> extends BaseResult<T, E> {
     super()
   }
 
+  andThen<U>(fn: (val: T) => Result<U, E>): Result<U, E> {
+    return fn(this.value)
+  }
+
   map<U>(fn: (val: T) => U): Result<U, E> {
     return new Ok(fn(this.value))
   }
@@ -48,6 +52,10 @@ export class Err<T, E> extends BaseResult<T, E> {
 
   private constructor(private readonly value: E) {
     super()
+  }
+
+  andThen<U>(_fn: (val: T) => Result<U, E>): Result<U, E> {
+    return new Err(this.value)
   }
 
   map<U>(_fn: (val: T) => U): Result<U, E> {

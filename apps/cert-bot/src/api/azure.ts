@@ -1,5 +1,6 @@
 import { Option, None, Err, Ok, Result, Some } from "@nvd.codes/monad"
 import { URLSearchParams } from "url"
+import querystring from "querystring"
 
 import {
   AZURE_API,
@@ -23,6 +24,7 @@ import {
   KeyVaultSecretResponse,
 } from "../models/keyVault"
 import { getEnvVar } from "../utils"
+import { ResourceListResult } from "../models/resource"
 
 const getManagedIdentity = (): Option<ManagedIdentity> =>
   Option.all(getEnvVar("MSI_ENDPOINT"), getEnvVar("MSI_SECRET")).map(
@@ -103,6 +105,11 @@ export const getAuthorizationTokens = async (
 const createApiError = (msg: string) => Err<AzureApi, Error>(new Error(msg))
 
 export type AzureApi = {
+  listResources: (
+    filter: string,
+    expand?: string,
+    top?: number,
+  ) => Promise<Result<ResourceListResult, ApiError>>
   getCdnCustomDomainCertificate: (
     cdnProfileName: string,
     cdnEndpointName: string,
@@ -143,7 +150,7 @@ export type AzureApi = {
 }
 
 export const createAzureApi = async (
-  subscriptionID: string,
+  subscriptionId: string,
   resourceGroup: string,
   getCredentials = getAzureCredentials,
   getTokens = getAuthorizationTokens,
@@ -169,6 +176,32 @@ export const createAzureApi = async (
     return createApiError("Failed fetching vault api token!")
   }
 
+  const listResources = async (
+    filter: string,
+    expand?: string,
+    top?: number,
+  ) => {
+    const token = managementToken.unwrap()
+    const query = querystring.stringify({
+      $filter: filter,
+      $expand: expand,
+      $top: top,
+    })
+    const endpoint = getManagementEndpoint(
+      subscriptionId,
+      resourceGroup,
+      `/resources?api-version=2020-06-01&${query}`,
+    )
+    const response = await sendJsonRequest<ResourceListResult>(endpoint, {
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `${token.tokenType} ${token.accessToken}`,
+      },
+    })
+
+    return response
+  }
+
   const getCdnCustomDomainCertificate = async (
     cdnProfileName: string,
     cdnEndpointName: string,
@@ -176,7 +209,7 @@ export const createAzureApi = async (
   ) => {
     const tokens = managementToken.unwrap()
     const endpoint = getManagementEndpoint(
-      subscriptionID,
+      subscriptionId,
       resourceGroup,
       `/providers/Microsoft.Cdn/profiles/${cdnProfileName}/endpoints/${cdnEndpointName}/customDomains/${cdnCustomDomainName}?api-version=2018-04-02`,
     )
@@ -197,7 +230,7 @@ export const createAzureApi = async (
     cdnProfileName: string,
     cdnEndpointName: string,
     cdnCustomDomainName: string,
-    keyVaultName: string,
+    vaultName: string,
     secretName: string,
     secretVersion: string,
   ) => {
@@ -206,19 +239,19 @@ export const createAzureApi = async (
       certificateSource: "AzureKeyVault",
       certificateSourceParameters: {
         deleteRule: "NoAction",
-        keyVaultName,
-        oDataType:
+        vaultName,
+        "@odata.type":
           "#Microsoft.Azure.Cdn.Models.KeyVaultCertificateSourceParameters",
-        resourceGroup,
+        resourceGroupName: resourceGroup,
         secretName,
         secretVersion,
-        subscriptionID,
+        subscriptionId,
         updateRule: "NoAction",
       },
       protocolType: "ServerNameIndication",
     }
     const endpoint = getManagementEndpoint(
-      subscriptionID,
+      subscriptionId,
       resourceGroup,
       `/providers/Microsoft.Cdn/profiles/${cdnProfileName}/endpoints/${cdnEndpointName}/customDomains/${cdnCustomDomainName}/enableCustomHttps?api-version=2019-12-31`,
     )
@@ -348,6 +381,9 @@ export const createAzureApi = async (
   }
 
   return Ok({
+    // https://docs.microsoft.com/en-us/rest/api/resources/resources/listbyresourcegroup
+    listResources,
+
     // https://docs.microsoft.com/en-us/rest/api/cdn/customdomains/get
     getCdnCustomDomainCertificate,
 
