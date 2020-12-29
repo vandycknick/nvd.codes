@@ -117,6 +117,7 @@ web_cdn_endpoint = cdn.Endpoint(
             # },
         ]
     },
+    tags={"cert-bot-domain-name": "nvd.codes"},
 )
 
 resume_cdn = cdn.Profile(
@@ -133,6 +134,7 @@ resume_cdn_endpoint = cdn.Endpoint(
             name="blobstorage", host_name=resume_app_storage_account.primary_web_host
         )
     ],
+    tags={"cert-bot-domain-name": "resume.nvd.codes"},
 )
 
 cdn_profile = cdn.Profile(
@@ -181,6 +183,7 @@ images_cdn_endpoint = cdn.Endpoint(
         )
     ],
     querystring_caching_behaviour="UseQueryString",
+    tags={"cert-bot-domain-name": "images.nvd.codes"},
 )
 
 domain = config.require("domain")
