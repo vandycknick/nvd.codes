@@ -18,8 +18,16 @@ def create_cert_bot_app(
         Path(__file__).parent.joinpath("../../apps/cert-bot/.dist").resolve()
     )
 
-    plan, storage_account = get_consumption_plan(
-        resource_group_name=resource_group.name
+    (plan, ac) = get_consumption_plan(resource_group_name=resource_group.name)
+
+    storage_account = storage.Account(
+        "nvdcertbotsa",
+        resource_group_name=resource_group.name,
+        account_kind="StorageV2",
+        account_tier="Standard",
+        account_replication_type="LRS",
+        enable_https_traffic_only=True,
+        min_tls_version="TLS1_2",
     )
 
     container = storage.Container(
@@ -52,6 +60,20 @@ def create_cert_bot_app(
         "https://functions-next.azure.com",
     ]
 
+    system_topic = eventgrid.SystemTopic(
+        "nvd-cb-sys-topic",
+        resource_group_name=resource_group.name,
+        location="Global",
+        source_arm_resource_id=resource_group.id,
+        topic_type="Microsoft.Resources.ResourceGroups",
+    )
+
+    certificate_topic = eventgrid.Topic(
+        "nvd-cb-cert-topic",
+        resource_group_name=resource_group.name,
+        location=resource_group.location,
+    )
+
     function_app = appservice.FunctionApp(
         "nvd-cert-bot-function-app",
         resource_group_name=resource_group.name,
@@ -81,6 +103,8 @@ def create_cert_bot_app(
                 "secrets/acme-contact-url/26f4e8a510f643b5bb46ab378104b5c0)",
             ),
             "ACME_DIRECTORY_URL": "https://acme-v02.api.letsencrypt.org/directory",
+            "CERT_BOT_CERTIFICATE_UPDATED_TOPIC_URI": certificate_topic.endpoint,
+            "CERT_BOT_CERTIFICATE_UPDATED_TOPIC_KEY": certificate_topic.primary_access_key,
             "CLOUDFLARE_ZONE_ID": Output.concat(
                 "@Microsoft.KeyVault(SecretUri=",
                 key_vault.vault_uri,
@@ -113,29 +137,38 @@ def create_cert_bot_app(
         certificate_permissions=["get", "list", "import"],
     )
 
-    system_topic = eventgrid.SystemTopic(
-        "nvd-cb-sys-topic",
-        resource_group_name=resource_group.name,
-        location="Global",
-        source_arm_resource_id=resource_group.id,
-        topic_type="Microsoft.Resources.ResourceGroups",
-    )
-
     system_topic_function_subscription = eventgrid.SystemTopicEventSubscription(
         "nvd-cb-func-subs",
         system_topic=system_topic.name,
         resource_group_name=resource_group.name,
-        # included_event_types=[],
+        # https://docs.microsoft.com/en-us/azure/event-grid/event-schema-resource-groups#available-event-types
+        # https://docs.microsoft.com/en-us/azure/event-grid/event-filtering#event-type-filtering
+        included_event_types=["Microsoft.Resources.ResourceWriteSuccess"],
         advanced_filter=eventgrid.EventSubscriptionAdvancedFilterArgs(
             string_contains=[
                 eventgrid.EventSubscriptionAdvancedFilterStringContainArgs(
                     key="Subject", values=["/providers/Microsoft.Cdn/profiles"],
-                )
+                ),
+                eventgrid.EventSubscriptionAdvancedFilterStringContainArgs(
+                    key="data.operationName",
+                    values=["Microsoft.Cdn/profiles/endpoints/write"],
+                ),
             ]
         ),
         azure_function_endpoint=eventgrid.EventSubscriptionAzureFunctionEndpointArgs(
             function_id=function_app.id.apply(
-                lambda id: f"{id}/functions/UpdateCertificates"
+                lambda id: f"{id}/functions/ResourceUpdatedHandler"
+            )
+        ),
+    )
+
+    certificate_topic_function_subscription = eventgrid.EventSubscription(
+        "nvd-cb-cert-sub",
+        scope=certificate_topic.id,
+        included_event_types=["CertBot.Certificate.Updated"],
+        azure_function_endpoint=eventgrid.EventSubscriptionAzureFunctionEndpointArgs(
+            function_id=function_app.id.apply(
+                lambda id: f"{id}/functions/CertificateUpdatedHandler"
             )
         ),
     )
