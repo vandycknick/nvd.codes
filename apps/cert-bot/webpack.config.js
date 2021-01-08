@@ -23,11 +23,13 @@ const resolveAzureFunctions = async () => {
   return functions
 }
 
-module.exports = async () => {
+module.exports = async (env, args) => {
   const entry = await resolveAzureFunctions()
+  const production = args.mode === "production"
 
   return {
-    mode: "production",
+    mode: production ? "production" : "development",
+    devtool: production ? undefined : "eval",
     target: "node",
     entry,
     resolve: {
@@ -63,7 +65,9 @@ module.exports = async () => {
         patterns: [
           { from: "**/*.json", context: "src/functions" },
           { from: "host.json", context: "src" },
-          { from: "local.settings.json", context: "src" },
+          ...(production
+            ? []
+            : [{ from: "local.settings.json", context: "src" }]),
         ],
       }),
     ],

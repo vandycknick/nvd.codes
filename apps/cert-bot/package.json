@@ -9,7 +9,7 @@
     "watch": "webpack --watch",
     "predev": "webpack",
     "dev": "cd .dist && func extensions install && func start",
-    "build": "yarn clean && webpack",
+    "build": "yarn clean && webpack --mode=production",
     "storage-emulator": "mkdir -p .tmp && azurite -l .tmp"
   },
   "dependencies": {
