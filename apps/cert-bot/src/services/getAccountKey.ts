@@ -1,4 +1,5 @@
 import { Err, Ok } from "@nvd.codes/monad"
+
 import { AzureApi } from "../api/azure"
 import { createPrivateKey } from "../utils"
 
@@ -7,7 +8,7 @@ export const getAccountKey = async (
   secretName: string,
   azureApi: AzureApi,
 ) => {
-  const privateKeyOrError = await azureApi.getKeyVaultSecret(
+  const privateKeyOrError = await azureApi.vault.getSecret(
     keyVaultName,
     secretName,
   )
@@ -21,7 +22,7 @@ export const getAccountKey = async (
   if (privateKeyOrNone.isNone()) {
     const privateKey = await createPrivateKey(4096)
 
-    const resultOrError = await azureApi.setKeyVaultSecret(
+    const resultOrError = await azureApi.vault.setSecret(
       keyVaultName,
       secretName,
       privateKey,

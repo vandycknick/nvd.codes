@@ -1,3 +1,45 @@
+export type Endpoint = {
+  id: string
+  location: string
+  name: string
+  type: string
+  tags: Partial<Record<string, string>>
+}
+
+export type CustomDomainListResult = {
+  value: CustomDomain[]
+  nextLink?: string
+}
+
+export type CustomDomain = {
+  id: string
+  name: string
+  type: string
+  properties: {
+    customHttpsProvisioningState:
+      | "Disabled"
+      | "Disabling"
+      | "Enabled"
+      | "Enabling"
+      | "Failed"
+    customHttpsProvisioningSubstate:
+      | "CertificateDeleted"
+      | "CertificateDeployed"
+      | "DeletingCertificate"
+      | "DeployingCertificate"
+      | "DomainControlValidationRequestApproved"
+      | "DomainControlValidationRequestRejected"
+      | "DomainControlValidationRequestTimedOut"
+      | "IssuingCertificate"
+      | "PendingDomainControlValidationREquestApproval"
+      | "SubmittingDomainControlValidationRequest"
+    hostName: string
+    provisioningState: string
+    resourceState: "Disabled" | "Disabling" | "Enabled" | "Enabling" | "Failed"
+    validationData: string
+  }
+}
+
 export type CdnCustomDomainResponse = {
   properties: Properties
 }
@@ -14,11 +56,11 @@ export type CustomHttpsParameters = {
 
 export type CertificateSourceParameters = {
   deleteRule: string
-  keyVaultName: string
-  oDataType: string
-  resourceGroup: string
+  vaultName: string
+  "@odata.type": string
+  resourceGroupName: string
   secretName: string
   secretVersion: string
-  subscriptionID: string
+  subscriptionId: string
   updateRule: string
 }

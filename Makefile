@@ -58,7 +58,8 @@ dev.cert-bot:
 check:
 	$(NPM_BIN)/tsc -p $(API_PROJECT) --noEmit
 	$(NPM_BIN)/tsc -p $(WEB_PROJECT) --noEmit
-	$(NPM_BIN)/eslint . --ext .ts --ext .tsx --ext .js --ext .json --ignore-path .gitignore
+	yarn workspace @nvd.codes/cert-bot tsc --noEmit
+	yarn eslint . --ext .ts --ext .tsx --ext .js --ext .json --ignore-path .gitignore
 	yarn workspace @nvd.codes/resume validate
 
 .PHONY: test.unit
