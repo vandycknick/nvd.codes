@@ -5,6 +5,7 @@ out
 .dist
 .tmp
 apps/resume/public
+apps/cert-bot/data
 
 # Dotnet
 bin/

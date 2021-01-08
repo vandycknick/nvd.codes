@@ -1,4 +1,5 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
+import { Option, None, Some } from "./option"
 abstract class BaseResult<T, E> {
   abstract readonly type: "Ok" | "Err"
 
@@ -22,6 +23,10 @@ export class Ok<T, E> extends BaseResult<T, E> {
     super()
   }
 
+  andThen<U>(fn: (val: T) => Result<U, E>): Result<U, E> {
+    return fn(this.value)
+  }
+
   map<U>(fn: (val: T) => U): Result<U, E> {
     return new Ok(fn(this.value))
   }
@@ -37,6 +42,10 @@ export class Ok<T, E> extends BaseResult<T, E> {
   unwrap(): T {
     return this.value
   }
+
+  unwrapUnsafe(): T | never {
+    return this.value
+  }
 }
 
 export class Err<T, E> extends BaseResult<T, E> {
@@ -48,6 +57,10 @@ export class Err<T, E> extends BaseResult<T, E> {
 
   private constructor(private readonly value: E) {
     super()
+  }
+
+  andThen<U>(_fn: (val: T) => Result<U, E>): Result<U, E> {
+    return new Err(this.value)
   }
 
   map<U>(_fn: (val: T) => U): Result<U, E> {
@@ -65,9 +78,34 @@ export class Err<T, E> extends BaseResult<T, E> {
   unwrapErr(): E {
     return this.value
   }
+
+  unwrapUnsafe(): T | never {
+    throw new Error(`${this.value}`)
+  }
 }
 
 export type Result<T, E> = Ok<T, E> | Err<T, E>
+
+export const Result = {
+  isResult: (value: unknown): value is Result<unknown, unknown> =>
+    typeof value === "object" &&
+    value != null &&
+    "type" in value &&
+    typeof (value as Result<unknown, unknown>)["type"] === "string" &&
+    ((value as Result<unknown, unknown>).type === "Ok" ||
+      (value as Result<unknown, unknown>).type === "Err"),
+
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  fromJSON: <T, E>(input: any): Option<Result<T, E>> => {
+    if (input.type === "Ok") {
+      return Some.create(Ok.create(input.value))
+    } else if (input.type === "Err") {
+      return Some.create(Err.create(input.value))
+    } else {
+      return None.create()
+    }
+  },
+}
 
 export const ok = Ok.create
 export const err = Err.create

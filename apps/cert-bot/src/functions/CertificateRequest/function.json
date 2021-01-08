@@ -1,0 +1,17 @@
+{
+  "bindings": [
+    {
+      "name": "context",
+      "type": "orchestrationTrigger",
+      "direction": "in"
+    },
+    {
+      "type": "eventGrid",
+      "direction": "out",
+      "name": "outputEvent",
+      "topicEndpointUri": "CERT_BOT_CERTIFICATE_UPDATED_TOPIC_URI",
+      "topicKeySetting": "CERT_BOT_CERTIFICATE_UPDATED_TOPIC_KEY"
+    }
+  ],
+  "disabled": false
+}

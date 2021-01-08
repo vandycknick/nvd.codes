@@ -378,12 +378,19 @@ describe("createAzureApi", () => {
     // Then
     expect(resultOrError).toStrictEqual(
       Ok({
-        getCdnCustomDomainCertificate: expect.any(Function),
-        setCdnCustomDomainCertificate: expect.any(Function),
-        getKeyVaultCertificate: expect.any(Function),
-        setKeyVaultCertificate: expect.any(Function),
-        getKeyVaultSecret: expect.any(Function),
-        setKeyVaultSecret: expect.any(Function),
+        listResources: expect.any(Function),
+        cdn: {
+          getEndpoint: expect.any(Function),
+          listCustomDomains: expect.any(Function),
+          getCustomDomainCertificate: expect.any(Function),
+          setCustomDomainCertificate: expect.any(Function),
+        },
+        vault: {
+          getSecret: expect.any(Function),
+          setSecret: expect.any(Function),
+          getCertificate: expect.any(Function),
+          setCertificate: expect.any(Function),
+        },
       }),
     )
   })
@@ -442,396 +449,489 @@ describe("AzureApi", () => {
     azure = resultOrError.unwrap()
   })
 
-  describe("getCdnCustomDomainCertificate", () => {
-    const sendJsonRequestMock = sendJsonRequest as jest.MockedFunction<
-      typeof sendJsonRequest
-    >
+  describe("cdn", () => {
+    describe("listCustomDomains", () => {
+      const sendJsonRequestMock = sendJsonRequest as jest.MockedFunction<
+        typeof sendJsonRequest
+      >
 
-    beforeEach(async () => {
-      sendJsonRequestMock.mockRestore()
-      sendJsonRequestMock.mockClear()
-    })
+      beforeEach(async () => {
+        sendJsonRequestMock.mockRestore()
+        sendJsonRequestMock.mockClear()
+      })
 
-    it("should return the version of the cdn domain certificate", async () => {
-      // Given
-      const cdnProfileName = "profileName"
-      const cdnEndpointName = "endpointName"
-      const cdnCustomDomainName = "domainName"
+      it("should returns a list of custom domains for an endpoint", async () => {
+        // Given
+        const cdnProfileName = "profileName"
+        const cdnEndpointName = "endpointName"
 
-      when(sendJsonRequestMock)
-        .calledWith(
-          getManagementEndpoint(
-            subscriptionId,
-            resourceGroup,
-            `/providers/Microsoft.Cdn/profiles/${cdnProfileName}/endpoints/${cdnEndpointName}/customDomains/${cdnCustomDomainName}?api-version=2018-04-02`,
-          ),
-          {
-            headers: {
-              Authorization: `Bearer 123`,
-            },
-          },
-        )
-        .mockResolvedValue(
-          Ok<CdnCustomDomainResponse, ApiError>({
-            properties: {
-              customHttpsParameters: {
-                certificateSource: "source",
-                protocolType: "type",
-                certificateSourceParameters: {
-                  secretName: "name",
-                  secretVersion: "456",
-                  deleteRule: "deleteRule",
-                  updateRule: "updateRule",
-                  keyVaultName: "keyVaultName",
-                  oDataType: "oDataType",
-                  resourceGroup,
-                  subscriptionID: subscriptionId,
-                },
+        when(sendJsonRequestMock)
+          .calledWith(
+            getManagementEndpoint(
+              subscriptionId,
+              resourceGroup,
+              `/providers/Microsoft.Cdn/profiles/${cdnProfileName}/endpoints/${cdnEndpointName}/customDomains?api-version=2019-12-31`,
+            ),
+            {
+              headers: {
+                Authorization: `Bearer 123`,
               },
             },
+          )
+          .mockResolvedValue(
+            Ok({
+              value: [{ id: "123" }, { id: "456" }],
+            }),
+          )
+
+        // When
+        const resultOrError = await azure.cdn.listCustomDomains(
+          cdnProfileName,
+          cdnEndpointName,
+        )
+
+        // Then
+        expect(resultOrError).toStrictEqual(Ok([{ id: "123" }, { id: "456" }]))
+      })
+
+      it("should return an empty array when the azure cdn api returns a 404", async () => {
+        // Given
+        const cdnProfileName = "profileName"
+        const cdnEndpointName = "endpointName"
+
+        sendJsonRequestMock.mockResolvedValue(
+          Err({
+            message: "Something about not finding something",
+            statusCode: 404,
           }),
         )
 
-      // When
-      const resultOrError = await azure.getCdnCustomDomainCertificate(
-        cdnProfileName,
-        cdnEndpointName,
-        cdnCustomDomainName,
-      )
-
-      // Then
-      expect(resultOrError).toStrictEqual(Ok("456"))
-    })
-
-    it("should return undefined when no certificate is configured", async () => {
-      // Given
-      const cdnProfileName = "profileName"
-      const cdnEndpointName = "endpointName"
-      const cdnCustomDomainName = "domainName"
-
-      when(sendJsonRequestMock)
-        .calledWith(
-          getManagementEndpoint(
-            subscriptionId,
-            resourceGroup,
-            `/providers/Microsoft.Cdn/profiles/${cdnProfileName}/endpoints/${cdnEndpointName}/customDomains/${cdnCustomDomainName}?api-version=2018-04-02`,
-          ),
-          {
-            headers: {
-              Authorization: `Bearer 123`,
-            },
-          },
-        )
-        .mockResolvedValue(
-          Ok<CdnCustomDomainResponse, ApiError>({
-            properties: {},
-          }),
+        // When
+        const resultOrError = await azure.cdn.listCustomDomains(
+          cdnProfileName,
+          cdnEndpointName,
         )
 
-      // When
-      const resultOrError = await azure.getCdnCustomDomainCertificate(
-        cdnProfileName,
-        cdnEndpointName,
-        cdnCustomDomainName,
-      )
+        // Then
+        expect(resultOrError).toStrictEqual(Ok([]))
+      })
 
-      // Then
-      expect(resultOrError).toStrictEqual(Ok(undefined))
-    })
+      it("should forward any api errors", async () => {
+        // Given
+        const cdnProfileName = "profileName"
+        const cdnEndpointName = "endpointName"
 
-    it("should forward any api errors", async () => {
-      // Given
-      const cdnProfileName = "profileName"
-      const cdnEndpointName = "endpointName"
-      const cdnCustomDomainName = "domainName"
-
-      when(sendJsonRequestMock)
-        .calledWith(
-          getManagementEndpoint(
-            subscriptionId,
-            resourceGroup,
-            `/providers/Microsoft.Cdn/profiles/${cdnProfileName}/endpoints/${cdnEndpointName}/customDomains/${cdnCustomDomainName}?api-version=2018-04-02`,
-          ),
-          {
-            headers: {
-              Authorization: `Bearer 123`,
-            },
-          },
-        )
-        .mockResolvedValue(
+        sendJsonRequestMock.mockResolvedValue(
           Err({
             message: "Some Error",
             statusCode: 500,
           }),
         )
 
-      // When
-      const resultOrError = await azure.getCdnCustomDomainCertificate(
-        cdnProfileName,
-        cdnEndpointName,
-        cdnCustomDomainName,
-      )
-
-      // Then
-      expect(resultOrError).toStrictEqual(
-        Err({
-          message: "Some Error",
-          statusCode: 500,
-        }),
-      )
-    })
-  })
-
-  describe("setCdnCustomDomainCertificate", () => {
-    const sendJsonRequestMock = sendJsonRequest as jest.MockedFunction<
-      typeof sendJsonRequest
-    >
-
-    beforeEach(async () => {
-      sendJsonRequestMock.mockRestore()
-      sendJsonRequestMock.mockClear()
-    })
-
-    it("should add a new KeyVault certificate to a CDN resource", async () => {
-      // Given
-      const cdnProfileName = "profileName"
-      const cdnEndpointName = "endpointName"
-      const cdnCustomDomainName = "domainName"
-
-      const keyVaultName = "keyVaultName"
-      const secretName = "secretName"
-      const secretVersion = "secretVersion"
-
-      when(sendJsonRequestMock)
-        .calledWith(
-          getManagementEndpoint(
-            subscriptionId,
-            resourceGroup,
-            `/providers/Microsoft.Cdn/profiles/${cdnProfileName}/endpoints/${cdnEndpointName}/customDomains/${cdnCustomDomainName}/enableCustomHttps?api-version=2019-12-31`,
-          ),
-          {
-            headers: {
-              "Content-Type": "application/json",
-              Authorization: `Bearer 123`,
-            },
-            method: "POST",
-            body: JSON.stringify({
-              certificateSource: "AzureKeyVault",
-              certificateSourceParameters: {
-                deleteRule: "NoAction",
-                keyVaultName,
-                oDataType:
-                  "#Microsoft.Azure.Cdn.Models.KeyVaultCertificateSourceParameters",
-                resourceGroup,
-                secretName,
-                secretVersion,
-                subscriptionID: subscriptionId,
-                updateRule: "NoAction",
-              },
-              protocolType: "ServerNameIndication",
-            }),
-          },
+        // When
+        const resultOrError = await azure.cdn.listCustomDomains(
+          cdnProfileName,
+          cdnEndpointName,
         )
-        .mockResolvedValue(
+
+        // Then
+        expect(resultOrError).toStrictEqual(
+          Err({
+            message: "Some Error",
+            statusCode: 500,
+          }),
+        )
+      })
+    })
+
+    describe("getCustomDomainCertificate", () => {
+      const sendJsonRequestMock = sendJsonRequest as jest.MockedFunction<
+        typeof sendJsonRequest
+      >
+
+      beforeEach(async () => {
+        sendJsonRequestMock.mockRestore()
+        sendJsonRequestMock.mockClear()
+      })
+
+      it("should return the version of the cdn domain certificate", async () => {
+        // Given
+        const cdnProfileName = "profileName"
+        const cdnEndpointName = "endpointName"
+        const cdnCustomDomainName = "domainName"
+
+        when(sendJsonRequestMock)
+          .calledWith(
+            getManagementEndpoint(
+              subscriptionId,
+              resourceGroup,
+              `/providers/Microsoft.Cdn/profiles/${cdnProfileName}/endpoints/${cdnEndpointName}/customDomains/${cdnCustomDomainName}?api-version=2019-12-31`,
+            ),
+            {
+              headers: {
+                Authorization: `Bearer 123`,
+              },
+            },
+          )
+          .mockResolvedValue(
+            Ok<CdnCustomDomainResponse, ApiError>({
+              properties: {
+                customHttpsParameters: {
+                  certificateSource: "source",
+                  protocolType: "type",
+                  certificateSourceParameters: {
+                    secretName: "name",
+                    secretVersion: "456",
+                    deleteRule: "deleteRule",
+                    updateRule: "updateRule",
+                    vaultName: "vaultName",
+                    "@odata.type": "oDataType",
+                    resourceGroupName: resourceGroup,
+                    subscriptionId,
+                  },
+                },
+              },
+            }),
+          )
+
+        // When
+        const resultOrError = await azure.cdn.getCustomDomainCertificate(
+          cdnProfileName,
+          cdnEndpointName,
+          cdnCustomDomainName,
+        )
+
+        // Then
+        expect(resultOrError).toStrictEqual(Ok("456"))
+      })
+
+      it("should return undefined when no certificate is configured", async () => {
+        // Given
+        const cdnProfileName = "profileName"
+        const cdnEndpointName = "endpointName"
+        const cdnCustomDomainName = "domainName"
+
+        when(sendJsonRequestMock)
+          .calledWith(
+            getManagementEndpoint(
+              subscriptionId,
+              resourceGroup,
+              `/providers/Microsoft.Cdn/profiles/${cdnProfileName}/endpoints/${cdnEndpointName}/customDomains/${cdnCustomDomainName}?api-version=2019-12-31`,
+            ),
+            {
+              headers: {
+                Authorization: `Bearer 123`,
+              },
+            },
+          )
+          .mockResolvedValue(
+            Ok<CdnCustomDomainResponse, ApiError>({
+              properties: {},
+            }),
+          )
+
+        // When
+        const resultOrError = await azure.cdn.getCustomDomainCertificate(
+          cdnProfileName,
+          cdnEndpointName,
+          cdnCustomDomainName,
+        )
+
+        // Then
+        expect(resultOrError).toStrictEqual(Ok(undefined))
+      })
+
+      it("should forward any api errors", async () => {
+        // Given
+        const cdnProfileName = "profileName"
+        const cdnEndpointName = "endpointName"
+        const cdnCustomDomainName = "domainName"
+
+        when(sendJsonRequestMock)
+          .calledWith(
+            getManagementEndpoint(
+              subscriptionId,
+              resourceGroup,
+              `/providers/Microsoft.Cdn/profiles/${cdnProfileName}/endpoints/${cdnEndpointName}/customDomains/${cdnCustomDomainName}?api-version=2019-12-31`,
+            ),
+            {
+              headers: {
+                Authorization: `Bearer 123`,
+              },
+            },
+          )
+          .mockResolvedValue(
+            Err({
+              message: "Some Error",
+              statusCode: 500,
+            }),
+          )
+
+        // When
+        const resultOrError = await azure.cdn.getCustomDomainCertificate(
+          cdnProfileName,
+          cdnEndpointName,
+          cdnCustomDomainName,
+        )
+
+        // Then
+        expect(resultOrError).toStrictEqual(
+          Err({
+            message: "Some Error",
+            statusCode: 500,
+          }),
+        )
+      })
+    })
+
+    describe("setCustomDomainCertificate", () => {
+      const sendJsonRequestMock = sendJsonRequest as jest.MockedFunction<
+        typeof sendJsonRequest
+      >
+
+      beforeEach(async () => {
+        sendJsonRequestMock.mockRestore()
+        sendJsonRequestMock.mockClear()
+      })
+
+      it("should add a new KeyVault certificate to a CDN resource", async () => {
+        // Given
+        const cdnProfileName = "profileName"
+        const cdnEndpointName = "endpointName"
+        const cdnCustomDomainName = "domainName"
+
+        const vaultName = "keyVaultName"
+        const secretName = "secretName"
+        const secretVersion = "secretVersion"
+
+        when(sendJsonRequestMock)
+          .calledWith(
+            getManagementEndpoint(
+              subscriptionId,
+              resourceGroup,
+              `/providers/Microsoft.Cdn/profiles/${cdnProfileName}/endpoints/${cdnEndpointName}/customDomains/${cdnCustomDomainName}/enableCustomHttps?api-version=2019-12-31`,
+            ),
+            {
+              headers: {
+                "Content-Type": "application/json",
+                Authorization: `Bearer 123`,
+              },
+              method: "POST",
+              body: JSON.stringify({
+                certificateSource: "AzureKeyVault",
+                certificateSourceParameters: {
+                  deleteRule: "NoAction",
+                  vaultName,
+                  "@odata.type":
+                    "#Microsoft.Azure.Cdn.Models.KeyVaultCertificateSourceParameters",
+                  resourceGroupName: resourceGroup,
+                  secretName,
+                  secretVersion,
+                  subscriptionId,
+                  updateRule: "NoAction",
+                },
+                protocolType: "ServerNameIndication",
+              }),
+            },
+          )
+          .mockResolvedValue(
+            Ok({
+              properties: {},
+            }),
+          )
+
+        // When
+        const resultOrError = await azure.cdn.setCustomDomainCertificate(
+          cdnProfileName,
+          cdnEndpointName,
+          cdnCustomDomainName,
+          vaultName,
+          secretName,
+          secretVersion,
+        )
+
+        // Then
+        expect(resultOrError).toStrictEqual(
           Ok({
             properties: {},
           }),
         )
+      })
 
-      // When
-      const resultOrError = await azure.setCdnCustomDomainCertificate(
-        cdnProfileName,
-        cdnEndpointName,
-        cdnCustomDomainName,
-        keyVaultName,
-        secretName,
-        secretVersion,
-      )
+      it("should forward any api errors", async () => {
+        // Given
+        const cdnProfileName = "profileName"
+        const cdnEndpointName = "endpointName"
+        const cdnCustomDomainName = "domainName"
 
-      // Then
-      expect(resultOrError).toStrictEqual(
-        Ok({
-          properties: {},
-        }),
-      )
-    })
-
-    it("should forward any api errors", async () => {
-      // Given
-      const cdnProfileName = "profileName"
-      const cdnEndpointName = "endpointName"
-      const cdnCustomDomainName = "domainName"
-
-      sendJsonRequestMock.mockResolvedValue(
-        Err({
-          message: "Some Error",
-          statusCode: 500,
-        }),
-      )
-
-      // When
-      const resultOrError = await azure.setCdnCustomDomainCertificate(
-        cdnProfileName,
-        cdnEndpointName,
-        cdnCustomDomainName,
-        "keyVaultName",
-        "secretName",
-        "secretVersion",
-      )
-
-      // Then
-      expect(resultOrError).toStrictEqual(
-        Err({
-          message: "Some Error",
-          statusCode: 500,
-        }),
-      )
-    })
-  })
-
-  describe("getKeyVaultCertificate", () => {
-    const sendJsonRequestMock = sendJsonRequest as jest.MockedFunction<
-      typeof sendJsonRequest
-    >
-
-    beforeEach(async () => {
-      sendJsonRequestMock.mockRestore()
-      sendJsonRequestMock.mockClear()
-    })
-
-    it("should return a key vault certificate", async () => {
-      // Given
-      const keyVaultName = "keyVaultName"
-      const certificateName = "certificateName"
-
-      when(sendJsonRequestMock)
-        .calledWith(
-          getVaultEndpoint(
-            keyVaultName,
-            `/certificates/${certificateName}?api-version=7.1`,
-          ),
-          {
-            headers: {
-              Authorization: "Bearer 123",
-            },
-          },
-        )
-        .mockResolvedValue(
-          Ok({
-            id: "123",
-            cer: "cer",
-          }),
-        )
-
-      // When
-      const resultOrError = await azure.getKeyVaultCertificate(
-        keyVaultName,
-        certificateName,
-      )
-
-      // Then
-      expect(resultOrError).toStrictEqual(Ok(Some({ id: "123", cer: "cer" })))
-    })
-
-    it("should return None when the api returns a 404", async () => {
-      // Given
-      const keyVaultName = "keyVaultName"
-      const certificateName = "certificateName"
-
-      when(sendJsonRequestMock)
-        .calledWith(
-          getVaultEndpoint(
-            keyVaultName,
-            `/certificates/${certificateName}?api-version=7.1`,
-          ),
-          {
-            headers: {
-              Authorization: "Bearer 123",
-            },
-          },
-        )
-        .mockResolvedValue(
+        sendJsonRequestMock.mockResolvedValue(
           Err({
-            statusCode: 404,
-            message: "Not Found",
+            message: "Some Error",
+            statusCode: 500,
           }),
         )
 
-      // When
-      const resultOrError = await azure.getKeyVaultCertificate(
-        keyVaultName,
-        certificateName,
-      )
+        // When
+        const resultOrError = await azure.cdn.setCustomDomainCertificate(
+          cdnProfileName,
+          cdnEndpointName,
+          cdnCustomDomainName,
+          "keyVaultName",
+          "secretName",
+          "secretVersion",
+        )
 
-      // Then
-      expect(resultOrError).toStrictEqual(Ok(None()))
-    })
-
-    it("should forward any api errors", async () => {
-      // Given
-      const keyVaultName = "keyVaultName"
-      const certificateName = "certificateName"
-
-      sendJsonRequestMock.mockResolvedValue(
-        Err({
-          statusCode: 500,
-          message: "Server Error",
-        }),
-      )
-
-      // When
-      const resultOrError = await azure.getKeyVaultCertificate(
-        keyVaultName,
-        certificateName,
-      )
-
-      // Then
-      expect(resultOrError).toStrictEqual(
-        Err({
-          statusCode: 500,
-          message: "Server Error",
-        }),
-      )
+        // Then
+        expect(resultOrError).toStrictEqual(
+          Err({
+            message: "Some Error",
+            statusCode: 500,
+          }),
+        )
+      })
     })
   })
 
-  describe("setKeyVaultCertificate", () => {
-    const sendJsonRequestMock = sendJsonRequest as jest.MockedFunction<
-      typeof sendJsonRequest
-    >
+  describe("vault", () => {
+    describe("getSecret", () => {
+      const sendJsonRequestMock = sendJsonRequest as jest.MockedFunction<
+        typeof sendJsonRequest
+      >
 
-    beforeEach(async () => {
-      sendJsonRequestMock.mockRestore()
-      sendJsonRequestMock.mockClear()
-    })
+      beforeEach(async () => {
+        sendJsonRequestMock.mockRestore()
+        sendJsonRequestMock.mockClear()
+      })
 
-    it.each(["pem", "pkcs12"])(
-      "should add a %s certificate to the vault and return its id",
-      async (type) => {
+      it("should return a key vault secret", async () => {
         // Given
         const keyVaultName = "keyVaultName"
-        const certificateName = "certificateName"
-        const certificate = "certificate"
+        const secretName = "secretName"
 
         when(sendJsonRequestMock)
           .calledWith(
             getVaultEndpoint(
               keyVaultName,
-              `/certificates/${certificateName}/import?api-version=7.1`,
+              `/secrets/${secretName}?api-version=7.1`,
+            ),
+            {
+              headers: {
+                Authorization: "Bearer 123",
+              },
+            },
+          )
+          .mockResolvedValue(
+            Ok({
+              id: "https://url/123",
+              value: "cer",
+            }),
+          )
+
+        // When
+        const resultOrError = await azure.vault.getSecret(
+          keyVaultName,
+          secretName,
+        )
+
+        // Then
+        expect(resultOrError).toStrictEqual(
+          Ok(Some({ value: "cer", version: "123" })),
+        )
+      })
+
+      it("should return None when the api returns a 404", async () => {
+        // Given
+        const keyVaultName = "keyVaultName"
+        const secretName = "certificateName"
+
+        when(sendJsonRequestMock)
+          .calledWith(
+            getVaultEndpoint(
+              keyVaultName,
+              `/secrets/${secretName}?api-version=7.1`,
+            ),
+            {
+              headers: {
+                Authorization: "Bearer 123",
+              },
+            },
+          )
+          .mockResolvedValue(
+            Err({
+              statusCode: 404,
+              message: "Not Found",
+            }),
+          )
+
+        // When
+        const resultOrError = await azure.vault.getSecret(
+          keyVaultName,
+          secretName,
+        )
+
+        // Then
+        expect(resultOrError).toStrictEqual(Ok(None()))
+      })
+
+      it("should forward any api errors", async () => {
+        // Given
+        const keyVaultName = "keyVaultName"
+        const secretName = "secretName"
+
+        sendJsonRequestMock.mockResolvedValue(
+          Err({
+            statusCode: 500,
+            message: "Server Error",
+          }),
+        )
+
+        // When
+        const resultOrError = await azure.vault.getSecret(
+          keyVaultName,
+          secretName,
+        )
+
+        // Then
+        expect(resultOrError).toStrictEqual(
+          Err({
+            statusCode: 500,
+            message: "Server Error",
+          }),
+        )
+      })
+    })
+
+    describe("setKeyVaultSecret", () => {
+      const sendJsonRequestMock = sendJsonRequest as jest.MockedFunction<
+        typeof sendJsonRequest
+      >
+
+      beforeEach(async () => {
+        sendJsonRequestMock.mockRestore()
+        sendJsonRequestMock.mockClear()
+      })
+
+      it("should add a secret to the vault and return its id", async () => {
+        // Given
+        const keyVaultName = "keyVaultName"
+        const secretName = "secretName"
+        const secretValue = "secretValue"
+
+        when(sendJsonRequestMock)
+          .calledWith(
+            getVaultEndpoint(
+              keyVaultName,
+              `/secrets/${secretName}?api-version=7.1`,
             ),
             {
               headers: {
                 "Content-Type": "application/json",
                 Authorization: "Bearer 123",
               },
-              method: "POST",
+              method: "PUT",
               body: JSON.stringify({
-                value: certificate,
-                policy: {
-                  secret_props: {
-                    contentType: `application/x-${type}`,
-                  },
-                },
+                contentType: "text/plain",
+                value: secretValue,
               }),
             },
           )
@@ -843,236 +943,241 @@ describe("AzureApi", () => {
           )
 
         // When
-        const resultOrError = await azure.setKeyVaultCertificate(
+        const resultOrError = await azure.vault.setSecret(
           keyVaultName,
-          certificateName,
-          certificate,
-          type as "pem" | "pkcs12",
+          secretName,
+          secretValue,
         )
 
         // Then
         expect(resultOrError).toStrictEqual(Ok("123"))
-      },
-    )
+      })
 
-    it("should forward any api errors", async () => {
-      // Given
-      const keyVaultName = "keyVaultName"
-      const certificateName = "certificateName"
-      const certificate = "certificate"
+      it("should forward any api errors", async () => {
+        // Given
+        const keyVaultName = "keyVaultName"
+        const secretName = "secretName"
+        const secretValue = "secretValue"
 
-      sendJsonRequestMock.mockResolvedValue(
-        Err({
-          statusCode: 500,
-          message: "Server Error",
-        }),
-      )
-
-      // When
-      const resultOrError = await azure.setKeyVaultCertificate(
-        keyVaultName,
-        certificateName,
-        certificate,
-        "pem",
-      )
-
-      // Then
-      expect(resultOrError).toStrictEqual(
-        Err({
-          statusCode: 500,
-          message: "Server Error",
-        }),
-      )
-    })
-  })
-
-  describe("getKeyVaultSecret", () => {
-    const sendJsonRequestMock = sendJsonRequest as jest.MockedFunction<
-      typeof sendJsonRequest
-    >
-
-    beforeEach(async () => {
-      sendJsonRequestMock.mockRestore()
-      sendJsonRequestMock.mockClear()
-    })
-
-    it("should return a key vault secret", async () => {
-      // Given
-      const keyVaultName = "keyVaultName"
-      const secretName = "secretName"
-
-      when(sendJsonRequestMock)
-        .calledWith(
-          getVaultEndpoint(
-            keyVaultName,
-            `/secrets/${secretName}?api-version=7.1`,
-          ),
-          {
-            headers: {
-              Authorization: "Bearer 123",
-            },
-          },
-        )
-        .mockResolvedValue(
-          Ok({
-            id: "https://url/123",
-            value: "cer",
-          }),
-        )
-
-      // When
-      const resultOrError = await azure.getKeyVaultSecret(
-        keyVaultName,
-        secretName,
-      )
-
-      // Then
-      expect(resultOrError).toStrictEqual(
-        Ok(Some({ value: "cer", version: "123" })),
-      )
-    })
-
-    it("should return None when the api returns a 404", async () => {
-      // Given
-      const keyVaultName = "keyVaultName"
-      const secretName = "certificateName"
-
-      when(sendJsonRequestMock)
-        .calledWith(
-          getVaultEndpoint(
-            keyVaultName,
-            `/secrets/${secretName}?api-version=7.1`,
-          ),
-          {
-            headers: {
-              Authorization: "Bearer 123",
-            },
-          },
-        )
-        .mockResolvedValue(
+        sendJsonRequestMock.mockResolvedValue(
           Err({
-            statusCode: 404,
-            message: "Not Found",
+            statusCode: 500,
+            message: "Server Error",
           }),
         )
 
-      // When
-      const resultOrError = await azure.getKeyVaultSecret(
-        keyVaultName,
-        secretName,
-      )
+        // When
+        const resultOrError = await azure.vault.setSecret(
+          keyVaultName,
+          secretName,
+          secretValue,
+        )
 
-      // Then
-      expect(resultOrError).toStrictEqual(Ok(None()))
+        // Then
+        expect(resultOrError).toStrictEqual(
+          Err({
+            statusCode: 500,
+            message: "Server Error",
+          }),
+        )
+      })
     })
 
-    it("should forward any api errors", async () => {
-      // Given
-      const keyVaultName = "keyVaultName"
-      const secretName = "secretName"
+    describe("getKeyVaultCertificate", () => {
+      const sendJsonRequestMock = sendJsonRequest as jest.MockedFunction<
+        typeof sendJsonRequest
+      >
 
-      sendJsonRequestMock.mockResolvedValue(
-        Err({
-          statusCode: 500,
-          message: "Server Error",
-        }),
-      )
+      beforeEach(async () => {
+        sendJsonRequestMock.mockRestore()
+        sendJsonRequestMock.mockClear()
+      })
 
-      // When
-      const resultOrError = await azure.getKeyVaultSecret(
-        keyVaultName,
-        secretName,
-      )
+      it("should return a key vault certificate", async () => {
+        // Given
+        const keyVaultName = "keyVaultName"
+        const certificateName = "certificateName"
 
-      // Then
-      expect(resultOrError).toStrictEqual(
-        Err({
-          statusCode: 500,
-          message: "Server Error",
-        }),
-      )
-    })
-  })
-
-  describe("setKeyVaultSecret", () => {
-    const sendJsonRequestMock = sendJsonRequest as jest.MockedFunction<
-      typeof sendJsonRequest
-    >
-
-    beforeEach(async () => {
-      sendJsonRequestMock.mockRestore()
-      sendJsonRequestMock.mockClear()
-    })
-
-    it("should add a secret to the vault and return its id", async () => {
-      // Given
-      const keyVaultName = "keyVaultName"
-      const secretName = "secretName"
-      const secretValue = "secretValue"
-
-      when(sendJsonRequestMock)
-        .calledWith(
-          getVaultEndpoint(
-            keyVaultName,
-            `/secrets/${secretName}?api-version=7.1`,
-          ),
-          {
-            headers: {
-              "Content-Type": "application/json",
-              Authorization: "Bearer 123",
+        when(sendJsonRequestMock)
+          .calledWith(
+            getVaultEndpoint(
+              keyVaultName,
+              `/certificates/${certificateName}?api-version=7.1`,
+            ),
+            {
+              headers: {
+                Authorization: "Bearer 123",
+              },
             },
-            method: "PUT",
-            body: JSON.stringify({
-              contentType: "text/plain",
-              value: secretValue,
+          )
+          .mockResolvedValue(
+            Ok({
+              id: "123",
+              cer: "cer",
             }),
-          },
+          )
+
+        // When
+        const resultOrError = await azure.vault.getCertificate(
+          keyVaultName,
+          certificateName,
         )
-        .mockResolvedValue(
-          Ok({
-            id: "123",
-            cer: "cer",
+
+        // Then
+        expect(resultOrError).toStrictEqual(Ok(Some({ id: "123", cer: "cer" })))
+      })
+
+      it("should return None when the api returns a 404", async () => {
+        // Given
+        const keyVaultName = "keyVaultName"
+        const certificateName = "certificateName"
+
+        when(sendJsonRequestMock)
+          .calledWith(
+            getVaultEndpoint(
+              keyVaultName,
+              `/certificates/${certificateName}?api-version=7.1`,
+            ),
+            {
+              headers: {
+                Authorization: "Bearer 123",
+              },
+            },
+          )
+          .mockResolvedValue(
+            Err({
+              statusCode: 404,
+              message: "Not Found",
+            }),
+          )
+
+        // When
+        const resultOrError = await azure.vault.getCertificate(
+          keyVaultName,
+          certificateName,
+        )
+
+        // Then
+        expect(resultOrError).toStrictEqual(Ok(None()))
+      })
+
+      it("should forward any api errors", async () => {
+        // Given
+        const keyVaultName = "keyVaultName"
+        const certificateName = "certificateName"
+
+        sendJsonRequestMock.mockResolvedValue(
+          Err({
+            statusCode: 500,
+            message: "Server Error",
           }),
         )
 
-      // When
-      const resultOrError = await azure.setKeyVaultSecret(
-        keyVaultName,
-        secretName,
-        secretValue,
-      )
+        // When
+        const resultOrError = await azure.vault.getCertificate(
+          keyVaultName,
+          certificateName,
+        )
 
-      // Then
-      expect(resultOrError).toStrictEqual(Ok("123"))
+        // Then
+        expect(resultOrError).toStrictEqual(
+          Err({
+            statusCode: 500,
+            message: "Server Error",
+          }),
+        )
+      })
     })
 
-    it("should forward any api errors", async () => {
-      // Given
-      const keyVaultName = "keyVaultName"
-      const secretName = "secretName"
-      const secretValue = "secretValue"
+    describe("vault.setCertificate", () => {
+      const sendJsonRequestMock = sendJsonRequest as jest.MockedFunction<
+        typeof sendJsonRequest
+      >
 
-      sendJsonRequestMock.mockResolvedValue(
-        Err({
-          statusCode: 500,
-          message: "Server Error",
-        }),
+      beforeEach(async () => {
+        sendJsonRequestMock.mockRestore()
+        sendJsonRequestMock.mockClear()
+      })
+
+      it.each(["pem", "pkcs12"])(
+        "should add a %s certificate to the vault and return its id",
+        async (type) => {
+          // Given
+          const keyVaultName = "keyVaultName"
+          const certificateName = "certificateName"
+          const certificate = "certificate"
+
+          when(sendJsonRequestMock)
+            .calledWith(
+              getVaultEndpoint(
+                keyVaultName,
+                `/certificates/${certificateName}/import?api-version=7.1`,
+              ),
+              {
+                headers: {
+                  "Content-Type": "application/json",
+                  Authorization: "Bearer 123",
+                },
+                method: "POST",
+                body: JSON.stringify({
+                  value: certificate,
+                  policy: {
+                    secret_props: {
+                      contentType: `application/x-${type}`,
+                    },
+                  },
+                }),
+              },
+            )
+            .mockResolvedValue(
+              Ok({
+                id: "123",
+                cer: "cer",
+              }),
+            )
+
+          // When
+          const resultOrError = await azure.vault.setCertificate(
+            keyVaultName,
+            certificateName,
+            certificate,
+            type as "pem" | "pkcs12",
+          )
+
+          // Then
+          expect(resultOrError).toStrictEqual(Ok("123"))
+        },
       )
 
-      // When
-      const resultOrError = await azure.setKeyVaultSecret(
-        keyVaultName,
-        secretName,
-        secretValue,
-      )
+      it("should forward any api errors", async () => {
+        // Given
+        const keyVaultName = "keyVaultName"
+        const certificateName = "certificateName"
+        const certificate = "certificate"
 
-      // Then
-      expect(resultOrError).toStrictEqual(
-        Err({
-          statusCode: 500,
-          message: "Server Error",
-        }),
-      )
+        sendJsonRequestMock.mockResolvedValue(
+          Err({
+            statusCode: 500,
+            message: "Server Error",
+          }),
+        )
+
+        // When
+        const resultOrError = await azure.vault.setCertificate(
+          keyVaultName,
+          certificateName,
+          certificate,
+          "pem",
+        )
+
+        // Then
+        expect(resultOrError).toStrictEqual(
+          Err({
+            statusCode: 500,
+            message: "Server Error",
+          }),
+        )
+      })
     })
   })
 })

@@ -23,24 +23,29 @@ key_vault = keyvault.KeyVault(
     soft_delete_enabled=True,
     soft_delete_retention_days=7,
     purge_protection_enabled=False,
-    access_policies=[
-        keyvault.KeyVaultAccessPolicyArgs(
-            tenant_id=current.tenant_id,
-            object_id=current.object_id,
-            key_permissions=["get", "list"],
-            secret_permissions=["get", "list", "set"],
-            storage_permissions=["get"],
-            certificate_permissions=["get", "list"],
-        ),
-        keyvault.KeyVaultAccessPolicyArgs(
-            tenant_id=current.tenant_id,
-            object_id=cdn_sp.object_id,
-            key_permissions=[],
-            secret_permissions=["get", "list"],
-            certificate_permissions=["get", "list"],
-        ),
-    ],
 )
+
+keyvault.AccessPolicy(
+    "current-sp-policy",
+    key_vault_id=key_vault.id,
+    tenant_id=current.tenant_id,
+    object_id=current.object_id,
+    key_permissions=["get", "list"],
+    secret_permissions=["get", "list", "set"],
+    storage_permissions=["get"],
+    certificate_permissions=["get", "list"],
+)
+
+keyvault.AccessPolicy(
+    "cdn-sp-policy",
+    key_vault_id=key_vault.id,
+    tenant_id=current.tenant_id,
+    object_id=cdn_sp.object_id,
+    key_permissions=[],
+    secret_permissions=["get", "list"],
+    certificate_permissions=["get", "list"],
+)
+
 
 app_insights = appinsights.Insights(
     "function-app-insights",

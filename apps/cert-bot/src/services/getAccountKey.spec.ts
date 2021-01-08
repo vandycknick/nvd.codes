@@ -1,19 +1,14 @@
 import { Err, None, Ok, Some } from "@nvd.codes/monad"
-import { AzureApi } from "../api/azure"
-import { getAccountKey } from "./getAcmePrivateKey"
+
+import { getAccountKey } from "./getAccountKey"
+import { createAzureApiMock } from "../api/azure.mock"
 
 describe("getAccountKey", () => {
-  let azureApi: jest.Mocked<AzureApi>
+  const mockAzureApi = createAzureApiMock()
 
   beforeEach(() => {
-    azureApi = {
-      getCdnCustomDomainCertificate: jest.fn(),
-      setCdnCustomDomainCertificate: jest.fn(),
-      getKeyVaultCertificate: jest.fn(),
-      setKeyVaultCertificate: jest.fn(),
-      getKeyVaultSecret: jest.fn(),
-      setKeyVaultSecret: jest.fn(),
-    }
+    mockAzureApi.mockRestore()
+    mockAzureApi.mockClear()
   })
 
   it("should return an error when azure key vault returns an error getting the account secret", async () => {
@@ -21,7 +16,7 @@ describe("getAccountKey", () => {
     const keyVaultName = "keyVaultName"
     const secretName = "secretName"
 
-    azureApi.getKeyVaultSecret.mockResolvedValue(
+    mockAzureApi.vault.getSecret.mockResolvedValue(
       Err({ statusCode: 500, message: "Server Error" }),
     )
 
@@ -29,7 +24,7 @@ describe("getAccountKey", () => {
     const resultOrError = await getAccountKey(
       keyVaultName,
       secretName,
-      azureApi,
+      mockAzureApi,
     )
 
     // Then
@@ -43,7 +38,7 @@ describe("getAccountKey", () => {
     const keyVaultName = "keyVaultName"
     const secretName = "secretName"
 
-    azureApi.getKeyVaultSecret.mockResolvedValue(
+    mockAzureApi.vault.getSecret.mockResolvedValue(
       Ok(Some({ value: "key", version: "123" })),
     )
 
@@ -51,7 +46,7 @@ describe("getAccountKey", () => {
     const resultOrError = await getAccountKey(
       keyVaultName,
       secretName,
-      azureApi,
+      mockAzureApi,
     )
 
     // Then
@@ -63,18 +58,18 @@ describe("getAccountKey", () => {
     const keyVaultName = "keyVaultName"
     const secretName = "secretName"
 
-    azureApi.getKeyVaultSecret.mockResolvedValue(Ok(None()))
-    azureApi.setKeyVaultSecret.mockResolvedValue(Ok("id"))
+    mockAzureApi.vault.getSecret.mockResolvedValue(Ok(None()))
+    mockAzureApi.vault.setSecret.mockResolvedValue(Ok("id"))
 
     // When
     const resultOrError = await getAccountKey(
       keyVaultName,
       secretName,
-      azureApi,
+      mockAzureApi,
     )
 
     // Then
-    expect(azureApi.setKeyVaultSecret).toHaveBeenCalledWith(
+    expect(mockAzureApi.vault.setSecret).toHaveBeenCalledWith(
       keyVaultName,
       secretName,
       expect.any(String),
@@ -87,8 +82,8 @@ describe("getAccountKey", () => {
     const keyVaultName = "keyVaultName"
     const secretName = "secretName"
 
-    azureApi.getKeyVaultSecret.mockResolvedValue(Ok(None()))
-    azureApi.setKeyVaultSecret.mockResolvedValue(
+    mockAzureApi.vault.getSecret.mockResolvedValue(Ok(None()))
+    mockAzureApi.vault.setSecret.mockResolvedValue(
       Err({
         statusCode: 500,
         message: "Server Error",
@@ -99,7 +94,7 @@ describe("getAccountKey", () => {
     const resultOrError = await getAccountKey(
       keyVaultName,
       secretName,
-      azureApi,
+      mockAzureApi,
     )
 
     // Then
