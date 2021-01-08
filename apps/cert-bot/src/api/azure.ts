@@ -15,7 +15,12 @@ import {
   ManagedIdentity,
   ServicePrincipal,
 } from "../models/auth"
-import { CdnCustomDomainResponse, CustomHttpsParameters } from "../models/cdn"
+import {
+  CdnCustomDomainResponse,
+  CustomDomainListResult,
+  CustomHttpsParameters,
+  Endpoint,
+} from "../models/cdn"
 import { ApiError, sendJsonRequest } from "./request"
 import {
   KeyVaultCertificateRequest,
@@ -105,48 +110,305 @@ export const getAuthorizationTokens = async (
 const createApiError = (msg: string) => Err<AzureApi, Error>(new Error(msg))
 
 export type AzureApi = {
+  // https://docs.microsoft.com/en-us/rest/api/resources/resources/listbyresourcegroup
   listResources: (
     filter: string,
     expand?: string,
     top?: number,
   ) => Promise<Result<ResourceListResult, ApiError>>
-  getCdnCustomDomainCertificate: (
-    cdnProfileName: string,
-    cdnEndpointName: string,
-    cdnCustomDomainName: string,
-  ) => Promise<Result<string | undefined, ApiError>>
 
-  setCdnCustomDomainCertificate: (
+  cdn: {
+    // https://docs.microsoft.com/en-us/rest/api/cdn/endpoints/get
+    getEndpoint: (
+      cdnProfileName: string,
+      cdnEndpointName: string,
+    ) => Promise<Result<Endpoint, ApiError>>
+
+    // https://docs.microsoft.com/en-us/rest/api/cdn/customdomains/listbyendpoint
+    listCustomDomains: (
+      cdnProfileName: string,
+      cdnEndpointName: string,
+    ) => Promise<Result<CustomDomainListResult["value"], ApiError>>
+
+    // https://docs.microsoft.com/en-us/rest/api/cdn/customdomains/get
+    getCustomDomainCertificate: (
+      cdnProfileName: string,
+      cdnEndpointName: string,
+      cdnCustomDomainName: string,
+    ) => Promise<Result<string | undefined, ApiError>>
+
+    // https://docs.microsoft.com/en-us/rest/api/cdn/customdomains/enablecustomhttps
+    setCustomDomainCertificate: (
+      cdnProfileName: string,
+      cdnEndpointName: string,
+      cdnCustomDomainName: string,
+      keyVaultName: string,
+      secretName: string,
+      secretVersion: string,
+    ) => Promise<Result<CdnCustomDomainResponse, ApiError>>
+  }
+
+  vault: {
+    // https://docs.microsoft.com/en-us/rest/api/keyvault/getcertificate/getcertificate
+    getCertificate: (
+      keyVaultName: string,
+      certificateName: string,
+    ) => Promise<Result<Option<KeyVaultCertificateResponse>, ApiError>>
+
+    // https://docs.microsoft.com/en-us/rest/api/keyvault/importcertificate/importcertificate
+    setCertificate: (
+      keyVaultName: string,
+      certificateName: string,
+      certificate: string,
+      type: "pem" | "pkcs12",
+    ) => Promise<Result<string, ApiError>>
+
+    // https://docs.microsoft.com/en-us/rest/api/keyvault/getsecret/getsecret
+    getSecret: (
+      keyVaultName: string,
+      secretName: string,
+    ) => Promise<Result<Option<{ value: string; version: string }>, ApiError>>
+
+    // https://docs.microsoft.com/en-us/rest/api/keyvault/setsecret/setsecret
+    setSecret: (
+      keyVaultName: string,
+      secretName: string,
+      secretValue: string,
+    ) => Promise<Result<string, ApiError>>
+  }
+}
+
+const createAzureCdnApi = (
+  subscriptionId: string,
+  resourceGroup: string,
+  tokens: AzureAuthenticationTokens,
+) => {
+  const apiVersion = "2019-12-31"
+  const getEndpoint = async (
+    cdnProfileName: string,
+    cdnEndpointName: string,
+  ) => {
+    const endpoint = getManagementEndpoint(
+      subscriptionId,
+      resourceGroup,
+      `/providers/Microsoft.Cdn/profiles/${cdnProfileName}/endpoints/${cdnEndpointName}?api-version=${apiVersion}`,
+    )
+    const response = await sendJsonRequest<Endpoint>(endpoint, {
+      headers: {
+        Authorization: `${tokens.tokenType} ${tokens.accessToken}`,
+      },
+    })
+    return response
+  }
+
+  const listCustomDomains = async (
+    cdnProfileName: string,
+    cdnEndpointName: string,
+  ) => {
+    const endpoint = getManagementEndpoint(
+      subscriptionId,
+      resourceGroup,
+      `/providers/Microsoft.Cdn/profiles/${cdnProfileName}/endpoints/${cdnEndpointName}/customDomains?api-version=${apiVersion}`,
+    )
+    const response = await sendJsonRequest<CustomDomainListResult>(endpoint, {
+      headers: {
+        Authorization: `${tokens.tokenType} ${tokens.accessToken}`,
+      },
+    })
+    return response
+      .map((result) => result.value)
+      .orElse<CustomDomainListResult["value"]>((err) =>
+        err.statusCode === 404 ? Ok([]) : Err(err),
+      )
+  }
+
+  const getCustomDomainCertificate = async (
     cdnProfileName: string,
     cdnEndpointName: string,
     cdnCustomDomainName: string,
-    keyVaultName: string,
+  ) => {
+    const endpoint = getManagementEndpoint(
+      subscriptionId,
+      resourceGroup,
+      `/providers/Microsoft.Cdn/profiles/${cdnProfileName}/endpoints/${cdnEndpointName}/customDomains/${cdnCustomDomainName}?api-version=${apiVersion}`,
+    )
+    const response = await sendJsonRequest<CdnCustomDomainResponse>(endpoint, {
+      headers: {
+        Authorization: `${tokens.tokenType} ${tokens.accessToken}`,
+      },
+    })
+
+    return response.map(
+      (customDomainResponse) =>
+        customDomainResponse.properties.customHttpsParameters
+          ?.certificateSourceParameters.secretVersion,
+    )
+  }
+
+  const setCustomDomainCertificate = async (
+    cdnProfileName: string,
+    cdnEndpointName: string,
+    cdnCustomDomainName: string,
+    vaultName: string,
     secretName: string,
     secretVersion: string,
-  ) => Promise<Result<CdnCustomDomainResponse, ApiError>>
+  ) => {
+    const data: CustomHttpsParameters = {
+      certificateSource: "AzureKeyVault",
+      certificateSourceParameters: {
+        deleteRule: "NoAction",
+        vaultName,
+        "@odata.type":
+          "#Microsoft.Azure.Cdn.Models.KeyVaultCertificateSourceParameters",
+        resourceGroupName: resourceGroup,
+        secretName,
+        secretVersion,
+        subscriptionId,
+        updateRule: "NoAction",
+      },
+      protocolType: "ServerNameIndication",
+    }
+    const endpoint = getManagementEndpoint(
+      subscriptionId,
+      resourceGroup,
+      `/providers/Microsoft.Cdn/profiles/${cdnProfileName}/endpoints/${cdnEndpointName}/customDomains/${cdnCustomDomainName}/enableCustomHttps?api-version=${apiVersion}`,
+    )
 
-  getKeyVaultCertificate: (
+    const response = await sendJsonRequest<CdnCustomDomainResponse>(endpoint, {
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `${tokens.tokenType} ${tokens.accessToken}`,
+      },
+      method: "POST",
+      body: JSON.stringify(data),
+    })
+
+    return response
+  }
+
+  return {
+    getEndpoint,
+    listCustomDomains,
+    getCustomDomainCertificate,
+    setCustomDomainCertificate,
+  }
+}
+
+const createAzureKeyVaultApi = (tokens: AzureAuthenticationTokens) => {
+  const getSecret = async (
+    keyVaultName: string,
+    secretName: string,
+  ): Promise<Result<Option<{ value: string; version: string }>, ApiError>> => {
+    const endpoint = getVaultEndpoint(
+      keyVaultName,
+      `/secrets/${secretName}?api-version=7.1`,
+    )
+    const response = await sendJsonRequest<KeyVaultSecretResponse>(endpoint, {
+      headers: {
+        Authorization: `${tokens.tokenType} ${tokens.accessToken}`,
+      },
+    })
+
+    return response
+      .map((result) =>
+        Some({
+          value: result.value,
+          version: result.id.split("/").slice(-1)[0],
+        }),
+      )
+      .orElse((error) => (error.statusCode === 404 ? Ok(None()) : Err(error)))
+  }
+
+  const setSecret = async (
+    keyVaultName: string,
+    secretName: string,
+    secretValue: string,
+  ) => {
+    const endpoint = getVaultEndpoint(
+      keyVaultName,
+      `/secrets/${secretName}?api-version=7.1`,
+    )
+    const data: KeyVaultSecretRequest = {
+      contentType: "text/plain",
+      value: secretValue,
+    }
+    const response = await sendJsonRequest<KeyVaultSecretResponse>(endpoint, {
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `${tokens.tokenType} ${tokens.accessToken}`,
+      },
+      method: "PUT",
+      body: JSON.stringify(data),
+    })
+
+    return response.map((secret) => secret.id)
+  }
+
+  const getCertificate = async (
     keyVaultName: string,
     certificateName: string,
-  ) => Promise<Result<Option<KeyVaultCertificateResponse>, ApiError>>
+  ) => {
+    const endpoint = getVaultEndpoint(
+      keyVaultName,
+      `/certificates/${certificateName}?api-version=7.1`,
+    )
+    const response = await sendJsonRequest<KeyVaultCertificateResponse>(
+      endpoint,
+      {
+        headers: {
+          Authorization: `${tokens.tokenType} ${tokens.accessToken}`,
+        },
+      },
+    )
 
-  setKeyVaultCertificate: (
+    return response
+      .map((result) => Some(result))
+      .orElse<Option<KeyVaultCertificateResponse>>((error) =>
+        error.statusCode === 404 ? Ok(None()) : Err(error),
+      )
+  }
+
+  const setCertificate = async (
     keyVaultName: string,
     certificateName: string,
     certificate: string,
     type: "pem" | "pkcs12",
-  ) => Promise<Result<string, ApiError>>
+  ) => {
+    const endpoint = getVaultEndpoint(
+      keyVaultName,
+      `/certificates/${certificateName}/import?api-version=7.1`,
+    )
 
-  getKeyVaultSecret: (
-    keyVaultName: string,
-    secretName: string,
-  ) => Promise<Result<Option<{ value: string; version: string }>, ApiError>>
+    const data: KeyVaultCertificateRequest = {
+      value: certificate,
+      policy: {
+        secret_props: {
+          contentType: `application/x-${type}`,
+        },
+      },
+    }
 
-  setKeyVaultSecret: (
-    keyVaultName: string,
-    secretName: string,
-    secretValue: string,
-  ) => Promise<Result<string, ApiError>>
+    const response = await sendJsonRequest<KeyVaultCertificateResponse>(
+      endpoint,
+      {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `${tokens.tokenType} ${tokens.accessToken}`,
+        },
+        method: "POST",
+        body: JSON.stringify(data),
+      },
+    )
+
+    return response.map((cert) => cert.id)
+  }
+
+  return {
+    getSecret,
+    setSecret,
+    getCertificate,
+    setCertificate,
+  }
 }
 
 export const createAzureApi = async (
@@ -202,204 +464,15 @@ export const createAzureApi = async (
     return response
   }
 
-  const getCdnCustomDomainCertificate = async (
-    cdnProfileName: string,
-    cdnEndpointName: string,
-    cdnCustomDomainName: string,
-  ) => {
-    const tokens = managementToken.unwrap()
-    const endpoint = getManagementEndpoint(
-      subscriptionId,
-      resourceGroup,
-      `/providers/Microsoft.Cdn/profiles/${cdnProfileName}/endpoints/${cdnEndpointName}/customDomains/${cdnCustomDomainName}?api-version=2018-04-02`,
-    )
-    const response = await sendJsonRequest<CdnCustomDomainResponse>(endpoint, {
-      headers: {
-        Authorization: `${tokens.tokenType} ${tokens.accessToken}`,
-      },
-    })
-
-    return response.map(
-      (customDomainResponse) =>
-        customDomainResponse.properties.customHttpsParameters
-          ?.certificateSourceParameters.secretVersion,
-    )
-  }
-
-  const setCdnCustomDomainCertificate = async (
-    cdnProfileName: string,
-    cdnEndpointName: string,
-    cdnCustomDomainName: string,
-    vaultName: string,
-    secretName: string,
-    secretVersion: string,
-  ) => {
-    const token = managementToken.unwrap()
-    const data: CustomHttpsParameters = {
-      certificateSource: "AzureKeyVault",
-      certificateSourceParameters: {
-        deleteRule: "NoAction",
-        vaultName,
-        "@odata.type":
-          "#Microsoft.Azure.Cdn.Models.KeyVaultCertificateSourceParameters",
-        resourceGroupName: resourceGroup,
-        secretName,
-        secretVersion,
-        subscriptionId,
-        updateRule: "NoAction",
-      },
-      protocolType: "ServerNameIndication",
-    }
-    const endpoint = getManagementEndpoint(
-      subscriptionId,
-      resourceGroup,
-      `/providers/Microsoft.Cdn/profiles/${cdnProfileName}/endpoints/${cdnEndpointName}/customDomains/${cdnCustomDomainName}/enableCustomHttps?api-version=2019-12-31`,
-    )
-
-    const response = await sendJsonRequest<CdnCustomDomainResponse>(endpoint, {
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `${token.tokenType} ${token.accessToken}`,
-      },
-      method: "POST",
-      body: JSON.stringify(data),
-    })
-
-    return response
-  }
-
-  const getKeyVaultCertificate = async (
-    keyVaultName: string,
-    certificateName: string,
-  ) => {
-    const endpoint = getVaultEndpoint(
-      keyVaultName,
-      `/certificates/${certificateName}?api-version=7.1`,
-    )
-    const token = keyVaultToken.unwrap()
-    const response = await sendJsonRequest<KeyVaultCertificateResponse>(
-      endpoint,
-      {
-        headers: {
-          Authorization: `${token.tokenType} ${token.accessToken}`,
-        },
-      },
-    )
-
-    return response
-      .map((result) => Some(result))
-      .orElse<Option<KeyVaultCertificateResponse>>((error) =>
-        error.statusCode === 404 ? Ok(None()) : Err(error),
-      )
-  }
-
-  const setKeyVaultCertificate = async (
-    keyVaultName: string,
-    certificateName: string,
-    certificate: string,
-    type: "pem" | "pkcs12",
-  ) => {
-    const endpoint = getVaultEndpoint(
-      keyVaultName,
-      `/certificates/${certificateName}/import?api-version=7.1`,
-    )
-    const token = keyVaultToken.unwrap()
-
-    const data: KeyVaultCertificateRequest = {
-      value: certificate,
-      policy: {
-        secret_props: {
-          contentType: `application/x-${type}`,
-        },
-      },
-    }
-
-    const response = await sendJsonRequest<KeyVaultCertificateResponse>(
-      endpoint,
-      {
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `${token.tokenType} ${token.accessToken}`,
-        },
-        method: "POST",
-        body: JSON.stringify(data),
-      },
-    )
-
-    return response.map((cert) => cert.id)
-  }
-
-  const getKeyVaultSecret = async (
-    keyVaultName: string,
-    secretName: string,
-  ): Promise<Result<Option<{ value: string; version: string }>, ApiError>> => {
-    const endpoint = getVaultEndpoint(
-      keyVaultName,
-      `/secrets/${secretName}?api-version=7.1`,
-    )
-    const token = keyVaultToken.unwrap()
-    const response = await sendJsonRequest<KeyVaultSecretResponse>(endpoint, {
-      headers: {
-        Authorization: `${token.tokenType} ${token.accessToken}`,
-      },
-    })
-
-    return response
-      .map((result) =>
-        Some({
-          value: result.value,
-          version: result.id.split("/").slice(-1)[0],
-        }),
-      )
-      .orElse((error) => (error.statusCode === 404 ? Ok(None()) : Err(error)))
-  }
-
-  const setKeyVaultSecret = async (
-    keyVaultName: string,
-    secretName: string,
-    secretValue: string,
-  ) => {
-    const endpoint = getVaultEndpoint(
-      keyVaultName,
-      `/secrets/${secretName}?api-version=7.1`,
-    )
-    const token = keyVaultToken.unwrap()
-    const data: KeyVaultSecretRequest = {
-      contentType: "text/plain",
-      value: secretValue,
-    }
-    const response = await sendJsonRequest<KeyVaultSecretResponse>(endpoint, {
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `${token.tokenType} ${token.accessToken}`,
-      },
-      method: "PUT",
-      body: JSON.stringify(data),
-    })
-
-    return response.map((secret) => secret.id)
-  }
-
   return Ok({
-    // https://docs.microsoft.com/en-us/rest/api/resources/resources/listbyresourcegroup
     listResources,
 
-    // https://docs.microsoft.com/en-us/rest/api/cdn/customdomains/get
-    getCdnCustomDomainCertificate,
+    cdn: createAzureCdnApi(
+      subscriptionId,
+      resourceGroup,
+      managementToken.unwrap(),
+    ),
 
-    // https://docs.microsoft.com/en-us/rest/api/cdn/customdomains/enablecustomhttps
-    setCdnCustomDomainCertificate,
-
-    // https://docs.microsoft.com/en-us/rest/api/keyvault/getcertificate/getcertificate
-    getKeyVaultCertificate,
-
-    // https://docs.microsoft.com/en-us/rest/api/keyvault/importcertificate/importcertificate
-    setKeyVaultCertificate,
-
-    // https://docs.microsoft.com/en-us/rest/api/keyvault/getsecret/getsecret
-    getKeyVaultSecret,
-
-    // https://docs.microsoft.com/en-us/rest/api/keyvault/setsecret/setsecret
-    setKeyVaultSecret,
+    vault: createAzureKeyVaultApi(keyVaultToken.unwrap()),
   })
 }

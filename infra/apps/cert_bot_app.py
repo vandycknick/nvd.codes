@@ -1,5 +1,5 @@
 from pathlib import Path
-from pulumi import asset, Output
+from pulumi import asset, Output, ResourceOptions
 from pulumi_azure import appservice, appinsights, core, eventgrid, keyvault, storage
 
 from apps.consumption_plan import get_consumption_plan
@@ -160,6 +160,7 @@ def create_cert_bot_app(
                 lambda id: f"{id}/functions/ResourceUpdatedHandler"
             )
         ),
+        opts=ResourceOptions(depends_on=[zip_blob, secret, function_app]),
     )
 
     certificate_topic_function_subscription = eventgrid.EventSubscription(
@@ -171,6 +172,7 @@ def create_cert_bot_app(
                 lambda id: f"{id}/functions/CertificateUpdatedHandler"
             )
         ),
+        opts=ResourceOptions(depends_on=[zip_blob, secret, function_app]),
     )
 
     return function_app
