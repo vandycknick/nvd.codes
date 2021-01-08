@@ -115,12 +115,10 @@ describe("getCdnEndpointsWithCustomDomains", () => {
       {
         profileName: "profile-name-1",
         endpointName: "profile-endpoint-name-1",
-        domainName: "www.example.com",
       },
       {
         profileName: "profile-name-2",
         endpointName: "profile-endpoint-name-2",
-        domainName: "example.com",
       },
     ])
   })

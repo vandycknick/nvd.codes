@@ -565,7 +565,7 @@ describe("AzureApi", () => {
             getManagementEndpoint(
               subscriptionId,
               resourceGroup,
-              `/providers/Microsoft.Cdn/profiles/${cdnProfileName}/endpoints/${cdnEndpointName}/customDomains/${cdnCustomDomainName}?api-version=2018-04-02`,
+              `/providers/Microsoft.Cdn/profiles/${cdnProfileName}/endpoints/${cdnEndpointName}/customDomains/${cdnCustomDomainName}?api-version=2019-12-31`,
             ),
             {
               headers: {
@@ -616,7 +616,7 @@ describe("AzureApi", () => {
             getManagementEndpoint(
               subscriptionId,
               resourceGroup,
-              `/providers/Microsoft.Cdn/profiles/${cdnProfileName}/endpoints/${cdnEndpointName}/customDomains/${cdnCustomDomainName}?api-version=2018-04-02`,
+              `/providers/Microsoft.Cdn/profiles/${cdnProfileName}/endpoints/${cdnEndpointName}/customDomains/${cdnCustomDomainName}?api-version=2019-12-31`,
             ),
             {
               headers: {
@@ -652,7 +652,7 @@ describe("AzureApi", () => {
             getManagementEndpoint(
               subscriptionId,
               resourceGroup,
-              `/providers/Microsoft.Cdn/profiles/${cdnProfileName}/endpoints/${cdnEndpointName}/customDomains/${cdnCustomDomainName}?api-version=2018-04-02`,
+              `/providers/Microsoft.Cdn/profiles/${cdnProfileName}/endpoints/${cdnEndpointName}/customDomains/${cdnCustomDomainName}?api-version=2019-12-31`,
             ),
             {
               headers: {

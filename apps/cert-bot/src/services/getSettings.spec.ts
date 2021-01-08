@@ -1,16 +1,23 @@
 import { None, Some } from "@nvd.codes/monad"
 import { when } from "jest-when"
-import { getEnvVar } from "../utils"
+import { getEnvVar, getOptionalEnvVar } from "../utils"
 import { getSettings } from "./getSettings"
 
 jest.mock("../utils")
 
 describe("getSettings", () => {
   const getEnvVarMock = getEnvVar as jest.MockedFunction<typeof getEnvVar>
-
+  const getOptionalEnvVarMock = getOptionalEnvVar as jest.MockedFunction<
+    typeof getOptionalEnvVar
+  >
   beforeEach(() => {
     getEnvVarMock.mockRestore()
     getEnvVarMock.mockClear()
+
+    getOptionalEnvVarMock.mockRestore()
+    getOptionalEnvVarMock.mockClear()
+
+    getOptionalEnvVarMock.mockImplementation((_key, defaultz) => Some(defaultz))
   })
 
   it("returns None when a setting is missing", () => {
@@ -31,17 +38,19 @@ describe("getSettings", () => {
       .calledWith("AZURE_KEYVAULT_NAME")
       .mockReturnValue(Some("keyVaultName"))
       .calledWith("AZURE_KEYVAULT_SECRET_NAME")
-      .mockReturnValue(Some("keyVaultNameSecretName"))
+      .mockReturnValue(Some("keyVaultSecretName"))
       .calledWith("AZURE_SUBSCRIPTION_ID")
       .mockReturnValue(Some("subscriptionId"))
       .calledWith("AZURE_RESOURCE_GROUP")
       .mockReturnValue(Some("resourceGroupName"))
       .calledWith("CLOUDFLARE_ZONE_ID")
       .mockReturnValue(Some("123"))
-      .calledWith("ACME_DIRECTORY_URL")
-      .mockReturnValue(Some("https://directory"))
       .calledWith("ACME_CONTACT_URL")
       .mockReturnValue(Some("mailto:email"))
+
+    when(getOptionalEnvVarMock)
+      .calledWith("ACME_DIRECTORY_URL", expect.any(String))
+      .mockReturnValue(Some("https://directory"))
 
     // When
     const settings = getSettings()
@@ -51,12 +60,11 @@ describe("getSettings", () => {
       Some({
         azureKeyVaultName: "keyVaultName",
         azureKeyVaultSecretName: "keyVaultSecretName",
-        azureKeyVaultCertificateName: "certificateName",
         azureSubscriptionId: "subscriptionId",
         azureResourceGroup: "resourceGroupName",
         cloudflareZoneId: "123",
         acmeDirectoryUrl: "https://directory",
-        acmeContacturl: "mailto:email",
+        acmeContactUrl: "mailto:email",
       }),
     )
   })
@@ -67,7 +75,7 @@ describe("getSettings", () => {
       .calledWith("AZURE_KEYVAULT_NAME")
       .mockReturnValue(Some("keyVaultName"))
       .calledWith("AZURE_KEYVAULT_SECRET_NAME")
-      .mockReturnValue(Some("keyVaultNameSecretName"))
+      .mockReturnValue(Some("keyVaultSecretName"))
       .calledWith("AZURE_SUBSCRIPTION_ID")
       .mockReturnValue(Some("subscriptionId"))
       .calledWith("AZURE_RESOURCE_GROUP")
@@ -85,13 +93,12 @@ describe("getSettings", () => {
       Some({
         azureKeyVaultName: "keyVaultName",
         azureKeyVaultSecretName: "keyVaultSecretName",
-        azureKeyVaultCertificateName: "certificateName",
         azureSubscriptionId: "subscriptionId",
         azureResourceGroup: "resourceGroupName",
         cloudflareZoneId: "123",
         acmeDirectoryUrl:
           "https://acme-staging-v02.api.letsencrypt.org/directory",
-        acmeContacturl: "mailto:email",
+        acmeContactUrl: "mailto:email",
       }),
     )
   })
