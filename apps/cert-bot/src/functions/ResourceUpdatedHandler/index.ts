@@ -29,6 +29,12 @@ const resourceUpdatedHandler = async (
   }
 
   const settings = settingsOrNone.unwrap()
+
+  if (!settings.certBotEnabled) {
+    log.info("Cert-bot disabled")
+    return Ok("Cert-bot disabled")
+  }
+
   const parsed = parseAzureResourceId(event.subject)
 
   if (parsed.isErr()) {
