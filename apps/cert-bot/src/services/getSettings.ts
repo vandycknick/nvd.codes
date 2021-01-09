@@ -17,6 +17,7 @@ export const getSettings = () =>
     getEnvVar("CLOUDFLARE_ZONE_ID"),
     getOptionalEnvVar("ACME_DIRECTORY_URL", defaults.letsencrypt.staging),
     getEnvVar("ACME_CONTACT_URL"),
+    getOptionalEnvVar("CERT_BOT_ENABLED", "false"),
   ).map(
     ([
       azureKeyVaultName,
@@ -26,6 +27,7 @@ export const getSettings = () =>
       cloudflareZoneId,
       acmeDirectoryUrl,
       acmeContactUrl,
+      certBotEnabled,
     ]) => ({
       azureKeyVaultName,
       azureKeyVaultSecretName,
@@ -34,5 +36,6 @@ export const getSettings = () =>
       cloudflareZoneId,
       acmeDirectoryUrl,
       acmeContactUrl,
+      certBotEnabled: certBotEnabled === "true",
     }),
   )

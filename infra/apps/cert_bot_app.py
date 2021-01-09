@@ -158,7 +158,9 @@ def create_cert_bot_app(
         azure_function_endpoint=eventgrid.EventSubscriptionAzureFunctionEndpointArgs(
             function_id=function_app.id.apply(
                 lambda id: f"{id}/functions/ResourceUpdatedHandler"
-            )
+            ),
+            max_events_per_batch=1,
+            preferred_batch_size_in_kilobytes=64,
         ),
         opts=ResourceOptions(depends_on=[zip_blob, secret, function_app]),
     )
@@ -170,7 +172,9 @@ def create_cert_bot_app(
         azure_function_endpoint=eventgrid.EventSubscriptionAzureFunctionEndpointArgs(
             function_id=function_app.id.apply(
                 lambda id: f"{id}/functions/CertificateUpdatedHandler"
-            )
+            ),
+            max_events_per_batch=1,
+            preferred_batch_size_in_kilobytes=64,
         ),
         opts=ResourceOptions(depends_on=[zip_blob, secret, function_app]),
     )

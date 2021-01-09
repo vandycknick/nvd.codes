@@ -4,6 +4,7 @@ import { getClient } from "durable-functions"
 
 import { CertificateUpdatedEvent } from "../../events/CertificateUpdatedEvent"
 import { getServices } from "../../services/getServices"
+import { getSettings } from "../../services/getSettings"
 
 const certificateUpdatedHandler = async (
   context: Context,
@@ -14,6 +15,20 @@ const certificateUpdatedHandler = async (
   log.info(
     `[CertificateUpdatedHandler] Received new eventGrid event ${event.id}.`,
   )
+
+  const settingsOrNone = getSettings()
+
+  if (settingsOrNone.isNone()) {
+    log.error("Not all settings provided!")
+    return Err("Not all required settings are provided!")
+  }
+
+  const settings = settingsOrNone.unwrap()
+
+  if (!settings.certBotEnabled) {
+    log.info("Cert-bot disabled")
+    return Ok("Cert-bot disabled")
+  }
 
   const { getCdnEndpointsWithCustomDomains, azure } = (
     await getServices()
@@ -77,6 +92,7 @@ const certificateUpdatedHandler = async (
   log.info(
     `Successfully scheduled ${success}/${updates.length} endpoint updates!`,
   )
+  return Ok("success")
 }
 
 export default certificateUpdatedHandler

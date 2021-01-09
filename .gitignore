@@ -6,6 +6,8 @@ out
 .tmp
 apps/resume/public
 apps/cert-bot/data
+wrangler.toml
+apps/headers/worker
 
 # Dotnet
 bin/

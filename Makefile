@@ -54,6 +54,10 @@ dev.images:
 dev.cert-bot:
 	@yarn concurrently -n dev,watch "yarn workspace @nvd.codes/cert-bot dev" "yarn workspace @nvd.codes/cert-bot watch"
 
+.PHONY: dev.headers
+dev.headers:
+	@yarn workspace @nvd.codes/headers dev
+
 .PHONY: check
 check:
 	$(NPM_BIN)/tsc -p $(API_PROJECT) --noEmit
@@ -86,6 +90,7 @@ build.libs:
 build: clean build.libs
 	yarn workspace @nvd.codes/api build
 	yarn workspace @nvd.codes/cert-bot build
+	yarn workspace @nvd.codes/headers build
 	yarn workspace @nvd.codes/images build
 	yarn workspace @nvd.codes/resume build
 	yarn workspace @nvd.codes/web build
