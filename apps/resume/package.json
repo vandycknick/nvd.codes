@@ -5,7 +5,7 @@
   "main": "index.js",
   "license": "MIT",
   "scripts": {
-    "validate": "resume test",
+    "validate": "resume validate",
     "serve": "resume serve -t nickvd",
     "build": "mkdir -p .dist && yarn build.pdf && yarn build.html && yarn build.html2",
     "build.pdf": "resume export -t nickvd .dist/resume.pdf",
