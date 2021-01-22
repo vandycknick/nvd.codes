@@ -1,13 +1,43 @@
-import React, { useEffect } from "react"
+import React, { useEffect, useState } from "react"
 import { AppProps } from "next/app"
 import { useRouter } from "next/router"
-import { CacheProvider } from "@emotion/react"
-import { cache } from "@emotion/css"
+import { ChakraProvider, Flex, Progress } from "@chakra-ui/react"
 
 import { pageView } from "services/gtag"
-import Layout from "components/Layout"
+import { Header } from "components/Common/Header"
+import { Footer } from "components/Common/Footer"
+import theme from "theme"
 
-const App: React.FC<AppProps> = ({ Component, pageProps }) => {
+const PageProgress = () => {
+  const [loading, setLoading] = useState(false)
+  const router = useRouter()
+
+  useEffect(() => {
+    const onRouteChangeStart = () => setLoading(true)
+    const onRouteCompleted = () => setLoading(false)
+
+    router.events.on("routeChangeStart", onRouteChangeStart)
+    router.events.on("routeChangeComplete", onRouteCompleted)
+    router.events.on("routeChangeError", onRouteCompleted)
+
+    return () => {
+      router.events.off("routeChangeStart", onRouteChangeStart)
+      router.events.off("routeChangeComplete", onRouteCompleted)
+      router.events.off("routeChangeError", onRouteCompleted)
+    }
+  }, [router])
+
+  return (
+    <Progress
+      colorScheme="teal"
+      size="xs"
+      isIndeterminate={loading}
+      value={100}
+    />
+  )
+}
+
+const App = ({ Component, pageProps }: AppProps) => {
   const router = useRouter()
   useEffect(() => {
     const handleRouteChange = (url: string): void => pageView(url)
@@ -16,11 +46,22 @@ const App: React.FC<AppProps> = ({ Component, pageProps }) => {
   }, [router])
 
   return (
-    <CacheProvider value={cache}>
-      <Layout>
+    <ChakraProvider theme={theme}>
+      <PageProgress />
+      <Header />
+      <Flex
+        direction="column"
+        align="center"
+        maxW={{ xl: "1200px" }}
+        px={4}
+        m="0 auto"
+        flex={1}
+        as="main"
+      >
         <Component {...pageProps} />
-      </Layout>
-    </CacheProvider>
+      </Flex>
+      <Footer />
+    </ChakraProvider>
   )
 }
 export default App

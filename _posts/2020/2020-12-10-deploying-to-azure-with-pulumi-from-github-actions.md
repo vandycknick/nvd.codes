@@ -83,7 +83,7 @@ Now that we've got these two common workflows defined, we’ll need to configure
 az ad sp list --show-mine | jq '.[].displayName'
 ```
 
-There are two types of authentication available for service principals: password-based authentication, and certificate-based authentication. To create a new service principal with password-based authentication run the following command: 
+There are two types of authentication available for service principals: password-based authentication, and certificate-based authentication. To create a new service principal with password-based authentication run the following command:
 
 ```sh
 az ad sp create-for-rbac --name <my-service-principal>
@@ -112,6 +112,7 @@ az account list | jq '.[] | select(.name == "<subscription-name>") | .id'
 ```
 
 This will return the id of the subscription where you want to deploy your resources. Now that we have everything ready we can match everything up to environment variables as follows:
+
 - `ARM_CLIENT_ID` → appId returned when creating the service principal
 - `ARM_CLIENT_SECRET` → password returned when creating the service principal
 - `ARM_TENTANT_ID` → tenant returned when creating the service principal

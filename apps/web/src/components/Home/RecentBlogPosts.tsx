@@ -1,19 +1,26 @@
 import React from "react"
-import Link from "next/link"
-import { css, cx } from "@emotion/css"
-import { useTheme } from "@emotion/react"
+import { default as NextLink } from "next/link"
 import { Post } from "@nvd.codes/core"
+import {
+  Box,
+  Circle,
+  Flex,
+  Grid,
+  Heading,
+  Link,
+  Tag,
+  Text,
+  useColorModeValue,
+  VStack,
+  HStack,
+} from "@chakra-ui/react"
 
-import { Heading } from "components/Common/Heading"
-import { Span } from "components/Common/Span"
-import { colors, fontWeight, spacing, fontSize } from "components/Tokens"
 import Time from "components/Common/Time"
-import { NavButton } from "components/Common/Buttons"
-import { fromTablet } from "components/Common/mediaQuery"
+import { FireIcon } from "components/Home/Icons"
 
 type LatestPost = Pick<
   Post,
-  "title" | "description" | "date" | "slug" | "readingTime"
+  "title" | "description" | "date" | "slug" | "readingTime" | "categories"
 >
 
 export type LatestPostsProps = {
@@ -21,103 +28,87 @@ export type LatestPostsProps = {
   posts: LatestPost[]
 }
 
-export const RecentBlogPosts: React.FC<LatestPostsProps> = ({
-  className,
-  posts,
-}) => {
-  const theme = useTheme()
+export const RecentBlogPosts = ({ className, posts }: LatestPostsProps) => {
+  const bg = useColorModeValue("gray.100", "gray.900")
+  const color = useColorModeValue("gray.700", "gray.400")
+  const circleBg = useColorModeValue("black", "white")
+  const circleColor = useColorModeValue("white", "black")
   return (
-    <div
-      className={cx(
-        className,
-        css`
-          padding: 0 ${spacing[4]};
-        `,
-      )}
-    >
-      <Heading
-        as="h4"
-        size="3xl"
-        weight="bold"
-        className={css`
-          padding: ${spacing[2]} 0;
-        `}
-      >
-        Recent Blog Posts
+    <VStack className={className} spacing={4} mt={4} as="section">
+      <Heading as="h4" py={4} size="lg">
+        Latest Articles
       </Heading>
-      <ul
-        className={css`
-          list-style-type: none;
-          padding: 0;
-          display: flex;
-          flex-direction: column;
-          justify-content: space-between;
-
-          ${fromTablet`flex-direction: row;`}
-        `}
+      <Text pb={1}>
+        While you are here, have a look at some ofthe latest articles I wrote.
+        Or go and have a look at some of my earlier articles!
+      </Text>
+      <NextLink href="/blog">
+        <Link pb={4} colorScheme="teal" fontWeight="bold" fontSize="lg">
+          Read More →
+        </Link>
+      </NextLink>
+      <Grid
+        templateColumns={{ base: "repeat(1, 1fr)", md: "repeat(3, 1fr)" }}
+        gap={6}
+        as="ul"
       >
         {posts.map((post) => (
-          <li
+          <Box
+            maxW={["none", "none", "sm"]}
+            borderWidth="1px"
+            borderRadius="lg"
+            borderColor="black"
+            overflow="hidden"
+            position="relative"
+            p="4"
+            as="li"
             key={post.title}
-            className={css`
-              ${fromTablet`width: 32%;`}
-            `}
+            _hover={{ bg }}
           >
-            <Link href="/post/[slug]" as={`/post/${post.slug}`} passHref>
-              <a
-                className={css`
-                  display: flex;
-                  flex-direction: column;
-                  margin: ${spacing[4]} 0;
-                  text-decoration: none;
-                `}
+            <NextLink href="/post/[slug]" as={`/post/${post.slug}`} passHref>
+              <Flex
+                as="a"
+                direction="column"
+                justifyContent="space-between"
+                height="100%"
               >
-                <Heading
-                  as="h5"
-                  className={css`
-                    font-size: ${fontSize.lg};
-                    font-weight: ${fontWeight.bold};
-                  `}
+                <Circle
+                  size="30px"
+                  bg={circleBg}
+                  color={circleColor}
+                  position="absolute"
+                  top={0}
+                  right={0}
+                  mt={3}
+                  mr={3}
                 >
-                  {post.title}
-                </Heading>
-                <Span
-                  className={css`
-                    color: ${colors.grey[300]};
-                    font-size: ${fontSize.sm};
-                    padding: ${spacing[2]} 0;
-                  `}
-                >
-                  {post.description}
-                </Span>
-                <div
-                  className={css`
-                    font-size: ${fontSize.sm};
-                    color: ${theme.onBackground};
-                  `}
-                >
-                  <Time dateTime={post.date} />
-                  <Span
-                    className={css`
-                      padding: 0 ${spacing[2]};
-                    `}
-                  >
-                    •
-                  </Span>
-                  <Span>{post.readingTime}</Span>
-                </div>
-              </a>
-            </Link>
-          </li>
+                  <FireIcon />
+                </Circle>
+                <VStack align="stretch">
+                  <Text fontSize="xs" color={color}>
+                    <Time dateTime={post.date} />
+                  </Text>
+                  <Heading as="h5" size="l" flex={1} isTruncated noOfLines={2}>
+                    {post.title}
+                  </Heading>
+                </VStack>
+                <VStack align="stretch">
+                  <Text fontSize="xs" color={color} py={2}>
+                    {post.readingTime}
+                  </Text>
+                  <HStack>
+                    {post.categories.slice(0, 3).map((category) => (
+                      <Tag size="md" key={category} colorScheme="cyan">
+                        {category}
+                      </Tag>
+                    ))}
+                  </HStack>
+                </VStack>
+              </Flex>
+            </NextLink>
+          </Box>
         ))}
-      </ul>
-      <div
-        className={css`
-          padding: ${spacing[4]} 0;
-        `}
-      >
-        <NavButton href="/blog">All Posts</NavButton>
-      </div>
-    </div>
+      </Grid>
+    </VStack>
   )
 }

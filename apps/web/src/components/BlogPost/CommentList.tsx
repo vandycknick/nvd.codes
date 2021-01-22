@@ -5,14 +5,11 @@ import { useTheme } from "@emotion/react"
 import styled from "@emotion/styled"
 import { PostComments } from "@nvd.codes/core"
 import * as timeago from "timeago.js"
+import { Text } from "@chakra-ui/react"
 
 import { fetchJSON } from "utils/async"
-import { spacing, colors, fontWeight, fontSize } from "components/Tokens"
 import { Image } from "components/BlogPost/Image"
-import { Span } from "components/Common/Span"
-import { Content } from "components/BlogPost/Content"
 import { LinkButton } from "components/Common/Buttons"
-import { fromTablet } from "components/Common/mediaQuery"
 
 type CommentListProps = {
   slug: string
@@ -38,8 +35,6 @@ const WriteComment: React.FC<{ editUrl?: string }> = ({ editUrl }) => {
           img {
             background-color: ${colors.grey[700]};
           }
-
-          ${fromTablet`display: block;`}
         `}
       />
       <div
@@ -85,7 +80,7 @@ const WriteComment: React.FC<{ editUrl?: string }> = ({ editUrl }) => {
               background: transparent;
             `}
           >
-            <Span
+            <Text
               className={css`
                 background: ${theme.background};
                 display: inline-block;
@@ -100,8 +95,8 @@ const WriteComment: React.FC<{ editUrl?: string }> = ({ editUrl }) => {
               `}
             >
               Write
-            </Span>
-            <Span
+            </Text>
+            <Text
               className={css`
                 display: inline-block;
                 padding: ${spacing[2]} ${spacing[4]};
@@ -112,7 +107,7 @@ const WriteComment: React.FC<{ editUrl?: string }> = ({ editUrl }) => {
               `}
             >
               Preview
-            </Span>
+            </Text>
           </div>
         </header>
         <div
@@ -152,7 +147,7 @@ const WriteComment: React.FC<{ editUrl?: string }> = ({ editUrl }) => {
         >
           <LinkButton
             href={editUrl}
-            target="_blank"
+            // target="_blank"
             className={css`
               font-size: ${fontSize.xs};
             `}
@@ -250,8 +245,6 @@ export const CommentList: React.FC<CommentListProps> = ({ slug }) => {
                 className={css`
                   display: none;
                   padding: 0 ${spacing[4]} 0 0;
-
-                  ${fromTablet`display: block;`}
                 `}
               />
               <article
@@ -305,9 +298,9 @@ export const CommentList: React.FC<CommentListProps> = ({ slug }) => {
                     {comment.author.login}
                   </a>
                   {" commented "}
-                  <Span>{timeago.format(comment.createdAt)}</Span>
+                  <Text>{timeago.format(comment.createdAt)}</Text>
                 </div>
-                <Content
+                <div
                   className={css`
                     padding: ${spacing[2]} ${spacing[4]};
                   `}
