@@ -74,7 +74,7 @@ const getLatestRepositories = async (take = 6): Promise<Repository[]> => {
       id: repo.id,
       name: repo.name,
       nameWithOwner: repo.nameWithOwner,
-      description: repo.nameWithOwner,
+      description: repo.description,
       updatedAt: repo.updatedAt,
       stars: repo.stars.totalCount,
       url: repo.url,

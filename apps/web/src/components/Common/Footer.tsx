@@ -1,56 +1,20 @@
 import React from "react"
-import { css } from "@emotion/css"
-import styled from "@emotion/styled"
-import { useTheme } from "@emotion/react"
+import { Link, Text, useColorModeValue, VStack } from "@chakra-ui/react"
+import { ExternalLinkIcon } from "@chakra-ui/icons"
 
-import { spacing, fontSize } from "components/Tokens"
-import { Container } from "components/Common/Container"
-import { Span } from "./Span"
-
-const FooterWrapper = styled.footer`
-  ${({ theme }) => css`
-    background-color: ${theme.navigation};
-    color: ${theme.onNavigation};
-    padding: ${spacing[4]} 0 ${spacing[2]} 0;
-  `}
-`
-
-const Footer: React.FC = () => {
-  const theme = useTheme()
+const Footer = () => {
+  const bg = useColorModeValue("gray.50", "gray.900")
   return (
-    <FooterWrapper>
-      <Container
-        className={css`
-          display: flex;
-          flex-direction: column;
-          align-items: center;
-        `}
-      >
-        <p>
-          <strong>nvd.codes</strong>&nbsp;is handcrafted with ❤️&nbsp;
-          <a
-            className={css`
-              color: ${theme.onNavigation};
-
-              &:hover {
-                color: ${theme.primaryLighter};
-              }
-            `}
-            href="https://github.com/nickvdyck/nvd.codes"
-          >
-            view source
-          </a>
-        </p>
-        <Span
-          className={css`
-            font-size: ${fontSize.xs};
-            padding: ${spacing[1]} 0;
-          `}
-        >
-          all materials © Nick Van Dyck 2020
-        </Span>
-      </Container>
-    </FooterWrapper>
+    <VStack bg={bg} py={4} as="footer">
+      <Text>
+        <strong>nvd.codes &nbsp;</strong>is handcrafted with ❤️&nbsp;
+        <Link href="https://github.com/nickvdyck/nvd.codes" isExternal>
+          view source
+          <ExternalLinkIcon mx={2} />
+        </Link>
+      </Text>
+      <Text>all materials © Nick Van Dyck 2021</Text>
+    </VStack>
   )
 }
 

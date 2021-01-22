@@ -1,225 +1,123 @@
-import React, { Fragment } from "react"
-import { css, cx } from "@emotion/css"
-import { useTheme } from "@emotion/react"
+import React from "react"
 import useSWR from "swr"
 import * as timeago from "timeago.js"
 import { Activity } from "@nvd.codes/core"
-
 import {
-  colors,
-  fontSize,
-  spacing,
-  borderRadius,
-  fontWeight,
-} from "components/Tokens"
-import { Card } from "components/Common/Card"
-import { Heading } from "components/Common/Heading"
-import { Commit as CommitIcon } from "components/Home/Icons/Commit"
-import { Repository as RepositoryIcon } from "components/Home/Repository"
-import { fromTablet, fromDesktop } from "components/Common/mediaQuery"
-import { Span } from "components/Common/Span"
-import { Tag } from "components/Common/Tag"
-import { fetchJSON } from "utils/async"
-import truncate from "utils/truncate"
+  Box,
+  Circle,
+  Divider,
+  Flex,
+  Grid,
+  Heading,
+  Spinner,
+  Text,
+  useColorModeValue,
+  VStack,
+} from "@chakra-ui/react"
 
-type LatestActivitiesProps = {
-  className?: string
+import { Commit as CommitIcon, RepositoryIcon } from "components/Home/Icons"
+import { fetchJSON } from "utils/async"
+
+// const cssFromBackgroundColor = (background: string): string => {
+//   let color = background
+
+//   if (color.length < 5) {
+//     color += color.slice(1)
+//   }
+//   color =
+//     parseInt(color.replace("#", "0x"), 16) > 0xffffff / 2 ? "#333" : "#fff"
+
+//   return css`
+//     background-color: ${background};
+//     color: ${color};
+//   `
+// }
+
+type ActivityCardProps = {
+  date: string
+  name: string
+  heading: string
+  message: string
+  icon: React.ReactElement
 }
 
-const cssFromBackgroundColor = (background: string): string => {
-  let color = background
-
-  if (color.length < 5) {
-    color += color.slice(1)
-  }
-  color =
-    parseInt(color.replace("#", "0x"), 16) > 0xffffff / 2 ? "#333" : "#fff"
-
-  return css`
-    background-color: ${background};
-    color: ${color};
-  `
+const ActivityCard = ({
+  date,
+  name,
+  heading,
+  message,
+  icon: Icon,
+}: ActivityCardProps) => {
+  const bg = useColorModeValue("transparent", "gray.700")
+  const nameColor = useColorModeValue("gray.500", "gray.50")
+  const messageColor = useColorModeValue("gray.600", "gray.100")
+  return (
+    <Flex direction="column" boxShadow="lg" borderRadius="md" bg={bg}>
+      <Text p={4} textAlign="right" w="100%" color={nameColor} fontSize="sm">
+        {timeago.format(date).toUpperCase()}
+      </Text>
+      <Flex w="100%" mt={0} mb={8} position="relative" alignItems="center">
+        <Divider />
+        <Circle
+          size="40px"
+          bg="teal.800"
+          bgGradient="linear(to-br, green.600, cyan.700)"
+          color="white"
+          position="absolute"
+          mx={8}
+          p={1}
+        >
+          {Icon}
+        </Circle>
+      </Flex>
+      <VStack px={8} pb={4} spacing={1} alignItems="left">
+        <Text color={nameColor} fontSize="sm">{`in ${name}`}</Text>
+        <Heading as="h5" size="md">
+          {heading}
+        </Heading>
+        <Text color={messageColor} fontSize="sm" noOfLines={2}>
+          {message}
+        </Text>
+      </VStack>
+    </Flex>
+  )
 }
 
 type OnlineActivityProps = {
   activity: Activity
 }
 
-const cardColStyles = css`
-  margin-bottom: ${spacing[4]};
-  padding: 0;
-  min-height: 200px;
-  ${fromTablet`width: 49%;`}
-  ${fromDesktop`width: 32%;`}
-`
-
 const OnlineActivity: React.FC<OnlineActivityProps> = ({ activity }) => {
-  const theme = useTheme()
+  const { latestCommit, projects } = activity
   return (
-    <Fragment>
-      <Card className={cardColStyles}>
-        <div
-          className={css`
-            flex: 1;
-            display: flex;
-            height: 100%;
-            align-items: center;
-            padding: ${spacing[4]} ${spacing[5]};
-          `}
-        >
-          <Span
-            className={css`
-              width: 30px;
-              display: flex;
-              padding: ${spacing[2]};
-              background-color: ${colors.teal[800]};
-              border-radius: ${borderRadius.md};
-            `}
-          >
-            <CommitIcon width={30} height={30} color={theme.onSurface} />
-          </Span>
-          <div
-            className={css`
-              display: flex;
-              flex-direction: column;
-              padding: 0 ${spacing[5]};
-            `}
-          >
-            <Span
-              className={css`
-                font-weight: ${fontWeight.bold};
-                font-size: ${fontSize.lg};
-              `}
-            >
-              Latest Commit
-            </Span>
-            <Span
-              className={css`
-                color: ${colors.grey[300]};
-                font-size: ${fontSize.xs};
-                padding-bottom: ${spacing[3]};
-              `}
-            >
-              {`created ${timeago.format(
-                activity.latestCommit.pushedDate,
-              )} in ${activity.latestCommit.repositoryName}`}
-            </Span>
-            <Span>{activity.latestCommit.messageHeadline}</Span>
-          </div>
-        </div>
-        <a
-          href={activity.latestCommit.url}
-          className={css`
-            display: flex;
-            color: ${theme.primaryLight};
-            background-color: ${colors.grey[800]};
-            padding: ${spacing[3]} ${spacing[5]};
-            border-bottom-left-radius: ${borderRadius.md};
-            border-bottom-right-radius: ${borderRadius.md};
-            text-decoration: none;
-
-            &:hover {
-              color: ${theme.primaryLighter};
-            }
-          `}
-        >
-          View Commit
-        </a>
-      </Card>
-      {activity?.projects.map((project) => (
-        <Card key={project.id} className={cardColStyles}>
-          <div
-            className={css`
-              display: flex;
-              flex: 1;
-              height: 100%;
-              align-items: center;
-              padding: ${spacing[3]} ${spacing[5]};
-            `}
-          >
-            <Span
-              className={css`
-                width: 30px;
-                display: flex;
-                padding: ${spacing[2]};
-                background-color: ${colors.teal[800]};
-                border-radius: ${borderRadius.md};
-              `}
-            >
-              <RepositoryIcon width={30} height={30} color={theme.onSurface} />
-            </Span>
-            <div
-              className={css`
-                display: flex;
-                flex-direction: column;
-                padding-left: ${spacing[5]};
-                width: 100%;
-              `}
-            >
-              <Span
-                className={css`
-                  display: flex;
-                  justify-content: space-between;
-                  align-items: center;
-                `}
-              >
-                <Span
-                  className={css`
-                    font-weight: ${fontWeight.bold};
-                    font-size: ${fontSize.lg};
-                  `}
-                >
-                  {project.name}
-                </Span>
-                <Tag
-                  className={css`
-                    ${cssFromBackgroundColor(project.primaryLanguage.color)}
-                    align-items: center;
-                    font-size: 0.5rem;
-                  `}
-                >
-                  {project.primaryLanguage.name}
-                </Tag>
-              </Span>
-              <Span
-                className={css`
-                  color: ${colors.grey[300]};
-                  font-size: ${fontSize.xs};
-                `}
-              >
-                {`last updated ${timeago.format(project.updatedAt)}`}
-              </Span>
-              <Span
-                className={css`
-                  font-size: ${fontSize.sm};
-                  padding-top: ${spacing[3]};
-                `}
-              >
-                {truncate(project.description || "", 12)}
-              </Span>
-            </div>
-          </div>
-          <a
-            href={project.url}
-            className={css`
-              display: flex;
-              color: ${theme.primaryLight};
-              background-color: ${colors.grey[800]};
-              padding: ${spacing[3]} ${spacing[5]};
-              border-bottom-left-radius: ${borderRadius.md};
-              border-bottom-right-radius: ${borderRadius.md};
-              text-decoration: none;
-
-              &:hover {
-                color: ${theme.primaryLighter};
-              }
-            `}
-          >
-            View Repository
-          </a>
-        </Card>
+    <Grid
+      as="section"
+      templateColumns={[
+        "repeat(1, 1fr)",
+        "repeat(1, 1fr)",
+        "repeat(2, 1fr)",
+        "repeat(3, 1fr)",
+      ]}
+      gap={5}
+    >
+      <ActivityCard
+        date={latestCommit.pushedDate}
+        name={latestCommit.repositoryName}
+        heading="Latest Commit"
+        message={latestCommit.messageHeadline}
+        icon={<CommitIcon width={6} height={6} />}
+      />
+      {projects.slice(0, 5).map((project) => (
+        <ActivityCard
+          key={project.id}
+          date={project.updatedAt}
+          name={project.nameWithOwner}
+          heading={project.name}
+          message={project.description}
+          icon={<RepositoryIcon width={6} height={6} />}
+        />
       ))}
-    </Fragment>
+    </Grid>
   )
 }
 
@@ -240,42 +138,33 @@ const renderOnlineActivity = ({
     return <div />
   }
 
-  return <div>Loading</div>
+  return (
+    <Spinner
+      thickness="4px"
+      speed="0.65s"
+      emptyColor="gray.200"
+      color="teal.500"
+      size="md"
+    />
+  )
 }
 
-const LatestActivities: React.FC<LatestActivitiesProps> = ({ className }) => {
+const LatestActivities = () => {
   const { data: activity, error } = useSWR<Activity>(
     `${process.env.NEXT_PUBLIC_PROJECTS_API}/api/project/activities`,
     fetchJSON,
   )
   return (
-    <div
-      className={cx(
-        className,
-        css`
-          padding: 0 ${spacing[4]};
-        `,
-      )}
-    >
-      <Heading as="h4" size="3xl" weight="bold">
+    <VStack spacing={4} py={8} mb={8} width="100%">
+      <Heading as="h4" size="lg" py={4}>
         Online Activity
       </Heading>
-      <div
-        className={css`
-          display: flex;
-          flex-direction: column;
-          padding: ${spacing[8]} 0 ${spacing[6]} 0;
-
-          ${fromTablet`
-            flex-direction: row;
-            flex-wrap: wrap;
-            justify-content: space-between;
-          `}
-        `}
-      >
-        {renderOnlineActivity({ activity, error })}
-      </div>
-    </div>
+      <Text pb={4}>
+        I like playing around with code, here are is a list of the latest things
+        I worked on in the open.
+      </Text>
+      <Box width="100%">{renderOnlineActivity({ activity, error })}</Box>
+    </VStack>
   )
 }
 

@@ -1,7 +1,7 @@
 {
   "extends": "@nvd/tsconfig",
   "compilerOptions": {
-    "target": "es5",
+    "target": "esnext",
     "lib": ["dom", "dom.iterable", "esnext"],
     "noEmit": true,
     "module": "esnext",

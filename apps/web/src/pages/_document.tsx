@@ -1,4 +1,5 @@
 import React from "react"
+import { ColorModeScript } from "@chakra-ui/react"
 import Document, {
   Html,
   Head,
@@ -7,7 +8,9 @@ import Document, {
   DocumentContext,
 } from "next/document"
 import { extractCritical } from "@emotion/server"
+
 import { GA_TRACKING_ID } from "services/gtag"
+import theme from "theme"
 
 type CriticalStyles = ReturnType<typeof extractCritical>
 type DocumentProps = { html: string } & CriticalStyles
@@ -31,10 +34,6 @@ class MyDocument extends Document<DocumentProps> {
             data-emotion-css={ids.join(" ")}
             dangerouslySetInnerHTML={{ __html: css }}
           />
-          <link
-            href="https://fonts.googleapis.com/css?family=Montserrat:700|Noto+Sans:normal,700"
-            rel="stylesheet"
-          />
           <script
             async
             src={`https://www.googletagmanager.com/gtag/js?id=${GA_TRACKING_ID}`}
@@ -53,6 +52,7 @@ class MyDocument extends Document<DocumentProps> {
           />
         </Head>
         <body>
+          <ColorModeScript initialColorMode={theme.config.initialColorMode} />
           <Main />
           <NextScript />
         </body>

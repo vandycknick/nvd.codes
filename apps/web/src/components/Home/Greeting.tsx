@@ -1,17 +1,17 @@
 import React from "react"
-import { css } from "@emotion/css"
-import { useTheme } from "@emotion/react"
-import styled from "@emotion/styled"
+import {
+  Button,
+  Heading,
+  HStack,
+  Text,
+  useColorModeValue,
+  VStack,
+} from "@chakra-ui/react"
 
-import { Heading } from "components/Common/Heading"
-import { Span } from "components/Common/Span"
-import { TextRoulette } from "components/Common/TextRoulette"
-import { OSDetect } from "components/Common/OSDetect"
-import { Paragraph } from "components/Common/Paragraph"
-import { colors, spacing } from "components/Tokens"
 import { Globe } from "components/Home/Icons/Globe"
 import { Github } from "components/Home/Icons/Github"
 import { Twitter } from "components/Home/Icons/Twitter"
+import TypeWriter from "components/Common/TypeWriter"
 
 type GreetingProps = {
   githubUrl: string
@@ -19,121 +19,79 @@ type GreetingProps = {
   siteUrl: string
 }
 
-const IconLink = styled.a`
-  ${({ theme }) => css`
-    display: flex;
-    align-items: center;
-    text-decoration: none;
-    color: ${theme.onBackground};
-    margin: 0 ${spacing[2]};
-
-    &:hover {
-      color: ${theme.primary};
-
-      svg {
-        fill: ${theme.primary};
-      }
-    }
-  `}
-`
-
 const Greeting: React.FC<GreetingProps> = ({
   githubUrl,
   twitterUrl,
   siteUrl,
 }) => {
-  const theme = useTheme()
+  const iconColor = useColorModeValue("black", "white")
   return (
-    <section
-      className={css`
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-      `}
-    >
-      <Heading
-        className={css`
-          padding-top: ${spacing[6]};
-        `}
-        weight="normal"
-      >
+    <VStack as="section" mb={4}>
+      <Heading pt={6} fontWeight="normal">
         Hi 👋
       </Heading>
-      <Heading as="h2" size="4xl" weight="extrabold">
-        I&#39;m <Span shadow="yellow">Nick</Span>
+      <Heading as="h2" size="4xl" fontWeight="extrabold">
+        I
+        <Text
+          as="span"
+          bgGradient="linear(to-br, green.400, cyan.500)"
+          bgClip="text"
+        >
+          &#39;
+        </Text>
+        m Nick
       </Heading>
-      <Heading
-        as="h3"
-        weight="normal"
-        className={css`
-          display: flex;
-        `}
-      >
+      <Heading as="h3" size="md" pt="4" fontWeight="normal" display="flex">
         And I&#39;m a &nbsp;
-        <TextRoulette
-          messages={[
-            `Software Engineer`,
-            `Web aficionado`,
-            `⌨️ 🧙‍♂️`,
-            <OSDetect windows="Code ninja 🐱‍👤" unix="Code ninja" key="4" />,
-            `Web Developer`,
-            <OSDetect windows="🐱‍👓" unix="☕    lover" key="6" />,
+        <TypeWriter
+          steps={[
+            250,
+            "Develo",
+            500,
+            "Full Stack Engin",
+            500,
+            "DevOps Engineer",
+            250,
+            "Software",
+            250,
+            "Software Engineer",
           ]}
+          loop={1}
         />
       </Heading>
-      <Paragraph
-        className={css`
-          max-width: 500px;
-          text-align: center;
-          margin: ${spacing[0]} 0;
-          padding: 0 ${spacing[1]};
-          color: ${colors.grey[200]};
-        `}
-      >
+      <Text py="4" maxW="500px" textAlign="center">
         I try to write code and blog about my experiences. Love writing,
         speaking, travelling or making lots of random stuff. Mostly I can be
         found playing around with Python, .NET, TypeScript or JavaScript.
         Occasionally developing CLI tools and apps.
-      </Paragraph>
-      <div
-        className={css`
-          display: flex;
-          align-items: center;
-          padding: ${spacing[5]} ${spacing[2]};
-        `}
-      >
-        <IconLink href={siteUrl}>
-          <Globe width={20} height={20} color={theme.onBackground} />
-          <Span
-            className={css`
-              margin: 0 ${spacing[3]};
-            `}
-          >
-            Web&nbsp;&nbsp;&nbsp;&nbsp;
-          </Span>
-        </IconLink>
-        <IconLink href={githubUrl}>
-          <Github width={20} height={20} color={theme.onBackground} />
-          <Span
-            className={css`
-              margin: 0 ${spacing[3]};
-            `}
-          >
-            Github&nbsp;
-          </Span>
-        </IconLink>
-        <IconLink href={twitterUrl}>
-          <Twitter width={24} height={24} color={theme.onBackground} />
-          <Span
-            className={css`
-              margin: 0 ${spacing[3]};
-            `}
-          >
-            Twitter
-          </Span>
-        </IconLink>
-      </div>
-    </section>
+      </Text>
+      <HStack pt="4">
+        <Button
+          as="a"
+          href={siteUrl}
+          bg="transparent"
+          leftIcon={<Globe width={5} height={5} color={iconColor} />}
+        >
+          Web
+        </Button>
+        <Button
+          as="a"
+          href={githubUrl}
+          bg="transparent"
+          leftIcon={<Github w={5} h={5} color={iconColor} />}
+        >
+          Github
+        </Button>
+        <Button
+          as="a"
+          href={twitterUrl}
+          bg="transparent"
+          leftIcon={<Twitter width={5} height={5} color={iconColor} />}
+        >
+          Twitter
+        </Button>
+      </HStack>
+    </VStack>
   )
 }
 

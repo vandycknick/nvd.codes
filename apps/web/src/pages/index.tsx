@@ -1,5 +1,5 @@
 import React, { Fragment } from "react"
-import { css } from "@emotion/css"
+import { GetStaticProps } from "next"
 
 import SEO from "components/Common/SEO"
 import { Greeting } from "components/Home/Greeting"
@@ -8,9 +8,6 @@ import {
   LatestPostsProps,
 } from "components/Home/RecentBlogPosts"
 import { LatestActivities } from "components/Home/LatestActivities"
-import { spacing } from "components/Tokens"
-import { Divider } from "components/Common/Divider"
-import { GetStaticProps } from "next"
 import { getLatestPosts } from "services/getLatestPosts"
 
 interface HomeProps {
@@ -25,19 +22,8 @@ const Home: React.FC<HomeProps> = ({ latestPosts }) => (
       siteUrl="https://nvd.codes"
       twitterUrl="https://twitter.com/vandycknick"
     />
-    <Divider />
-    <RecentBlogPosts
-      className={css`
-        margin: ${spacing[6]} 0;
-      `}
-      posts={latestPosts}
-    />
-    <Divider />
-    <LatestActivities
-      className={css`
-        margin: ${spacing[6]} 0;
-      `}
-    />
+    <RecentBlogPosts posts={latestPosts} />
+    <LatestActivities />
   </Fragment>
 )
 
@@ -48,6 +34,7 @@ export const getStaticProps: GetStaticProps<HomeProps> = async () => {
     "date",
     "readingTime",
     "slug",
+    "categories",
   ])
 
   return {

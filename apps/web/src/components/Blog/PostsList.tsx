@@ -1,17 +1,20 @@
 import React from "react"
-import { css, cx } from "@emotion/css"
-import { useTheme } from "@emotion/react"
-import Link from "next/link"
+import { css } from "@emotion/css"
+import { default as NextLink } from "next/link"
 import { Post } from "@nvd.codes/core"
 import Image from "next/image"
+import {
+  Box,
+  Grid,
+  Heading,
+  HStack,
+  Link,
+  Tag,
+  Text,
+  useColorModeValue,
+  useToken,
+} from "@chakra-ui/react"
 
-import { Heading } from "components/Common/Heading"
-import { Card } from "components/Common/Card"
-import { spacing, borderRadius, fontSize } from "components/Tokens"
-import { Paragraph } from "components/Common/Paragraph"
-import { fromTablet, fromDesktopWideScreen } from "components/Common/mediaQuery"
-import { Tag } from "components/Common/Tag"
-import { Span } from "components/Common/Span"
 import Time from "components/Common/Time"
 
 type PostPreview = Pick<
@@ -27,131 +30,75 @@ type PostPreview = Pick<
 >
 
 export type PostsListProps = {
-  className?: string
   posts: PostPreview[]
 }
 
-export const PostsList: React.FC<PostsListProps> = ({ className, posts }) => {
-  const theme = useTheme()
+export const PostsList: React.FC<PostsListProps> = ({ posts }) => {
+  const radius = useToken("radii", "md")
+  const bg = useColorModeValue("transparent", "gray.700")
   return (
-    <section
-      className={cx(
-        css`
-          display: flex;
-          flex-direction: row;
-          flex-wrap: wrap;
-          width: 100%;
-          padding: ${spacing[8]} 0;
-        `,
-        className,
-      )}
+    <Grid
+      as="section"
+      templateColumns={[
+        "repeat(1, 1fr)",
+        "repeat(1, 1fr)",
+        "repeat(2, 1fr)",
+        "repeat(3, 1fr)",
+      ]}
+      gap={4}
+      py={6}
     >
       {posts.map((post) => (
-        <div
-          className={css`
-            display: flex;
-            flex-direction: column;
-            box-sizing: border-box;
-            width: 100%;
-            padding-bottom: ${spacing[4]};
-
-            ${fromTablet`
-                  width: 50%;
-                  padding: ${spacing[2]};
-              `}
-
-            ${fromDesktopWideScreen`width: 33%`}
-          `}
-          key={post.id}
-        >
-          <Card
-            as="article"
-            className={css`
-              padding: 0;
-            `}
-          >
-            <Link href="/post/[slug]" as={`/post/${post.slug}`} passHref>
-              <a
-                className={css`
-                  text-decoration: none;
-                  color: ${theme.onSurface};
-                `}
-              >
-                {post.cover && (
-                  <div
+        <Box key={post.id} boxShadow="lg" borderRadius="md" bg={bg}>
+          <NextLink href="/post/[slug]" as={`/post/${post.slug}`} passHref>
+            <Link textDecoration="none" _hover={{ textDecoration: "none" }}>
+              {post.cover && (
+                <Box position="relative">
+                  <Image
+                    src={post.cover}
+                    height={300}
+                    width={500}
+                    objectFit={"cover"}
                     className={css`
-                      position: relative;
+                      border-top-left-radius: ${radius};
+                      border-top-right-radius: ${radius};
+                      opacity: 0.8;
                     `}
-                  >
-                    <Image
-                      src={post.cover}
-                      height={300}
-                      width={500}
-                      objectFit={"cover"}
-                      className={css`
-                        border-top-left-radius: ${borderRadius.md};
-                        border-top-right-radius: ${borderRadius.md};
-                        opacity: 0.5;
-                      `}
-                    />
-                    <div
-                      className={css`
-                        position: absolute;
-                        bottom: 0;
-                        padding: ${spacing[4]};
-                      `}
+                  />
+                  <Box position="absolute" bottom={0} p={4} color="white">
+                    <Heading as="h3" size="xl">
+                      {post.title}
+                    </Heading>
+                    <Text fontSize="sm">
+                      <Time dateTime={post.date} />
+                      <Text as="span" px={2}>
+                        •
+                      </Text>
+                      {post.readingTime}
+                    </Text>
+                  </Box>
+                </Box>
+              )}
+              <Box p={4}>
+                <HStack wrap="wrap" spacing={2}>
+                  {post.categories.map((category) => (
+                    <Tag
+                      key={category}
+                      borderRadius="full"
+                      variant="solid"
+                      colorScheme="green"
                     >
-                      <Heading as="h3" size="3xl" weight="bold">
-                        {post.title}
-                      </Heading>
-                      <div
-                        className={css`
-                          font-size: ${fontSize.sm};
-                        `}
-                      >
-                        <Time dateTime={post.date} />
-                        <Span
-                          className={css`
-                            padding: 0 ${spacing[2]};
-                          `}
-                        >
-                          •
-                        </Span>
-                        <Span>{post.readingTime}</Span>
-                      </div>
-                    </div>
-                  </div>
-                )}
-                <div
-                  className={css`
-                    padding: ${spacing[4]};
-                  `}
-                >
-                  <div>
-                    {post.categories.map((category) => (
-                      <Tag key={category}>{category}</Tag>
-                    ))}
-                  </div>
-                  <Paragraph>{post.description}</Paragraph>
-                  <Span
-                    className={css`
-                      display: block;
-                      box-sizing: border-box;
-                      color: ${theme.primaryLight};
-
-                      &:hover {
-                        color: ${theme.primaryLighter};
-                      }
-                    `}
-                  >
-                    READ MORE
-                  </Span>
-                </div>
-              </a>
+                      {category}
+                    </Tag>
+                  ))}
+                </HStack>
+                <Text>{post.description}</Text>
+                <Text>READ MORE</Text>
+              </Box>
             </Link>
-          </Card>
-        </div>
+          </NextLink>
+        </Box>
       ))}
-    </section>
+    </Grid>
   )
 }
