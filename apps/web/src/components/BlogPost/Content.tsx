@@ -1,116 +1,169 @@
-import { css } from "@emotion/css"
-import styled from "@emotion/styled"
-import { fromTablet } from "components/Common/mediaQuery"
-
+import React, { ElementType, ReactNode } from "react"
+import ReactMarkdown from "react-markdown"
 import {
-  fontFamily,
-  spacing,
-  fontWeight,
-  colors,
-  shadow,
-} from "components/Tokens"
+  Text,
+  Code,
+  Divider,
+  Link,
+  List,
+  Checkbox,
+  ListItem,
+  Heading,
+  Image,
+} from "@chakra-ui/react"
 
-const Content = styled.section`
-  ${({ theme }) => css`
-    h1,
-    h2,
-    h3,
-    h4,
-    h5,
-    h6 {
-      font-family: ${fontFamily.headings};
-      padding: ${spacing[4]} 0;
-      font-weight: ${fontWeight.bold};
-      line-height: 1.125;
-    }
+import { PrismAsyncLight as SyntaxHighlighter } from "react-syntax-highlighter"
+import { dracula } from "react-syntax-highlighter/dist/cjs/styles/prism"
 
-    p {
-      padding-bottom: ${spacing[4]};
-    }
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+function getCoreProps(props: any): any {
+  return props["data-sourcepos"]
+    ? { "data-sourcepos": props["data-sourcepos"] }
+    : {}
+}
 
-    ul,
-    ol {
-      margin: ${spacing[1]} 0 ${spacing[4]} ${spacing[12]};
-    }
+type Props = { children?: ReactNode }
 
-    ul {
-      list-style-type: disc;
-      list-style-position: outside;
-    }
+const Paragraph = ({ children }: Props) => <Text pb={4}>{children}</Text>
 
-    ol {
-      list-style-type: decimal;
-      list-style-position: outside;
-    }
+const Emphasis = ({ children }: Props) => <Text as="em">{children}</Text>
 
-    a {
-      color: ${colors.teal[500]};
-      overflow-wrap: break-word;
-      word-wrap: break-word;
+const Blockquote = ({ children }: Props) => (
+  <Text
+    as="blockquote"
+    py={2}
+    pl={4}
+    my={4}
+    borderLeftColor="teal.500"
+    borderLeftWidth="4px"
+    borderLeftStyle="solid"
+    fontStyle="italic"
+    className="no-padding"
+  >
+    {children}
+  </Text>
+)
 
-      &:hover {
-        color: ${colors.teal[700]};
-      }
-    }
+const CodeBlock = (
+  props: Props & { language?: string; value: string; node: { meta?: string } },
+) => {
+  const { value, language } = props
+  let showLineNumbers = false
 
-    img {
-      display: block;
-      margin-left: auto;
-      margin-right: auto;
-      width: 100%;
+  try {
+    const meta = JSON.parse(props.node.meta ?? "")
+    showLineNumbers = meta?.numberLines ?? false
+  } catch {
+    // Ignored
+  }
 
-      ${fromTablet`width: auto;`}
-    }
+  return (
+    <SyntaxHighlighter
+      showLineNumbers={showLineNumbers}
+      language={language}
+      style={dracula}
+    >
+      {value}
+    </SyntaxHighlighter>
+  )
+}
 
-    details {
-      padding-bottom: ${spacing[4]};
+const Delete = ({ children }: Props) => <Text as="del">{children}</Text>
 
-      summary {
-        padding-bottom: ${spacing[2]};
-      }
-    }
+const Span = ({ children }: Props) => <Text as="span">{children}</Text>
 
-    blockquote {
-      font-style: italic;
-      border-width: 0 0 0 4px;
-      border-color: ${colors.teal[600]};
-      border-style: solid;
-      padding-left: ${spacing[8]};
-      margin-top: ${spacing[6]};
-      margin-bottom: ${spacing[6]};
-    }
+const ListElement = (
+  props: Props & { start: number; ordered: boolean; depth: number },
+) => {
+  const { start, ordered, children, depth } = props
+  const attrs = getCoreProps(props)
+  if (start !== null && start !== 1 && start !== undefined) {
+    attrs.start = start.toString()
+  }
+  let styleType = "disc"
+  if (ordered) styleType = "decimal"
+  if (depth === 1) styleType = "circle"
+  return (
+    <List
+      spacing={4}
+      as={ordered ? "ol" : "ul"}
+      styleType={styleType}
+      pl={4}
+      mt={1}
+      ml={6}
+      mb={4}
+      {...attrs}
+    >
+      {children}
+    </List>
+  )
+}
 
-    blockquote p {
-      padding-top: ${spacing[2]};
-      padding-bottom: ${spacing[2]};
-    }
+const ListItemElement = (props: Props & { checked: boolean }) => {
+  const { children, checked } = props
+  let checkbox = null
+  if (checked !== null && checked !== undefined) {
+    checkbox = (
+      <Checkbox isChecked={checked} isReadOnly>
+        {children}
+      </Checkbox>
+    )
+  }
+  return (
+    <ListItem
+      {...getCoreProps(props)}
+      listStyleType={checked !== null ? "none" : "inherit"}
+    >
+      {checkbox || children}
+    </ListItem>
+  )
+}
 
-    code {
-      background: ${theme.onBackground};
-      color: ${theme.background};
-      border-radius: 5px;
-      padding: 2px;
-      font-size: 14px;
-      overflow-wrap: break-word;
-      word-wrap: break-word;
-    }
+const HeadingElement = (props: Props & { level: number }) => {
+  const { level, children } = props
+  const sizes = ["2xl", "xl", "lg", "md", "sm", "xs"]
+  return (
+    <Heading
+      my={4}
+      as={`h${level}`}
+      size={sizes[level - 1]}
+      {...getCoreProps(props)}
+    >
+      {children}
+    </Heading>
+  )
+}
 
-    pre {
-      background: #191d21;
-      border-radius: 5px;
-      box-shadow: ${shadow.inner};
-      margin-bottom: ${spacing[4]};
-      padding: ${spacing[4]};
-      overflow: auto;
-      font-family: Consolas, Monaco, "Andale Mono", "Ubuntu Mono", monospace;
+const InlineCode = (props: Props) => {
+  const { children } = props
+  return <Code {...getCoreProps(props)}>{children}</Code>
+}
 
-      code {
-        background: ${theme.transparent};
-        color: ${theme.onBackground};
-        font-family: Consolas, Monaco, "Andale Mono", "Ubuntu Mono", monospace;
-      }
-    }
-  `}
-`
+const renderers: { [nodeType: string]: ElementType } = {
+  paragraph: Paragraph,
+  emphasis: Emphasis,
+  blockquote: Blockquote,
+  code: CodeBlock,
+  delete: Delete,
+  thematicBreak: Divider,
+  link: Link,
+  img: Image,
+  linkReference: Link,
+  imageReference: Image,
+  text: Span,
+  list: ListElement,
+  listItem: ListItemElement,
+  definition: () => null,
+  heading: HeadingElement,
+  inlineCode: InlineCode,
+}
 
-export { Content }
+type ContentsProps = {
+  children: string
+}
+
+const Contents = ({ children }: ContentsProps) => (
+  <ReactMarkdown renderers={renderers}>{children}</ReactMarkdown>
+)
+
+export { Contents }

@@ -1,36 +1,26 @@
 import React, { Fragment } from "react"
-import { css } from "@emotion/css"
+import { Avatar, Heading, Text, VStack } from "@chakra-ui/react"
 
 import SEO from "components/Common/SEO"
-import { Paragraph } from "components/Common/Paragraph"
 import { LinkButton } from "components/Common/Buttons"
-import { Heading } from "components/Common/Heading"
-import { spacing } from "components/Tokens"
 
-const About: React.FC = () => (
+const About = () => (
   <Fragment>
     <SEO title="About" />
-    <section
-      className={css`
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-      `}
-    >
-      <Heading
-        className={css`
-          align-self: center;
-          padding: ${spacing[3]};
-        `}
-        size="4xl"
-      >
+    <VStack as="section" justify="center">
+      <Heading size="xl" pb={4}>
         About Me
       </Heading>
-      <Paragraph
-        className={css`
-          text-align: center;
-        `}
-      >
+      <Heading as="h3" size="md" pb={4} color="gray.400" fontWeight="normal">
+        Fun facts and the story behind my digital journey
+      </Heading>
+      <Avatar
+        size="2xl"
+        name="Nick Van Dyck"
+        src="https://nvd.codes/profile.png"
+        bg="teal.500"
+      />
+      <Text align="center" maxWidth="700px" py={6}>
         I’m an enthusiastic and passionate software engineer with over 6 years
         of experience. I&#39;m fond of all things web and always striving to
         build user friendly, scalable and stable web solutions that get users
@@ -39,11 +29,11 @@ const About: React.FC = () => (
         Eventually I hope to pursue a role where I can have a high impact on the
         product. In my spare time I like to hack on open source or personal
         projects, read books or watch a good movie.
-      </Paragraph>
+      </Text>
       <LinkButton href="https://resume.nvd.codes/resume.pdf">
         Resume 👨‍🎓
       </LinkButton>
-    </section>
+    </VStack>
   </Fragment>
 )
 

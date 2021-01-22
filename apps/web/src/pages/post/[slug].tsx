@@ -1,22 +1,17 @@
 import React, { Fragment } from "react"
-import { css } from "@emotion/css"
-import { useTheme } from "@emotion/react"
 import { GetStaticProps, GetStaticPaths } from "next"
 import ErrorPage from "next/error"
 import { Post } from "@nvd.codes/core"
+import { Box, Divider, Flex, Heading, HStack, VStack } from "@chakra-ui/react"
 
 import SEO from "components/Common/SEO"
-import { Content } from "components/BlogPost/Content"
 import { CommentList } from "components/BlogPost/CommentList"
-import { Heading } from "components/Common/Heading"
-import { spacing } from "components/Tokens"
 import Time from "components/Common/Time"
-import { Span } from "components/Common/Span"
 import { Calendar } from "components/BlogPost/Icons/Calendar"
 import { Edit } from "components/BlogPost/Icons/Edit"
 import { Time as TimeIcon } from "components/BlogPost/Icons/Time"
 import { getAllPosts } from "services/getAllPosts"
-import { Divider } from "components/Common/Divider"
+import { Contents } from "components/BlogPost/Content"
 
 type BlogPostProps = {
   post?: Pick<
@@ -39,9 +34,7 @@ type BlogPostParams = {
   slug: string
 }
 
-const BlogPost: React.FC<BlogPostProps> = ({ post }) => {
-  const theme = useTheme()
-
+const BlogPost = ({ post }: BlogPostProps) => {
   if (post == null) {
     return <ErrorPage statusCode={404} />
   }
@@ -49,88 +42,28 @@ const BlogPost: React.FC<BlogPostProps> = ({ post }) => {
   return (
     <Fragment>
       <SEO title={post.title} description={post.description} />
-      <article
-        className={css`
-          display: flex;
-          flex-direction: column;
-          padding-bottom: ${spacing[4]};
-        `}
-      >
-        <header
-          className={css`
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            padding-bottom: ${spacing[16]};
-          `}
-        >
-          <Heading
-            className={css`
-              padding: ${spacing[3]};
-              text-align: center;
-            `}
-            size="4xl"
-          >
+      <Box as="article" w="100%" pb={4}>
+        <VStack mb={8}>
+          <Heading size="2xl" textAlign="center" pb={4}>
             {post.title}
           </Heading>
-          <div
-            className={css`
-              display: flex;
-              align-items: center;
-              justify-content: space-between;
-
-              span {
-                display: inline-flex;
-                align-items: center;
-                padding: 0 ${spacing[1]};
-              }
-            `}
-          >
-            <Span>
-              <Calendar
-                className={css`
-                  padding: 0 ${spacing[2]};
-                `}
-                width={20}
-                height={20}
-                color={theme.onBackground}
-              />
+          <HStack spacing={6}>
+            <Flex alignItems="center">
+              <Calendar color="white" width={5} height={5} mr={2} />
               <Time dateTime={post.date} />
-            </Span>
-            <Span>
-              <Edit
-                className={css`
-                  padding: 0 ${spacing[2]};
-                `}
-                width={20}
-                height={20}
-                color={theme.onBackground}
-              />
-              <a
-                className={css`
-                  color: ${theme.onBackground};
-                  text-decoration: none;
-                `}
-                href={post.editUrl}
-              >
-                suggest edit
-              </a>
-            </Span>
-            <Span>
-              <TimeIcon
-                className={css`
-                  padding: 0 ${spacing[2]};
-                `}
-                width={20}
-                height={20}
-                color={theme.onBackground}
-              />
+            </Flex>
+            <Flex alignItems="center">
+              <Edit color="white" width={5} height={5} mr={2} />
+              <a href={post.editUrl}>suggest edit</a>
+            </Flex>
+            <Flex alignItems="center">
+              <TimeIcon color="white" width={5} height={5} mr={2} />
               {post.readingTime}
-            </Span>
-          </div>
-        </header>
-        <Content dangerouslySetInnerHTML={{ __html: post.content }} />
-      </article>
+            </Flex>
+          </HStack>
+        </VStack>
+        <Contents>{post.content}</Contents>
+      </Box>
       <Divider />
       <CommentList slug={post.slug} />
     </Fragment>

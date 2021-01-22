@@ -1,13 +1,10 @@
-import { promises } from "fs"
 import { join, dirname } from "path"
-import matter from "gray-matter"
 import readingTime from "reading-time"
 import { Post } from "@nvd.codes/core"
-const { readFile } = promises
 
 import { getAllSlugs, SlugInfo } from "services/getAllSlugs"
-import markdownToHtml from "services/markdownToHtml"
-import copyImage from "services/parseImage"
+import copyImage from "services/copyImage"
+import { getPostContents } from "./getPostContents"
 
 const IMAGES_DROP_LOCATION_ROOT = "static/images"
 
@@ -21,28 +18,23 @@ const parseCoverImage = async (
 }
 
 const createPost = async (slugInfo: SlugInfo): Promise<Post> => {
-  const fileContents = await readFile(slugInfo.filePath, "utf-8")
-  const { data, content } = matter(fileContents)
-  const html = await markdownToHtml(content, {
-    imagesRootPath: dirname(slugInfo.filePath),
-    imagesDestinationPath: join(IMAGES_DROP_LOCATION_ROOT, slugInfo.slug),
-  })
+  const { metadata, contents } = await getPostContents(slugInfo)
 
   const cover =
-    data["cover"] != null
-      ? await parseCoverImage(data["cover"], slugInfo)
+    metadata["cover"] != null
+      ? await parseCoverImage(metadata["cover"], slugInfo)
       : null
 
   return {
-    id: data["id"],
-    title: data["title"],
-    description: data["description"],
-    date: new Date(data["date"]).toISOString(),
-    draft: !!data["draft"],
-    categories: data["categories"],
+    id: metadata["id"],
+    title: metadata["title"],
+    description: metadata["description"],
+    date: new Date(metadata["date"]).toISOString(),
+    draft: !!metadata["draft"],
+    categories: metadata["categories"],
     cover,
-    content: html,
-    readingTime: readingTime(content).text,
+    content: contents,
+    readingTime: readingTime(contents).text,
     slug: slugInfo.slug,
     editUrl: `https://github.com/nickvdyck/nvd.codes/edit/main/_posts/${slugInfo.relativePath}`,
   }
