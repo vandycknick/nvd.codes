@@ -33,6 +33,9 @@ const PageProgress = () => {
       size="xs"
       isIndeterminate={loading}
       value={100}
+      position="fixed"
+      width="100%"
+      zIndex={999}
     />
   )
 }
