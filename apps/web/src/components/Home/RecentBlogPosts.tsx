@@ -65,7 +65,12 @@ export const RecentBlogPosts = ({ className, posts }: LatestPostsProps) => {
             key={post.title}
             _hover={{ bg }}
           >
-            <NextLink href="/post/[slug]" as={`/post/${post.slug}`} passHref>
+            <NextLink
+              href="/post/[slug]"
+              as={`/post/${post.slug}`}
+              passHref
+              prefetch={false}
+            >
               <Flex
                 as="a"
                 direction="column"
