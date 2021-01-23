@@ -1,15 +1,9 @@
 import React from "react"
+import { Icon } from "@chakra-ui/react"
 
-type LogoProps = { className?: string }
-
-const Logo = ({ className }: LogoProps) => {
+const Logo = () => {
   return (
-    <svg
-      className={className}
-      xmlns="http://www.w3.org/2000/svg"
-      fill="none"
-      viewBox="0 0 93 33"
-    >
+    <Icon viewBox="0 0 93 33" width={125} height={10}>
       <g filter="url(#filter0_d)">
         <rect x="4" width="85" height="25" fill="#319795" />
       </g>
@@ -51,7 +45,7 @@ const Logo = ({ className }: LogoProps) => {
           />
         </filter>
       </defs>
-    </svg>
+    </Icon>
   )
 }
 

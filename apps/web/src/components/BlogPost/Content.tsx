@@ -13,8 +13,7 @@ import {
 } from "@chakra-ui/react"
 import { PrismAsyncLight as SyntaxHighlighter } from "react-syntax-highlighter"
 import { dracula } from "react-syntax-highlighter/dist/cjs/styles/prism"
-
-import { Image } from "components/Common/Image"
+import Image from "next/image"
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 function getCoreProps(props: any): any {
