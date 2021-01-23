@@ -2,7 +2,15 @@ import React, { Fragment } from "react"
 import { GetStaticProps, GetStaticPaths } from "next"
 import ErrorPage from "next/error"
 import { Post } from "@nvd.codes/core"
-import { Box, Divider, Flex, Heading, HStack, VStack } from "@chakra-ui/react"
+import {
+  Box,
+  Divider,
+  Flex,
+  Heading,
+  HStack,
+  useColorModeValue,
+  VStack,
+} from "@chakra-ui/react"
 
 import SEO from "components/Common/SEO"
 import { CommentList } from "components/BlogPost/CommentList"
@@ -35,6 +43,8 @@ type BlogPostParams = {
 }
 
 const BlogPost = ({ post }: BlogPostProps) => {
+  const iconColor = useColorModeValue("black", "white")
+
   if (post == null) {
     return <ErrorPage statusCode={404} />
   }
@@ -49,22 +59,22 @@ const BlogPost = ({ post }: BlogPostProps) => {
           </Heading>
           <HStack spacing={6}>
             <Flex alignItems="center">
-              <Calendar color="white" width={5} height={5} mr={2} />
+              <Calendar color={iconColor} width={5} height={5} mr={2} />
               <Time dateTime={post.date} />
             </Flex>
             <Flex alignItems="center">
-              <Edit color="white" width={5} height={5} mr={2} />
+              <Edit color={iconColor} width={5} height={5} mr={2} />
               <a href={post.editUrl}>suggest edit</a>
             </Flex>
             <Flex alignItems="center">
-              <TimeIcon color="white" width={5} height={5} mr={2} />
+              <TimeIcon color={iconColor} width={5} height={5} mr={2} />
               {post.readingTime}
             </Flex>
           </HStack>
         </VStack>
         <Contents>{post.content}</Contents>
       </Box>
-      <Divider />
+      <Divider my={6} />
       <CommentList slug={post.slug} />
     </Fragment>
   )

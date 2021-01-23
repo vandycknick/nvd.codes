@@ -1,6 +1,7 @@
 import React, { ElementType, ReactNode } from "react"
 import ReactMarkdown from "react-markdown"
 import {
+  Box,
   Text,
   Code,
   Divider,
@@ -9,11 +10,11 @@ import {
   Checkbox,
   ListItem,
   Heading,
-  Image,
 } from "@chakra-ui/react"
-
 import { PrismAsyncLight as SyntaxHighlighter } from "react-syntax-highlighter"
 import { dracula } from "react-syntax-highlighter/dist/cjs/styles/prism"
+
+import { Image } from "components/Common/Image"
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 function getCoreProps(props: any): any {
@@ -139,6 +140,15 @@ const InlineCode = (props: Props) => {
   return <Code {...getCoreProps(props)}>{children}</Code>
 }
 
+const ImageElement = (props: Props & { src: string; alt: string }) => {
+  const { src, alt } = props
+  return (
+    <Box w="100%" textAlign="center">
+      <Image src={src} alt={alt} width={750} height={500} />
+    </Box>
+  )
+}
+
 const renderers: { [nodeType: string]: ElementType } = {
   paragraph: Paragraph,
   emphasis: Emphasis,
@@ -147,9 +157,9 @@ const renderers: { [nodeType: string]: ElementType } = {
   delete: Delete,
   thematicBreak: Divider,
   link: Link,
-  img: Image,
+  image: ImageElement,
   linkReference: Link,
-  imageReference: Image,
+  imageReference: ImageElement,
   text: Span,
   list: ListElement,
   listItem: ListItemElement,
