@@ -1,5 +1,5 @@
 import React, { Fragment, useRef, useEffect, memo } from "react"
-import { Text, TextProps, useControllableState } from "@chakra-ui/react"
+import { Text, TextProps } from "@chakra-ui/react"
 import { motion, useAnimation } from "framer-motion"
 
 type Arg = string | number | TypeFunction

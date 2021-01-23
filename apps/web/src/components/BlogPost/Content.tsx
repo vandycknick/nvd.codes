@@ -144,7 +144,7 @@ const ImageElement = (props: Props & { src: string; alt: string }) => {
   const { src, alt } = props
   return (
     <Box w="100%" textAlign="center">
-      <Image src={src} alt={alt} width={750} height={500} />
+      <Image objectFit="contain" src={src} alt={alt} width={750} height={500} />
     </Box>
   )
 }
