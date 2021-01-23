@@ -13,7 +13,6 @@ import {
   Text,
   Textarea,
   useColorModeValue,
-  useColorMode,
 } from "@chakra-ui/react"
 
 import { fetchJSON } from "utils/async"
