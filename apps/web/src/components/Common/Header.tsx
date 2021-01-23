@@ -15,7 +15,6 @@ import {
 } from "@chakra-ui/react"
 import { HamburgerIcon, SunIcon, MoonIcon } from "@chakra-ui/icons"
 import Link from "next/link"
-import { css } from "@emotion/css"
 
 import Logo from "components/Common/Logo"
 
@@ -90,11 +89,7 @@ const Header = () => {
         m="0 auto"
       >
         <Flex align="center">
-          <Logo
-            className={css`
-              width: 125px;
-            `}
-          />
+          <Logo />
         </Flex>
         <IconButton
           aria-label="Toggle menu"
