@@ -10,13 +10,13 @@
     "build": "yarn clean && wrangler build"
   },
   "devDependencies": {
-    "@cloudflare/wrangler": "^1.12.3",
+    "@cloudflare/wrangler": "^1.13.0",
     "@cloudflare/workers-types": "^2.1.0",
     "@nvd/tsconfig": "^1.0.0",
     "ts-loader": "^8.0.14",
     "typescript": "^4.1.3",
     "service-worker-mock": "^2.0.5",
-    "webpack": "^5.13.0",
-    "webpack-cli": "^4.3.1"
+    "webpack": "^5.17.0",
+    "webpack-cli": "^4.4.0"
   }
 }
