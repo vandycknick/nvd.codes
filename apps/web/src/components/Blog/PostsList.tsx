@@ -1,5 +1,4 @@
 import React from "react"
-import { css } from "@emotion/css"
 import { default as NextLink } from "next/link"
 import { Post } from "@nvd.codes/core"
 import Image from "next/image"
@@ -12,7 +11,6 @@ import {
   Tag,
   Text,
   useColorModeValue,
-  useToken,
 } from "@chakra-ui/react"
 
 import Time from "components/Common/Time"
@@ -34,7 +32,6 @@ export type PostsListProps = {
 }
 
 export const PostsList: React.FC<PostsListProps> = ({ posts }) => {
-  const radius = useToken("radii", "md")
   const bg = useColorModeValue("transparent", "gray.700")
   return (
     <Grid
@@ -63,11 +60,7 @@ export const PostsList: React.FC<PostsListProps> = ({ posts }) => {
                     height={300}
                     width={500}
                     objectFit={"cover"}
-                    className={css`
-                      border-top-left-radius: ${radius};
-                      border-top-right-radius: ${radius};
-                      opacity: 0.8;
-                    `}
+                    className="post-card-cover"
                   />
                   <Box position="absolute" bottom={0} p={4} color="white">
                     <Heading as="h3" size="xl">
