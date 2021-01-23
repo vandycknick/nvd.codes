@@ -51,7 +51,11 @@ export const PostsList: React.FC<PostsListProps> = ({ posts }) => {
       {posts.map((post) => (
         <Box key={post.id} boxShadow="lg" borderRadius="md" bg={bg}>
           <NextLink href="/post/[slug]" as={`/post/${post.slug}`} passHref>
-            <Link textDecoration="none" _hover={{ textDecoration: "none" }}>
+            <Link
+              textDecoration="none"
+              _hover={{ textDecoration: "none" }}
+              _focus={{ outline: "hidden" }}
+            >
               {post.cover && (
                 <Box position="relative">
                   <Image
