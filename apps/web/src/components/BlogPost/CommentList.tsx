@@ -1,174 +1,144 @@
 import React from "react"
 import useSWR from "swr"
-import { css } from "@emotion/css"
-import { useTheme } from "@emotion/react"
-import styled from "@emotion/styled"
 import { PostComments } from "@nvd.codes/core"
 import * as timeago from "timeago.js"
-import { Text } from "@chakra-ui/react"
+import {
+  Box,
+  ChakraStyleProps,
+  Flex,
+  List,
+  ListItem,
+  Image,
+  PseudoProps,
+  Text,
+  Textarea,
+  useColorModeValue,
+  useColorMode,
+} from "@chakra-ui/react"
 
 import { fetchJSON } from "utils/async"
-import { Image } from "components/BlogPost/Image"
 import { LinkButton } from "components/Common/Buttons"
 
 type CommentListProps = {
   slug: string
 }
 
-const WriteComment: React.FC<{ editUrl?: string }> = ({ editUrl }) => {
-  const theme = useTheme()
+const arrowStyles: PseudoProps<ChakraStyleProps>["_before"] = {
+  position: "absolute",
+  top: "11px",
+  right: "100%",
+  left: "-16px",
+  display: ["none", "block"],
+  width: 0,
+  height: 0,
+  pointerEvents: "none",
+  content: '" "',
+  borderColor: "transparent",
+  borderStyle: "solid solid outset",
+}
+
+const WriteComment = ({ editUrl }: { editUrl?: string }) => {
+  const main = useColorModeValue("gray.100", "gray.700")
+  const accent = useColorModeValue("white", "gray.800")
+  const border = useColorModeValue("gray.300", "gray.300")
   return (
-    <div
-      className={css`
-        padding: ${spacing[4]} 0;
-        display: flex;
-      `}
-    >
+    <Flex py={4}>
       <Image
         src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAxNCAxNiIgdmVyc2lvbj0iMS4xIj48cGF0aCBmaWxsPSJyZ2IoMTc5LDE3OSwxNzkpIiBmaWxsLXJ1bGU9ImV2ZW5vZGQiIGQ9Ik04IDEwLjVMOSAxNEg1bDEtMy41TDUuMjUgOWgzLjVMOCAxMC41ek0xMCA2SDRMMiA3aDEwbC0yLTF6TTkgMkw3IDMgNSAyIDQgNWg2TDkgMnptNC4wMyA3Ljc1TDEwIDlsMSAyLTIgM2gzLjIyYy40NSAwIC44Ni0uMzEuOTctLjc1bC41Ni0yLjI4Yy4xNC0uNTMtLjE5LTEuMDgtLjcyLTEuMjJ6TTQgOWwtMy4wMy43NWMtLjUzLjE0LS44Ni42OS0uNzIgMS4yMmwuNTYgMi4yOGMuMTEuNDQuNTIuNzUuOTcuNzVINWwtMi0zIDEtMnoiPjwvcGF0aD48L3N2Zz4="
-        width={40}
-        height={40}
+        width={10}
+        height={10}
+        backgroundColor={main}
+        borderRadius="full"
+        mr={4}
         alt="@anonymous"
-        className={css`
-          display: none;
-          padding: 0 ${spacing[4]} 0 0;
-          img {
-            background-color: ${colors.grey[700]};
-          }
-        `}
+        display={["none", "block"]}
       />
-      <div
-        className={css`
-          position: relative;
-          flex: 1 1 auto;
-          min-width: 1px;
-          border: 1px solid ${colors.grey[300]};
-
-          &:before,
-          &:after {
-            position: absolute;
-            top: 11px;
-            right: 100%;
-            left: -16px;
-            display: block;
-            width: 0;
-            height: 0;
-            pointer-events: none;
-            content: " ";
-            border-color: transparent;
-            border-style: solid solid outset;
-          }
-
-          &:before {
-            border-width: 8px;
-            border-right-color: ${colors.grey[300]};
-          }
-        `}
+      <Box
+        position="relative"
+        borderColor={border}
+        borderStyle="solid"
+        borderWidth="1px"
+        borderRadius="md"
+        flex="1 1 auto"
+        _before={{
+          ...arrowStyles,
+          borderWidth: "8px",
+          borderRightColor: border,
+        }}
+        _after={arrowStyles}
       >
-        <header
-          className={css`
-            background-color: ${colors.grey[800]};
-            border-bottom: 1px solid ${colors.grey[300]};
-            padding: ${spacing[2]} ${spacing[4]} 0 ${spacing[4]};
-            font-size: ${fontSize.sm};
-          `}
+        <Box
+          as="header"
+          borderBottomColor={border}
+          borderBottomStyle="solid"
+          borderBottomWidth="1px"
+          borderTopRadius="md"
+          pt={2}
+          px={4}
+          pb={0}
+          backgroundColor={main}
+          fontSize="sm"
         >
-          <div
-            className={css`
-              box-sizing: border-box;
-              margin-bottom: -1px;
-              background: transparent;
-            `}
-          >
+          <Box marginBottom="-1px" background="transparent">
             <Text
-              className={css`
-                background: ${theme.background};
-                display: inline-block;
-                padding: ${spacing[2]} ${spacing[4]};
-                border: 1px solid ${colors.grey[300]};
-                border-bottom: 0;
-                border-radius: 3px 3px 0 0;
-
-                &:hover {
-                  cursor: pointer;
-                }
-              `}
+              display="inline-block"
+              py={2}
+              px={4}
+              background={accent}
+              borderWidth="1px"
+              borderStyle="solid"
+              borderColor={border}
+              borderBottom="0"
+              borderTopRadius="md"
+              _hover={{ cursor: "pointer" }}
             >
               Write
             </Text>
             <Text
-              className={css`
-                display: inline-block;
-                padding: ${spacing[2]} ${spacing[4]};
-
-                &:hover {
-                  cursor: pointer;
-                }
-              `}
+              display="inline-block"
+              py={2}
+              px={4}
+              _hover={{ cursor: "pointer" }}
             >
               Preview
             </Text>
-          </div>
-        </header>
-        <div
-          className={css`
-            padding: ${spacing[4]};
-          `}
-        >
-          <textarea
+          </Box>
+        </Box>
+        <Box padding={4}>
+          <Textarea
             placeholder="Sign in to comment"
             aria-label="comment"
             disabled
-            className={css`
-              background: ${colors.grey[800]};
-              color: ${colors.white};
-              padding: 8px;
-              width: 100%;
-              min-height: 90px;
-              border: 1px solid ${colors.grey[300]};
-              border-radius: 3px;
-              display: block;
-              box-sizing: border-box;
-              resize: vertical;
-              appearance: none;
-
-              &[disabled] {
-                cursor: not-allowed;
-              }
-            `}
+            background={main}
+            color="white"
+            p={4}
+            width="100%"
+            minHeight="90px"
+            borderWidth="1px"
+            borderStyle="solid"
+            borderRadius="md"
+            display="block"
+            resize="vertical"
+            appearance="none"
+            _disabled={{ cursor: "not-allowed" }}
           />
-        </div>
-        <footer
-          className={css`
-            display: flex;
-            justify-content: flex-end;
-            padding: 0 ${spacing[4]} ${spacing[4]} ${spacing[4]};
-          `}
-        >
+        </Box>
+        <Flex as="footer" justifyContent="flex-end" pt={0} px={4} pb={4}>
           <LinkButton
             href={editUrl}
-            // target="_blank"
-            className={css`
-              font-size: ${fontSize.xs};
-            `}
-            // disabled={editUrl == undefined || editUrl === ""}
+            fontSize="sm"
+            target="_blank"
+            disabled={editUrl == undefined || editUrl === ""}
           >
             Open Github
           </LinkButton>
-        </footer>
-      </div>
-    </div>
+        </Flex>
+      </Box>
+    </Flex>
   )
 }
 
-const CommentWrapper = styled.section`
-  max-width: 750px;
-  margin: 0 auto;
-  padding-bottom: ${spacing[4]};
-`
-
 export const CommentList: React.FC<CommentListProps> = ({ slug }) => {
-  const theme = useTheme()
   const { data, error } = useSWR<PostComments>(
     `${process.env.NEXT_PUBLIC_COMMENTS_API}/api/comments/${slug}`,
     fetchJSON,
@@ -178,140 +148,90 @@ export const CommentList: React.FC<CommentListProps> = ({ slug }) => {
 
   if (data == undefined && error == undefined) {
     return (
-      <CommentWrapper>
-        <div
-          className={css`
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            padding: ${spacing[6]};
-          `}
-        >
+      <Box maxWidth="750px" width="100%" margin="0 auto" pb={4}>
+        <Flex justifyContent="center" alignItems="center" padding={6}>
           Loading comments...
-        </div>
+        </Flex>
         <WriteComment />
-      </CommentWrapper>
+      </Box>
     )
   }
 
   if (error != undefined) {
     return (
-      <CommentWrapper>
-        <div
-          className={css`
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            padding: ${spacing[6]};
-          `}
-        >
+      <Box maxWidth="750px" width="100%" margin="0 auto" pb={4}>
+        <Flex justifyContent="center" alignItems="center" padding={6}>
           Oh no, something went wrong trying to load comments for this post.
-        </div>
+        </Flex>
         <WriteComment />
-      </CommentWrapper>
+      </Box>
     )
   }
 
   return (
-    <CommentWrapper>
-      {data?.totalComments === 0 && (
-        <div
-          className={css`
-            font-weight: ${fontWeight.bold};
-          `}
-        >
-          0 Comments
-        </div>
-      )}
+    <Box maxWidth="750px" width="100%" margin="0 auto" pb={4}>
+      {data?.totalComments === 0 && <Text fontWeight="bold">0 Comments</Text>}
       {(data?.totalComments ?? 0) > 0 && (
-        <ul
-          className={css`
-            margin: 0;
-            padding: ${spacing[4]} 0;
-          `}
-        >
+        <List m={0} py={4} px={0}>
           {data?.comments.map((comment) => (
-            <li
-              key={comment.id}
-              className={css`
-                padding: ${spacing[4]} 0;
-                display: flex;
-              `}
-            >
+            <ListItem key={comment.id} px={4} py={0}>
               <Image
                 src={comment.author.avatarUrl}
                 width={40}
                 height={40}
-                className={css`
-                  display: none;
-                  padding: 0 ${spacing[4]} 0 0;
-                `}
+                display="none"
+                pb={4}
               />
-              <article
-                className={css`
-                  position: relative;
-                  flex: 1 1 auto;
-                  min-width: 1px;
-                  border: 1px solid ${colors.grey[300]};
-
-                  &:before,
-                  &:after {
-                    position: absolute;
-                    top: 11px;
-                    right: 100%;
-                    left: -16px;
-                    display: block;
-                    width: 0;
-                    height: 0;
-                    pointer-events: none;
-                    content: " ";
-                    border-color: transparent;
-                    border-style: solid solid outset;
-                  }
-
-                  &:before {
-                    border-width: 8px;
-                    border-right-color: ${colors.grey[300]};
-                  }
-                `}
+              <Box
+                position="relative"
+                borderColor="gray.300"
+                borderStyle="solid"
+                borderWidth="1px"
+                borderRadius="sm"
+                flex="1 1 auto"
+                _before={{
+                  ...arrowStyles,
+                  borderWidth: "8px",
+                  borderRightColor: "gray.300",
+                }}
+                _after={arrowStyles}
               >
                 <div
-                  className={css`
-                    background-color: ${colors.grey[800]};
-                    border-bottom: 1px solid ${colors.grey[300]};
-                    padding: ${spacing[2]} ${spacing[4]};
-                    font-size: ${fontSize.sm};
-                  `}
+                // className={css`
+                //   background-color: ${colors.grey[800]};
+                //   border-bottom: 1px solid ${colors.grey[300]};
+                //   padding: ${spacing[2]} ${spacing[4]};
+                //   font-size: ${fontSize.sm};
+                // `}
                 >
                   <a
                     href={`https://github.com/${comment.author.login}`}
-                    className={css`
-                      color: ${theme.onBackground};
-                      font-weight: ${fontWeight.bold};
-                      text-decoration: none;
+                    // className={css`
+                    //   color: ${theme.onBackground};
+                    //   font-weight: ${fontWeight.bold};
+                    //   text-decoration: none;
 
-                      &:hover {
-                        text-decoration: underline;
-                      }
-                    `}
+                    //   &:hover {
+                    //     text-decoration: underline;
+                    //   }
+                    // `}
                   >
                     {comment.author.login}
                   </a>
                   {" commented "}
                   <Text>{timeago.format(comment.createdAt)}</Text>
                 </div>
-                <div
-                  className={css`
-                    padding: ${spacing[2]} ${spacing[4]};
-                  `}
+                <Box
+                  py={2}
+                  px={4}
                   dangerouslySetInnerHTML={{ __html: comment.body }}
                 />
-              </article>
-            </li>
+              </Box>
+            </ListItem>
           ))}
-        </ul>
+        </List>
       )}
       <WriteComment editUrl={data?.url} />
-    </CommentWrapper>
+    </Box>
   )
 }
