@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react"
 import { AppProps } from "next/app"
 import { useRouter } from "next/router"
-import { ChakraProvider, Flex, Progress } from "@chakra-ui/react"
+import { Box, ChakraProvider, Flex, Progress } from "@chakra-ui/react"
 
 import { pageView } from "services/gtag"
 import { Header } from "components/Common/Header"
@@ -49,16 +49,18 @@ const App = ({ Component, pageProps }: AppProps) => {
     <ChakraProvider theme={theme}>
       <PageProgress />
       <Header />
-      <Flex
-        direction="column"
-        align="center"
-        maxW={{ xl: "1200px" }}
-        px={4}
-        m="0 auto"
-        flex={1}
-        as="main"
-      >
-        <Component {...pageProps} />
+      <Flex width="100%" maxWidth="100%" flex={1} as="main">
+        <Box
+          px={4}
+          flexGrow={1}
+          margin="0px auto"
+          position="relative"
+          width="100%"
+          maxW={{ xl: "1200px" }}
+          overflowX="hidden"
+        >
+          <Component {...pageProps} />
+        </Box>
       </Flex>
       <Footer />
     </ChakraProvider>
