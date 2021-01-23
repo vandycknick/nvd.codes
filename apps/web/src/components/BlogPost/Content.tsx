@@ -60,7 +60,7 @@ const CodeBlock = (
   return (
     <SyntaxHighlighter
       showLineNumbers={showLineNumbers}
-      language={language}
+      language={language ?? "text"}
       style={dracula}
     >
       {value}
