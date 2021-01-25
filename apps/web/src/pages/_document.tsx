@@ -25,6 +25,11 @@ class MyDocument extends Document<DocumentProps> {
     return (
       <Html lang="en">
         <Head>
+          <meta name="author" content="Nick Van Dyck" />
+          <meta
+            name="description"
+            content="Nick Van Dyck is a software engineer."
+          />
           <link rel="shortcut icon" href="/favicon.png" />
           <script
             async

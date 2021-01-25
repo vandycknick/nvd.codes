@@ -89,7 +89,11 @@ const Header = () => {
         m="0 auto"
       >
         <Flex align="center">
-          <Logo />
+          <Link href="/">
+            <a aria-label="HomePage">
+              <Logo />
+            </a>
+          </Link>
         </Flex>
         <IconButton
           aria-label="Toggle menu"

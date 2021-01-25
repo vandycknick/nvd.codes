@@ -29,8 +29,8 @@ export type LatestPostsProps = {
 }
 
 export const RecentBlogPosts = ({ className, posts }: LatestPostsProps) => {
-  const bg = useColorModeValue("gray.100", "gray.900")
-  const color = useColorModeValue("gray.700", "gray.400")
+  const bg = useColorModeValue("gray.50", "gray.900")
+  const color = useColorModeValue("gray.700", "gray.200")
   const circleBg = useColorModeValue("black", "white")
   const circleColor = useColorModeValue("white", "black")
   return (
