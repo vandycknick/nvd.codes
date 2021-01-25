@@ -1,5 +1,6 @@
 import { extendTheme } from "@chakra-ui/react"
 import styles from "./styles"
+import colors from "./colors"
 
 import Link from "./components/Link"
 
@@ -11,6 +12,8 @@ const config = {
 
 const overrides = {
   config,
+
+  colors,
 
   styles,
 
