@@ -4,9 +4,9 @@ import { Post } from "@nvd.codes/core"
 import Image from "next/image"
 import {
   Box,
+  Flex,
   Grid,
   Heading,
-  HStack,
   Link,
   Tag,
   Text,
@@ -77,18 +77,20 @@ export const PostsList: React.FC<PostsListProps> = ({ posts }) => {
                 </Box>
               )}
               <Box p={4}>
-                <HStack wrap="wrap" spacing={2}>
+                <Flex wrap="wrap">
                   {post.categories.map((category) => (
                     <Tag
                       key={category}
                       borderRadius="full"
                       variant="solid"
                       colorScheme="green"
+                      mr="5px"
+                      mt="4px"
                     >
                       {category}
                     </Tag>
                   ))}
-                </HStack>
+                </Flex>
                 <Text>{post.description}</Text>
                 <Text>READ MORE</Text>
               </Box>
