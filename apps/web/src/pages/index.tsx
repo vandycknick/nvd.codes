@@ -4,14 +4,14 @@ import { GetStaticProps } from "next"
 import SEO from "components/Common/SEO"
 import { Greeting } from "components/Home/Greeting"
 import {
-  RecentBlogPosts,
-  LatestPostsProps,
-} from "components/Home/RecentBlogPosts"
+  LatestArticles,
+  LatestArticlesProps,
+} from "components/Home/LatestArticles"
 import { LatestActivities } from "components/Home/LatestActivities"
 import { getLatestPosts } from "services/getLatestPosts"
 
 interface HomeProps {
-  latestPosts: LatestPostsProps["posts"]
+  latestPosts: LatestArticlesProps["posts"]
 }
 
 const Home: React.FC<HomeProps> = ({ latestPosts }) => (
@@ -22,7 +22,7 @@ const Home: React.FC<HomeProps> = ({ latestPosts }) => (
       siteUrl="https://nvd.codes"
       twitterUrl="https://twitter.com/vandycknick"
     />
-    <RecentBlogPosts posts={latestPosts} />
+    <LatestArticles posts={latestPosts} />
     <LatestActivities />
   </Fragment>
 )

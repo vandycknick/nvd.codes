@@ -23,12 +23,12 @@ type LatestPost = Pick<
   "title" | "description" | "date" | "slug" | "readingTime" | "categories"
 >
 
-export type LatestPostsProps = {
+export type LatestArticlesProps = {
   className?: string
   posts: LatestPost[]
 }
 
-export const RecentBlogPosts = ({ className, posts }: LatestPostsProps) => {
+export const LatestArticles = ({ className, posts }: LatestArticlesProps) => {
   const bg = useColorModeValue("gray.50", "gray.900")
   const color = useColorModeValue("gray.700", "gray.200")
   const circleBg = useColorModeValue("black", "white")
