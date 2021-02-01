@@ -4,12 +4,10 @@ import { PostComments } from "@nvd.codes/core"
 import * as timeago from "timeago.js"
 import {
   Box,
-  ChakraStyleProps,
   Flex,
   List,
   ListItem,
   Image,
-  PseudoProps,
   Text,
   Textarea,
   useColorModeValue,
@@ -22,7 +20,7 @@ type CommentListProps = {
   slug: string
 }
 
-const arrowStyles: PseudoProps<ChakraStyleProps>["_before"] = {
+const arrowStyles = {
   position: "absolute",
   top: "11px",
   right: "100%",
