@@ -8,10 +8,10 @@
     "build": "tsc && cp -r src/styles .dist && cp -r src/views .dist"
   },
   "dependencies": {
-    "ejs": "^3.1.5"
+    "ejs": "^3.1.6"
   },
   "devDependencies": {
     "@types/ejs": "^3.0.5",
-    "typescript": "^4.1.3"
+    "typescript": "^4.1.5"
   }
 }
