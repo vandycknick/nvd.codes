@@ -1,11 +1,11 @@
-import { extendTheme } from "@chakra-ui/react"
+import { extendTheme, ColorMode } from "@chakra-ui/react"
 import styles from "./styles"
 import colors from "./colors"
 
 import Link from "./components/Link"
 
 const config = {
-  initialColorMode: "dark",
+  initialColorMode: "dark" as ColorMode,
 
   useSystemColorMode: true,
 }
