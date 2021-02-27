@@ -11,6 +11,19 @@ Security is something that is often taken for granted when working with docker c
 
 ## What are Capabilities
 
+Traditional UNIX privilege mode dives users into 2 groups:
+- *Normal Users* subject to privilege checking based on UID (user ID) and GIDs (group IDs)
+- *Super User* (uid 0) which  bypasses many of those checks.
+
+Traditional mechanism for giving privilege to an unprivileged user is don via set-UID root program
+```
+chown root prog
+chmod u+s prog
+```
+- When executed, process assumes UID of file owner
+    - process gains privilege of superuser
+- Powerful but dangerous
+
 Root is often thought of being this all-powerful user, but that's actually not the whole picture, only the `root` user with all capabilities is all-powerful. In essence, capabilities turn the binary `root/non-root` into a fine-grained access control system. Or according to the capabilities man page (`man capabilities`), capabilities are distinct units of privilege that can be independently enabled or disabled. They were first added to the Linux [kernel](https://mirrors.edge.kernel.org/pub/linux/libs/security/linux-privs/kernel-2.2/capfaq-0.2.txt) about 15 years ago, with the aim of to divide up the powers of the root user. Back then `root` actually was this all-powerful user and processes would only run in privileged or non-privileged mode. Either your process could do everything and make admin-level kernel calls or it was restricted to the constraints of a standard user. Certain programs need to be run by standard users but also make privileged kernel calls would require to set the suid bit. This effectively grants this binary full privileged access and it's binaries like these that are a prime target for hackers to exploit and gain privileged access to a machine.
 
 This isn't a great situation to be in and is exactly why kernel developers came up with a more nuanced solution by splitting up these privileges into several separate capabilities. Each capability is defined as a bitmask which allows us to compose them together. Originally the kernel allocated a 32-bit bitmask to define these capabilities. But a few years this was expanded into 64 bits and we are currently sitting at around 40 defined capabilities.

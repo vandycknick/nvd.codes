@@ -16,7 +16,7 @@ const resourceUpdateCertificateOrchestrator = function* (
     revision: string
   }
 
-  const currentRevision = yield context.df.callActivity(
+  const currentRevision: string = yield context.df.callActivity(
     "ResourceCdnGetCurrentCertificate",
     resource,
   )

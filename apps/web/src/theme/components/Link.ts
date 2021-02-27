@@ -1,9 +1,10 @@
 import { mode } from "@chakra-ui/theme-tools"
+import { ComponentSingleStyleConfig } from "@chakra-ui/react"
 
-const Link = {
+const Link: ComponentSingleStyleConfig = {
   variants: {
     // you can name it whatever you want
-    primary: (props: { colorScheme: string }) => {
+    primary: (props) => {
       const { colorScheme } = props
       if (colorScheme == null) {
         return {}
