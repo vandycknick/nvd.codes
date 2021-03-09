@@ -1,28 +1,31 @@
 ---
 id: 85492f70-ffa0-4444-8d29-3035359d0c33
-title: Monitor shell commands with eBPF
-description: Ever wondered if it would be possible to monitor every command ever typed inside a shell prompt. In this post, I walk you through creating an eBPF program to monitor every shell command typed on a bash or zsh prompt.
+title:
+description: Ever wondered if it would be possible to monitor what is getting typed at other shells running on a Linux system. Well I have and in this post, I walk you through creating an eBPF program to monitor every command typed on a bash or zsh prompt.
 date: 2021-03-07T20:00:00+01:00
 categories: [linux, bpftrace, ebpf, internals]
 cover: ./assets/2021-03-07-monitor-shell-commands-with-ebpf/cover.jpg
 draft: true
 ---
 
-Ever wondered if it would be possible to monitor any shell on you system and have it logs any command users are typing in it?
+Have you ever logged on to a server or workstation and asked yourself "I wonder what other users are executing right now?". Well, I certainly have and I'm always curious about what is currently running on a system. This isn't really a hard question to answer, any Linux system comes preinstalled with tools like `top` that can exactly show you all the currently running processes on the system. But that's not what I'm talking about here, I want a record of every command typed at any shell new or cold currently in use on the system. This seems like a pretty tough challenge, but there are some hidden powers inside the Linux kernel that make this task rather straight forward.
 
-it's not really something you do for fun, instability of you whole Linux system just lures around the corner.
+The technology I'm talking about here is called eBPF and you might have used or heard about it before. You see more and more tools are starting to leverage the powers of eBPF to build amazing things. Especially in the cloud-native space tools like falco, cilium, calico leverage eBPF to build very performant networking or monitoring tools. eBPF stands for Berkeley Packet Filter. Remember iptables? As the name implies, the original BPF allows a user to specify rules that will be applied to network packets as they flow through the network. This has been part of Linux for years.
 
-eBPF is a pretty powerful technology that allows you to extend or monitor the kernel in a safe manner. By safe here I mean that these programs are run in a virtual environment, making it impossible to cause system-wide instabilities. I think we are all too familiar with Windows BSOD's caused by drivers leaking memory or not properly checking some inputs causing a system to crash. Or even on Linux or MacOS you can have drivers wreaking havoc on the system causing all kinds of instabilities.
+But when BPF got extended, it allowed users to add code that gets executed by the kernel in a safe manner. What I mean by safe here is that these programs are run in a virtual machine inside the kernel, making it impossible for it to cause system-wide instabilities. Ever installed a driver and have it crash your whole system at the most inconvenient time? Well, I certainly have seen my fair share of BSOD's. eBPF solves all of that allowing you to safely attach probes at different parts of the kernel.
 
-## Snooping on commands typed in bash
+In this post, I want to show you how we can leverage eBPF to snoop any command typed inside any shell prompt on a Linux based system.
+Have you ever wondered when you were logged in
 
-Let's start relatively simple and see if we can snoop any command typed in a bash shell. As you are probably already aware we are going to use a technology called eBPF to get this working. To make it easier to work with eBPF from the command line we'll need a tool called `bpftrace`. I'll explain what this is and how it works in relation to eBPF in a sec, but let's first get something up and running. On a Ubuntu-based system it's relatively straight forward to install `bpftrace`:
+## Spying on commands typed in a bash shell
+
+Let's start focussing on bash and see if it is possible to snoop on commands in any bash shell currently live on the system. To make it easier to work with eBPF we'll need install a tool named `bpftrace`. I'll explain what this is and how it works in relation to eBPF in a sec, but let's first get something up and running. On a Ubuntu-based system it's relatively straight forward to install `bpftrace`:
 
 ```sh
 sudo apt install -y bpftrace
 ```
 
-One of the cool things about `bpftrace` is that it comes with a bunch of amazing [tools](https://github.com/iovisor/bpftrace/tree/master/tools) already preinstalled. At this point, we are just one command away from achieving our goal. One of the preinstalled tools is named `bashreadline.bt` and it does exactly what we need. When run it starts monitoring every command entered in a bash shell. If `bpftrace` is installed, you should be able to find with:
+One of the cool things about `bpftrace` is that it comes preinstalled with a bunch of amazing [tools](https://github.com/iovisor/bpftrace/tree/master/tools) already. At this point, we are just one command away from achieving our goal. One of the preinstalled tools is named `bashreadline.bt` and it does exactly what we need. When run it starts monitoring every command entered in a bash shell. If `bpftrace` is installed, you should be able to find with:
 
 ```sh
 $ which bashreadline.bt
