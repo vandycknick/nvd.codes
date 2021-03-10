@@ -1,6 +1,6 @@
 ---
 id: 85492f70-ffa0-4444-8d29-3035359d0c33
-title:
+title: Spy on any command typed in a shell with eBPF
 description: Ever wondered if it would be possible to monitor what is getting typed at other shells running on a Linux system. Well I have and in this post, I walk you through creating an eBPF program to monitor every command typed on a bash or zsh prompt.
 date: 2021-03-07T20:00:00+01:00
 categories: [linux, bpftrace, ebpf, internals]
@@ -8,7 +8,7 @@ cover: ./assets/2021-03-07-monitor-shell-commands-with-ebpf/cover.jpg
 draft: true
 ---
 
-Have you ever logged on to a server or workstation and asked yourself "I wonder what other users are executing right now?". Well, I certainly have and I'm always curious about what is currently running on a system. This isn't really a hard question to answer, any Linux system comes preinstalled with tools like `top` that can exactly show you all the currently running processes on the system. But that's not what I'm talking about here, I want a record of every command typed at any shell new or cold currently in use on the system. This seems like a pretty tough challenge, but there are some hidden powers inside the Linux kernel that make this task rather straight forward.
+Have you ever logged on to a server or workstation and asked yourself "I wonder what other users are executing right now?". Well, I certainly have and I'm always curious about what is currently running on a system. Which isn't really a hard question to answer, any Linux system comes preinstalled with tools like `top` that can exactly show you all the currently running processes on the system. But that's not what I'm talking about here, I want a record of every command typed at any shell new or old currently in use on the system. This seems like a pretty tough challenge, but there are some hidden powers inside the Linux kernel that make this task rather straight forward.
 
 The technology I'm talking about here is called eBPF and you might have used or heard about it before. You see more and more tools are starting to leverage the powers of eBPF to build amazing things. Especially in the cloud-native space tools like falco, cilium, calico leverage eBPF to build very performant networking or monitoring tools. eBPF stands for Berkeley Packet Filter. Remember iptables? As the name implies, the original BPF allows a user to specify rules that will be applied to network packets as they flow through the network. This has been part of Linux for years.
 
