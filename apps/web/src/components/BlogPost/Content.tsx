@@ -72,6 +72,10 @@ const Delete = ({ children }: Props) => <Text as="del">{children}</Text>
 
 const Span = ({ children }: Props) => <Text as="span">{children}</Text>
 
+const LinkElement = ({ children }: Props) => (
+  <Link color="teal">{children}</Link>
+)
+
 const ListElement = (
   props: Props & { start: number; ordered: boolean; depth: number },
 ) => {
@@ -155,7 +159,7 @@ const renderers: { [nodeType: string]: ElementType } = {
   code: CodeBlock,
   delete: Delete,
   thematicBreak: Divider,
-  link: Link,
+  link: LinkElement,
   image: ImageElement,
   linkReference: Link,
   imageReference: ImageElement,
