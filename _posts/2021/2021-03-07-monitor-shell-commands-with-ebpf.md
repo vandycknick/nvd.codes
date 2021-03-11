@@ -8,24 +8,23 @@ cover: ./assets/2021-03-07-monitor-shell-commands-with-ebpf/cover.jpg
 draft: true
 ---
 
-Have you ever logged on to a server or workstation and asked yourself "I wonder what other users are executing right now?". Well, I certainly have and I'm always curious about what is currently running on a system. Which isn't really a hard question to answer, any Linux system comes preinstalled with tools like `top` that can exactly show you all the currently running processes on the system. But that's not what I'm talking about here, I want a record of every command typed at any shell new or old currently in use on the system. This seems like a pretty tough challenge, but there are some hidden powers inside the Linux kernel that make this task rather straight forward.
+Have you ever logged on to a server or workstation and asked yourself "I wonder what other users are executing right now?". Well, I certainly have and I'm always curious about what is currently running on a system. This last one isn't a difficult question to answer. Any Linux system comes preinstalled with tools like `top` that can exactly show you all the currently running processes on the system. But that's not what I'm talking about here, I want a record of every command typed at any shell new or old currently in use on the system. This seems like a pretty tough challenge, but some hidden powers inside the Linux kernel make this task rather straight forward.
 
-The technology I'm talking about here is called eBPF and you might have used or heard about it before. You see more and more tools are starting to leverage the powers of eBPF to build amazing things. Especially in the cloud-native space tools like falco, cilium, calico leverage eBPF to build very performant networking or monitoring tools. eBPF stands for Berkeley Packet Filter. Remember iptables? As the name implies, the original BPF allows a user to specify rules that will be applied to network packets as they flow through the network. This has been part of Linux for years.
+The hidden powers I'm talking about here is called eBPF and you might have used or heard about it before. You see more and more tools starting to leverage eBPF to build amazing things. Especially in the cloud-native space tools like Falco, Cilium and Calico leverage eBPF to build very performant networking or monitoring tools. BPF stands for Berkeley Packet Filter. Remember iptables? Like the name implies, the original BPF allowed a user to specify rules that will be applied to network packets as they flow through the network. This has been part of Linux for years.
 
-But when BPF got extended, it allowed users to add code that gets executed by the kernel in a safe manner. What I mean by safe here is that these programs are run in a virtual machine inside the kernel, making it impossible for it to cause system-wide instabilities. Ever installed a driver and have it crash your whole system at the most inconvenient time? Well, I certainly have seen my fair share of BSOD's. eBPF solves all of that allowing you to safely attach probes at different parts of the kernel.
+But when BPF got extended, it now allows users to probe and add code to the kernel in a safe manner. What I mean by safe here is that these programs are run in a virtual machine inside the kernel, making it impossible for it to cause system-wide instabilities. Ever installed a driver and have it crash your whole system at the most inconvenient time? Well, I certainly have seen my fair share of BSOD's. eBPF solves all of that allowing you to safely attach probes to different parts of the kernel.
 
-In this post, I want to show you how we can leverage eBPF to snoop any command typed inside any shell prompt on a Linux based system.
-Have you ever wondered when you were logged in
+Safely running code in kernel mode, well that sounds really interesting doesn't it? In this post I'll walk you through how we can install a probe with eBPF to see every command typed inside any shell on a Linux based system!
 
-## Spying on commands typed in a bash shell
+## Spying on commands typed in a bash
 
-Let's start focussing on bash and see if it is possible to snoop on commands in any bash shell currently live on the system. To make it easier to work with eBPF we'll need install a tool named `bpftrace`. I'll explain what this is and how it works in relation to eBPF in a sec, but let's first get something up and running. On a Ubuntu-based system it's relatively straight forward to install `bpftrace`:
+Let's keep things simple to start with and just focus on bash for now. To make it easier with eBPF we'll install a tool named `bpftrace`. I'll explain in a sec what this is and how it works with eBPF, but let's make sure we have something up and running first. On a Ubuntu-based system it's relatively straight-forward to install:
 
 ```sh
 sudo apt install -y bpftrace
 ```
 
-One of the cool things about `bpftrace` is that it comes preinstalled with a bunch of amazing [tools](https://github.com/iovisor/bpftrace/tree/master/tools) already. At this point, we are just one command away from achieving our goal. One of the preinstalled tools is named `bashreadline.bt` and it does exactly what we need. When run it starts monitoring every command entered in a bash shell. If `bpftrace` is installed, you should be able to find with:
+One of the cool things about `bpftrace` is that it comes preinstalled with a bunch of amazing [tools](https://github.com/iovisor/bpftrace/tree/master/tools). This means that at this point, we are just one command away from achieving our goal here. One of the preinstalled tools is named `bashreadline.bt` and it does exactly what we need. When run it starts monitoring every command entered in a bash shell. If `bpftrace` is installed, you should be able to locate it on your system with:
 
 ```sh
 $ which bashreadline.bt
@@ -33,7 +32,7 @@ $ which bashreadline.bt
 /usr/sbin/bashreadline.bt
 ```
 
-To execute an eBPF program you need to be root, which means if you are running as a normal user that you will need to prefix your command with sudo. Besides that you will also need the `CAP_SYS_ADMIN` capability, so if you are playing around with eBPF in a docker container make sure to add this capability because docker drops this one by default. This can be done by adding `--cap-add=SYS_ADMIN` to your docker run command. But beware about using this on a production system, the CAP_SYS_ADMIN capability is a key that opens a lot of doors for the root user.
+In order to install an eBPF program you need to be root, this means that if you are running as a normal user you will need to prefix the following command with `sudo`. Besides running as sudo you also need the `CAP_SYS_ADMIN`, if you don't know what this means and are not using docker for this then don't worry about it. If you are using Docker on the other hand you will need to add this capability because docker will drop it by default. This can be done by adding `--cap-add=SYS_ADMIN` to your docker run command. But beware about using this on a production system, the CAP_SYS_ADMIN capability is a key that can open a lot of doors for the root user.
 
 ```sh
 $ sudo bashreadline.bt
