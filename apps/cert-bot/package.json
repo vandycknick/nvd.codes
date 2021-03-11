@@ -29,10 +29,10 @@
     "@types/node-forge": "^0.9.7",
     "copy-webpack-plugin": "^8.0.0",
     "fast-glob": "^3.2.5",
-    "ts-loader": "^8.0.17",
+    "ts-loader": "^8.0.18",
     "ts-node": "^9.1.1",
     "typescript": "^4.2.3",
-    "webpack": "^5.24.3",
+    "webpack": "^5.24.4",
     "webpack-cli": "^4.5.0"
   }
 }
