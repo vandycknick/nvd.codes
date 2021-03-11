@@ -17,12 +17,13 @@ const getComments = async function (context: Context): Promise<HttpResponse> {
 
   const commentsForPost = await getCommentsForPost(slug)
 
-  if (commentsForPost == null) {
-    log.info(`No comments found on github with title ${slug}`)
-    return notFound()
-  }
-
-  return jsonResult(commentsForPost)
+  return commentsForPost.mapOrElse(
+    (comments) => jsonResult(comments),
+    (error) => {
+      log.error(error)
+      return notFound()
+    },
+  )
 }
 
 export default getComments

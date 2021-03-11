@@ -15,7 +15,6 @@
   },
   "dependencies": {
     "@nvd.codes/config": "^1.0.0",
-    "@nvd.codes/core": "^1.0.0",
     "@azure/storage-blob": "^12.4.1",
     "@hapi/accept": "^5.0.2",
     "sharp": "^0.27.2"
