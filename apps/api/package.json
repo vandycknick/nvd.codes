@@ -23,9 +23,9 @@
     "@nvd/tsconfig": "^1.0.0",
     "@types/node-fetch": "^2.5.8",
     "copy-webpack-plugin": "^8.0.0",
-    "ts-loader": "^8.0.17",
+    "ts-loader": "^8.0.18",
     "typescript": "^4.2.3",
-    "webpack": "^5.24.3",
+    "webpack": "^5.24.4",
     "webpack-cli": "^4.5.0"
   }
 }
