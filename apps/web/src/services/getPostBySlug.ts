@@ -24,7 +24,6 @@ const createPost = async (slugInfo: SlugInfo): Promise<Post> => {
     metadata["cover"] != null
       ? await parseCoverImage(metadata["cover"], slugInfo)
       : null
-
   return {
     id: metadata["id"],
     title: metadata["title"],
@@ -36,7 +35,7 @@ const createPost = async (slugInfo: SlugInfo): Promise<Post> => {
     content: contents,
     readingTime: readingTime(contents).text,
     slug: slugInfo.slug,
-    editUrl: `https://github.com/nickvdyck/nvd.codes/edit/main/_posts/${slugInfo.relativePath}`,
+    editUrl: `https://github.com/nickvdyck/nvd.codes/edit/main/_posts/${slugInfo.relativePath}`
   }
 }
 

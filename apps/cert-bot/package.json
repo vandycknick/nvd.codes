@@ -14,7 +14,6 @@
   },
   "dependencies": {
     "@nvd.codes/config": "^1.0.0",
-    "@nvd.codes/core": "^1.0.0",
     "@nvd.codes/http": "^1.0.0",
     "@nvd.codes/monad": "^1.0.0",
     "acme-client": "^4.1.3",

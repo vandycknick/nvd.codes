@@ -69,7 +69,7 @@ def create_api_app(
             "APPINSIGHTS_INSTRUMENTATIONKEY": insights.instrumentation_key,
             "FUNCTIONS_WORKER_RUNTIME": "node",
             "GITHUB_TOKEN": config.require("github_token"),
-            "ISSUE_QUERY": "user:nickvdyck repo:nvd.codes state:open label:comment",
+            "ISSUE_QUERY": "user:nickvdyck repo:nvd.codes author:nickvdyck label:comment",
             "WEBSITE_RUN_FROM_PACKAGE": Output.concat(
                 "@Microsoft.KeyVault(SecretUri=", secret_uri, ")"
             ),
