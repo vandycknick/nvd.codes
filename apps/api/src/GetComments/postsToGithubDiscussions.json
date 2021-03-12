@@ -1,4 +1,5 @@
 [
+  { "slug": "monitor-any-command-typed-at-a-shell-with-ebpf", "discussion": 37 },
   { "slug": "correctly-encode-powershell-payloads-for-exploits", "discussion": 36 },
   { "slug": "hack-the-box-omni", "discussion": 35 },
   { "slug": "deploying-to-azure-with-pulumi-from-github-actions", "discussion": 34 },
