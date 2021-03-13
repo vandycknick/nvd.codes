@@ -70,7 +70,7 @@ uretprobe:/bin/bash:readline
 
 To better understand what's going on we'll need a quick primer in eBPF and bpftrace. We already know that eBPF allows us to run small programs inside a VM within the Linux kernel. Which in turn allows us to attach probes and instrument different parts of the system. `bpftrace` on the other hand simplifies working with eBPF by giving access to a higher-level language that with the help of LLVM allows scripts to compile down to BPF byte code. The language itself is inspired by awk and C, allowing us to write anything from complex programs all the way to single nifty one-liners.
 
-Let's dive a bit deeper into the set of probes that are available to us:
+The following image gives an overview of all the probes we can add to different parts of the kernel:
 
 ![bpftrace probes](./assets/2021-03-12-monitor-any-command-typed-at-a-shell-with-ebpf/bpftrace_probes_2018.png)
 
@@ -207,4 +207,4 @@ This works like a charm, we now have the same monitoring program for zsh like we
 
 ## Conclusion
 
-I hope this gives you a good idea of the powers that are lurking deep inside the Linux kernel. And this is even just the tip of the iceberg, there's a lot more you can do with eBPF. Even the bpftrace tool contains comes with a lot more tools I haven't covered here that you can learn from or play around with. The examples shown in this post are rather simple and only logs commands that are getting executed. But bpftrace allows you to go a lot further than that. In a coming post, we'll have a look at  [ttysnoop](https://github.com/iovisor/bcc/blob/master/tools/ttysnoop.py) and I'll walk you through how a couple of lines of python allow monitoring all input and output from a specific terminal.
+I hope this gives you a good idea of the powers that are lurking deep inside the Linux kernel. And this is just the tip of the iceberg, there's a lot more you can do with eBPF. Even the bpftrace comes with a lot more tools I haven't covered here that you can learn from or play around with. The bashreadline or zshsnoop script we created only traces the return value of a specific function using uretprobes, it shows that a command wa entered. It doesn't show if the command succeeded and what the output was. But you can go a lot further than that. In a coming post, we'll have a look at  [ttysnoop](https://github.com/iovisor/bcc/blob/master/tools/ttysnoop.py) and I'll walk you through how in a couple of lines of python we can monitoring all input and output from a specific terminal.
