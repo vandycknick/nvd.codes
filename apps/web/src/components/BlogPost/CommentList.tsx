@@ -124,6 +124,7 @@ const WriteComment = ({ editUrl }: { editUrl?: string }) => {
           <LinkButton
             href={editUrl}
             fontSize="sm"
+            rel="noopener noreferrer"
             target="_blank"
             disabled={editUrl == undefined || editUrl === ""}
           >
@@ -193,25 +194,11 @@ export const CommentList: React.FC<CommentListProps> = ({ slug }) => {
                 }}
                 _after={arrowStyles}
               >
-                <div
-                // className={css`
-                //   background-color: ${colors.grey[800]};
-                //   border-bottom: 1px solid ${colors.grey[300]};
-                //   padding: ${spacing[2]} ${spacing[4]};
-                //   font-size: ${fontSize.sm};
-                // `}
-                >
+                <div>
                   <a
+                    rel="noopener noreferrer"
+                    target="_blank"
                     href={`https://github.com/${comment.author.login}`}
-                    // className={css`
-                    //   color: ${theme.onBackground};
-                    //   font-weight: ${fontWeight.bold};
-                    //   text-decoration: none;
-
-                    //   &:hover {
-                    //     text-decoration: underline;
-                    //   }
-                    // `}
                   >
                     {comment.author.login}
                   </a>

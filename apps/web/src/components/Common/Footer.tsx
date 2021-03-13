@@ -8,9 +8,14 @@ const Footer = () => {
     <VStack bg={bg} py={4} as="footer">
       <Text>
         <strong>nvd.codes &nbsp;</strong>is handcrafted with ❤️&nbsp;
-        <Link href="https://github.com/nickvdyck/nvd.codes" isExternal>
+        <Link
+          href="https://github.com/nickvdyck/nvd.codes"
+          isExternal
+          rel="noopener noreferrer"
+          display="inline-flex"
+        >
           view source
-          <ExternalLinkIcon mx={2} />
+          <ExternalLinkIcon mx={1} mt="2px" />
         </Link>
       </Text>
       <Text>all materials © Nick Van Dyck 2021</Text>
