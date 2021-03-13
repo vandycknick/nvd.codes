@@ -11,6 +11,7 @@ import {
   ListItem,
   Heading,
 } from "@chakra-ui/react"
+import { ExternalLinkIcon } from "@chakra-ui/icons"
 import { PrismAsyncLight as SyntaxHighlighter } from "react-syntax-highlighter"
 import { dracula } from "react-syntax-highlighter/dist/cjs/styles/prism"
 import Image from "next/image"
@@ -72,8 +73,16 @@ const Delete = ({ children }: Props) => <Text as="del">{children}</Text>
 
 const Span = ({ children }: Props) => <Text as="span">{children}</Text>
 
-const LinkElement = ({ children }: Props) => (
-  <Link color="teal">{children}</Link>
+const LinkElement = ({ children, href }: Props & { href: string }) => (
+  <Link
+    colorScheme="teal"
+    isExternal
+    rel="noopener noreferrer"
+    display="inline-flex"
+    href={href}
+  >
+    {children} <ExternalLinkIcon mx="2px" mt="2px" />
+  </Link>
 )
 
 const ListElement = (

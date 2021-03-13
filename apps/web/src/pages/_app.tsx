@@ -36,6 +36,7 @@ const PageProgress = () => {
       position="fixed"
       width="100%"
       zIndex={999}
+      aria-label="Page loader progress bar"
     />
   )
 }
