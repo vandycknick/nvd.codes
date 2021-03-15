@@ -93,7 +93,7 @@ export const LatestArticles = ({ className, posts }: LatestArticlesProps) => {
                   <Text fontSize="xs" color={color}>
                     <Time dateTime={post.date} />
                   </Text>
-                  <Heading as="h5" size="l" flex={1} isTruncated noOfLines={2}>
+                  <Heading as="h5" size="l" noOfLines={2}>
                     {post.title}
                   </Heading>
                 </VStack>
