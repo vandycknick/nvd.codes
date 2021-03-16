@@ -1,5 +1,5 @@
 import React from "react"
-import { default as NextLink } from "next/link"
+import NextLink from "next/link"
 import { Post } from "@nvd.codes/core"
 import Image from "next/image"
 import {
