@@ -25,6 +25,7 @@ type PostPreview = Pick<
   | "readingTime"
   | "categories"
   | "cover"
+  | "placeholderCss"
 >
 
 export type PostsListProps = {
@@ -53,29 +54,35 @@ export const PostsList: React.FC<PostsListProps> = ({ posts }) => {
               _hover={{ textDecoration: "none" }}
               _focus={{ outline: "hidden" }}
             >
-              {post.cover && (
-                <Box position="relative">
-                  <Image
-                    src={post.cover}
-                    height={300}
-                    width={500}
-                    objectFit={"cover"}
-                    className="post-card-cover"
-                  />
-                  <Box position="absolute" bottom={0} p={4} color="white">
-                    <Heading as="h3" size="xl">
-                      {post.title}
-                    </Heading>
-                    <Text fontSize="sm">
-                      <Time dateTime={post.date} />
-                      <Text as="span" px={2}>
-                        •
-                      </Text>
-                      {post.readingTime}
+              <Box position="relative" overflow="hidden" borderTopRadius="md">
+                <Box
+                  pos="absolute"
+                  inset={0}
+                  w="full"
+                  h="full"
+                  css={post.placeholderCss}
+                  style={{ filter: "blur(24px)", transform: "scale(1.2)" }}
+                />
+                <Image
+                  src={post.cover || ""}
+                  height={300}
+                  width={500}
+                  objectFit="cover"
+                  className="post-card-cover"
+                />
+                <Box position="absolute" bottom={0} p={4} color="white">
+                  <Heading as="h3" size="xl">
+                    {post.title}
+                  </Heading>
+                  <Text fontSize="sm">
+                    <Time dateTime={post.date} />
+                    <Text as="span" px={2}>
+                      •
                     </Text>
-                  </Box>
+                    {post.readingTime}
+                  </Text>
                 </Box>
-              )}
+              </Box>
               <Box p={4}>
                 <Flex wrap="wrap">
                   {post.categories.map((category) => (

@@ -29,6 +29,7 @@
   },
   "devDependencies": {
     "@nvd/tsconfig": "^1.0.0",
+    "@plaiceholder/css": "^1.0.0",
     "@types/express": "4.17.11",
     "@types/gtag.js": "^0.0.4",
     "@types/node": "^14.14.34",

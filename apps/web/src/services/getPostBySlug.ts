@@ -1,6 +1,9 @@
 import { join, dirname } from "path"
 import readingTime from "reading-time"
 import { Post } from "@nvd.codes/core"
+import fs from "fs"
+import { promisify } from "util"
+import { getPixelsCSS, PixelsCSS } from "@plaiceholder/css"
 
 import { getAllSlugs, SlugInfo } from "services/getAllSlugs"
 import copyImage from "services/copyImage"
@@ -9,21 +12,28 @@ import { getPostContents } from "./getPostContents"
 const IMAGES_DROP_LOCATION_ROOT = "static/images"
 
 const parseCoverImage = async (
-  cover: string,
+  coverPath: string,
   slugInfo: SlugInfo,
-): Promise<string> => {
-  const coverFilePath = join(dirname(slugInfo.filePath), cover)
+): Promise<{ cover: string; placeholderCss: PixelsCSS }> => {
+  const coverFilePath = join(dirname(slugInfo.filePath), coverPath)
   const destination = join(IMAGES_DROP_LOCATION_ROOT, slugInfo.slug)
-  return copyImage(coverFilePath, destination)
+  const cover = await copyImage(coverFilePath, destination)
+  const image = await promisify(fs.readFile)(coverFilePath)
+  const css = await getPixelsCSS(image)
+  return {
+    cover,
+    placeholderCss: css,
+  }
 }
 
 const createPost = async (slugInfo: SlugInfo): Promise<Post> => {
   const { metadata, contents } = await getPostContents(slugInfo)
 
-  const cover =
+  const image =
     metadata["cover"] != null
       ? await parseCoverImage(metadata["cover"], slugInfo)
       : null
+
   return {
     id: metadata["id"],
     title: metadata["title"],
@@ -31,7 +41,8 @@ const createPost = async (slugInfo: SlugInfo): Promise<Post> => {
     date: new Date(metadata["date"]).toISOString(),
     draft: !!metadata["draft"],
     categories: metadata["categories"],
-    cover,
+    cover: image?.cover ?? null,
+    placeholderCss: image?.placeholderCss ?? null,
     content: contents,
     readingTime: readingTime(contents).text,
     slug: slugInfo.slug,
