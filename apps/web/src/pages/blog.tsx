@@ -79,6 +79,7 @@ export const getStaticProps: GetStaticProps<BlogProps> = async ({ params }) => {
     "readingTime",
     "categories",
     "cover",
+    "placeholderCss",
   ])
   const pages = Math.ceil(posts.length / POSTS_PER_PAGE)
   const page = params?.page ?? 1
