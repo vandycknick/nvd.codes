@@ -3,7 +3,6 @@ import readingTime from "reading-time"
 import { Post } from "@nvd.codes/core"
 import fs from "fs"
 import { promisify } from "util"
-import { getPixelsCSS, PixelsCSS } from "@plaiceholder/css"
 
 import { getAllSlugs, SlugInfo } from "services/getAllSlugs"
 import copyImage from "services/copyImage"
@@ -14,15 +13,32 @@ const IMAGES_DROP_LOCATION_ROOT = "static/images"
 const parseCoverImage = async (
   coverPath: string,
   slugInfo: SlugInfo,
-): Promise<{ cover: string; placeholderCss: PixelsCSS }> => {
+): Promise<{
+  cover: string
+  placeholder: string
+  placeholderCss: Record<string, string>
+}> => {
   const coverFilePath = join(dirname(slugInfo.filePath), coverPath)
   const destination = join(IMAGES_DROP_LOCATION_ROOT, slugInfo.slug)
   const cover = await copyImage(coverFilePath, destination)
-  const image = await promisify(fs.readFile)(coverFilePath)
-  const css = await getPixelsCSS(image)
+  let base64 = ""
+  let css = {}
+
+  // TODO: Fix this little hack
+  if (process.env["NODE_ENV"] !== "production") {
+    const image = await promisify(fs.readFile)(coverFilePath)
+    // eslint-disable-next-line @typescript-eslint/no-var-requires
+    const { getBase64 } = require("@plaiceholder/base64")
+    // eslint-disable-next-line @typescript-eslint/no-var-requires
+    const { getPixelsCSS } = require("@plaiceholder/css")
+    base64 = await getBase64(image)
+    css = await getPixelsCSS(image)
+  }
+
   return {
     cover,
     placeholderCss: css,
+    placeholder: base64,
   }
 }
 
@@ -41,8 +57,9 @@ const createPost = async (slugInfo: SlugInfo): Promise<Post> => {
     date: new Date(metadata["date"]).toISOString(),
     draft: !!metadata["draft"],
     categories: metadata["categories"],
-    cover: image?.cover ?? null,
-    placeholderCss: image?.placeholderCss ?? null,
+    cover: image?.cover,
+    placeholderCss: image?.placeholderCss,
+    placeholder: image?.placeholder,
     content: contents,
     readingTime: readingTime(contents).text,
     slug: slugInfo.slug,

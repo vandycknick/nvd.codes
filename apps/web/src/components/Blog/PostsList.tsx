@@ -32,7 +32,7 @@ export type PostsListProps = {
   posts: PostPreview[]
 }
 
-export const PostsList: React.FC<PostsListProps> = ({ posts }) => {
+export const PostsList = ({ posts }: PostsListProps) => {
   const bg = useColorModeValue("transparent", "gray.700")
   return (
     <Grid
