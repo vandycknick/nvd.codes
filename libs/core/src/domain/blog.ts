@@ -9,8 +9,9 @@ export interface Post {
   content: string
   categories: string[]
   readingTime: string
-  cover: string | null
-  placeholderCss: Record<string, string> | null
+  cover?: string
+  placeholderCss?: Record<string, string>
+  placeholder?: string
   slug: string
   editUrl: string
 }
