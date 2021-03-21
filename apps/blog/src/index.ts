@@ -25,6 +25,7 @@ const serve = (): void => {
       if (err) {
         throw err
       }
+      // eslint-disable-next-line no-console
       console.log(`Listening on ${port}`)
       server.start()
     },

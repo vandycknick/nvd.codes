@@ -41,7 +41,6 @@ export class BlogServer implements IBlogServer {
         callback(null, post)
       }
     } catch (err) {
-      console.error(err)
       callback(new InternalError(err), null)
     }
   }
@@ -96,7 +95,6 @@ export class BlogServer implements IBlogServer {
       response.setTotalPages(Math.ceil(sorted.length / count))
       callback(null, response)
     } catch (err) {
-      console.error(err)
       callback(new InternalError(err), null)
     }
   }

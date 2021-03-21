@@ -36,7 +36,6 @@ export const getPost = async (
     const cachedPost = JSON.parse(cache) as PostCache
 
     if (cachedPost.sha256 === markdown.sha256) {
-      console.log("post is cached")
       parsed = cachedPost.post
     }
   } catch {
@@ -45,7 +44,6 @@ export const getPost = async (
 
   if (parsed === undefined) {
     parsed = await parseMarkdownPost(markdown.contents, filePath, config)
-    console.log("post is not cached, caching now")
     await writeFile(
       cachePath,
       JSON.stringify({

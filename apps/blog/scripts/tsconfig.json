@@ -2,6 +2,6 @@
   "extends": "@nvd/tsconfig",
   "compilerOptions": {
     "target": "ES2018",
-    "resolveJsonModule": true,
-  },
+    "resolveJsonModule": true
+  }
 }
