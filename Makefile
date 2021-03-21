@@ -58,6 +58,14 @@ dev.cert-bot:
 dev.headers:
 	@yarn workspace @nvd.codes/headers dev
 
+.PHONY: up.blog-api
+up.blog-api:
+	bash ./scripts/up-blog-api.sh
+
+.PHONY: stop.blog-api
+down.blog-api:
+	bash ./scripts/stop-blog-api.sh
+
 .PHONY: check
 check:
 	$(NPM_BIN)/tsc -p $(API_PROJECT) --noEmit
@@ -79,7 +87,7 @@ test.fix:
 	NODE_ENV=test ${NPM_BIN}/jest --testPathIgnorePatterns '/(.dist|e2e)/' --update-snapshot
 
 .PHONY: build.libs
-build.libs:
+build.libs: build.proto
 	yarn workspace @nvd.codes/core tsc
 	yarn workspace @nvd.codes/config tsc
 	yarn workspace @nvd.codes/http tsc
@@ -93,7 +101,14 @@ build: clean build.libs
 	yarn workspace @nvd.codes/headers build
 	yarn workspace @nvd.codes/images build
 	yarn workspace @nvd.codes/resume build
+
+	make up.blog-api
 	yarn workspace @nvd.codes/web build
+	make down.blog-api
+
+.PHONY: build.proto
+build.proto:
+	yarn workspace @nvd.codes/blog-proto build
 
 .PHONY: pulumi.preview
 pulumi.preview:

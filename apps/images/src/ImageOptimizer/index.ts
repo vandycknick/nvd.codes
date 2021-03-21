@@ -80,7 +80,7 @@ const imageOptimizer = async function (
   }
 
   const config = getConfig()
-  const filePath = `_next/static/images/${imagePath}`
+  const filePath = `images/${imagePath}`
 
   try {
     log.info(`Downloading file ${filePath}`)

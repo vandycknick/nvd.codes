@@ -1,7 +1,6 @@
 import React, { Fragment } from "react"
 import { GetStaticProps, GetStaticPaths } from "next"
 import ErrorPage from "next/error"
-import { Post } from "@nvd.codes/core"
 import {
   Box,
   Divider,
@@ -18,12 +17,14 @@ import Time from "components/Common/Time"
 import { Calendar } from "components/BlogPost/Icons/Calendar"
 import { Edit } from "components/BlogPost/Icons/Edit"
 import { Time as TimeIcon } from "components/BlogPost/Icons/Time"
-import { getAllPosts } from "services/getAllPosts"
 import { Contents } from "components/BlogPost/Content"
+
+import { getPostBySlug, listAllPosts } from "services/posts"
+import { Post } from "@nvd.codes/blog-proto"
 
 type BlogPostProps = {
   post?: Pick<
-    Post,
+    Post.AsObject,
     | "title"
     | "description"
     | "date"
@@ -32,10 +33,6 @@ type BlogPostProps = {
     | "content"
     | "editUrl"
   >
-  pageContext: {
-    previous: string | null
-    next: string | null
-  }
 }
 
 type BlogPostParams = {
@@ -80,41 +77,46 @@ const BlogPost = ({ post }: BlogPostProps) => {
   )
 }
 
+const notFound = (): { notFound: true } => ({
+  notFound: true,
+})
+
 export const getStaticProps: GetStaticProps<
   BlogPostProps,
   BlogPostParams
 > = async ({ params }) => {
-  if (!params) return { props: { pageContext: { next: null, previous: null } } }
+  const slug = params?.slug
 
-  const posts = await getAllPosts([
-    "id",
-    "title",
-    "description",
-    "date",
-    "slug",
-    "readingTime",
-    "content",
-    "editUrl",
-  ])
-  const post = posts.find((p) => p.slug === params.slug)
+  if (slug === undefined) {
+    return notFound()
+  }
 
-  if (!post) return { props: { pageContext: { next: null, previous: null } } }
+  const post = await getPostBySlug({
+    slug,
+    fields: [
+      "id",
+      "title",
+      "description",
+      "date",
+      "slug",
+      "readingTime",
+      "content",
+      "editUrl",
+    ],
+  })
 
-  const index = posts.findIndex((p) => p.id === post.id)
-
+  if (post === undefined) {
+    return notFound()
+  }
   return {
     props: {
       post,
-      pageContext: {
-        next: posts[index - 1]?.slug ?? null,
-        previous: posts[index + 1]?.slug ?? null,
-      },
     },
   }
 }
 
 export const getStaticPaths: GetStaticPaths<BlogPostParams> = async () => {
-  const posts = await getAllPosts(["slug"])
+  const posts = await listAllPosts(["slug"])
 
   return {
     paths: posts.map((posts) => {
