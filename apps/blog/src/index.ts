@@ -19,7 +19,7 @@ const serve = (): void => {
 
   server.addService(BlogService, new BlogServer(config))
   server.bindAsync(
-    config.address,
+    config.endpoint,
     ServerCredentials.createInsecure(),
     (err, port) => {
       if (err) {
@@ -31,8 +31,8 @@ const serve = (): void => {
     },
   )
 
-  if (config.address.startsWith("unix://")) {
-    process.on("exit", () => rmSync(config.address.replace("unix://", "")))
+  if (config.endpoint.startsWith("unix://")) {
+    process.on("exit", () => rmSync(config.endpoint.replace("unix://", "")))
   }
 }
 

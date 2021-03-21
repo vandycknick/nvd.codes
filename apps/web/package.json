@@ -10,7 +10,7 @@
     "prebuild": "yarn clean",
     "build": "next build && next export -o .dist && yarn copy-images && yarn sitemap",
     "start": "next start",
-    "sitemap": "ts-node --project tsconfig.server.json src/utils/createSitemap.ts",
+    "sitemap": "dotenv -- ts-node --project tsconfig.server.json src/utils/createSitemap.ts",
     "copy-images": "dotenv -- ./scripts/copy-images.sh"
   },
   "dependencies": {

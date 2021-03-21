@@ -7,10 +7,13 @@ import {
 import { credentials } from "@grpc/grpc-js"
 import { Empty } from "google-protobuf/google/protobuf/empty_pb"
 
-const client = new BlogClient(
-  "unix:///tmp/nvd-codes-blog-api.sock",
-  credentials.createInsecure(),
-)
+const API = process.env["BLOG_API_ENDPOINT"]
+
+if (API === undefined) {
+  throw new Error("BLOG_API_ENDPOINT endpoint not defined!")
+}
+
+const client = new BlogClient(API, credentials.createInsecure())
 
 type PartialPost<P extends keyof Post.AsObject> = Pick<Post.AsObject, P>
 
