@@ -5,12 +5,12 @@ import NextLink from "next/link"
 
 import SEO from "components/Common/SEO"
 import { PostsList, PostsListProps } from "components/Blog/PostsList"
-import { getAllPosts } from "services/getAllPosts"
+import { listPosts } from "services/posts"
 
 type BlogProps = {
   posts: PostsListProps["posts"]
   pager: {
-    pages: number
+    total: number
     current: number
   }
 }
@@ -46,9 +46,9 @@ const Blog = ({ posts, pager }: BlogProps) => (
       )}
 
       <Text d="flex" alignItems="center" mx={4}>
-        Page {pager.current} of {pager.pages}
+        Page {pager.current} of {pager.total}
       </Text>
-      {pager.current === pager.pages ? (
+      {pager.current === pager.total ? (
         <Button colorScheme="teal" size="sm" w="70px" disabled>
           Next
         </Button>
@@ -70,33 +70,33 @@ const Blog = ({ posts, pager }: BlogProps) => (
 const POSTS_PER_PAGE = 9
 
 export const getStaticProps: GetStaticProps<BlogProps> = async ({ params }) => {
-  const posts = await getAllPosts([
-    "id",
-    "title",
-    "description",
-    "date",
-    "slug",
-    "readingTime",
-    "categories",
-    "cover",
-    "placeholderCss",
-  ])
-  const pages = Math.ceil(posts.length / POSTS_PER_PAGE)
-  const page = params?.page ?? 1
-  const current = Array.isArray(page) ? 1 : parseInt(`${page}`, 10)
+  const page =
+    params !== undefined
+      ? Array.isArray(params.page)
+        ? parseInt(params.page[0], 10)
+        : parseInt(params.page ?? "1", 10)
+      : 1
 
-  const start = (current - 1) * POSTS_PER_PAGE
-  const end = current * POSTS_PER_PAGE
+  const [posts, pager] = await listPosts({
+    page,
+    count: POSTS_PER_PAGE,
+    fields: [
+      "id",
+      "title",
+      "description",
+      "date",
+      "slug",
+      "readingTime",
+      "categoriesList",
+      "cover",
+      "placeholderCssMap",
+    ],
+  })
 
   return {
     props: {
-      posts: posts
-        .sort((post1, post2) => (post1.date > post2.date ? -1 : 1))
-        .slice(start, end),
-      pager: {
-        pages,
-        current,
-      },
+      posts,
+      pager,
     },
   }
 }

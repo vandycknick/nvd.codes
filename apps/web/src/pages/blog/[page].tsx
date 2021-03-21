@@ -1,5 +1,6 @@
 import { GetStaticPaths } from "next"
-import { getAllPosts } from "services/getAllPosts"
+
+import { listPosts } from "services/posts"
 import Blog from "../blog"
 
 function range(start: number, end: number): number[] {
@@ -9,11 +10,15 @@ function range(start: number, end: number): number[] {
 export { getStaticProps } from "../blog"
 
 export const getStaticPaths: GetStaticPaths = async () => {
-  const posts = await getAllPosts(["title", "slug"])
-  const pages = Math.ceil(posts.length / 9)
+  const [, pager] = await listPosts({
+    page: 1,
+    count: 9,
+    fields: ["title", "slug"],
+  })
+  const pages = pager.total
 
   return {
-    paths: range(2, pages).map((page) => {
+    paths: range(1, pages).map((page) => {
       return {
         params: {
           page: `${page}`,

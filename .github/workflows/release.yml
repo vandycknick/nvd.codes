@@ -49,6 +49,10 @@ jobs:
 
       - name: Build api and web
         run: make build
+        env:
+          BLOG_POSTS_DIRECTORY: ${{ secrets.BLOG_POSTS_DIRECTORY }}
+          BLOG_CACHE_DIRECTORY: ${{ secrets.BLOG_CACHE_DIRECTORY }}
+          BLOG_API_ENDPOINT: ${{ secrets.BLOG_API_ENDPOINT }}
 
       - name: Setup Python
         uses: actions/setup-python@v2

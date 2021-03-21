@@ -14,7 +14,8 @@ import {
 import { ExternalLinkIcon } from "@chakra-ui/icons"
 import { PrismAsyncLight as SyntaxHighlighter } from "react-syntax-highlighter"
 import { dracula } from "react-syntax-highlighter/dist/cjs/styles/prism"
-import Image from "next/image"
+
+import { Image } from "components/Common/Image"
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 function getCoreProps(props: any): any {
