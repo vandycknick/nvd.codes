@@ -5,8 +5,6 @@ import express from "express"
 import { createProxyMiddleware } from "http-proxy-middleware"
 import next from "next"
 
-import { purgePostsCache, watchAllPosts } from "services/getAllPosts"
-
 const port = 3000
 const app = next({ dev: true })
 const handle = app.getRequestHandler()
@@ -17,10 +15,12 @@ async function main(): Promise<void> {
     target: "http://0.0.0.0:7071",
   })
 
-  await purgePostsCache()
   await app.prepare()
 
   server.use("/api", apiProxy)
+
+  const CACHE_DIRECTORY = process.env["BLOG_CACHE_DIRECTORY"]
+  server.use("/images", express.static(`${CACHE_DIRECTORY}/images`))
 
   server.all("*", (req, res) => handle(req, res))
 
@@ -28,8 +28,6 @@ async function main(): Promise<void> {
     // eslint-disable-next-line no-console
     console.log(`> Ready on http://localhost:${port}`)
   })
-
-  watchAllPosts()
 }
 
 main()

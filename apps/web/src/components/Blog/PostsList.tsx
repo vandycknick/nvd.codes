@@ -1,7 +1,6 @@
 import React from "react"
 import NextLink from "next/link"
-import { Post } from "@nvd.codes/core"
-import Image from "next/image"
+import { Post } from "@nvd.codes/blog-proto"
 import {
   Box,
   Flex,
@@ -14,18 +13,20 @@ import {
 } from "@chakra-ui/react"
 
 import Time from "components/Common/Time"
+import { placeholderCssMapToObject } from "services/placeholderCssMapToObject"
+import { Image } from "components/Common/Image"
 
 type PostPreview = Pick<
-  Post,
+  Post.AsObject,
   | "id"
   | "title"
   | "description"
   | "date"
   | "slug"
   | "readingTime"
-  | "categories"
+  | "categoriesList"
   | "cover"
-  | "placeholderCss"
+  | "placeholderCssMap"
 >
 
 export type PostsListProps = {
@@ -47,31 +48,46 @@ export const PostsList = ({ posts }: PostsListProps) => {
       py={6}
     >
       {posts.map((post) => (
-        <Box key={post.id} boxShadow="lg" borderRadius="md" bg={bg}>
+        <Box
+          key={post.id}
+          boxShadow="lg"
+          borderRadius="md"
+          bg={bg}
+          _hover={{
+            transform: "scale(1.02)",
+            transitionDuration: ".5s",
+            transitionTimingFunction: "cubic-bezier(.4,0,.2,1)",
+            transitionProperty:
+              "background-color,border-color,color,fill,stroke,opacity,box-shadow,transform",
+          }}
+        >
           <NextLink href="/post/[slug]" as={`/post/${post.slug}`} passHref>
             <Link
               textDecoration="none"
               _hover={{ textDecoration: "none" }}
               _focus={{ outline: "hidden" }}
             >
-              <Box position="relative" overflow="hidden" borderTopRadius="md">
-                <Box
-                  pos="absolute"
-                  inset={0}
-                  w="full"
-                  h="full"
-                  css={post.placeholderCss}
-                  style={{ filter: "blur(24px)", transform: "scale(1.2)" }}
-                />
+              <Box pos="relative">
                 <Image
                   src={post.cover || ""}
                   height={300}
                   width={500}
                   objectFit="cover"
-                  className="post-card-cover"
+                  borderTopRadius="md"
+                  placeholderCss={placeholderCssMapToObject(
+                    post.placeholderCssMap,
+                  )}
+                  imageClassName="post-card-cover"
                 />
-                <Box position="absolute" bottom={0} p={4} color="white">
-                  <Heading as="h3" size="xl">
+                <Box
+                  position="absolute"
+                  bottom={0}
+                  px={4}
+                  pt={4}
+                  pb={1}
+                  color="white"
+                >
+                  <Heading as="h3" size="xl" pb={2}>
                     {post.title}
                   </Heading>
                   <Text fontSize="sm">
@@ -83,9 +99,9 @@ export const PostsList = ({ posts }: PostsListProps) => {
                   </Text>
                 </Box>
               </Box>
-              <Box p={4}>
+              <Flex p={4} direction="column">
                 <Flex wrap="wrap">
-                  {post.categories.map((category) => (
+                  {post.categoriesList.map((category) => (
                     <Tag
                       key={category}
                       borderRadius="full"
@@ -98,9 +114,9 @@ export const PostsList = ({ posts }: PostsListProps) => {
                     </Tag>
                   ))}
                 </Flex>
-                <Text>{post.description}</Text>
+                <Text flex={1}>{post.description}</Text>
                 <Text>READ MORE</Text>
-              </Box>
+              </Flex>
             </Link>
           </NextLink>
         </Box>

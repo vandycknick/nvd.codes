@@ -1,0 +1,10 @@
+{
+  "extends": "@nvd/tsconfig",
+  "compilerOptions": {
+    "target": "ES2018",
+    "resolveJsonModule": true,
+    "outDir": ".dist",
+    "rootDir": "src"
+  },
+  "include": ["src/**/*.ts"]
+}

@@ -29,6 +29,13 @@ def is_input_redirected() -> bool:
         else:
             return False
 
+# Stolen from: https://stackoverflow.com/questions/1094841/get-human-readable-version-of-file-size
+def sizeof_fmt(num, suffix='B'):
+    for unit in ['','Ki','Mi','Gi','Ti','Pi','Ei','Zi']:
+        if abs(num) < 1024.0:
+            return "%3.1f%s%s" % (num, unit, suffix)
+        num /= 1024.0
+    return "%.1f%s%s" % (num, 'Yi', suffix)
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(
@@ -63,8 +70,9 @@ if __name__ == "__main__":
 
     for file in files:
         relative = os.path.relpath(file, cwd)
+        size = sizeof_fmt(os.path.getsize(file))
 
-        print("Uploading file: {0}".format(file))
+        print(f"Uploading file: {file} {size}")
 
         (content_type, content_encoding) = mimetypes.guess_type(file)
         content_settings = ContentSettings(

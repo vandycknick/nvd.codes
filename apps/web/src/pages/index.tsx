@@ -8,7 +8,7 @@ import {
   LatestArticlesProps,
 } from "components/Home/LatestArticles"
 import { LatestActivities } from "components/Home/LatestActivities"
-import { getLatestPosts } from "services/getLatestPosts"
+import { listPosts } from "services/posts"
 
 interface HomeProps {
   latestPosts: LatestArticlesProps["posts"]
@@ -28,18 +28,22 @@ const Home: React.FC<HomeProps> = ({ latestPosts }) => (
 )
 
 export const getStaticProps: GetStaticProps<HomeProps> = async () => {
-  const latestPosts = await getLatestPosts(3, [
-    "title",
-    "description",
-    "date",
-    "readingTime",
-    "slug",
-    "categories",
-  ])
+  const [posts] = await listPosts({
+    page: 1,
+    count: 3,
+    fields: [
+      "title",
+      "description",
+      "date",
+      "readingTime",
+      "categoriesList",
+      "slug",
+    ],
+  })
 
   return {
     props: {
-      latestPosts,
+      latestPosts: posts,
     },
   }
 }
