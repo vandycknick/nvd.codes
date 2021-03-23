@@ -73,6 +73,12 @@ export const parseAzureResourceId = (resourceId: string) => {
   const resourceName = chunks.pop()
   const resourceType = chunks.pop() ?? matches[4]
 
+  if (resourceName === undefined || resourceType === undefined) {
+    return Err(
+      `Failed parsing for ${resourceId}, resourceName or resourceType is undefined.`,
+    )
+  }
+
   return Ok({
     subscriptionId: matches[1],
     resourceGroupName: matches[2],

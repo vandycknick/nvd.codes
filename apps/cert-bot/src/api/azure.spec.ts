@@ -385,6 +385,9 @@ describe("createAzureApi", () => {
           getCustomDomainCertificate: expect.any(Function),
           setCustomDomainCertificate: expect.any(Function),
         },
+        webApp: {
+          getByName: expect.any(Function),
+        },
         vault: {
           getSecret: expect.any(Function),
           setSecret: expect.any(Function),

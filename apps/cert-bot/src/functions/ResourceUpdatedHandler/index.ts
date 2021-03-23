@@ -13,6 +13,8 @@ import {
 } from "../Certificate/validators"
 import { ResourceUpdatedEvent } from "../../events/ResourceUpdatedEvent"
 
+const CERT_BOT_TAG = "cert-bot-issuer"
+
 const resourceUpdatedHandler = async (
   context: Context,
   event: ResourceUpdatedEvent,
@@ -35,7 +37,8 @@ const resourceUpdatedHandler = async (
     return Ok("Cert-bot disabled")
   }
 
-  const parsed = parseAzureResourceId(event.subject)
+  const resourceId = event.subject
+  const parsed = parseAzureResourceId(resourceId)
 
   if (parsed.isErr()) {
     const msg = "Invalid subject, can't be parsed as an azure resource id"
@@ -49,7 +52,9 @@ const resourceUpdatedHandler = async (
   )
 
   if (apiOrError.isErr()) {
-    return Err(apiOrError.unwrapErr().message)
+    const err = apiOrError.unwrapErr()
+    log.error(err)
+    return Err(err.message)
   }
 
   const azure = apiOrError.unwrap()
@@ -72,12 +77,12 @@ const resourceUpdatedHandler = async (
     }
 
     const endpoint = endpointOrError.unwrap()
+    const issuer = endpoint.tags[CERT_BOT_TAG]
 
-    if (endpoint.tags["cert-bot-issuer"] == undefined) {
+    if (issuer == undefined) {
       log.info("Endpoint not managed by certbot!")
       return Ok("Endpoint not managed by cert bot!")
     }
-    const issuer = endpoint.tags["cert-bot-issuer"]
 
     const domainsOrError = await azure.cdn.listCustomDomains(
       profileName,
@@ -119,8 +124,7 @@ const resourceUpdatedHandler = async (
             undefined,
             {
               resource: {
-                profileName,
-                endpointName,
+                resourceId,
                 domainName: domain.properties.hostName,
               },
               certificateName: certificate.certificateName,
@@ -133,6 +137,7 @@ const resourceUpdatedHandler = async (
         }
         return Ok("Finished")
       } catch (ex) {
+        log.error(ex)
         return Err(ex)
       }
     })
@@ -140,7 +145,71 @@ const resourceUpdatedHandler = async (
     const ids = await Promise.all(promises)
     log.info(ids)
     return Ok("finished")
+  } else if (provider === "Microsoft.Web") {
+    const siteOrError = await azure.webApp.getByName(
+      parsed.unwrap().resourceName,
+    )
+
+    if (siteOrError.isErr()) {
+      const err = siteOrError.unwrapErr()
+      log.error(err)
+      return Err(`${err.statusCode}: ${err.message}`)
+    }
+
+    const site = siteOrError.unwrap()
+    log.info(site)
+
+    const issuer = site.tags[CERT_BOT_TAG]
+    if (issuer == undefined) {
+      log.info("Endpoint not managed by cert bot!")
+      return Ok("Endpoint not managed by cert bot!")
+    }
+
+    const client = getClient(context)
+    const promises = site.properties.hostNames
+      .filter((hostname) => !hostname.endsWith("azurewebsites.net"))
+      .map(async (hostName) => {
+        try {
+          const certificateEntity = getCertificateEntity([hostName], issuer)
+          const state = await client.readEntityState<Certificate>(
+            certificateEntity,
+          )
+          const certificate = state.entityState
+          if (
+            isCertificateReady(certificate) &&
+            isCertificateValid(certificate)
+          ) {
+            log.info(
+              `Certificate for ${hostName} already exists and is still valid!`,
+            )
+            await client.startNew(
+              "ResourceUpdateCertificateOrchestrator",
+              undefined,
+              {
+                resource: {
+                  resourceId,
+                  domainName: hostName,
+                },
+                certificateName: certificate.certificateName,
+                revision: certificate.revision,
+              },
+            )
+          } else {
+            log.info(`Renewing certificate for ${hostName}!`)
+            await client.signalEntity(certificateEntity, "renew")
+          }
+          return Ok("Finished")
+        } catch (ex) {
+          log.error(ex)
+          return Err(ex)
+        }
+      })
+
+    const ids = await Promise.all(promises)
+    log.info(ids)
+    return Ok("finished")
   } else {
+    log.error("Unsupported provider!")
     return Err("Unsupported provider")
   }
 }
