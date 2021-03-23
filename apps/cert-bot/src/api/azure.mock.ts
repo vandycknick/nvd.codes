@@ -4,6 +4,7 @@ interface MockedAzureApi {
   listResources: jest.MockedFunction<AzureApi["listResources"]>
   cdn: jest.Mocked<AzureApi["cdn"]>
   vault: jest.Mocked<AzureApi["vault"]>
+  webApp: jest.Mocked<AzureApi["webApp"]>
   mockRestore(): void
   mockClear(): void
 }
@@ -23,6 +24,10 @@ export const createAzureApiMock = (): MockedAzureApi => ({
     setCertificate: jest.fn(),
   },
 
+  webApp: {
+    getByName: jest.fn(),
+  },
+
   mockRestore() {
     this.listResources.mockRestore()
     this.cdn.getEndpoint.mockRestore()
@@ -33,6 +38,7 @@ export const createAzureApiMock = (): MockedAzureApi => ({
     this.vault.setSecret.mockRestore()
     this.vault.getCertificate.mockRestore()
     this.vault.setCertificate.mockRestore()
+    this.webApp.getByName.mockRestore()
   },
 
   mockClear() {
@@ -45,5 +51,6 @@ export const createAzureApiMock = (): MockedAzureApi => ({
     this.vault.setSecret.mockClear()
     this.vault.getCertificate.mockClear()
     this.vault.setCertificate.mockClear()
+    this.webApp.getByName.mockClear()
   },
 })

@@ -30,6 +30,7 @@ import {
 } from "../models/keyVault"
 import { getEnvVar } from "../utils"
 import { ResourceListResult } from "../models/resource"
+import { Site } from "../models/webApp"
 
 const getManagedIdentity = (): Option<ManagedIdentity> =>
   Option.all(getEnvVar("MSI_ENDPOINT"), getEnvVar("MSI_SECRET")).map(
@@ -175,6 +176,10 @@ export type AzureApi = {
       secretName: string,
       secretValue: string,
     ) => Promise<Result<string, ApiError>>
+  }
+
+  webApp: {
+    getByName: (name: string) => Promise<Result<Site, ApiError>>
   }
 }
 
@@ -411,6 +416,33 @@ const createAzureKeyVaultApi = (tokens: AzureAuthenticationTokens) => {
   }
 }
 
+const createWebAppApi = (
+  subscriptionId: string,
+  resourceGroup: string,
+  tokens: AzureAuthenticationTokens,
+) => {
+  const getByName = async (name: string): Promise<Result<Site, ApiError>> => {
+    const endpoint = getManagementEndpoint(
+      subscriptionId,
+      resourceGroup,
+      `/providers/Microsoft.Web/sites/${name}?api-version=2019-08-01`,
+    )
+
+    const response = await sendJsonRequest<Site>(endpoint, {
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `${tokens.tokenType} ${tokens.accessToken}`,
+      },
+    })
+
+    return response
+  }
+
+  return {
+    getByName,
+  }
+}
+
 export const createAzureApi = async (
   subscriptionId: string,
   resourceGroup: string,
@@ -474,5 +506,11 @@ export const createAzureApi = async (
     ),
 
     vault: createAzureKeyVaultApi(keyVaultToken.unwrap()),
+
+    webApp: createWebAppApi(
+      subscriptionId,
+      resourceGroup,
+      managementToken.unwrap(),
+    ),
   })
 }

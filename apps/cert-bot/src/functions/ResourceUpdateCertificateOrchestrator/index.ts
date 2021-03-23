@@ -8,8 +8,7 @@ const resourceUpdateCertificateOrchestrator = function* (
 
   const { resource, certificateName, revision } = context.df.getInput() as {
     resource: {
-      profileName: string
-      endpointName: string
+      resourceId: string
       domainName: string
     }
     certificateName: string
