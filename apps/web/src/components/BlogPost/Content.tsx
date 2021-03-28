@@ -1,7 +1,15 @@
 import React, { ElementType, ReactNode } from "react"
 import ReactMarkdown from "react-markdown"
+import gfm from "remark-gfm"
+
 import {
   Box,
+  Table,
+  Thead,
+  Tbody,
+  Tr,
+  Th,
+  Td,
   Text,
   Code,
   Divider,
@@ -162,6 +170,16 @@ const ImageElement = (props: Props & { src: string; alt: string }) => {
   )
 }
 
+const TableElement = (props: Props) => (
+  <Table variant="simple" mb={10}>
+    {props.children}
+  </Table>
+)
+
+const TableCell = (props: Props & { isHeader: boolean }) => (
+  <>{props.isHeader ? <Th>{props.children}</Th> : <Td>{props.children}</Td>}</>
+)
+
 const renderers: { [nodeType: string]: ElementType } = {
   paragraph: Paragraph,
   emphasis: Emphasis,
@@ -179,6 +197,11 @@ const renderers: { [nodeType: string]: ElementType } = {
   definition: () => null,
   heading: HeadingElement,
   inlineCode: InlineCode,
+  table: TableElement,
+  tableHead: Thead,
+  tableBody: Tbody,
+  tableRow: Tr,
+  tableCell: TableCell,
 }
 
 type ContentsProps = {
@@ -186,7 +209,9 @@ type ContentsProps = {
 }
 
 const Contents = ({ children }: ContentsProps) => (
-  <ReactMarkdown renderers={renderers}>{children}</ReactMarkdown>
+  <ReactMarkdown renderers={renderers} plugins={[gfm]}>
+    {children}
+  </ReactMarkdown>
 )
 
 export { Contents }
