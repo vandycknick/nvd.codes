@@ -1,13 +1,23 @@
 [
-  { "slug": "monitor-any-command-typed-at-a-shell-with-ebpf", "discussion": 37 },
-  { "slug": "correctly-encode-powershell-payloads-for-exploits", "discussion": 36 },
+  { "slug": "hack-the-box-luanne", "discussion": 40 },
+  {
+    "slug": "monitor-any-command-typed-at-a-shell-with-ebpf",
+    "discussion": 37
+  },
+  {
+    "slug": "correctly-encode-powershell-payloads-for-exploits",
+    "discussion": 36
+  },
   { "slug": "hack-the-box-omni", "discussion": 35 },
-  { "slug": "deploying-to-azure-with-pulumi-from-github-actions", "discussion": 34 },
+  {
+    "slug": "deploying-to-azure-with-pulumi-from-github-actions",
+    "discussion": 34
+  },
   { "slug": "a-couple-of-tricks-to-resolve-your-public-ip", "discussion": 33 },
   { "slug": "kong-not-supported-on-my-old-refurbished-cpu", "discussion": 32 },
   { "slug": "gcr-with-kubernetes", "discussion": 28 },
   { "slug": "set-up-docker-from-scratch-on-wsl2", "discussion": 31 },
   { "slug": "use-docker-secrets-in-asp-net-core", "discussion": 30 },
   { "slug": "curl-tips-and-tricks", "discussion": 27 },
-  { "slug": "dotnet-build-target-net4x-on-unix-systems", "discussion": 29}
+  { "slug": "dotnet-build-target-net4x-on-unix-systems", "discussion": 29 }
 ]
