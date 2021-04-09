@@ -7,9 +7,7 @@ categories: [hack-the-box, luanne, netbsd, web, lua, injection, fuzzing]
 cover: ./assets/2021-03-28-hack-the-box-luanne/cover.png
 ---
 
-I recently managed to complete another machine on Hack the Box, and this post will explain how I managed to solve it. Luanne got released as an easy difficulty NetBSD machine. I can't entirely agree with this difficulty level, as many others have also given this machine a lousy rating and bad rep in the forums. Nonetheless, I really enjoyed solving this machine. For me, the main problem was my lack of experience with BSD systems. It made me waste a lot of time getting my Linux reverse shell knowledge ported over to BSD. But forgetting that I was solving a BSD machine halfway through the challenge also didn't help. In hindsight, it easy to say that it should have gotten a different rating, which probably would have helped with the initial perception.
-
-Let's dive into the machine and start our initial discovery with a nmap scan. The command will enumerate all versions `-sV`, run all default scripts `-sC`, and store the output in `nmap.txt` to refer back to it later.
+I recently managed to complete another machine on Hack the Box, and in this post, I want to walk you through the steps I took to solve it. Luanne got released as an easy difficulty NetBSD machine. I can't entirely agree with this difficulty level, as many others have also given this machine a lousy rating and got some critique in the forums. Nonetheless, I really enjoyed solving this machine. For me, the main problem was my lack of experience with BSD systems. It made me waste a lot of time getting my Linux reverse shell knowledge ported over to BSD. But forgetting that I was solving a BSD machine halfway through the challenge also didn't help! Let's dive into the machine and start our initial discovery with a nmap scan. The command will enumerate all versions `-sV`, run all default scripts `-sC`, and store the output in `nmap.txt` to refer back to it later.
 
 ```sh
 $ nmap -sV -sC -o nmap.txt 10.10.10.218
@@ -43,7 +41,7 @@ Service detection performed. Please report any incorrect results at https://nmap
 # Nmap done at Thu Mar 25 20:16:04 2021 -- 1 IP address (1 host up) scanned in 200.25 seconds
 ```
 
-At this point, I kicked off another scan in the background to scan all ports with `-p-`, but that didn't yield any different results. You can see that the target host has ports 22, 80 and 9001 open and is using NetBSD. A few other things to note is the `robots.txt` file behind the service running on port 80 and that both services require authentication.
+At this point, I kicked off another scan in the background to scan all ports with `-p-`, but that didn't turn up any new results. You can see that the target host has ports 22, 80 and 9001 open and is using NetBSD. A few other things to note is the `robots.txt` file behind the service running on port 80 and that both services require authentication.
 
 I'm not sure what Medusa httpd or Supervisor process manager is. So I'm going to focus my attention first on the service running behind port 80. Opening up Firefox, we get greeted with a basic auth login prompt.
 
@@ -96,7 +94,7 @@ $ curl 10.10.10.218/weather/forecast?city=list
 {"code": 200,"cities": ["London","Manchester","Birmingham","Leeds","Glasgow","Southampton","Liverpool","Newcastle","Nottingham","Sheffield","Bristol","Belfast","Leicester"]}
 ```
 
-It seems the API is relatively straightforward. Given a parameter `city`, it will provide you with the weather forecast for that city. This city parameter is something I can control and thus want to play around with next and see if I can get some weird results adding special characters. I always like to manually the following characters (`%`, `"` and `'`) because I find they often yield interesting results.
+It seems the API is relatively straightforward. Given a parameter `city`, it will provide you with the weather forecast for that city. This city parameter is something I can control and thus want to play around with next. Lets see see if we can get some weird results by adding special characters. I always like to manually add the following characters (`%`, `"` and `'`) because I find they often yield interesting results.
 
 ```sh
 $ curl 10.10.10.218/weather/forecast?city=London%
@@ -109,7 +107,7 @@ $ curl 10.10.10.218/weather/forecast?city=London\'
 <br>Lua error: /usr/local/webapi/weather.lua:49: attempt to call a nil value
 ```
 
-Not sure what happened when injecting the percentage sign. It seems that it invalidated the whole query. But hard to say, for now, let's keep that in mind for later. Because using a single quote returns a Lua error message. I have written some Lua code in the past but am by all means no expert in this language. I will need to do some research to understand better what constructs the language offers to get RCE.
+Not sure what happened when injecting the percentage sign. It seems that it invalidated the whole query. But hard to say, for now, let's keep that in mind for later. Because using a single quote returns a Lua error message. I have written some Lua code in the past but am by all means no expert in this language. I will need to do some research to better understand what constructs the language/runtime offers to get an RCE.
 
 ![DuckDuckGo Searching For Lua Code Injection](./assets/2021-03-28-hack-the-box-luanne/search-code-injection.png)
 
@@ -119,11 +117,11 @@ This first article was fascinating, especially the following section, which gave
 
 Continuing on this idea, I would like to make sure I can get some basic injection working. But for this, I'm going to move on to Burp Suite so I can have better control over the payload I'm going to inject. Playing around, I managed to cobble together a working payload:
 
-[image: burp-suite-working-ci]
+![Burp Suite Working RCE](./assets/2021-03-28-hack-the-box-luanne/burp-suite-working-ci.png)
 
-Do notice the `--`, which is a comment in Lua and is required to get this exploit to work. Adding a comment to the end of a payload is always an easy escape hatch to get an exploit to work. We can see it is working because the output of the `id` comment got appended in the response. We know now that we can execute commands as the `_httpd` user on the host.
+Do notice the `--`, which is a comment in Lua and is required to get this exploit working. Adding a comment to the end of a payload is always an easy escape hatch to get an exploit to work. We can see it is working because the output of the `id` comment got appended in the response. We now know that we can execute commands as the `_httpd` user on the host.
 
-At this point, I got stuck for some time trying to get a reverse shell up and running. I didn't manage to get any of my default reverse shells working. I even tried writing the payload in Lua, but that didn't work because of missing modules. Taking a step back, I realised that this target host was a BSD system. Searching around for a BSD specific reverse shell, I bumped into this [repo](https://github.com/swisskyrepo/PayloadsAllTheThings/blob/master/Methodology%20and%20Resources/Reverse%20Shell%20Cheatsheet.md#netcat-openbsd).
+At this point, I got stuck for some time trying to get a reverse shell up and running. I didn't manage to get any of my default reverse shells working. I even tried writing the payload in Lua, but that didn't work because of missing modules. Taking a step back, I remembered again that this target host was a BSD system. Searching around for a BSD specific reverse shell, I bumped into this [repo](https://github.com/swisskyrepo/PayloadsAllTheThings/blob/master/Methodology%20and%20Resources/Reverse%20Shell%20Cheatsheet.md#netcat-openbsd).
 
 ![Creating Reverse Shell in Burp](./assets/2021-03-28-hack-the-box-luanne/burp-suite-reverse-shell.png)
 
@@ -166,7 +164,7 @@ HASH: $bitlocker$1$16$6f972989ddc209f1eccf07313a7266a2$1048576$12$3a33a8eaff5e6f
 This shows what mode we should use to crack the password:
 
 ```sh
-$ hashcat -a 0 -m 500 -o cracked.txt hashes /opt/SecLists/Passwords/Leaked-Databases/rockyou.txt --username --show
+$ hashcat -a 0 -m 500 -o cracked.txt hashes /opt/SecLists/Passwords/Leaked-Databases/rockyou.txt --username
 
 $ cat cracked.txt
 webapi_user:$1$vVoNCsOl$lMtBS6GL2upDbR4Owhzyc0:iamthebest
@@ -176,7 +174,7 @@ Hashcat appends the cracked password to the end of the line. The cracked passwor
 
 ![Logged into service on port 80](./assets/2021-03-28-hack-the-box-luanne/web-80-logged-in.png)
 
-I also tried to get access to the service running on port `9001`, but the credentials didn't seem to work for this service. So back to the drawing board, pretty early on, I noticed that Nginx was proxying to something on localhost. Let's have a look and see what is running on this box:
+I also tried to get access to the service running on port `9001`, but the credentials didn't seem to work for this service. Pretty early on, I noticed that Nginx was proxying to something on localhost. Let's have a look and see what is running on this box:
 
 ```sh
 $ ps auxww
@@ -229,7 +227,7 @@ With the help of my search engine, I bumped into [this](https://man.netbsd.org/N
 | -I       | Causes httpd to use the given port instead of the default one.                                                   |
 | -U       | Causes httpd to switch to the given user                                                                         |
 
-The interesting thing here is `-u`, which allows access to user directories by using a URL in the form of `/~user/`. `-U`, on the other hand, runs the service under a different user. So let's have a look at the service running on port `3001`. It requires some form of authentication, but we already managed to crack a password, lets see if that one works:
+The interesting thing here is the `-u` flag, which allows access to user directories by using a URL in the form of `/~user/`. `-U`, on the other hand, runs the service under a different user. So let's have a look at the service running on port `3001`. It requires some form of authentication, but we already managed to crack a password, lets see if that one works:
 
 ```sh
 $ curl -u webapi_user:iamthebest localhost:3001/~r.michaels/
