@@ -13,7 +13,7 @@ const stream = new SitemapStream({ hostname: "https://nvd.codes" })
 
 const createSitemap = async () => {
   const posts = await listAllPosts()
-  const slugs = posts.map((post) => `/posts/${post.slug}`)
+  const slugs = posts.map((post) => `/post/${post.slug}`)
   const all = ([] as string[]).concat(links, slugs)
   const sitemap = await streamToPromise(Readable.from(all).pipe(stream))
   return sitemap.toString()
