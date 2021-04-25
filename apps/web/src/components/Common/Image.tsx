@@ -4,9 +4,7 @@ import { Box, BoxProps } from "@chakra-ui/react"
 
 const imageLoader = ({ src, width, quality }: ImageLoaderProps): string => {
   const host =
-    process.env.NODE_ENV === "production"
-      ? "https://images.nvd.codes"
-      : window.location.origin
+    process.env.NODE_ENV === "production" ? "https://images.nvd.codes" : ""
   return `${host}${src}?w=${width}&q=${quality ?? 75}`
 }
 
