@@ -68,13 +68,15 @@ const CodeBlock = (
   }
 
   return (
-    <SyntaxHighlighter
-      showLineNumbers={showLineNumbers}
-      language={language ?? "text"}
-      style={dracula}
-    >
-      {value}
-    </SyntaxHighlighter>
+    <Box mb={6}>
+      <SyntaxHighlighter
+        showLineNumbers={showLineNumbers}
+        language={language ?? "text"}
+        style={dracula}
+      >
+        {value}
+      </SyntaxHighlighter>
+    </Box>
   )
 }
 
@@ -107,11 +109,10 @@ const ListElement = (
   if (depth === 1) styleType = "circle"
   return (
     <List
-      spacing={4}
+      spacing={1}
       as={ordered ? "ol" : "ul"}
       styleType={styleType}
       pl={4}
-      mt={1}
       ml={6}
       mb={4}
       {...attrs}
