@@ -81,39 +81,37 @@ const notFound = (): { notFound: true } => ({
   notFound: true,
 })
 
-export const getStaticProps: GetStaticProps<
-  BlogPostProps,
-  BlogPostParams
-> = async ({ params }) => {
-  const slug = params?.slug
+export const getStaticProps: GetStaticProps<BlogPostProps, BlogPostParams> =
+  async ({ params }) => {
+    const slug = params?.slug
 
-  if (slug === undefined) {
-    return notFound()
-  }
+    if (slug === undefined) {
+      return notFound()
+    }
 
-  const post = await getPostBySlug({
-    slug,
-    fields: [
-      "id",
-      "title",
-      "description",
-      "date",
-      "slug",
-      "readingTime",
-      "content",
-      "editUrl",
-    ],
-  })
+    const post = await getPostBySlug({
+      slug,
+      fields: [
+        "id",
+        "title",
+        "description",
+        "date",
+        "slug",
+        "readingTime",
+        "content",
+        "editUrl",
+      ],
+    })
 
-  if (post === undefined) {
-    return notFound()
+    if (post === undefined) {
+      return notFound()
+    }
+    return {
+      props: {
+        post,
+      },
+    }
   }
-  return {
-    props: {
-      post,
-    },
-  }
-}
 
 export const getStaticPaths: GetStaticPaths<BlogPostParams> = async () => {
   const posts = await listAllPosts(["slug"])

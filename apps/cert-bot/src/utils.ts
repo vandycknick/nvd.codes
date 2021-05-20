@@ -61,7 +61,8 @@ export const delay = (time: number): Promise<void> =>
   })
 
 export const parseAzureResourceId = (resourceId: string) => {
-  const resourceIdPattern = /subscriptions\/(.+)\/resourceGroups\/(.+)\/providers\/(.+?)\/(.+?)\/(.+)/gi
+  const resourceIdPattern =
+    /subscriptions\/(.+)\/resourceGroups\/(.+)\/providers\/(.+?)\/(.+?)\/(.+)/gi
 
   const matches = resourceIdPattern.exec(resourceId)
 

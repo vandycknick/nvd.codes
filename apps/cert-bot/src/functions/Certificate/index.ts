@@ -131,19 +131,14 @@ const handleReadyCertificate = async (
     return
   }
 
-  const {
-    certificateName,
-    notAfter,
-    notBefore,
-    revision,
-    issuer,
-  } = df.getInput() as {
-    certificateName: string
-    notAfter: string
-    notBefore: string
-    revision: string
-    issuer: string
-  }
+  const { certificateName, notAfter, notBefore, revision, issuer } =
+    df.getInput() as {
+      certificateName: string
+      notAfter: string
+      notBefore: string
+      revision: string
+      issuer: string
+    }
 
   const notAfterDate = new Date(notAfter)
   notAfterDate.setDate(notAfterDate.getDate() - 30)
