@@ -117,7 +117,10 @@ export const parseMarkdownPost = async (
     placeholderCss: placeHolders.css,
     readingTime: readingTime(contents).text,
     slug: createSlugFromFilePath(postFilePath, config.postsDirectory).slug,
-    editUrl: `https://github.com/nickvdyck/nvd.codes/edit/main/${repoRelativePath}`,
+    editUrl: `https://github.com/nickvdyck/nvd.codes/edit/main${resolve(
+      "/",
+      repoRelativePath,
+    )}`,
   }
 
   return {
