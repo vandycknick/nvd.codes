@@ -76,7 +76,7 @@ When looking around online for exploits for this particular GitLab version I bum
 
 ## Foothold
 
-Triggering the LFI is actually fairly trivial. The HackerOne article explains everything you need to know in pretty great detail, but let me walk you through the steps. To get started, we need to create 2 projects on GitLab with the user we just created. Let's call them `project-a` and 'project-b`, now in `project-a` create a new issue with the following description:
+Triggering the LFI is actually fairly trivial. The HackerOne article explains everything you need to know in pretty great detail, but let me walk you through the steps. To get started, we need to create 2 projects on GitLab with the user we just created. Let's call them `project-a` and `project-b`, now in `project-a` create a new issue with the following description:
 
 ```md
 ![a](/uploads/11111111111111111111111111111111/../../../../../../../../../../../../../../etc/passwd)
