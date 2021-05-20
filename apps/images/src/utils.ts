@@ -3,7 +3,7 @@ import { BindingDefinition, Context, Logger } from "@azure/functions"
 export const createMockContext = (
   bindingDefinitions: unknown[],
 ): jest.Mocked<Context> => {
-  const log = (jest.fn() as unknown) as jest.MockInstance<void, []> & Logger
+  const log = jest.fn() as unknown as jest.MockInstance<void, []> & Logger
 
   log.verbose = jest.fn()
   log.info = jest.fn()
