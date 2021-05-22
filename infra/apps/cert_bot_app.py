@@ -147,7 +147,8 @@ def create_cert_bot_app(
         advanced_filter=eventgrid.EventSubscriptionAdvancedFilterArgs(
             string_contains=[
                 eventgrid.EventSubscriptionAdvancedFilterStringContainArgs(
-                    key="Subject", values=["/providers/Microsoft.Cdn/profiles"],
+                    key="Subject",
+                    values=["/providers/Microsoft.Cdn/profiles"],
                 ),
                 eventgrid.EventSubscriptionAdvancedFilterStringContainArgs(
                     key="data.operationName",

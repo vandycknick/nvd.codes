@@ -67,12 +67,16 @@ down.blog-api:
 	bash ./scripts/stop-blog-api.sh
 
 .PHONY: check
-check:
+check: lint.infra
 	$(NPM_BIN)/tsc -p $(API_PROJECT) --noEmit
 	$(NPM_BIN)/tsc -p $(WEB_PROJECT) --noEmit
 	yarn workspace @nvd.codes/cert-bot tsc --noEmit
 	yarn eslint . --ext .ts --ext .tsx --ext .js --ext .json --ignore-path .gitignore
 	yarn workspace @nvd.codes/resume validate
+
+.PHONY: lint.infra
+lint.infra:
+	@cd infra && pipenv run black --check .
 
 .PHONY: test.unit
 test.unit:

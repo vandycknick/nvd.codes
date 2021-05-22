@@ -26,7 +26,6 @@ key_vault = keyvault.KeyVault(
     resource_group_name=resource_group.name,
     location=resource_group.location,
     sku_name="standard",
-    soft_delete_enabled=True,
     soft_delete_retention_days=7,
     purge_protection_enabled=False,
 )
@@ -68,7 +67,9 @@ web_app_storage_account = storage.Account(
     account_replication_type="LRS",
     enable_https_traffic_only=True,
     min_tls_version="TLS1_2",
-    static_website={"indexDocument": "index.html",},
+    static_website={
+        "indexDocument": "index.html",
+    },
 )
 
 resume_app_storage_account = storage.Account(
@@ -79,7 +80,9 @@ resume_app_storage_account = storage.Account(
     account_replication_type="LRS",
     enable_https_traffic_only=True,
     min_tls_version="TLS1_2",
-    static_website={"indexDocument": "index.html",},
+    static_website={
+        "indexDocument": "index.html",
+    },
 )
 
 web_cdn = cdn.Profile(
@@ -168,7 +171,7 @@ images_cdn_endpoint = cdn.Endpoint(
 )
 
 domain = config.require("domain")
-zone_id = config.require("zone_id")
+zone_id = config.require_secret("zone_id")
 proxied = config.require_bool("dns_proxied")
 
 web_dns_record = create_cname_record(
