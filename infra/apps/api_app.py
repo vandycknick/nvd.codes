@@ -73,7 +73,7 @@ def create_api_app(
             "WEBSITE_RUN_FROM_PACKAGE": Output.concat(
                 "@Microsoft.KeyVault(SecretUri=", secret_uri, ")"
             ),
-            "WEBSITE_NODE_DEFAULT_VERSION": "~12",
+            "WEBSITE_NODE_DEFAULT_VERSION": "~14",
         },
         https_only=True,
         os_type="linux",
