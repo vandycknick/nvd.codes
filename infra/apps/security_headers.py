@@ -14,19 +14,20 @@ def create_security_headers_app():
         worker_content = worker_file.read()
 
     script = WorkerScript(
-        "custom-headers", name="nvd-codes-headers", content=worker_content,
+        "custom-headers",
+        name="nvd-codes-headers",
+        content=worker_content,
     )
 
     exclude_assets = WorkerRoute(
         "next-js-assets",
         pattern="nvd.codes/_next/*",
-        zone_id=config.require("zone_id"),
+        zone_id=config.require_secret("zone_id"),
     )
 
     route = WorkerRoute(
         "custom-headers-route",
         pattern="nvd.codes/*",
-        zone_id=config.require("zone_id"),
+        zone_id=config.require_secret("zone_id"),
         script_name=script.name,
     )
-

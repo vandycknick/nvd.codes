@@ -13,7 +13,10 @@ def get_consumption_plan(
         resource_group_name=resource_group_name,
         kind="functionapp",
         reserved=True,
-        sku=appservice.PlanSkuArgs(tier="Dynamic", size="Y1",),
+        sku=appservice.PlanSkuArgs(
+            tier="Dynamic",
+            size="Y1",
+        ),
     )
 
     storage_account = storage.Account(
