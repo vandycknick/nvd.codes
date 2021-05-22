@@ -67,7 +67,7 @@ down.blog-api:
 	bash ./scripts/stop-blog-api.sh
 
 .PHONY: check
-check: lint.infra
+check:
 	$(NPM_BIN)/tsc -p $(API_PROJECT) --noEmit
 	$(NPM_BIN)/tsc -p $(WEB_PROJECT) --noEmit
 	yarn workspace @nvd.codes/cert-bot tsc --noEmit
