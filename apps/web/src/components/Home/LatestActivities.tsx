@@ -153,7 +153,7 @@ const renderOnlineActivity = ({
 
 const LatestActivities = () => {
   const { data: activity, error } = useSWR<Activity>(
-    `${process.env.NEXT_PUBLIC_PROJECTS_API}/api/project/activities`,
+    `${process.env.NEXT_PUBLIC_PROJECTS_API}/project/activities`,
     fetchJSON,
   )
   return (

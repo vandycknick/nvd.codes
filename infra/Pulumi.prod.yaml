@@ -8,6 +8,8 @@ config:
     secure: AAABADBDf15TQp/7U7yQsI8YW+2tr5jKuWElv5BG0Lh05+aQeUsXcxyUzNLr07WNqzSardsL/EQ=
   nvd-codes-infra:dns_proxied: "true"
   nvd-codes-infra:domain: nvd.codes
+  nvd-codes-infra:email:
+    secure: AAABAKIVFOrxSMx4eUxXKN/kednNAMzs4bo0A6nihfCeraYP4HahCwSofrRel73JF7zF1de/v2M=
   nvd-codes-infra:github_token:
     secure: AAABAFYxI8qbRA3u35P7MHgYgK6cPSG0B0FIzRxAyuPeFx+V101FrWyEOSJILm3asDnMwHpJER0Wc1dBIt6Zx5OoQHxYB3VH
   nvd-codes-infra:zone_id:

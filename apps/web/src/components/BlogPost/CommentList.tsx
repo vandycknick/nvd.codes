@@ -138,7 +138,7 @@ const WriteComment = ({ editUrl }: { editUrl?: string }) => {
 
 export const CommentList: React.FC<CommentListProps> = ({ slug }) => {
   const { data, error } = useSWR<PostComments>(
-    `${process.env.NEXT_PUBLIC_COMMENTS_API}/api/comments/${slug}`,
+    `${process.env.NEXT_PUBLIC_COMMENTS_API}/comments/${slug}`,
     fetchJSON,
     // eslint-disable-next-line @typescript-eslint/no-empty-function
     { shouldRetryOnError: false, onErrorRetry: () => {} },

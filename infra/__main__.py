@@ -1,8 +1,7 @@
-from pulumi import Config, export, FileArchive, Output
-from pulumi_azure import appinsights, appservice, cdn, core, storage, keyvault
+from pulumi import export, Output
+from pulumi_azure import appinsights, cdn, core, storage, keyvault
+from pulumi_azure_native import apimanagement
 from pulumi_azuread import get_service_principal
-from pulumi_cloudflare import Record
-import json
 
 from apps import (
     create_api_app,
@@ -10,14 +9,17 @@ from apps import (
     create_cert_bot_app,
     create_security_headers_app,
 )
+
 from utils.cloudflare import create_cname_record
 from utils.config import get_config
+
 
 config = get_config()
 current = core.get_client_config()
 
 resource_group = core.ResourceGroup("nvd-codes")
 
+gh_actions_sp = get_service_principal(display_name="nvd-codes-gh-actions-ci")
 cdn_sp = get_service_principal(display_name="Microsoft.Azure.Cdn")
 
 key_vault = keyvault.KeyVault(
@@ -34,7 +36,7 @@ keyvault.AccessPolicy(
     "current-sp-policy",
     key_vault_id=key_vault.id,
     tenant_id=current.tenant_id,
-    object_id=current.object_id,
+    object_id=gh_actions_sp.object_id,
     key_permissions=["get", "list"],
     secret_permissions=["get", "list", "set"],
     storage_permissions=["get"],
@@ -170,6 +172,26 @@ images_cdn_endpoint = cdn.Endpoint(
     tags={"cert-bot-domain-name": "images.nvd.codes"},
 )
 
+gateway = apimanagement.ApiManagementService(
+    "nvd-api-gateway",
+    publisher_email=config.require_secret("email"),
+    publisher_name="nvd-codes",
+    resource_group_name=resource_group.name,
+    service_name="nvd-api-gateway",
+    sku=apimanagement.ApiManagementServiceSkuPropertiesArgs(
+        capacity=0,
+        name="Consumption",
+    ),
+    custom_properties={
+        "Microsoft.WindowsAzure.ApiManagement.Gateway.Security.Protocols.Tls11": False,
+        "Microsoft.WindowsAzure.ApiManagement.Gateway.Security.Protocols.Tls10": False,
+        "Microsoft.WindowsAzure.ApiManagement.Gateway.Security.Backend.Protocols.Tls11": False,
+        "Microsoft.WindowsAzure.ApiManagement.Gateway.Security.Backend.Protocols.Tls10": False,
+        "Microsoft.WindowsAzure.ApiManagement.Gateway.Security.Backend.Protocols.Ssl30": False,
+        "Microsoft.WindowsAzure.ApiManagement.Gateway.Protocols.Server.Http2": True,
+    },
+)
+
 domain = config.require("domain")
 zone_id = config.require_secret("zone_id")
 proxied = config.require_bool("dns_proxied")
@@ -190,19 +212,17 @@ resume_dns_record = create_cname_record(
 )
 
 api_dns_record = create_cname_record(
-    name="api", zone_id=zone_id, value=api_app.default_hostname, proxied=proxied
+    name="api",
+    zone_id=zone_id,
+    value=gateway.gateway_url.apply(
+        lambda url: url.replace("http://", "").replace("https://", "")
+    ),
+    proxied=proxied,
 )
 
 images_dns_record = create_cname_record(
     name="images", zone_id=zone_id, value=images_cdn_endpoint.host_name, proxied=proxied
 )
-
-# api_host_binding = appservice.CustomHostnameBinding(
-#     "api-host-binding",
-#     resource_group_name=resource_group.name,
-#     app_service_name=api_app.name,
-#     hostname=api_dns_record.name,
-# )
 
 export("web_app_connection_string", web_app_storage_account.primary_connection_string)
 export(
