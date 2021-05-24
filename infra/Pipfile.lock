@@ -1,7 +1,7 @@
 {
     "_meta": {
         "hash": {
-            "sha256": "07e33c2a99ee08aeaf717fe3a1bb124d7635dcea312870ef7c411165260c9ef5"
+            "sha256": "936b184de4e15520dba26f9fc4061e41bc416125b627e1aef1c0003a8e8ab136"
         },
         "pipfile-spec": 6,
         "requires": {
@@ -276,6 +276,13 @@
             ],
             "index": "pypi",
             "version": "==4.4.0"
+        },
+        "pulumi-azure-native": {
+            "hashes": [
+                "sha256:eaaa5bf6e7baa167d0bd0e8090b77e6188ee0215c8ef1eece722a11ecec4bbb0"
+            ],
+            "index": "pypi",
+            "version": "==1.7.0"
         },
         "pulumi-azuread": {
             "hashes": [

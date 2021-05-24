@@ -90,5 +90,4 @@ def create_api_app(
         ),
         secret_permissions=["get"],
     )
-
     return function_app
