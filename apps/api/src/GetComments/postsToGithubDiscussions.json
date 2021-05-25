@@ -1,4 +1,5 @@
 [
+  { "slug": "hack-the-box-laboratory", "discussion": 46 },
   { "slug": "hack-the-box-luanne", "discussion": 40 },
   {
     "slug": "monitor-any-command-typed-at-a-shell-with-ebpf",
