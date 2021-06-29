@@ -24,5 +24,3 @@ variable "region" {
   description = "OCI Region"
   default     = "eu-amsterdam-1"
 }
-
-# ocid1.tenancy.oc1..aaaaaaaa2c2ovde3376dys5fiffoj23scnms2ch6ek6hlyitmahlmn2lvwbq
