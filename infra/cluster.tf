@@ -8,6 +8,10 @@ resource "oci_containerengine_cluster" "nvd_codes_cluster" {
   name               = "nvd-codes-cluster"
   vcn_id             = module.vcn.vcn_id
 
+  endpoint_config {
+    subnet_id = oci_core_subnet.nvd_codes_public_subnet_a.id
+  }
+
   options {
     add_ons {
       is_kubernetes_dashboard_enabled = false
