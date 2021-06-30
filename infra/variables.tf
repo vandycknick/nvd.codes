@@ -29,3 +29,13 @@ variable "base_cidr_block" {
   type        = string
   description = "Base VCN CIDR block"
 }
+
+variable "pods_cidr_block" {
+  type        = string
+  description = "Kubernetes Pods CIDR block"
+}
+
+variable "services_cidr_block" {
+  type        = string
+  description = "Kubernetes Services CIDR block"
+}
