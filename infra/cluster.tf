@@ -17,7 +17,7 @@ resource "oci_containerengine_cluster" "nvd_codes_cluster" {
       pods_cidr     = var.pods_cidr_block
       services_cidr = var.services_cidr_block
     }
-    service_lb_subnet_ids = [oci_core_subnet.vcn_public_subnet.id]
+    service_lb_subnet_ids = [oci_core_subnet.nvd_codes_public_subnet_a.id]
   }
 }
 
@@ -29,15 +29,15 @@ resource "oci_containerengine_node_pool" "nvd_codes_pool_1" {
   node_config_details {
     placement_configs {
       availability_domain = data.oci_identity_availability_domains.ads.availability_domains[0].name
-      subnet_id           = oci_core_subnet.vcn_private_subnet.id
+      subnet_id           = oci_core_subnet.nvd_codes_private_subnet_a.id
     }
     placement_configs {
       availability_domain = data.oci_identity_availability_domains.ads.availability_domains[1].name
-      subnet_id           = oci_core_subnet.vcn_private_subnet.id
+      subnet_id           = oci_core_subnet.nvd_codes_private_subnet_a.id
     }
     placement_configs {
       availability_domain = data.oci_identity_availability_domains.ads.availability_domains[2].name
-      subnet_id           = oci_core_subnet.vcn_private_subnet.id
+      subnet_id           = oci_core_subnet.nvd_codes_private_subnet_a.id
     }
     size = 3
   }
