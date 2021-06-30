@@ -2,6 +2,14 @@ data "oci_identity_availability_domains" "ads" {
   compartment_id = var.tenancy_ocid
 }
 
+data "oci_core_images" "oracle_linux" {
+  compartment_id           = oci_identity_compartment.nvd_codes.id
+  operating_system         = "Oracle Linux"
+  operating_system_version = "8.4"
+  sort_by                  = "TIMECREATED"
+  sort_order               = "DESC"
+}
+
 resource "oci_containerengine_cluster" "nvd_codes_cluster" {
   compartment_id     = oci_identity_compartment.nvd_codes.id
   kubernetes_version = "v1.19.7"
@@ -37,7 +45,7 @@ resource "oci_containerengine_node_pool" "nvd_codes_pool_1" {
 
   node_source_details {
     # https://docs.oracle.com/en-us/iaas/images/image/f3727add-b1a2-47d8-8064-a1a9741096a0/
-    image_id    = "ocid1.image.oc1.eu-amsterdam-1.aaaaaaaafseustdv743lvdqbbzlqs7sehlqcm2wp2u4jkyppci6xvohczvnq"
+    image_id    = data.oci_core_images.oracle_linux.images.0.id
     source_type = "image"
   }
 
