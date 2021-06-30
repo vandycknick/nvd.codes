@@ -129,7 +129,7 @@ resource "oci_core_security_list" "nvd_codes_public_seclist" {
 }
 
 
-resource "oci_core_subnet" "vcn_public_subnet" {
+resource "oci_core_subnet" "nvd_codes_public_subnet_a" {
   compartment_id = oci_identity_compartment.nvd_codes.id
   vcn_id         = module.vcn.vcn_id
   cidr_block     = module.subnet_addrs.network_cidr_blocks.public_subnet_a
