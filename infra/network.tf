@@ -21,7 +21,7 @@ module "vcn" {
   compartment_id = oci_identity_compartment.nvd_codes.id
   region         = var.region
   vcn_name       = "nvd-codes"
-  vcn_dns_label  = "nvd-codes"
+  vcn_dns_label  = "nvdcodes"
 
   internet_gateway_enabled = true
   nat_gateway_enabled      = true
