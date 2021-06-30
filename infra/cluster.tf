@@ -31,14 +31,6 @@ resource "oci_containerengine_node_pool" "nvd_codes_pool_1" {
       availability_domain = data.oci_identity_availability_domains.ads.availability_domains[0].name
       subnet_id           = oci_core_subnet.nvd_codes_private_subnet_a.id
     }
-    placement_configs {
-      availability_domain = data.oci_identity_availability_domains.ads.availability_domains[1].name
-      subnet_id           = oci_core_subnet.nvd_codes_private_subnet_a.id
-    }
-    placement_configs {
-      availability_domain = data.oci_identity_availability_domains.ads.availability_domains[2].name
-      subnet_id           = oci_core_subnet.nvd_codes_private_subnet_a.id
-    }
     size = 3
   }
   node_shape = "VM.Standard.E2.1.Micro"
