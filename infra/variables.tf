@@ -24,3 +24,8 @@ variable "region" {
   description = "OCI Region"
   default     = "eu-amsterdam-1"
 }
+
+variable "base_cidr_block" {
+  type        = string
+  description = "Base VCN CIDR block"
+}
