@@ -36,7 +36,7 @@ resource "oci_containerengine_node_pool" "nvd_codes_pool_1" {
   node_shape = "VM.Standard.E2.1.Micro"
 
   node_source_details {
-    image_id    = "Oracle-Linux-8.4-2021.06.20-0"
+    image_id    = "Oracle-Linux-7.9-2021.06.20-0"
     source_type = "image"
   }
 
