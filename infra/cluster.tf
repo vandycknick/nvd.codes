@@ -39,6 +39,11 @@ resource "oci_containerengine_node_pool" "nvd_codes_pool_1" {
   }
   node_shape = "VM.Standard.A1.Flex"
 
+  node_shape_config {
+    memory_in_gbs = 6
+    ocpus         = 1
+  }
+
   node_source_details {
     # https://docs.oracle.com/en-us/iaas/images/image/f3727add-b1a2-47d8-8064-a1a9741096a0/
     image_id    = "ocid1.image.oc1.eu-amsterdam-1.aaaaaaaay4mtwt7fafcm7bdmxweoldowmwyudbbnfjqtvnfvy4wiewsfvueq"
