@@ -33,7 +33,7 @@ resource "oci_containerengine_node_pool" "nvd_codes_pool_1" {
     }
     size = 3
   }
-  node_shape = "VM.Standard.E2.1.Micro"
+  node_shape = "VM.Standard.A1.Flex"
 
   node_source_details {
     # https://docs.oracle.com/en-us/iaas/images/image/f3727add-b1a2-47d8-8064-a1a9741096a0/
