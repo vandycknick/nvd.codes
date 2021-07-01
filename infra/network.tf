@@ -231,13 +231,3 @@ resource "oci_core_security_list" "service_lb_sec_list" {
   compartment_id = oci_identity_compartment.nvd_codes.id
   vcn_id         = module.vcn.vcn_id
 }
-
-resource "oci_core_dhcp_options" "nvd_codes_dhcp_options" {
-  display_name   = "nvd-codes-dhcp-options"
-  compartment_id = "oci_identity_compartment.nvd_codes.id"
-  vcn_id         = module.vcn.vcn_id
-  options {
-    type        = "DomainNameServer"
-    server_type = "VcnLocalPlusInternet"
-  }
-}
