@@ -25,7 +25,7 @@ module "vcn" {
 
   internet_gateway_enabled = true
   nat_gateway_enabled      = true
-  service_gateway_enabled  = false
+  service_gateway_enabled  = true
   vcn_cidr                 = module.subnet_addrs.base_cidr_block
 }
 
@@ -51,6 +51,18 @@ resource "oci_core_security_list" "nvd_codes_private_seclist" {
     tcp_options {
       min = 22
       max = 22
+    }
+  }
+
+  ingress_security_rules {
+    stateless   = false
+    source      = "0.0.0.0/0"
+    source_type = "CIDR_BLOCK"
+    protocol    = local.protocols.ICMP
+
+    icmp_options {
+      type = 3
+      code = 4
     }
   }
 
