@@ -9,7 +9,8 @@ resource "oci_containerengine_cluster" "nvd_codes_cluster" {
   vcn_id             = module.vcn.vcn_id
 
   endpoint_config {
-    subnet_id = oci_core_subnet.nvd_codes_public_subnet_a.id
+    is_public_ip_enabled = "true"
+    subnet_id            = oci_core_subnet.kubernetes_api_endpoint_subnet.id
   }
 
   options {
@@ -21,7 +22,7 @@ resource "oci_containerengine_cluster" "nvd_codes_cluster" {
       pods_cidr     = var.pods_cidr_block
       services_cidr = var.services_cidr_block
     }
-    service_lb_subnet_ids = [oci_core_subnet.nvd_codes_public_subnet_a.id]
+    service_lb_subnet_ids = [oci_core_subnet.service_lb_subnet.id]
   }
 }
 
@@ -33,7 +34,7 @@ resource "oci_containerengine_node_pool" "nvd_codes_pool_1" {
   node_config_details {
     placement_configs {
       availability_domain = data.oci_identity_availability_domains.ads.availability_domains[0].name
-      subnet_id           = oci_core_subnet.nvd_codes_private_subnet_a.id
+      subnet_id           = oci_core_subnet.node_subnet.id
     }
     size = 3
   }
