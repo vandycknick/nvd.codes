@@ -138,3 +138,17 @@ resource "oci_core_subnet" "nvd_codes_public_subnet_a" {
   security_list_ids = [oci_core_security_list.nvd_codes_public_seclist.id]
   display_name      = "nvd-codes-public-subnet-a"
 }
+
+resource "oci_core_dhcp_options" "nvd_codes_dhcp_options" {
+
+  # Required
+  compartment_id = "oci_identity_compartment.nvd_codes.id"
+  vcn_id         = module.vcn.vcn_id
+  options {
+    type        = "DomainNameServer"
+    server_type = "VcnLocalPlusInternet"
+  }
+
+  # Optional
+  display_name = "nvd-codes-dhcp-options"
+}
