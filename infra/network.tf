@@ -213,6 +213,41 @@ resource "oci_core_security_list" "node_subnet_sec_list" {
     source      = "0.0.0.0/0"
     stateless   = "false"
   }
+
+  ingress_security_rules {
+    protocol    = local.protocols.TCP
+    source      = module.subnet_addrs.network_cidr_blocks.service_lb_subnet
+    source_type = "CIDR_BLOCK"
+    stateless   = false
+
+    tcp_options {
+      max = 10256
+      min = 10256
+    }
+  }
+  ingress_security_rules {
+    protocol    = local.protocols.TCP
+    source      = module.subnet_addrs.network_cidr_blocks.service_lb_subnet
+    source_type = "CIDR_BLOCK"
+    stateless   = false
+
+    tcp_options {
+      max = 30496
+      min = 30496
+    }
+  }
+  ingress_security_rules {
+    protocol    = local.protocols.TCP
+    source      = module.subnet_addrs.network_cidr_blocks.service_lb_subnet
+    source_type = "CIDR_BLOCK"
+    stateless   = false
+
+    tcp_options {
+      max = 30957
+      min = 30957
+    }
+  }
+
 }
 
 resource "oci_core_subnet" "service_lb_subnet" {
@@ -230,4 +265,62 @@ resource "oci_core_security_list" "service_lb_sec_list" {
   display_name   = "service-lb-subnet-sec-list"
   compartment_id = oci_identity_compartment.nvd_codes.id
   vcn_id         = module.vcn.vcn_id
+
+  egress_security_rules {
+    destination      = module.subnet_addrs.network_cidr_blocks.node_subnet
+    destination_type = "CIDR_BLOCK"
+    protocol         = local.protocols.TCP
+    stateless        = false
+
+    tcp_options {
+      max = 10256
+      min = 10256
+    }
+  }
+  egress_security_rules {
+    destination      = module.subnet_addrs.network_cidr_blocks.node_subnet
+    destination_type = "CIDR_BLOCK"
+    protocol         = local.protocols.TCP
+    stateless        = false
+
+    tcp_options {
+      max = 30496
+      min = 30496
+    }
+  }
+  egress_security_rules {
+    destination      = module.subnet_addrs.network_cidr_blocks.node_subnet
+    destination_type = "CIDR_BLOCK"
+    protocol         = local.protocols.TCP
+    stateless        = false
+
+    tcp_options {
+      max = 30957
+      min = 30957
+    }
+  }
+
+  ingress_security_rules {
+    protocol    = local.protocols.TCP
+    source      = "0.0.0.0/0"
+    source_type = "CIDR_BLOCK"
+    stateless   = false
+
+    tcp_options {
+      max = 443
+      min = 443
+    }
+  }
+  ingress_security_rules {
+    protocol    = local.protocols.TCP
+    source      = "0.0.0.0/0"
+    source_type = "CIDR_BLOCK"
+    stateless   = false
+
+    tcp_options {
+      max = 80
+      min = 80
+    }
+  }
+
 }
