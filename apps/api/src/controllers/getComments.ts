@@ -1,17 +1,14 @@
-import { Context } from "@azure/functions"
+import { RouterContext as Context } from "koa-router"
 import { HttpResponse, notFound, jsonResult } from "@nvd.codes/http"
 
-import getCommentsForPost from "./getCommentsForPost"
+import getCommentsForPost from "../services/getCommentsForPost"
 
-const getSlug = (context: Context): string | undefined =>
-  context.bindingData["slug"]
+const getSlug = (context: Context): string | undefined => context.params.slug
 
 const getComments = async function (context: Context): Promise<HttpResponse> {
-  const { log } = context
   const slug = getSlug(context)
 
   if (slug == null) {
-    log.info("No slug found in bindingData, returning 404")
     return notFound()
   }
 
@@ -20,7 +17,8 @@ const getComments = async function (context: Context): Promise<HttpResponse> {
   return commentsForPost.mapOrElse(
     (comments) => jsonResult(comments),
     (error) => {
-      log.error(error)
+      // eslint-disable-next-line no-console
+      console.error(error)
       return notFound()
     },
   )
