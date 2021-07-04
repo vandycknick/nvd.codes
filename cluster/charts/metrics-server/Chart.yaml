@@ -1,0 +1,4 @@
+apiVersion: v1
+name: metrics-server
+description: Metrics Server
+version: 0.5.0
