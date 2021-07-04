@@ -96,7 +96,6 @@ build.libs: build.proto
 	yarn workspace @nvd.codes/config tsc
 	yarn workspace @nvd.codes/http tsc
 	yarn workspace @nvd.codes/monad tsc
-	yarn workspace jsonresume-theme-nickvd build
 
 .PHONY: build
 build: clean build.libs
@@ -139,3 +138,9 @@ deploy:
 		(pipenv run pulumi stack output -s prod --json --show-secrets | \
 		jq -r '.resume_app_connection_string' | \
 		pipenv run python utils/upload.py --container '$$web' --cwd $(RESUME_PROJECT)/.dist)
+
+
+.PHONY: build.api
+build.api: COMMIT_SHA=$(shell git log -1 --pretty=format:"%H")
+build.api:
+	docker buildx build --platform linux/amd64,linux/arm64 -f apps/api/Dockerfile -t eu-amsterdam-1.ocir.io/axpksneljs3y/nvd-codes/api:${COMMIT_SHA} --push .

@@ -3,7 +3,7 @@ import { PostComments } from "@nvd.codes/core"
 import { Ok, Err, Result, Option, Some, None } from "@nvd.codes/monad"
 
 import { getConfig } from "../config"
-import postsToDiscussions from "./postsToGithubDiscussions.json"
+import postsToDiscussions from "../data/postsToGithubDiscussions.json"
 
 const query = `
 query GetDiscussionByNumber($number: Int!) {
