@@ -1,5 +1,0 @@
-name = "headers"
-type = "webpack"
-route = ""
-workers_dev = true
-webpack_config = "webpack.config.js"
