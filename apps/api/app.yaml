@@ -1,0 +1,36 @@
+image:
+  repository: eu-amsterdam-1.ocir.io/axpksneljs3y/nvd-codes/api
+  tag: e7e114f576eced55d3bd1548ce27c9923675457d
+
+container:
+  env:
+    - name: GITHUB_TOKEN
+      valueFrom:
+        secretKeyRef:
+          name: nvd-codes-api-secrets
+          key: github_token
+    - name: ISSUE_QUERY
+      value: "user:nickvdyck repo:nvd.codes author:nickvdyck label:comment"
+
+ingress:
+  enabled: true
+  annotations:
+    cert-manager.io/cluster-issuer: "letsencrypt-prod"
+    traefik.ingress.kubernetes.io/router.tls: "true"
+  path: /
+  pathType: Prefix
+  tls:
+    - hosts:
+        - api.nvd.codes
+      secretName: nvd-codes-api
+  hosts:
+    - api.nvd.codes
+
+middleware:
+  - name: set-cors-headers
+    spec:
+      headers:
+        accessControlAllowOriginList:
+          - "https://nvd.codes"
+        accessControlMaxAge: 100
+        addVaryHeader: true
