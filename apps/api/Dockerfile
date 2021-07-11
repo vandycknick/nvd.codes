@@ -3,6 +3,8 @@ FROM node:16-alpine
 ARG NODE_ENV=production
 ENV NODE_ENV=${NODE_ENV}
 
+ENV PORT=3000
+
 WORKDIR /workspace
 
 COPY yarn.lock package.json ./
@@ -13,6 +15,6 @@ RUN yarn workspace @nvd.codes/api install --frozen-lock-file
 
 COPY apps/api apps/api
 
-EXPOSE 3000
+EXPOSE ${PORT}
 
 CMD [ "node", "/workspace/apps/api/.dist/server.js" ]

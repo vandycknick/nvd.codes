@@ -121,7 +121,7 @@ const getCommentsForPost = async (
     headers: {
       "Content-Type": "application/json",
       Accept: "application/json",
-      Authorization: `bearer ${config.GITHUB_TOKEN}`,
+      Authorization: `bearer ${config.githubToken}`,
       "GraphQL-Features": "discussions_api",
     },
     body: JSON.stringify({

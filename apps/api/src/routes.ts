@@ -1,4 +1,5 @@
 import Router from "koa-router"
+
 import getActivities from "./controllers/getActivities"
 import getComments from "./controllers/getComments"
 
