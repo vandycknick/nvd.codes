@@ -1,6 +1,6 @@
 import React from "react"
 import { default as NextLink } from "next/link"
-import { Post } from "@nvd.codes/blog-proto"
+import { Post } from "@nvd.codes/contracts"
 import {
   Box,
   Circle,
@@ -19,8 +19,8 @@ import Time from "components/Common/Time"
 import { FireIcon } from "components/Home/Icons"
 
 type LatestPost = Pick<
-  Post.AsObject,
-  "title" | "description" | "date" | "slug" | "readingTime" | "categoriesList"
+  Post,
+  "title" | "description" | "date" | "slug" | "readingTime" | "categories"
 >
 
 export type LatestArticlesProps = {
@@ -102,7 +102,7 @@ export const LatestArticles = ({ className, posts }: LatestArticlesProps) => {
                     {post.readingTime}
                   </Text>
                   <HStack>
-                    {post.categoriesList.slice(0, 3).map((category) => (
+                    {post.categories.slice(0, 3).map((category) => (
                       <Tag size="md" key={category} colorScheme="cyan">
                         {category}
                       </Tag>

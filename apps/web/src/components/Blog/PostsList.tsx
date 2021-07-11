@@ -1,6 +1,6 @@
 import React from "react"
 import NextLink from "next/link"
-import { Post } from "@nvd.codes/blog-proto"
+import { Post } from "@nvd.codes/contracts"
 import {
   Box,
   Flex,
@@ -13,20 +13,19 @@ import {
 } from "@chakra-ui/react"
 
 import Time from "components/Common/Time"
-import { placeholderCssMapToObject } from "services/placeholderCssMapToObject"
 import { Image } from "components/Common/Image"
 
 type PostPreview = Pick<
-  Post.AsObject,
+  Post,
   | "id"
   | "title"
   | "description"
   | "date"
   | "slug"
   | "readingTime"
-  | "categoriesList"
+  | "categories"
   | "cover"
-  | "placeholderCssMap"
+  | "placeholderCss"
 >
 
 export type PostsListProps = {
@@ -74,9 +73,7 @@ export const PostsList = ({ posts }: PostsListProps) => {
                   width={500}
                   objectFit="cover"
                   borderTopRadius="md"
-                  placeholderCss={placeholderCssMapToObject(
-                    post.placeholderCssMap,
-                  )}
+                  placeholderCss={post.placeholderCss}
                   imageClassName="post-card-cover"
                 />
                 <Box
@@ -101,7 +98,7 @@ export const PostsList = ({ posts }: PostsListProps) => {
               </Box>
               <Flex p={4} direction="column">
                 <Flex wrap="wrap">
-                  {post.categoriesList.map((category) => (
+                  {post.categories.map((category) => (
                     <Tag
                       key={category}
                       borderRadius="full"
