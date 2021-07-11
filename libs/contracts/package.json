@@ -1,0 +1,14 @@
+{
+  "name": "@nvd.codes/contracts",
+  "private": true,
+  "version": "1.0.0",
+  "main": "./.dist/index.js",
+  "license": "MIT",
+  "dependencies": {
+    "@trpc/server": "^8.1.4-alpha.1",
+    "zod": "^3.3.4"
+  },
+  "devDependencies": {
+    "typescript": "^4.3.5"
+  }
+}
