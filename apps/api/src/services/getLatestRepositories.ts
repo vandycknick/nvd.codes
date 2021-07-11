@@ -60,7 +60,7 @@ const getLatestRepositories = async (take = 6): Promise<Repository[]> => {
     headers: {
       "Content-Type": "application/json",
       Accept: "application/json",
-      Authorization: `bearer ${config.GITHUB_TOKEN}`,
+      Authorization: `bearer ${config.githubToken}`,
     },
     body: JSON.stringify({
       query,

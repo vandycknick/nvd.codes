@@ -9,8 +9,8 @@ container:
         secretKeyRef:
           name: nvd-codes-api-secrets
           key: github_token
-    - name: ISSUE_QUERY
-      value: "user:nickvdyck repo:nvd.codes author:nickvdyck label:comment"
+    - name: LOG_LEVEL
+      value: "info"
 
 ingress:
   enabled: true
