@@ -1,11 +1,11 @@
 import React, { Fragment } from "react"
-import { GetStaticProps } from "next"
+import { GetServerSideProps } from "next"
 import { Box, Button, Heading, Text, VStack } from "@chakra-ui/react"
 import NextLink from "next/link"
 
 import SEO from "components/Common/SEO"
 import { PostsList, PostsListProps } from "components/Blog/PostsList"
-import { listPosts } from "services/posts"
+import { listPosts } from "services/blog"
 
 type BlogProps = {
   posts: PostsListProps["posts"]
@@ -69,7 +69,9 @@ const Blog = ({ posts, pager }: BlogProps) => (
 
 const POSTS_PER_PAGE = 9
 
-export const getStaticProps: GetStaticProps<BlogProps> = async ({ params }) => {
+export const getServerSideProps: GetServerSideProps<BlogProps> = async ({
+  params,
+}) => {
   const page =
     params !== undefined
       ? Array.isArray(params.page)
@@ -87,9 +89,9 @@ export const getStaticProps: GetStaticProps<BlogProps> = async ({ params }) => {
       "date",
       "slug",
       "readingTime",
-      "categoriesList",
+      "categories",
       "cover",
-      "placeholderCssMap",
+      "placeholderCss",
     ],
   })
 

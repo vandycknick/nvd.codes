@@ -1,5 +1,5 @@
 import React, { Fragment } from "react"
-import { GetStaticProps, GetStaticPaths } from "next"
+import { GetServerSideProps } from "next"
 import ErrorPage from "next/error"
 import {
   Box,
@@ -10,6 +10,7 @@ import {
   useColorModeValue,
   VStack,
 } from "@chakra-ui/react"
+import { Post, Image } from "@nvd.codes/contracts"
 
 import SEO from "components/Common/SEO"
 import { CommentList } from "components/BlogPost/CommentList"
@@ -19,12 +20,11 @@ import { Edit } from "components/BlogPost/Icons/Edit"
 import { Time as TimeIcon } from "components/BlogPost/Icons/Time"
 import { Contents } from "components/BlogPost/Content"
 
-import { getPostBySlug, listAllPosts } from "services/posts"
-import { Post } from "@nvd.codes/blog-proto"
+import { getPostBySlug } from "services/blog"
 
 type BlogPostProps = {
   post?: Pick<
-    Post.AsObject,
+    Post,
     | "title"
     | "description"
     | "date"
@@ -32,7 +32,7 @@ type BlogPostProps = {
     | "readingTime"
     | "content"
     | "editUrl"
-  >
+  > & { images: Image[] }
 }
 
 type BlogPostParams = {
@@ -69,7 +69,14 @@ const BlogPost = ({ post }: BlogPostProps) => {
             </Flex>
           </HStack>
         </VStack>
-        <Contents>{post.content}</Contents>
+        <Contents
+          images={post.images.reduce((map, image) => {
+            map[image.url] = image.placeholder
+            return map
+          }, {} as Record<string, string>)}
+        >
+          {post.content}
+        </Contents>
       </Box>
       <Divider my={6} />
       <CommentList slug={post.slug} />
@@ -81,50 +88,38 @@ const notFound = (): { notFound: true } => ({
   notFound: true,
 })
 
-export const getStaticProps: GetStaticProps<BlogPostProps, BlogPostParams> =
-  async ({ params }) => {
-    const slug = params?.slug
+export const getServerSideProps: GetServerSideProps<
+  BlogPostProps,
+  BlogPostParams
+> = async ({ params }) => {
+  const slug = params?.slug
 
-    if (slug === undefined) {
-      return notFound()
-    }
-
-    const post = await getPostBySlug({
-      slug,
-      fields: [
-        "id",
-        "title",
-        "description",
-        "date",
-        "slug",
-        "readingTime",
-        "content",
-        "editUrl",
-      ],
-    })
-
-    if (post === undefined) {
-      return notFound()
-    }
-    return {
-      props: {
-        post,
-      },
-    }
+  if (slug === undefined) {
+    return notFound()
   }
 
-export const getStaticPaths: GetStaticPaths<BlogPostParams> = async () => {
-  const posts = await listAllPosts(["slug"])
+  const post = await getPostBySlug({
+    slug,
+    fields: [
+      "id",
+      "title",
+      "description",
+      "date",
+      "slug",
+      "readingTime",
+      "content",
+      "editUrl",
+      "images",
+    ],
+  })
 
+  if (post === undefined) {
+    return notFound()
+  }
   return {
-    paths: posts.map((posts) => {
-      return {
-        params: {
-          slug: posts.slug,
-        },
-      }
-    }),
-    fallback: false,
+    props: {
+      post,
+    },
   }
 }
 

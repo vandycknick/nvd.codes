@@ -1,7 +1,7 @@
-import React, { ElementType, ReactNode } from "react"
+import React, { createContext, ElementType, ReactNode, useContext } from "react"
 import ReactMarkdown from "react-markdown"
 import gfm from "remark-gfm"
-
+import Image from "next/image"
 import {
   Box,
   Table,
@@ -23,7 +23,9 @@ import { ExternalLinkIcon } from "@chakra-ui/icons"
 import { PrismAsyncLight as SyntaxHighlighter } from "react-syntax-highlighter"
 import { dracula } from "react-syntax-highlighter/dist/cjs/styles/prism"
 
-import { Image } from "components/Common/Image"
+import { imageLoader } from "components/Common/Image"
+
+const ContentsContext = createContext<Record<string, string>>({})
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 function getCoreProps(props: any): any {
@@ -163,10 +165,36 @@ const InlineCode = (props: Props) => {
 }
 
 const ImageElement = (props: Props & { src: string; alt: string }) => {
+  const images = useContext(ContentsContext)
   const { src, alt } = props
+  const placeholder = images[src]
+
   return (
-    <Box w="100%" textAlign="center">
-      <Image objectFit="contain" src={src} alt={alt} width={750} height={500} />
+    <Box py="6" m="0 auto" maxW="800px">
+      <Box position="relative">
+        <Box
+          css={{
+            backgroundImage: `url('${placeholder}')`,
+            backgroundRepeat: "no-repeat",
+            backgroundSize: "cover",
+            overflow: "hidden",
+            position: "absolute",
+            filter: "blur(10px)",
+            transform: "scale(0.96)",
+          }}
+          w="100%"
+          h="100%"
+        />
+        <Image
+          layout="responsive"
+          loader={imageLoader}
+          loading="lazy"
+          src={src}
+          alt={alt}
+          width={600}
+          height={350}
+        />
+      </Box>
     </Box>
   )
 }
@@ -207,12 +235,15 @@ const renderers: { [nodeType: string]: ElementType } = {
 
 type ContentsProps = {
   children: string
+  images: Record<string, string>
 }
 
-const Contents = ({ children }: ContentsProps) => (
-  <ReactMarkdown renderers={renderers} plugins={[gfm]}>
-    {children}
-  </ReactMarkdown>
+const Contents = ({ children, images }: ContentsProps) => (
+  <ContentsContext.Provider value={images}>
+    <ReactMarkdown renderers={renderers} plugins={[gfm]}>
+      {children}
+    </ReactMarkdown>
+  </ContentsContext.Provider>
 )
 
 export { Contents }
