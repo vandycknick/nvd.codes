@@ -4,21 +4,6 @@ export interface HttpResponse {
   body: string | Uint8Array
 }
 
-export const badRequest = (msg?: string): HttpResponse => ({
-  status: 400,
-  body: msg ?? "Bad Request",
-})
-
-export const notFound = (msg?: string): HttpResponse => ({
-  status: 404,
-  body: msg ?? "Not Found",
-})
-
-export const notAllowed = (msg?: string): HttpResponse => ({
-  status: 405,
-  body: msg ?? "Method not allowed",
-})
-
 export const contentResult = (content: string): HttpResponse => ({
   status: 200,
   body: content,
@@ -49,4 +34,29 @@ export const jsonResult = <T>(
     "Content-Type": "application/json",
   },
   body: JSON.stringify(json),
+})
+
+export const badRequest = (msg?: string): HttpResponse => ({
+  status: 400,
+  body: msg ?? "Bad Request",
+})
+
+export const unAuthorized = (): HttpResponse => ({
+  status: 403,
+  body: "UnAuthorized",
+})
+
+export const notFound = (msg?: string): HttpResponse => ({
+  status: 404,
+  body: msg ?? "Not Found",
+})
+
+export const notAllowed = (msg?: string): HttpResponse => ({
+  status: 405,
+  body: msg ?? "Method not allowed",
+})
+
+export const internalServerError = (): HttpResponse => ({
+  status: 500,
+  body: "Internal Server Error",
 })
