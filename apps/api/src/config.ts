@@ -1,12 +1,19 @@
-import { ConfigBuilder } from "@nvd.codes/config"
+import { LogLevel } from "bunyan"
 
-const config = new ConfigBuilder().addEnvironmentVariables().build()
+const getRequiredEnv = (key: string) => {
+  const value = process.env[key]
 
-const appConfig = {
-  GITHUB_TOKEN: config.getString("GITHUB_TOKEN"),
-  ISSUE_QUERY: config.getString("ISSUE_QUERY"),
+  if (value == undefined)
+    throw new Error(`Required environment variable '${key}' is not defined!`)
+
+  return value
 }
 
-type AppConfig = typeof appConfig
-
-export const getConfig = (): AppConfig => appConfig
+export const getConfig = () => {
+  const port = getRequiredEnv("PORT")
+  return {
+    githubToken: getRequiredEnv("GITHUB_TOKEN"),
+    port: parseInt(port, 10),
+    logLevel: getRequiredEnv("LOG_LEVEL") as LogLevel,
+  }
+}
