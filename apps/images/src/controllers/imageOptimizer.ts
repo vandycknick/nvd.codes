@@ -6,12 +6,11 @@ import {
   badRequest,
   imageResult,
 } from "@nvd.codes/http"
-import { Context } from "@azure/functions"
 import { mediaType } from "@hapi/accept"
 import { extname } from "path"
+import { Context } from "koa"
 
-import { getConfig } from "../config"
-import { downloadFile } from "./downloadFile"
+import { downloadFile } from "../services/downloadFile"
 import { byteSize } from "../utils"
 
 const ONE_MINUTE = 60
@@ -41,21 +40,21 @@ const getSupportedMimeType = (
 const imageOptimizer = async function (
   context: Context,
 ): Promise<HttpResponse> {
-  const { req, log } = context
+  const { request, log } = context
 
-  log.verbose("Starting function ImageOptimizer.")
+  log.info("Starting function ImageOptimizer.")
 
-  if (req === undefined) {
+  if (request === undefined) {
     return notFound()
   }
 
-  if (req.method !== "GET") {
+  if (request.method !== "GET") {
     return notAllowed()
   }
 
-  const { imagePath } = req.params
-  const { w } = req.query
-  const mimeType = getSupportedMimeType(req.headers["accept"], MODERN_TYPES)
+  const imagePath = request.path
+  const { w } = request.query
+  const mimeType = getSupportedMimeType(request.get("accept"), MODERN_TYPES)
 
   if (imagePath == undefined || imagePath === "") {
     return notFound()
@@ -65,8 +64,10 @@ const imageOptimizer = async function (
     return notFound()
   }
 
-  if (!w) {
-    return badRequest("'w' parameter (width) is required")
+  if (!w || !(typeof w == "string")) {
+    return badRequest(
+      "'w' parameter (width) is required and can't contain multiple values",
+    )
   }
 
   const width = parseInt(w, 10)
@@ -79,12 +80,12 @@ const imageOptimizer = async function (
     return badRequest(`'w' parameter (width) of ${width} is not allowed`)
   }
 
-  const config = getConfig()
-  const filePath = `images/${imagePath}`
+  const filePath = imagePath
 
   try {
     log.info(`Downloading file ${filePath}`)
-    const file = await downloadFile(config.IMAGES_CONTAINER, filePath)
+
+    const file = await downloadFile(filePath)
 
     if (file == undefined) {
       return notFound()

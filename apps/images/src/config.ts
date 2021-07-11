@@ -1,16 +1,20 @@
-import { ConfigBuilder, Config } from "@nvd.codes/config"
+import type { LogLevel } from "bunyan"
 
-let config: Config | undefined = undefined
+const getRequiredEnv = (key: string) => {
+  const value = process.env[key]
+
+  if (value == undefined)
+    throw new Error(`Required environment variable '${key}' is not defined!`)
+
+  return value
+}
 
 export const getConfig = () => {
-  if (config === undefined) {
-    config = new ConfigBuilder().addEnvironmentVariables().build()
-  }
-
+  const port = getRequiredEnv("PORT")
   return {
-    AZURE_STORAGE_CONNECTION_STRING: config.getString(
-      "AZURE_STORAGE_CONNECTION_STRING",
-    ),
-    IMAGES_CONTAINER: config.getString("IMAGES_CONTAINER"),
+    bucketNamespace: getRequiredEnv("IMAGES_BUCKET_NAMESPACE"),
+    bucketName: getRequiredEnv("IMAGES_BUCKET_NAME"),
+    port: parseInt(port, 10),
+    logLevel: getRequiredEnv("LOG_LEVEL") as LogLevel,
   }
 }
