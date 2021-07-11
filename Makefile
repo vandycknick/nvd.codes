@@ -11,6 +11,7 @@ UPDATE_FLAGS 	:= $(if $(filter-out 1,$(FIX)), "", "--update-snapshot")
 
 INFRA			:= $(ROOT)/infra
 API_PROJECT 	:= $(ROOT)/apps/api
+BLOG_PROJECT	:= $(ROOT)/apps/blog
 WEB_PROJECT 	:= $(ROOT)/apps/web
 RESUME_PROJECT	:= $(ROOT)/apps/resume
 RESUME_JSON		:= $(ROOT)/_data/resume.json
@@ -38,39 +39,28 @@ clean:
 dev:
 	@yarn concurrently -n web,api -c red,cyan "$(MAKE) dev.web" "$(MAKE) dev.api"
 
+.PHONY: dev.api
+dev.api:
+	@yarn workspace @nvd.codes/api dev
+
+.PHONY: dev.blog
+dev.blog:
+	@yarn workspace @nvd.codes/blog dev
+
+.PHONY: dev.images
+dev.images:
+	@yarn workspace @nvd.codes/images dev
+
 .PHONY: dev.web
 dev.web:
 	@yarn workspace @nvd.codes/web dev
 
-.PHONY: dev.api
-dev.api:
-	@yarn concurrently -n dev,watch "yarn workspace @nvd.codes/api dev" "yarn workspace @nvd.codes/api watch"
-
-.PHONY: dev.images
-dev.images:
-	@yarn concurrently -n dev,watch "yarn workspace @nvd.codes/images dev" "yarn workspace @nvd.codes/images watch"
-
-.PHONY: dev.cert-bot
-dev.cert-bot:
-	@yarn concurrently -n dev,watch "yarn workspace @nvd.codes/cert-bot dev" "yarn workspace @nvd.codes/cert-bot watch"
-
-.PHONY: dev.headers
-dev.headers:
-	@yarn workspace @nvd.codes/headers dev
-
-.PHONY: up.blog-api
-up.blog-api:
-	bash ./scripts/up-blog-api.sh
-
-.PHONY: stop.blog-api
-down.blog-api:
-	bash ./scripts/stop-blog-api.sh
 
 .PHONY: check
 check:
 	$(NPM_BIN)/tsc -p $(API_PROJECT) --noEmit
 	$(NPM_BIN)/tsc -p $(WEB_PROJECT) --noEmit
-	yarn workspace @nvd.codes/cert-bot tsc --noEmit
+	$(NOM_BIN)/tsc -p $(BLOG_PROJECT) --noEmit
 	yarn eslint . --ext .ts --ext .tsx --ext .js --ext .json --ignore-path .gitignore
 	yarn workspace @nvd.codes/resume validate
 
@@ -91,27 +81,18 @@ test.fix:
 	NODE_ENV=test ${NPM_BIN}/jest --testPathIgnorePatterns '/(.dist|e2e)/' --update-snapshot
 
 .PHONY: build.libs
-build.libs: build.proto
+build.libs:
+	yarn workspace @nvd.codes/contracts tsc
 	yarn workspace @nvd.codes/core tsc
-	yarn workspace @nvd.codes/config tsc
 	yarn workspace @nvd.codes/http tsc
 	yarn workspace @nvd.codes/monad tsc
 
 .PHONY: build
 build: clean build.libs
 	yarn workspace @nvd.codes/api build
-	yarn workspace @nvd.codes/cert-bot build
-	yarn workspace @nvd.codes/headers build
+	yarn workspace @nvd.codes/blog build
 	yarn workspace @nvd.codes/images build
-	yarn workspace @nvd.codes/resume build
-
-	make up.blog-api
 	yarn workspace @nvd.codes/web build
-	make down.blog-api
-
-.PHONY: build.proto
-build.proto:
-	yarn workspace @nvd.codes/blog-proto build
 
 .PHONY: pulumi.preview
 pulumi.preview:
