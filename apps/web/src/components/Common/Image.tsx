@@ -2,9 +2,15 @@ import React from "react"
 import NextImage, { ImageLoaderProps, ImageProps } from "next/image"
 import { Box, BoxProps } from "@chakra-ui/react"
 
-const imageLoader = ({ src, width, quality }: ImageLoaderProps): string => {
+export const imageLoader = ({
+  src,
+  width,
+  quality,
+}: ImageLoaderProps): string => {
   const host =
-    process.env.NODE_ENV === "production" ? "https://images.nvd.codes" : ""
+    process.env.NODE_ENV === "production"
+      ? "https://images.nvd.codes"
+      : "http://localhost:5000"
   return `${host}${src}?w=${width}&q=${quality ?? 75}`
 }
 
@@ -38,7 +44,7 @@ export const Image = ({
     )}
     <NextImage
       loader={imageLoader}
-      src={src}
+      src={src as string}
       height={height ?? 300}
       width={width ?? 500}
       objectFit={objectFit}

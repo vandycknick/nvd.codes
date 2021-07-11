@@ -1,5 +1,5 @@
 import React, { Fragment } from "react"
-import { GetStaticProps } from "next"
+import { GetServerSideProps } from "next"
 
 import SEO from "components/Common/SEO"
 import { Greeting } from "components/Home/Greeting"
@@ -8,7 +8,7 @@ import {
   LatestArticlesProps,
 } from "components/Home/LatestArticles"
 import { LatestActivities } from "components/Home/LatestActivities"
-import { listPosts } from "services/posts"
+import { listPosts } from "services/blog"
 
 interface HomeProps {
   latestPosts: LatestArticlesProps["posts"]
@@ -27,7 +27,7 @@ const Home: React.FC<HomeProps> = ({ latestPosts }) => (
   </Fragment>
 )
 
-export const getStaticProps: GetStaticProps<HomeProps> = async () => {
+export const getServerSideProps: GetServerSideProps<HomeProps> = async () => {
   const [posts] = await listPosts({
     page: 1,
     count: 3,
@@ -36,7 +36,7 @@ export const getStaticProps: GetStaticProps<HomeProps> = async () => {
       "description",
       "date",
       "readingTime",
-      "categoriesList",
+      "categories",
       "slug",
     ],
   })
