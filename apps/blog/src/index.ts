@@ -1,39 +1,69 @@
 // eslint-disable-next-line @typescript-eslint/triple-slash-reference
 /// <reference path="./lib.d.ts" />
-import { rmSync } from "fs"
-import { Server, ServerCredentials } from "@grpc/grpc-js"
-import { BlogService } from "@nvd.codes/blog-proto"
+import Koa from "koa"
+import { createLogger } from "bunyan"
+import loggerMiddleware from "koa-bunyan-logger"
+import Router from "@koa/router"
+import bodyParser from "koa-bodyparser"
+import { createBlogRouter } from "@nvd.codes/contracts"
 
-import { getConfig } from "./config"
-import { BlogServer } from "./server"
+import { createKoaMiddleware } from "./utils"
+import { AppContext, createContext } from "./context"
+import { getHealth } from "./controllers/getHealth"
+import { getPostBySlug } from "./controllers/getPostBySlug"
+import { syncPosts } from "./controllers/syncPosts"
+import { listPosts } from "./controllers/listPosts"
 
-const serve = (): void => {
-  const configOrNone = getConfig()
+const router = new Router()
+const app = new Koa()
+const logger = createLogger({
+  name: "app",
+  level: "info",
+})
 
-  if (configOrNone.isNone()) {
-    throw new Error("Invalid configuration!")
-  }
+app.use(loggerMiddleware(logger))
+app.use(loggerMiddleware.requestIdContext())
 
-  const config = configOrNone.unwrap()
-  const server = new Server()
+app.use(async (ctx, next) => {
+  const logger = ctx.log
+  await next()
+  logger.info({
+    request: ctx.request,
+    response: ctx.response,
+  })
+})
 
-  server.addService(BlogService, new BlogServer(config))
-  server.bindAsync(
-    config.endpoint,
-    ServerCredentials.createInsecure(),
-    (err, port) => {
-      if (err) {
-        throw err
-      }
-      // eslint-disable-next-line no-console
-      console.log(`Listening on ${port}`)
-      server.start()
-    },
-  )
+//TODO: FIX THIS
+app.use(async (ctx, next) => {
+  await createContext(ctx)
+  await next()
+})
 
-  if (config.endpoint.startsWith("unix://")) {
-    process.on("exit", () => rmSync(config.endpoint.replace("unix://", "")))
-  }
-}
+router.get("/health", async (ctx) => {
+  const result = await getHealth(ctx)
+  ctx.set(result.headers ?? {})
+  ctx.status = result.status
+  ctx.body = result.body
+})
 
-serve()
+router.post("/blog/sync", bodyParser(), async (ctx) => {
+  const result = await syncPosts(ctx)
+  ctx.set(result.headers ?? {})
+  ctx.status = result.status
+  ctx.body = result.body
+})
+
+app.use(router.routes())
+app.use(router.allowedMethods())
+
+app.use(
+  createKoaMiddleware({
+    router: createBlogRouter<AppContext>({
+      getPostBySlug,
+      listPosts,
+    }),
+    createContext,
+  }),
+)
+
+app.listen(3000, () => logger.info("Server listening on 3000"))

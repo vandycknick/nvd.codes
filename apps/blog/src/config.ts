@@ -1,22 +1,13 @@
-import { Option } from "@nvd.codes/monad"
-import { getEnvVar, getOptionalEnvVar } from "./utils"
+import { getEnvVar, getEnvVarAsInt, memoize } from "./utils"
 
-export type AppConfig = {
-  postsDirectory: string
-  cacheDirectory: string
-  endpoint: string
-  imagesRoot: string
-}
-
-export const getConfig = (): Option<AppConfig> =>
-  Option.all(
-    getEnvVar("BLOG_POSTS_DIRECTORY"),
-    getEnvVar("BLOG_CACHE_DIRECTORY"),
-    getEnvVar("BLOG_API_ENDPOINT"),
-    getOptionalEnvVar("IMAGES_ROOT", "images"),
-  ).map(([postsDirectory, cacheDirectory, endpoint, imagesRoot]) => ({
-    postsDirectory,
-    cacheDirectory,
-    endpoint,
-    imagesRoot,
-  }))
+export const getConfig = memoize(() => {
+  return {
+    bucketNamespace: getEnvVar("IMAGES_BUCKET_NAMESPACE"),
+    bucketName: getEnvVar("IMAGES_BUCKET_NAME"),
+    port: getEnvVarAsInt("PORT", 4000),
+    dbType: getEnvVar("TYPEORM_CONNECTION") as "oracle",
+    dbUser: getEnvVar("TYPEORM_USERNAME"),
+    dbPassword: getEnvVar("TYPEORM_PASSWORD"),
+    dbDriverConfig: getEnvVar("TYPEORM_DRIVER_EXTRA"),
+  }
+})
