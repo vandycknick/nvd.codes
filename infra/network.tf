@@ -39,7 +39,6 @@ resource "random_string" "dns_label_suffix" {
   special = false
 }
 
-
 resource "oci_core_subnet" "kubernetes_api_endpoint_subnet" {
   display_name               = "kubernetes-api-endpoint-subnet"
   compartment_id             = oci_identity_compartment.nvd_codes.id

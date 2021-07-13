@@ -39,3 +39,8 @@ variable "services_cidr_block" {
   type        = string
   description = "Kubernetes Services CIDR block"
 }
+
+variable "nvd_codes_blog_public_key" {
+  type        = string
+  description = "Public key for blog api user"
+}
