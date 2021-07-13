@@ -103,9 +103,7 @@ export const startSyncPostsJob = async ({ job }: StartSyncPostsJobOptions) => {
       })
     })
 
-    const enabled = false
-
-    if (enabled && directory != undefined) {
+    if (directory != undefined) {
       await rm(directory, { recursive: true, force: true }).catch((error) => {
         logger.error({
           msg: "Error trying to remove blog posts tmp directory.",
