@@ -40,4 +40,8 @@ resource "oci_identity_policy" "nvd_codes_bucket_wrangler_policy" {
     "Allow group nvd-codes-bucket-wrangler to read objects in compartment nvd-codes",
     "Allow group nvd-codes-bucket-wrangler to manage objects in compartment nvd-codes where any {request.permission='OBJECT_CREATE', request.permission='OBJECT_INSPECT'}"
   ]
+
+  depends_on = [
+    oci_identity_group.nvd_codes_bucket_wrangler
+  ]
 }
