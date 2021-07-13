@@ -22,7 +22,7 @@ resource "oci_identity_api_key" "nvd_codes_blog_key" {
 resource "oci_identity_group" "nvd_codes_bucket_wrangler" {
   compartment_id = var.tenancy_ocid
   name           = "nvd-codes-bucket-wrangler"
-  description    = ""
+  description    = "Group to manage and read buckets and objects."
 }
 
 resource "oci_identity_user_group_membership" "nvd_codes_blog_bucket_wrangler_membership" {
@@ -33,7 +33,7 @@ resource "oci_identity_user_group_membership" "nvd_codes_blog_bucket_wrangler_me
 resource "oci_identity_policy" "nvd_codes_bucket_wrangler_policy" {
   compartment_id = var.tenancy_ocid
   name           = "nvd-codes-bucket-wrangler"
-  description    = ""
+  description    = "Gives access to nvd-codes-bucket-wrangler to manage and read buckets and objects."
 
   statements = [
     "Allow group nvd-codes-bucket-wrangler to read buckets in compartment nvd-codes",
