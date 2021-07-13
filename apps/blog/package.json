@@ -24,11 +24,12 @@
     "koa-bunyan-logger": "^2.1.0",
     "oci-common": "^1.22.1",
     "oci-objectstorage": "^1.22.1",
-    "oracledb": "^5.2.0",
+    "oracledb": "https://github.com/oracle/node-oracledb/releases/download/v5.2.0/oracledb-src-5.2.0.tgz",
     "reading-time": "^1.3.0",
     "remark-parse": "^9.0.0",
     "remark-slug": "^6.0.0",
     "remark-stringify": "^9.0.1",
+    "sharp": "^0.28.3",
     "typeorm": "^0.2.34",
     "unified": "^9.2.1",
     "unist-util-visit": "^2.0.3"
