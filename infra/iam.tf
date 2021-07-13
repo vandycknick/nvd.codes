@@ -5,11 +5,8 @@ resource "oci_identity_user" "nvd_codes_blog" {
 }
 
 resource "oci_identity_user_capabilities_management" "nvd_codes_blog_capabilities" {
-  #Required
-  user_id     = oci_identity_user.nvd_codes_blog.id
-  description = ""
+  user_id = oci_identity_user.nvd_codes_blog.id
 
-  #Optional
   can_use_api_keys             = "true"
   can_use_auth_tokens          = "false"
   can_use_console_password     = "false"
@@ -34,9 +31,9 @@ resource "oci_identity_user_group_membership" "nvd_codes_blog_bucket_wrangler_me
 }
 
 resource "oci_identity_policy" "nvd_codes_bucket_wrangler_policy" {
-  #Required
   compartment_id = var.tenancy_ocid
   name           = "nvd-codes-bucket-wrangler"
+  description    = ""
 
   statements = [
     "Allow group nvd-codes-bucket-wrangler to read buckets in compartment nvd-codes",
