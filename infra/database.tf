@@ -15,5 +15,5 @@ resource "oci_database_autonomous_database" "nvd_codes_blog_db" {
   kms_key_id    = "ORACLE_MANAGED_KEY"
   license_model = "LICENSE_INCLUDED"
 
-  whitelisted_ips = concat(["${module.vcn.vcn_id};${module.subnet_addrs.node_subnet}"], var.database_ip_safe_list)
+  whitelisted_ips = concat(["${module.vcn.vcn_id};${module.subnet_addrs.network_cidr_blocks.node_subnet}"], var.database_ip_safe_list)
 }
