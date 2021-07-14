@@ -1,6 +1,7 @@
 resource "oci_database_autonomous_database" "nvd_codes_blog_db" {
   compartment_id           = oci_identity_compartment.nvd_codes.id
   db_name                  = "nvdcodesdb"
+  display_name             = "nvdcodesdb"
   db_version               = "19c"
   db_workload              = "DW"
   cpu_core_count           = 1
@@ -14,7 +15,6 @@ resource "oci_database_autonomous_database" "nvd_codes_blog_db" {
   is_dedicated            = false
   is_free_tier            = true
 
-  #   kms_key_id    = "ORACLE_MANAGED_KEY"
   license_model = "LICENSE_INCLUDED"
 
   whitelisted_ips = concat(["${module.vcn.vcn_id};${module.subnet_addrs.network_cidr_blocks.node_subnet}"], var.database_ip_safe_list)
