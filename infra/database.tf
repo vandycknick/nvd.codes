@@ -6,6 +6,8 @@ resource "oci_database_autonomous_database" "nvd_codes_blog_db" {
   data_storage_size_in_gb = 20
   cpu_core_count          = 1
 
+  admin_password = var.database_admin_password
+
   is_access_control_enabled = true
   is_auto_scaling_enabled   = false
   is_data_guard_enabled     = false
