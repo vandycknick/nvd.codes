@@ -41,8 +41,14 @@ variable "services_cidr_block" {
 }
 
 variable "database_ip_safe_list" {
-  type    = list(string)
-  default = []
+  type        = list(string)
+  default     = []
+  description = "List of IPs that can connect to the DB."
+}
+
+variable "database_admin_password" {
+  type        = string
+  description = "Admin password for DBs"
 }
 
 variable "nvd_codes_blog_public_key" {
