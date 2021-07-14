@@ -1,10 +1,11 @@
 resource "oci_database_autonomous_database" "nvd_codes_blog_db" {
-  compartment_id          = oci_identity_compartment.nvd_codes.id
-  db_name                 = "nvdcodesdb"
-  db_version              = "19c"
-  db_workload             = "DW"
-  data_storage_size_in_gb = 20
-  cpu_core_count          = 1
+  compartment_id           = oci_identity_compartment.nvd_codes.id
+  db_name                  = "nvdcodesdb"
+  db_version               = "19c"
+  db_workload              = "DW"
+  cpu_core_count           = 1
+  data_storage_size_in_gb  = 20
+  data_storage_size_in_tbs = 1
 
   admin_password = var.database_admin_password
 
