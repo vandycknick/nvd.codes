@@ -1,6 +1,6 @@
 resource "oci_database_autonomous_database" "nvd_codes_blog_db" {
   compartment_id          = oci_identity_compartment.nvd_codes.id
-  db_name                 = "nvd-codes-blog"
+  db_name                 = "nvdcodesdb"
   db_version              = "19c"
   db_workload             = "DW"
   data_storage_size_in_gb = 20
