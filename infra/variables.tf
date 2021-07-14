@@ -40,6 +40,11 @@ variable "services_cidr_block" {
   description = "Kubernetes Services CIDR block"
 }
 
+variable "database_ip_safe_list" {
+  type    = list(string)
+  default = []
+}
+
 variable "nvd_codes_blog_public_key" {
   type        = string
   description = "Public key for blog api user"
