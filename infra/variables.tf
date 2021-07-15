@@ -49,11 +49,13 @@ variable "database_ip_safe_list" {
 variable "database_admin_password" {
   type        = string
   description = "Admin password for DBs"
+  sensitive   = true
 }
 
 variable "database_wallet_password" {
   type        = string
   description = "Password for DB wallet"
+  sensitive   = true
 }
 
 variable "nvd_codes_blog_public_key" {
