@@ -1,12 +1,22 @@
 import { ObjectStorageClient, NodeFSBlob } from "oci-objectstorage"
-import { ConfigFileAuthenticationDetailsProvider } from "oci-common"
+import { Region, SimpleAuthenticationDetailsProvider } from "oci-common"
 import { promises } from "fs"
 import { join } from "path"
 import { getConfig } from "../config"
 
 const { stat } = promises
 
-const provider = new ConfigFileAuthenticationDetailsProvider()
+const config = getConfig()
+
+const provider = new SimpleAuthenticationDetailsProvider(
+  config.ociTenancy,
+  config.ociUser,
+  config.ociFingerprint,
+  config.ociPrivateKey,
+  null,
+  Region.fromRegionId(config.ociRegion),
+)
+
 const client = new ObjectStorageClient({
   authenticationDetailsProvider: provider,
 })
