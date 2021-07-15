@@ -13,6 +13,6 @@ export const getConfig = memoize(() => {
     ociTenancy: getEnvVar("OCI_TENANCY"),
     ociFingerprint: getEnvVar("OCI_FINGERPRINT"),
     ociRegion: getEnvVar("OCI_REGION"),
-    ociPrivateKey: getEnvVar("OCI_PRIVATE_KEY"),
+    ociPrivateKey: getEnvVar("OCI_PRIVATE_KEY").replace(/\\n/g, "\n"),
   }
 })
