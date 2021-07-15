@@ -19,3 +19,11 @@ resource "oci_database_autonomous_database" "nvd_codes_blog_db" {
 
   whitelisted_ips = concat(["${module.vcn.vcn_id};${module.subnet_addrs.network_cidr_blocks.node_subnet}"], var.database_ip_safe_list)
 }
+
+resource "oci_database_autonomous_database_wallet" "nvd_codes_blog_db_wallet" {
+  autonomous_database_id = oci_database_autonomous_database.nvd_codes_blog_db.id
+  password               = var.database_wallet_password
+
+  base64_encode_content = true
+  generate_type         = "SINGLE"
+}

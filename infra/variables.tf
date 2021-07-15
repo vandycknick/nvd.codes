@@ -51,6 +51,11 @@ variable "database_admin_password" {
   description = "Admin password for DBs"
 }
 
+variable "database_wallet_password" {
+  type        = string
+  description = "Password for DB wallet"
+}
+
 variable "nvd_codes_blog_public_key" {
   type        = string
   description = "Public key for blog api user"
