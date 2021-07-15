@@ -13,9 +13,11 @@ import { getHealth } from "./controllers/getHealth"
 import { getPostBySlug } from "./controllers/getPostBySlug"
 import { syncPosts } from "./controllers/syncPosts"
 import { listPosts } from "./controllers/listPosts"
+import { getConfig } from "./config"
 
 const router = new Router()
 const app = new Koa()
+const config = getConfig()
 const logger = createLogger({
   name: "app",
   level: "info",
@@ -66,4 +68,4 @@ app.use(
   }),
 )
 
-app.listen(3000, () => logger.info("Server listening on 3000"))
+app.listen(config.port, () => logger.info(`Server listening on ${config.port}`))
