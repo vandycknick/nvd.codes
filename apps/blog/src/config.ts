@@ -14,5 +14,6 @@ export const getConfig = memoize(() => {
     ociFingerprint: getEnvVar("OCI_FINGERPRINT"),
     ociRegion: getEnvVar("OCI_REGION"),
     ociPrivateKey: getEnvVar("OCI_PRIVATE_KEY").replace(/\\n/g, "\n"),
+    webhookSecret: getEnvVar("WEBHOOK_SECRET"),
   }
 })
