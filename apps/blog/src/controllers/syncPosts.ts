@@ -16,7 +16,7 @@ const isPushedToDefaultBranch = (event: GithubPushEvent): boolean =>
 
 export const syncPosts = async ({ request, log: logger }: Context) => {
   const event = request.get("x-github-event")
-  if (event === "installation") {
+  if (event === "installation" || event === "ping") {
     return jsonResult({ status: "Ok" })
   }
 
