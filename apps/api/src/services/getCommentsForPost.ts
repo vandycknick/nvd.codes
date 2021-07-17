@@ -1,5 +1,5 @@
 import fetch from "node-fetch"
-import { PostComments } from "@nvd.codes/core"
+import { PostComments } from "@nvd.codes/contracts"
 
 import { getConfig } from "../config"
 import postsToDiscussions from "../data/postsToGithubDiscussions.json"

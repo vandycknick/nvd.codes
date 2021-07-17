@@ -1,6 +1,6 @@
 import React from "react"
 import useSWR from "swr"
-import { PostComments } from "@nvd.codes/core"
+import { PostComments } from "@nvd.codes/contracts"
 import * as timeago from "timeago.js"
 import {
   Box,
