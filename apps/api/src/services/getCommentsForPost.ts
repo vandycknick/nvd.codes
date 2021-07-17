@@ -1,6 +1,5 @@
 import fetch from "node-fetch"
 import { PostComments } from "@nvd.codes/core"
-import { Ok, Err, Result, Option, Some, None } from "@nvd.codes/monad"
 
 import { getConfig } from "../config"
 import postsToDiscussions from "../data/postsToGithubDiscussions.json"
@@ -96,23 +95,16 @@ type GraphQLResponse = {
     | undefined
 }
 
-const getDiscussionForSlug = (slug: string): Option<number> => {
+const getDiscussionForSlug = (slug: string) => {
   const post = postsToDiscussions.find((p) => p.slug == slug)
-
-  if (post == undefined) {
-    return None()
-  }
-
-  return Some(post.discussion)
+  return post?.discussion
 }
 
-const getCommentsForPost = async (
-  slug: string,
-): Promise<Result<PostComments, string>> => {
-  const idOrNone = getDiscussionForSlug(slug)
+const getCommentsForPost = async (slug: string): Promise<PostComments> => {
+  const id = getDiscussionForSlug(slug)
 
-  if (idOrNone.isNone()) {
-    return Err(`No discussion configured for ${slug}`)
+  if (id === undefined) {
+    throw new Error(`No discussion configured for ${slug}`)
   }
 
   const config = getConfig()
@@ -126,21 +118,19 @@ const getCommentsForPost = async (
     },
     body: JSON.stringify({
       query,
-      variables: { number: idOrNone.unwrap() },
+      variables: { number: id },
     }),
   })
 
   const graph: GraphQLResponse = await response.json()
 
   if (graph.data?.repository == undefined) {
-    return Err("No data returned!")
+    throw new Error("No data returned!")
   }
 
-  if (graph.data.repository.discussion.number !== idOrNone.unwrap()) {
-    return Err(
-      `Invalid discussion: expected ${idOrNone.unwrap()} but returned ${
-        graph.data.repository.discussion.number
-      }.`,
+  if (graph.data.repository.discussion.number !== id) {
+    throw new Error(
+      `Invalid discussion: expected ${id} but returned ${graph.data.repository.discussion.number}.`,
     )
   }
 
@@ -163,14 +153,14 @@ const getCommentsForPost = async (
     })),
   }))
 
-  return Ok({
+  return {
     id: discussion.id,
     title: discussion.title,
     url: discussion.url,
     reactions,
     comments,
     totalComments: 0,
-  })
+  }
 }
 
 export default getCommentsForPost

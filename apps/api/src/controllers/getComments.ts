@@ -12,16 +12,14 @@ const getComments = async function (context: Context): Promise<HttpResponse> {
     return notFound()
   }
 
-  const commentsForPost = await getCommentsForPost(slug)
-
-  return commentsForPost.mapOrElse(
-    (comments) => jsonResult(comments),
-    (error) => {
-      // eslint-disable-next-line no-console
-      console.error(error)
-      return notFound()
-    },
-  )
+  try {
+    const commentsForPost = await getCommentsForPost(slug)
+    return jsonResult(commentsForPost)
+  } catch (error) {
+    // eslint-disable-next-line no-console
+    console.error(error)
+    return notFound()
+  }
 }
 
 export default getComments
