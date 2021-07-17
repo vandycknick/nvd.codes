@@ -12,7 +12,6 @@
   "dependencies": {
     "@nvd.codes/core": "^1.0.0",
     "@nvd.codes/http": "^1.0.0",
-    "@nvd.codes/monad": "^1.0.0",
     "bunyan": "^1.8.15",
     "koa": "^2.13.1",
     "koa-bunyan-logger": "^2.1.0",
