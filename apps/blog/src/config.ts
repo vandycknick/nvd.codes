@@ -1,4 +1,4 @@
-import { getEnvVar, getEnvVarAsInt, memoize } from "./utils"
+import { getEnvVar, getEnvVarAsInt, memoize } from "@nvd.codes/utils"
 
 export const getConfig = memoize(() => {
   return {

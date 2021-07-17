@@ -13,6 +13,7 @@
     "@koa/router": "^10.0.0",
     "@nvd.codes/contracts": "1.0.0",
     "@nvd.codes/http": "^1.0.0",
+    "@nvd.codes/utils": "^1.0.0",
     "@plaiceholder/base64": "^1.0.0",
     "@plaiceholder/css": "^1.0.0",
     "@trpc/server": "^8.1.4-alpha.1",
