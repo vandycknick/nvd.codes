@@ -22,3 +22,8 @@ export interface Commit {
   pushedDate: string
   repositoryName: string
 }
+
+export interface Activity {
+  latestCommit: Commit
+  projects: Repository[]
+}
