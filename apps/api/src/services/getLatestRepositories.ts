@@ -1,5 +1,5 @@
 import fetch from "node-fetch"
-import { Repository } from "@nvd.codes/core"
+import { Repository } from "@nvd.codes/contracts"
 
 import { getConfig } from "../config"
 

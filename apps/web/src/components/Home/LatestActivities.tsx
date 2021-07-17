@@ -1,7 +1,7 @@
 import React from "react"
 import useSWR from "swr"
 import * as timeago from "timeago.js"
-import { Activity } from "@nvd.codes/core"
+import { Activity } from "@nvd.codes/contracts"
 import {
   Box,
   Circle,

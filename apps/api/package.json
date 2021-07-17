@@ -10,7 +10,7 @@
     "build": "tsc"
   },
   "dependencies": {
-    "@nvd.codes/core": "^1.0.0",
+    "@nvd.codes/contracts": "^1.0.0",
     "@nvd.codes/http": "^1.0.0",
     "bunyan": "^1.8.15",
     "koa": "^2.13.1",
