@@ -17,16 +17,23 @@ COPY libs/ libs/
 
 RUN yarn workspace @nvd.codes/blog install --frozen-lock-file
 
-FROM node:16-alpine as base
+FROM node:16.5.0-alpine as base
 
 ARG NODE_ENV=production
 ENV NODE_ENV=${NODE_ENV}
 
 ENV PORT=3000
 
+RUN addgroup --gid 10001 --system nonroot \
+    && adduser  --uid 10000 --system --ingroup nonroot --home /home/nonroot nonroot
+
+RUN apk add --no-cache tini
+
+ENTRYPOINT ["/sbin/tini", "--", "node"]
+
 ENV LD_LIBRARY_PATH=/opt/oracle/instantclient_19_10:/opt/oracle/instantclient_19_11
 
-RUN apk add libaio libnsl libc6-compat musl-dev git && \
+RUN apk add --no-cache libaio libnsl libc6-compat musl-dev git && \
     # Patching some stuff up like a true hacker
     ln -s /lib64/* /lib && \
     ln -s libnsl.so.2 /usr/lib/libnsl.so.1 && \
@@ -41,4 +48,6 @@ COPY apps/blog apps/blog
 
 EXPOSE ${PORT}
 
-CMD [ "node", "/workspace/apps/blog/.dist/index.js" ]
+USER nonroot
+
+CMD [ "/workspace/apps/blog/.dist/index.js" ]
