@@ -12,9 +12,8 @@ UPDATE_FLAGS 	:= $(if $(filter-out 1,$(FIX)), "", "--update-snapshot")
 INFRA			:= $(ROOT)/infra
 API_PROJECT 	:= $(ROOT)/apps/api
 BLOG_PROJECT	:= $(ROOT)/apps/blog
+IMAGES_PROJECT	:= $(ROOT)/apps/images
 WEB_PROJECT 	:= $(ROOT)/apps/web
-RESUME_PROJECT	:= $(ROOT)/apps/resume
-RESUME_JSON		:= $(ROOT)/_data/resume.json
 
 .PHONY: install
 install:
@@ -23,10 +22,6 @@ install:
 .PHONY: install.yarn
 install.yarn:
 	yarn --frozen-lockfile
-
-.PHONY: install.pulumi
-install.pulumi:
-	cd infra && pipenv install
 
 .PHONY: clean
 clean:
@@ -59,10 +54,10 @@ dev.web:
 .PHONY: check
 check:
 	$(NPM_BIN)/tsc -p $(API_PROJECT) --noEmit
+	$(NPM_BIN)/tsc -p $(BLOG_PROJECT) --noEmit
+	$(NPM_BIN)/tsc -p $(IMAGES_PROJECT) --noEmit
 	$(NPM_BIN)/tsc -p $(WEB_PROJECT) --noEmit
-	$(NOM_BIN)/tsc -p $(BLOG_PROJECT) --noEmit
 	yarn eslint . --ext .ts --ext .tsx --ext .js --ext .json --ignore-path .gitignore
-	yarn workspace @nvd.codes/resume validate
 
 .PHONY: lint.infra
 lint.infra:
@@ -83,9 +78,8 @@ test.fix:
 .PHONY: build.libs
 build.libs:
 	yarn workspace @nvd.codes/contracts tsc
-	yarn workspace @nvd.codes/core tsc
 	yarn workspace @nvd.codes/http tsc
-	yarn workspace @nvd.codes/monad tsc
+	yarn workspace @nvd.codes/utils tsc
 
 .PHONY: build
 build: clean build.libs
@@ -94,34 +88,13 @@ build: clean build.libs
 	yarn workspace @nvd.codes/images build
 	yarn workspace @nvd.codes/web build
 
-.PHONY: pulumi.preview
-pulumi.preview:
-	cd $(INFRA) && \
-		pipenv run \
-			pulumi preview --stack prod
-
-.PHONY: pulumi.up
-pulumi.up:
-	cd $(INFRA) && \
-		pipenv run \
-			pulumi up --yes --stack prod --suppress-outputs
-
-.PHONY: deploy
-deploy:
-	@echo ""
-	@echo "\033[0;32mDeploying Assets \033[0m"
-	@echo "\033[0;32m------------------- \033[0m"
-	@cd $(INFRA) && \
-		(pipenv run pulumi stack output -s prod --json --show-secrets | \
-		jq -r '.web_app_connection_string' | \
-		pipenv run python utils/upload.py --container '$$web' --cwd $(WEB_PROJECT)/.dist)
-	@cd $(INFRA) && \
-		(pipenv run pulumi stack output -s prod --json --show-secrets | \
-		jq -r '.resume_app_connection_string' | \
-		pipenv run python utils/upload.py --container '$$web' --cwd $(RESUME_PROJECT)/.dist)
-
-
 .PHONY: build.api
 build.api: COMMIT_SHA=$(shell git log -1 --pretty=format:"%H")
 build.api:
-	docker buildx build --platform linux/amd64,linux/arm64 -f apps/api/Dockerfile -t eu-amsterdam-1.ocir.io/axpksneljs3y/nvd-codes/api:${COMMIT_SHA} --push .
+	docker buildx build --platform linux/arm64 -f apps/api/Dockerfile -t eu-amsterdam-1.ocir.io/axpksneljs3y/nvd-codes/api:${COMMIT_SHA} --push .
+
+.PHONY: build.blog
+build.blog: COMMIT_SHA=$(shell git log -1 --pretty=format:"%H")
+build.blog:
+	# docker build -f apps/blog/Dockerfile -t eu-amsterdam-1.ocir.io/axpksneljs3y/nvd-codes/blog:${COMMIT_SHA} .
+	docker buildx build --platform linux/arm64 -f apps/blog/Dockerfile -t eu-amsterdam-1.ocir.io/axpksneljs3y/nvd-codes/blog:${COMMIT_SHA} --push .
