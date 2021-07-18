@@ -11,6 +11,7 @@ export const hasValidSignature = (
   const payloadDigest = hmac.update(payload).digest("hex")
   const digest = Buffer.from(`sha1=${payloadDigest}`, "utf8")
 
+  // eslint-disable-next-line no-console
   console.log(payload, signature, payloadDigest)
 
   const checksum = Buffer.from(signature, "utf-8")
