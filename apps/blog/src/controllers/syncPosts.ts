@@ -6,7 +6,7 @@ import {
   internalServerError,
 } from "@nvd.codes/http"
 import { hasValidSignature } from "../services/hasValidSignature"
-import { createSyncJob } from "../services/createSyncJob"
+import { startSyncPostsJob } from "../services/startSyncPostsJob"
 
 const isNullOrEmpty = (input: string | undefined | null): boolean =>
   input == undefined || input == ""
@@ -60,8 +60,7 @@ export const syncPosts = async ({ request, log: logger }: Context) => {
       repository: pushEvent.repository.url,
     })
 
-    const uuid = await createSyncJob({
-      type: "posts",
+    const uuid = await startSyncPostsJob({
       branch: pushEvent.repository.default_branch,
       commit: pushEvent.after,
       repository: pushEvent.repository.url,

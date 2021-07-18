@@ -7,7 +7,7 @@
   "scripts": {
     "build": "tsc",
     "dev": "PORT=4000 dotenv -e ../../.env -- tsnd src/index.ts",
-    "typeorm": "dotenv -- node --require ts-node/register ../../node_modules/typeorm/cli.js"
+    "typeorm": "dotenv -e ../../.env -- node --require ts-node/register ../../node_modules/typeorm/cli.js"
   },
   "dependencies": {
     "@koa/router": "^10.0.0",
