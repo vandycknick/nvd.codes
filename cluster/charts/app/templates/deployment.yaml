@@ -28,6 +28,12 @@ spec:
       - name: {{ include "app.name" . }}
         image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
         imagePullPolicy: {{ .Values.image.pullPolicy }}
+        livenessProbe:
+          httpGet:
+            path: /health
+            port: {{ .Values.container.port }}
+          initialDelaySeconds: 10
+          periodSeconds: 30
         {{- if .Values.container.env }}
         env:
           {{- range .Values.container.env }}
@@ -43,6 +49,21 @@ spec:
             {{- end}}
           {{- end }}
         {{- end }}
+        {{- if .Values.container.envFrom}}
+        envFrom:
+          {{- range .Values.container.envFrom }}
+          - secretRef:
+              name: {{ .secretRef.name }}
+          {{- end}}
+        {{- end }}
         ports:
           - name: http
             containerPort: {{ .Values.container.port }}
+        {{- if .Values.container.volumeMounts }}
+        volumeMounts:
+          {{- toYaml .Values.container.volumeMounts | nindent 10 }}
+        {{- end }}
+      {{- if .Values.volumes }}
+      volumes:
+        {{- toYaml .Values.volumes | nindent 8 }}
+      {{- end}}
