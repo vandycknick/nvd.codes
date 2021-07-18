@@ -1,4 +1,4 @@
-import { ConfigFileAuthenticationDetailsProvider } from "oci-common"
+import { Region, SimpleAuthenticationDetailsProvider } from "oci-common"
 import { ObjectStorageClient } from "oci-objectstorage"
 
 import { getConfig } from "../config"
@@ -22,7 +22,16 @@ const readStream = (stream: NodeJS.ReadableStream): Promise<Buffer> => {
   })
 }
 
-const provider = new ConfigFileAuthenticationDetailsProvider()
+const config = getConfig()
+
+const provider = new SimpleAuthenticationDetailsProvider(
+  config.ociTenancy,
+  config.ociUser,
+  config.ociFingerprint,
+  config.ociPrivateKey,
+  null,
+  Region.fromRegionId(config.ociRegion),
+)
 const client = new ObjectStorageClient({
   authenticationDetailsProvider: provider,
 })

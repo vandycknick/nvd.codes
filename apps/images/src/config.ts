@@ -1,20 +1,16 @@
 import type { LogLevel } from "bunyan"
+import { getEnvVar, getEnvVarAsInt, memoize } from "@nvd.codes/utils"
 
-const getRequiredEnv = (key: string) => {
-  const value = process.env[key]
-
-  if (value == undefined)
-    throw new Error(`Required environment variable '${key}' is not defined!`)
-
-  return value
-}
-
-export const getConfig = () => {
-  const port = getRequiredEnv("PORT")
+export const getConfig = memoize(() => {
   return {
-    bucketNamespace: getRequiredEnv("IMAGES_BUCKET_NAMESPACE"),
-    bucketName: getRequiredEnv("IMAGES_BUCKET_NAME"),
-    port: parseInt(port, 10),
-    logLevel: getRequiredEnv("LOG_LEVEL") as LogLevel,
+    bucketNamespace: getEnvVar("IMAGES_BUCKET_NAMESPACE"),
+    bucketName: getEnvVar("IMAGES_BUCKET_NAME"),
+    port: getEnvVarAsInt("PORT", 3000),
+    logLevel: getEnvVar("LOG_LEVEL") as LogLevel,
+    ociUser: getEnvVar("OCI_USER"),
+    ociTenancy: getEnvVar("OCI_TENANCY"),
+    ociFingerprint: getEnvVar("OCI_FINGERPRINT"),
+    ociRegion: getEnvVar("OCI_REGION"),
+    ociPrivateKey: getEnvVar("OCI_PRIVATE_KEY").replace(/\\n/g, "\n"),
   }
-}
+})
