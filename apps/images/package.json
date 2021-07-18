@@ -7,20 +7,22 @@
   "scripts": {
     "build": "tsc",
     "clean": "rm -rf .dist",
-    "dev": "dotenv -- tsnd src/index.ts"
+    "dev": "PORT=5000 dotenv -e ../../.env -- tsnd src/index.ts"
   },
   "dependencies": {
     "@hapi/accept": "^5.0.2",
+    "@koa/router": "^10.0.0",
+    "@nvd.codes/utils": "^1.0.0",
     "bunyan": "^1.8.15",
     "koa": "^2.13.1",
     "koa-bunyan-logger": "^2.1.0",
-    "oci-common": "^1.22.1",
-    "oci-objectstorage": "^1.22.1",
+    "oci-common": "^1.23.0",
+    "oci-objectstorage": "^1.23.0",
     "sharp": "^0.28.3"
   },
   "devDependencies": {
-    "@types/koa": "^2.13.4",
     "@nvd/tsconfig": "^1.0.0",
+    "@types/koa": "^2.13.4",
     "@types/sharp": "^0.28.4",
     "dotenv-cli": "^4.0.0",
     "ts-node": "^10.1.0",
