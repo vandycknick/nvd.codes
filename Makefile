@@ -98,3 +98,8 @@ build.blog: COMMIT_SHA=$(shell git log -1 --pretty=format:"%H")
 build.blog:
 	# docker build -f apps/blog/Dockerfile -t eu-amsterdam-1.ocir.io/axpksneljs3y/nvd-codes/blog:${COMMIT_SHA} .
 	docker buildx build --platform linux/arm64 -f apps/blog/Dockerfile -t eu-amsterdam-1.ocir.io/axpksneljs3y/nvd-codes/blog:${COMMIT_SHA} --push .
+
+.PHONY: build.images
+build.images: COMMIT_SHA=$(shell git log -1 --pretty=format:"%H")
+build.images:
+	docker buildx build --platform linux/arm64 -f apps/images/Dockerfile -t eu-amsterdam-1.ocir.io/axpksneljs3y/nvd-codes/images:${COMMIT_SHA} --push .
