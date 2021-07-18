@@ -5,8 +5,8 @@ import {
   CreateDateColumn,
 } from "typeorm"
 
-@Entity({ name: "blogsyncjobs" })
-export class BlogSyncJobEntity {
+@Entity({ name: "syncpostsjob" })
+export class SyncPostsJob {
   @PrimaryGeneratedColumn("uuid")
   id!: string
 

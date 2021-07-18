@@ -5,7 +5,7 @@ import { memoize } from "@nvd.codes/utils"
 import { CreateKoaContextOptions } from "./utils"
 import { entities } from "./entity"
 import { PostEntity } from "./entity/Post"
-import { BlogSyncJobEntity } from "./entity/BlogSyncJob"
+import { SyncPostsJob } from "./entity/SyncPostsJob"
 import { getConfig } from "./config"
 
 const getRepositories = memoize(async () => {
@@ -21,7 +21,7 @@ const getRepositories = memoize(async () => {
 
   return {
     postsRepository: getRepository(PostEntity),
-    syncJobsRepository: getRepository(BlogSyncJobEntity),
+    syncJobsRepository: getRepository(SyncPostsJob),
   }
 })
 
