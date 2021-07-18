@@ -20,7 +20,7 @@ jobs:
       - name: Setup Node
         uses: actions/setup-node@v1
         with:
-          node-version: "12.x"
+          node-version: "16.x"
 
       - name: Get yarn cache directory path
         id: yarn-cache-dir-path
@@ -47,41 +47,5 @@ jobs:
       - name: Unit Test
         run: make test.unit
 
-      - name: Build api and web
+      - name: Build project
         run: make build
-        env:
-          BLOG_POSTS_DIRECTORY: ${{ secrets.BLOG_POSTS_DIRECTORY }}
-          BLOG_CACHE_DIRECTORY: ${{ secrets.BLOG_CACHE_DIRECTORY }}
-          BLOG_API_ENDPOINT: ${{ secrets.BLOG_API_ENDPOINT }}
-
-      - name: Setup Python
-        uses: actions/setup-python@v2
-        with:
-          python-version: "3.9"
-        if: github.ref == 'refs/heads/main' && github.event_name == 'push'
-
-      - uses: dschep/install-pipenv-action@v1
-        if: github.ref == 'refs/heads/main' && github.event_name == 'push'
-
-      - name: Install Pulumi
-        run: |
-          curl -fsSL https://get.pulumi.com | sh
-          echo "/home/runner/.pulumi/bin" >> $GITHUB_PATH
-        if: github.ref == 'refs/heads/main' && github.event_name == 'push'
-
-      - name: Install infra dependencies
-        run: make install.pulumi
-        if: github.ref == 'refs/heads/main' && github.event_name == 'push'
-
-      - name: Deploy
-        run: |
-          make pulumi.up
-          make deploy
-        env:
-          ARM_CLIENT_ID: ${{ secrets.ARM_CLIENT_ID }}
-          ARM_CLIENT_SECRET: ${{ secrets.ARM_CLIENT_SECRET }}
-          ARM_TENANT_ID: ${{ secrets.ARM_TENANT_ID }}
-          ARM_SUBSCRIPTION_ID: ${{ secrets.ARM_SUBSCRIPTION_ID }}
-          PULUMI_ACCESS_TOKEN: ${{ secrets.PULUMI_ACCESS_TOKEN }}
-          PULUMI_CI: up
-        if: github.ref == 'refs/heads/main' && github.event_name == 'push'
