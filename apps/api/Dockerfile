@@ -17,4 +17,4 @@ COPY apps/api apps/api
 
 EXPOSE ${PORT}
 
-CMD [ "node", "/workspace/apps/api/.dist/server.js" ]
+CMD [ "node", "/workspace/apps/api/.dist/index.js" ]
