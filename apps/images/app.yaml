@@ -1,0 +1,25 @@
+image:
+  repository: eu-amsterdam-1.ocir.io/axpksneljs3y/nvd-codes/images
+  tag: ed371a8754b9b5e7a84d94a00f91f6d200f20145
+
+container:
+  env:
+    - name: LOG_LEVEL
+      value: "info"
+  envFrom:
+    - secretRef:
+        name: nvd-codes-blog
+
+ingress:
+  enabled: true
+  annotations:
+    cert-manager.io/cluster-issuer: "letsencrypt-prod"
+    traefik.ingress.kubernetes.io/router.tls: "true"
+  path: /
+  pathType: Prefix
+  tls:
+    - hosts:
+        - images.nvd.codes
+      secretName: nvd-codes-images
+  hosts:
+    - images.nvd.codes

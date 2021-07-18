@@ -17,4 +17,4 @@ COPY apps/images apps/images
 
 EXPOSE ${PORT}
 
-CMD [ "node", "/workspace/images/api/.dist/index.js" ]
+CMD [ "node", "/workspace/apps/images/.dist/index.js" ]
