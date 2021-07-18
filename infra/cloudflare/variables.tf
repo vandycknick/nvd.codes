@@ -24,3 +24,15 @@ variable "region" {
   description = "OCI Region"
   default     = "eu-amsterdam-1"
 }
+
+variable "cloudflare_account_id" {
+  type        = string
+  description = "Cloudlfare account id"
+}
+
+data "cloudflare_zones" "main" {
+  filter {
+    name = "nvd.codes"
+  }
+}
+
