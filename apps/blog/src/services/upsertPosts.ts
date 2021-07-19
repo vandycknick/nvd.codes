@@ -55,6 +55,8 @@ export const upsertPosts = async ({ job }: SyncPostsOptions) => {
 
         const parsed = await parseMarkdownPost(
           postContents.contents,
+          job.repository,
+          job.branch,
           slugInfo.relativePath,
           directory,
         )
