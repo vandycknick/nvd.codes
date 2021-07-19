@@ -10,6 +10,7 @@ replicas: 1
 container:
   # env:
   port: 3000
+  healthCheck: /health
 
 ingress:
   enabled: false
