@@ -88,6 +88,13 @@ build: clean build.libs
 	yarn workspace @nvd.codes/images build
 	yarn workspace @nvd.codes/web build
 
+.PHONY: build.docker
+build.docker:
+	$(MAKE) build.api
+	$(MAKE) build.blog
+	$(MAKE) build.images
+	$(MAKE) build.web
+
 .PHONY: build.api
 build.api: COMMIT_SHA=$(shell git log -1 --pretty=format:"%H")
 build.api:
