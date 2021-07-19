@@ -22,3 +22,16 @@ ingress:
   hosts:
     - nvd.codes
 
+middleware:
+  - name: set-security-headers
+    spec:
+      headers:
+        customResponseHeaders:
+          X-Powered-By: "Passion and tiny cute kittens"
+          X-nananana: "Batcache"
+        contentTypeNosniff: true
+        frameDeny: true
+        browserXssFilter: true
+        sslRedirect: true
+        stsSeconds: 31536000
+        referrerPolicy: strict-origin-when-cross-origin
