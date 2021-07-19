@@ -1,0 +1,24 @@
+image:
+  repository: eu-amsterdam-1.ocir.io/axpksneljs3y/nvd-codes/web
+  tag: 23b2560ff7b827ea0dd1eb6568194ae2c90ab12a
+
+container:
+  envFrom:
+    - secretRef:
+        name: nvd-codes-web
+  healthCheck: /api/healthz
+
+ingress:
+  enabled: true
+  annotations:
+    cert-manager.io/cluster-issuer: "letsencrypt-prod"
+    traefik.ingress.kubernetes.io/router.tls: "true"
+  path: /
+  pathType: Prefix
+  tls:
+    - hosts:
+        - nvd.codes
+      secretName: nvd-codes-web
+  hosts:
+    - nvd.codes
+

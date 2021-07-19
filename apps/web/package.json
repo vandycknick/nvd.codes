@@ -5,7 +5,7 @@
   "main": "index.js",
   "license": "MIT",
   "scripts": {
-    "dev": "dotenv -- next dev",
+    "dev": "PORT=7000 dotenv -e ../../.env -- next dev",
     "build": "next build",
     "start": "next start",
     "sitemap": "dotenv -- ts-node --project tsconfig.server.json src/utils/createSitemap.ts"
