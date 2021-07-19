@@ -55,6 +55,8 @@ const remarkImages: Plugin<
 
 export const parseMarkdownPost = async (
   post: Buffer,
+  repositoryUrl: string,
+  branch: string,
   postFilePath: string,
   repoRootPath: string,
 ): Promise<ParsedPost> => {
@@ -89,10 +91,7 @@ export const parseMarkdownPost = async (
     placeholder: placeHolders.base64,
     placeholderCss: placeHolders.css,
     readingTime: readingTime(contents).text,
-    editUrl: `https://github.com/nickvdyck/nvd.codes/edit/main${resolve(
-      "/",
-      postFilePath,
-    )}`,
+    editUrl: `${repositoryUrl}/edit/${branch}${resolve("/", postFilePath)}`,
   }
 
   return {
