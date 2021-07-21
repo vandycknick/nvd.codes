@@ -20,5 +20,5 @@ data "cloudflare_zones" "main" {
 }
 
 locals {
-  load_balancer_ip = element(data.oci_load_balancer_load_balancers.cluster_lb.load_balancers, 0).ip_address_details.ip_address
+  load_balancer_ip = data.oci_load_balancer_load_balancers.cluster_lb.load_balancers[0].ip_address_details[0].ip_address
 }
