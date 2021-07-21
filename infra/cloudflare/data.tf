@@ -10,7 +10,7 @@ data "terraform_remote_state" "core" {
 }
 
 data "oci_load_balancer_load_balancers" "cluster_lb" {
-  compartment_id = vardata.terraform_remote_state.core.outputs.compartment_id
+  compartment_id = data.terraform_remote_state.core.outputs.compartment_id
 }
 
 data "cloudflare_zones" "main" {
