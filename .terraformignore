@@ -1,6 +1,6 @@
-_data
-_posts
-node_modules
-apps
-libs
-scripts
+.github/
+.vscode/
+apps/
+libs/
+node_modules/
+.env
