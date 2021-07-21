@@ -231,8 +231,8 @@ resource "oci_core_security_list" "node_subnet_sec_list" {
     stateless   = false
 
     tcp_options {
-      max = 30496
-      min = 30496
+      max = 31127
+      min = 31127
     }
   }
   ingress_security_rules {
@@ -242,8 +242,8 @@ resource "oci_core_security_list" "node_subnet_sec_list" {
     stateless   = false
 
     tcp_options {
-      max = 30957
-      min = 30957
+      max = 31728
+      min = 31728
     }
   }
 
@@ -283,8 +283,8 @@ resource "oci_core_security_list" "service_lb_sec_list" {
     stateless        = false
 
     tcp_options {
-      max = 30496
-      min = 30496
+      max = 31127
+      min = 31127
     }
   }
   egress_security_rules {
@@ -294,8 +294,8 @@ resource "oci_core_security_list" "service_lb_sec_list" {
     stateless        = false
 
     tcp_options {
-      max = 30957
-      min = 30957
+      max = 31728
+      min = 31728
     }
   }
 
