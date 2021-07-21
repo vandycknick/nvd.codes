@@ -12,7 +12,15 @@ releases:
   - name: traefik
     namespace: ingress
     chart: traefik/traefik
-    version: 9.19.2
+    version: 10.1.1
+    values:
+      - deployment:
+          replicas: 2
+        service:
+          annotations:
+            service.beta.kubernetes.io/oci-load-balancer-shape: "flexible"
+            service.beta.kubernetes.io/oci-load-balancer-shape-flex-min: 10
+            service.beta.kubernetes.io/oci-load-balancer-shape-flex-max: 10
 
   - name: cert-manager
     namespace: cert-manager
