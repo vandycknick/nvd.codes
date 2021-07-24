@@ -10,7 +10,7 @@ RUN addgroup --gid 10001 --system nonroot \
 
 RUN apk add --no-cache tini
 
-ENTRYPOINT ["/sbin/tini", "--", "node"]
+ENTRYPOINT ["/sbin/tini", "--", "node", "--experimental-specifier-resolution=node"]
 
 WORKDIR /workspace
 

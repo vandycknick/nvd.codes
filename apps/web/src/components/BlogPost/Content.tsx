@@ -1,4 +1,4 @@
-import React, { createContext, ElementType, ReactNode, useContext } from "react"
+import React, { createContext, ReactNode, useContext } from "react"
 import ReactMarkdown from "react-markdown"
 import gfm from "remark-gfm"
 import Image from "next/image"
@@ -8,7 +8,6 @@ import {
   Thead,
   Tbody,
   Tr,
-  Th,
   Td,
   Text,
   Code,
@@ -27,20 +26,18 @@ import { imageLoader } from "components/Common/Image"
 
 const ContentsContext = createContext<Record<string, string>>({})
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-function getCoreProps(props: any): any {
-  return props["data-sourcepos"]
-    ? { "data-sourcepos": props["data-sourcepos"] }
-    : {}
-}
+type Components = ReactMarkdown.TransformOptions["components"]
+type Props = { children?: ReactNode[]; className?: string }
 
-type Props = { children?: ReactNode }
+const ParagraphComponent = ({ children }: Props) => (
+  <Text pb={4}>{children}</Text>
+)
 
-const Paragraph = ({ children }: Props) => <Text pb={4}>{children}</Text>
+const EmphasisComponent = ({ children }: Props) => (
+  <Text as="em">{children}</Text>
+)
 
-const Emphasis = ({ children }: Props) => <Text as="em">{children}</Text>
-
-const Blockquote = ({ children }: Props) => (
+const BlockquoteComponent = ({ children }: Props) => (
   <Text
     as="blockquote"
     py={2}
@@ -56,37 +53,78 @@ const Blockquote = ({ children }: Props) => (
   </Text>
 )
 
-const CodeBlock = (
-  props: Props & { language?: string; value: string; node: { meta?: string } },
-) => {
-  const { value, language } = props
-  let showLineNumbers = false
+const DeleteComponent = ({ children }: Props) => (
+  <Text as="del">{children}</Text>
+)
 
-  try {
-    const meta = JSON.parse(props.node.meta ?? "")
-    showLineNumbers = meta?.numberLines ?? false
-  } catch {
-    // Ignored
+const SpanComponent = ({ children }: Props) => <Text as="span">{children}</Text>
+
+const H1Component = ({ children }: Props) => (
+  <Heading my={4} as="h1" size="2xl">
+    {children}
+  </Heading>
+)
+const H2Component = ({ children }: Props) => (
+  <Heading my={4} as="h2" size="xl">
+    {children}
+  </Heading>
+)
+
+const H3Component = ({ children }: Props) => (
+  <Heading my={4} as="h3" size="lg">
+    {children}
+  </Heading>
+)
+
+const H4Component = ({ children }: Props) => (
+  <Heading my={4} as="h4" size="md">
+    {children}
+  </Heading>
+)
+
+const H5Component = ({ children }: Props) => (
+  <Heading my={4} as="h5" size="sm">
+    {children}
+  </Heading>
+)
+
+const H6Component = ({ children }: Props) => (
+  <Heading my={4} as="h6" size="xs">
+    {children}
+  </Heading>
+)
+
+const TableComponent = ({ children }: Props) => (
+  <Table variant="simple" mb={10}>
+    {children}
+  </Table>
+)
+
+const CodeComponent = ({
+  className,
+  inline,
+  children,
+}: Props & { inline?: boolean }) => {
+  if (inline) {
+    return <Code>{children}</Code>
   }
+
+  const language = className?.split("language-")[1] ?? "text"
 
   return (
     <Box mb={6}>
       <SyntaxHighlighter
-        showLineNumbers={showLineNumbers}
-        language={language ?? "text"}
+        // showLineNumbers={showLineNumbers}
+        language={language}
         style={dracula}
       >
-        {value}
+        {children}
       </SyntaxHighlighter>
     </Box>
   )
 }
 
-const Delete = ({ children }: Props) => <Text as="del">{children}</Text>
-
-const Span = ({ children }: Props) => <Text as="span">{children}</Text>
-
-const LinkElement = ({ children, href }: Props & { href: string }) => (
+const LinkComponent = ({ children, href }: Props & { href: string }) => (
   <Link
     colorScheme="teal"
     isExternal
@@ -98,77 +136,10 @@ const LinkElement = ({ children, href }: Props & { href: string }) => (
   </Link>
 )
 
-const ListElement = (
-  props: Props & { start: number; ordered: boolean; depth: number },
-) => {
-  const { start, ordered, children, depth } = props
-  const attrs = getCoreProps(props)
-  if (start !== null && start !== 1 && start !== undefined) {
-    attrs.start = start.toString()
-  }
-  let styleType = "disc"
-  if (ordered) styleType = "decimal"
-  if (depth === 1) styleType = "circle"
-  return (
-    <List
-      spacing={1}
-      as={ordered ? "ol" : "ul"}
-      styleType={styleType}
-      pl={4}
-      ml={6}
-      mb={4}
-      {...attrs}
-    >
-      {children}
-    </List>
-  )
-}
-
-const ListItemElement = (props: Props & { checked: boolean }) => {
-  const { children, checked } = props
-  let checkbox = null
-  if (checked !== null && checked !== undefined) {
-    checkbox = (
-      <Checkbox isChecked={checked} isReadOnly>
-        {children}
-      </Checkbox>
-    )
-  }
-  return (
-    <ListItem
-      {...getCoreProps(props)}
-      listStyleType={checked !== null ? "none" : "inherit"}
-    >
-      {checkbox || children}
-    </ListItem>
-  )
-}
-
-const HeadingElement = (props: Props & { level: number }) => {
-  const { level, children } = props
-  const sizes = ["2xl", "xl", "lg", "md", "sm", "xs"]
-  return (
-    <Heading
-      my={4}
-      as={`h${level}`}
-      size={sizes[level - 1]}
-      {...getCoreProps(props)}
-    >
-      {children}
-    </Heading>
-  )
-}
-
-const InlineCode = (props: Props) => {
-  const { children } = props
-  return <Code {...getCoreProps(props)}>{children}</Code>
-}
-
-const ImageElement = (props: Props & { src: string; alt: string }) => {
+const ImageComponent = (props: Props & { src: string; alt: string }) => {
   const images = useContext(ContentsContext)
   const { src, alt } = props
   const placeholder = images[src]
-
   return (
     <Box py="6" m="0 auto" maxW="800px">
       <Box position="relative">
@@ -199,38 +170,82 @@ const ImageElement = (props: Props & { src: string; alt: string }) => {
   )
 }
 
-const TableElement = (props: Props) => (
-  <Table variant="simple" mb={10}>
-    {props.children}
-  </Table>
-)
+const ListComponent = ({
+  depth,
+  ordered,
+  children,
+}: Props & { depth: number; ordered: boolean }) => {
+  let styleType = "disc"
+  if (ordered) styleType = "decimal"
+  if (depth === 1) styleType = "circle"
+  return (
+    <List
+      spacing={1}
+      as={ordered ? "ol" : "ul"}
+      styleType={styleType}
+      pl={4}
+      ml={6}
+      mb={4}
+    >
+      {children}
+    </List>
+  )
+}
 
-const TableCell = (props: Props & { isHeader: boolean }) => (
-  <>{props.isHeader ? <Th>{props.children}</Th> : <Td>{props.children}</Td>}</>
-)
+const ListItemComponent = (props: Props & { checked: boolean | null }) => {
+  const { children, checked } = props
+  let checkbox = null
+  if (checked !== null && checked !== undefined) {
+    checkbox = (
+      <Checkbox isChecked={checked} isReadOnly>
+        {children}
+      </Checkbox>
+    )
+  }
+  return (
+    <ListItem listStyleType={checked !== null ? "none" : "inherit"}>
+      {checkbox || children}
+    </ListItem>
+  )
+}
 
-const renderers: { [nodeType: string]: ElementType } = {
-  paragraph: Paragraph,
-  emphasis: Emphasis,
-  blockquote: Blockquote,
-  code: CodeBlock,
-  delete: Delete,
-  thematicBreak: Divider,
-  link: LinkElement,
-  image: ImageElement,
-  linkReference: Link,
-  imageReference: ImageElement,
-  text: Span,
-  list: ListElement,
-  listItem: ListItemElement,
-  definition: () => null,
-  heading: HeadingElement,
-  inlineCode: InlineCode,
-  table: TableElement,
-  tableHead: Thead,
-  tableBody: Tbody,
-  tableRow: Tr,
-  tableCell: TableCell,
+const components: Components = {
+  p: ParagraphComponent,
+  em: EmphasisComponent,
+  blockquote: BlockquoteComponent,
+
+  code: CodeComponent,
+
+  del: DeleteComponent,
+  hr: Divider,
+  a({ href, children }) {
+    if (typeof href === "string") {
+      return <LinkComponent href={href}>{children}</LinkComponent>
+    }
+    return <></>
+  },
+  img(props) {
+    const { src, alt } = props
+    if (typeof src === "string" && typeof alt === "string") {
+      return <ImageComponent src={src} alt={alt} {...props} />
+    }
+    return <></>
+  },
+  span: SpanComponent,
+  ol: ListComponent,
+  ul: ListComponent,
+  li: ListItemComponent,
+  h1: H1Component,
+  h2: H2Component,
+  h3: H3Component,
+  h4: H4Component,
+  h5: H5Component,
+  h6: H6Component,
+  table: TableComponent,
+  thead: Thead,
+  tbody: Tbody,
+  tr: Tr,
+  td: Td,
 }
 
 type ContentsProps = {
@@ -240,7 +255,7 @@ type ContentsProps = {
 
 const Contents = ({ children, images }: ContentsProps) => (
   <ContentsContext.Provider value={images}>
-    <ReactMarkdown renderers={renderers} plugins={[gfm]}>
+    <ReactMarkdown components={components} remarkPlugins={[gfm as any]}>
       {children}
     </ReactMarkdown>
   </ContentsContext.Provider>

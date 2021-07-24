@@ -1,10 +1,10 @@
 import { dirname, resolve, join, relative } from "path"
 import matter from "gray-matter"
-import unified, { Plugin } from "unified"
+import { unified, Plugin } from "unified"
 import remarkParse from "remark-parse"
 import remarkSlug from "remark-slug"
 import remarkStringify from "remark-stringify"
-import visit from "unist-util-visit"
+import { visit } from "unist-util-visit"
 import readingTime from "reading-time"
 
 import { createPlaceHolders } from "./parseCoverImage"
