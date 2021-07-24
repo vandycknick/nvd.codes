@@ -2,22 +2,26 @@
   "name": "@nvd.codes/images",
   "private": true,
   "version": "1.0.0",
-  "main": "index.js",
+  "type": "module",
+  "exports": "./.dist/index.js",
   "license": "MIT",
+  "engines": {
+    "node": ">=16.0.0"
+  },
   "scripts": {
     "build": "tsc",
     "clean": "rm -rf .dist",
-    "dev": "PORT=5000 dotenv -e ../../.env -- tsnd src/index.ts"
+    "dev": "dotenv -e ../../.env -- nodemon --config nodemon.json src/index.ts"
   },
   "dependencies": {
     "@hapi/accept": "^5.0.2",
-    "@koa/router": "^10.0.0",
+    "@koa/router": "^10.1.0",
     "@nvd.codes/utils": "^1.0.0",
     "bunyan": "^1.8.15",
     "koa": "^2.13.1",
     "koa-bunyan-logger": "^2.1.0",
-    "oci-common": "^1.23.0",
-    "oci-objectstorage": "^1.23.0",
+    "oci-common": "^2.0.0",
+    "oci-objectstorage": "^2.0.0",
     "sharp": "^0.28.3"
   },
   "devDependencies": {
@@ -25,8 +29,6 @@
     "@types/koa": "^2.13.4",
     "@types/sharp": "^0.28.4",
     "dotenv-cli": "^4.0.0",
-    "ts-node": "^10.1.0",
-    "ts-node-dev": "^1.1.8",
     "typescript": "^4.3.5"
   }
 }

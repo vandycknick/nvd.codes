@@ -29,7 +29,7 @@ RUN addgroup --gid 10001 --system nonroot \
 
 RUN apk add --no-cache tini
 
-ENTRYPOINT ["/sbin/tini", "--", "node"]
+ENTRYPOINT ["/sbin/tini", "--", "node", "--experimental-specifier-resolution=node"]
 
 ENV LD_LIBRARY_PATH=/opt/oracle/instantclient_19_10:/opt/oracle/instantclient_19_11
 
