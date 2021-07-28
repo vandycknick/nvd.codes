@@ -27,10 +27,10 @@ resource "oci_containerengine_cluster" "nvd_codes_cluster" {
 }
 
 resource "oci_containerengine_node_pool" "nvd_codes_pool_1" {
-  count              = 0
+  count              = 1
   cluster_id         = oci_containerengine_cluster.nvd_codes_cluster.id
   compartment_id     = oci_identity_compartment.nvd_codes.id
-  kubernetes_version = "v1.19.7"
+  kubernetes_version = "v1.20.8"
   name               = "nvd-codes-pool-1"
   node_config_details {
     placement_configs {
