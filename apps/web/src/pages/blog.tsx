@@ -79,27 +79,35 @@ export const getServerSideProps: GetServerSideProps<BlogProps> = async ({
         : parseInt(params.page ?? "1", 10)
       : 1
 
-  const [posts, pager] = await listPosts({
-    page,
-    count: POSTS_PER_PAGE,
-    fields: [
-      "id",
-      "title",
-      "description",
-      "date",
-      "slug",
-      "readingTime",
-      "categories",
-      "cover",
-      "placeholderCss",
-    ],
-  })
+  try {
+    const [posts, pager] = await listPosts({
+      page,
+      count: POSTS_PER_PAGE,
+      fields: [
+        "id",
+        "title",
+        "description",
+        "date",
+        "slug",
+        "readingTime",
+        "categories",
+        "cover",
+        "placeholderCss",
+      ],
+    })
 
-  return {
-    props: {
-      posts,
-      pager,
-    },
+    return {
+      props: {
+        posts,
+        pager,
+      },
+    }
+  } catch (error) {
+    // TODO: Improve error handling
+    return {
+      props: {},
+      notFound: true,
+    }
   }
 }
 
