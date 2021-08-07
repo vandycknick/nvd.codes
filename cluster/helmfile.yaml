@@ -11,9 +11,11 @@ releases:
     namespace: kube-system
     chart: charts/metrics-server
 
+  # https://github.com/DataDog/helm-charts/tree/master/charts/datadog
   - name: datadog
     namespace: kube-system
     chart: datadog/datadog
+    version: 2.19.9
     values:
       - datadog:
           site: {{requiredEnv "DATADOG_SITE"}}
@@ -23,6 +25,7 @@ releases:
             enabled: true
             containerCollectAll: true
 
+  # https://github.com/traefik/traefik-helm-chart/blob/master/traefik
   - name: traefik
     namespace: ingress
     chart: traefik/traefik
@@ -36,10 +39,11 @@ releases:
             service.beta.kubernetes.io/oci-load-balancer-shape-flex-min: 10
             service.beta.kubernetes.io/oci-load-balancer-shape-flex-max: 10
 
+  # https://artifacthub.io/packages/helm/cert-manager/cert-manager
   - name: cert-manager
     namespace: cert-manager
     chart: jetstack/cert-manager
-    version: v1.4.0
+    version: v1.4.3
     values:
       - installCRDs: true
 
