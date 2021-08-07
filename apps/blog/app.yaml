@@ -1,6 +1,6 @@
 image:
   repository: eu-amsterdam-1.ocir.io/axpksneljs3y/nvd-codes/blog
-  tag: 8c642486c79cde26aed5fa56983fe72379794fb1
+  tag: fba6be5ede7674bdfb63c3ec55e678b209906dfd
 
 container:
   env:

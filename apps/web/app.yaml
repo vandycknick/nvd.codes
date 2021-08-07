@@ -1,6 +1,6 @@
 image:
   repository: eu-amsterdam-1.ocir.io/axpksneljs3y/nvd-codes/web
-  tag: 2c692817b9b6c96b840982a066922c7662ec3914
+  tag: fba6be5ede7674bdfb63c3ec55e678b209906dfd
 
 container:
   envFrom:
