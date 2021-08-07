@@ -111,11 +111,12 @@ export const getServerSideProps: GetServerSideProps<
       "editUrl",
       "images",
     ],
-  })
+  }).catch(() => undefined)
 
   if (post === undefined) {
     return notFound()
   }
+
   return {
     props: {
       post,
