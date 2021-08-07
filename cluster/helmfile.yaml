@@ -3,11 +3,25 @@ repositories:
     url: https://helm.traefik.io/traefik
   - name: jetstack
     url: https://charts.jetstack.io
+  - name: datadog
+    url: https://helm.datadoghq.com
 
 releases:
   - name: metrics-server
     namespace: kube-system
     chart: charts/metrics-server
+
+  - name: datadog
+    namespace: kube-system
+    chart: datadog/datadog
+    values:
+      - datadog:
+          site: {{requiredEnv "DATADOG_SITE"}}
+          apiKey: {{requiredEnv "DATADOG_API_TOKEN"}}
+          containerExcludeLogs: "kube_namespace:kube-system"
+          logs:
+            enabled: true
+            containerCollectAll: true
 
   - name: traefik
     namespace: ingress
