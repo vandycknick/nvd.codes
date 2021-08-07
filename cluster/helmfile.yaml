@@ -29,7 +29,7 @@ releases:
     version: 10.1.1
     values:
       - deployment:
-          replicas: 2
+          replicas: 3
         service:
           annotations:
             service.beta.kubernetes.io/oci-load-balancer-shape: "flexible"
