@@ -59,10 +59,6 @@ check:
 	$(NPM_BIN)/tsc -p $(WEB_PROJECT) --noEmit
 	yarn eslint . --ext .ts --ext .tsx --ext .js --ext .json --ignore-path .gitignore
 
-.PHONY: lint.infra
-lint.infra:
-	@cd infra && pipenv run black --check .
-
 .PHONY: test.unit
 test.unit:
 	NODE_ENV=test ${NPM_BIN}/jest --testPathIgnorePatterns '/(.dist|e2e)/'
