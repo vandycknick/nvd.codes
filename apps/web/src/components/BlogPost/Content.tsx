@@ -1,5 +1,5 @@
 import React, { createContext, ReactNode, useContext } from "react"
-import ReactMarkdown from "react-markdown"
+import ReactMarkdown, { Components } from "react-markdown"
 import gfm from "remark-gfm"
 import Image from "next/image"
 import {
@@ -26,7 +26,6 @@ import { imageLoader } from "components/Common/Image"
 
 const ContentsContext = createContext<Record<string, string>>({})
 
-type Components = ReactMarkdown.TransformOptions["components"]
 type Props = { children?: ReactNode[]; className?: string }
 
 const ParagraphComponent = ({ children }: Props) => (
@@ -245,7 +244,9 @@ const components: Components = {
   thead: Thead,
   tbody: Tbody,
   tr: Tr,
-  td: Td,
+  // TODO: FIX ME
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  td: Td as any,
 }
 
 type ContentsProps = {
@@ -255,7 +256,7 @@ type ContentsProps = {
 
 const Contents = ({ children, images }: ContentsProps) => (
   <ContentsContext.Provider value={images}>
-    <ReactMarkdown components={components} remarkPlugins={[gfm as any]}>
+    <ReactMarkdown components={components} remarkPlugins={[gfm]}>
       {children}
     </ReactMarkdown>
   </ContentsContext.Provider>
