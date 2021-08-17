@@ -4,7 +4,7 @@ title: "Hack The Box Luanne"
 description: In this post I walk you through how I solved Luanne from Hack the Box. This is an easy difficulty NetBSD box, focussing on fuzzing and code injection via Lua.
 date: 2021-03-28T20:00:00+01:00
 categories: [hack-the-box, luanne, netbsd, web, lua, injection, fuzzing]
-cover: ./assets/2021-03-28-hack-the-box-luanne/cover.png
+cover: ./assets/2021-03-28-hack-the-box-luanne/cover.jpg
 ---
 
 I recently managed to complete another machine on Hack the Box, and in this post, I want to walk you through the steps I took to solve it. Luanne got released as an easy difficulty NetBSD machine. I can't entirely agree with this difficulty level, as many others have also given this machine a lousy rating and got some critique in the forums. Nonetheless, I really enjoyed solving this machine. For me, the main problem was my lack of experience with BSD systems. It made me waste a lot of time getting my Linux reverse shell knowledge ported over to BSD. But forgetting that I was solving a BSD machine halfway through the challenge also didn't help! Let's dive into the machine and start our initial discovery with a nmap scan. The command will enumerate all versions `-sV`, run all default scripts `-sC`, and store the output in `nmap.txt` to refer back to it later.
