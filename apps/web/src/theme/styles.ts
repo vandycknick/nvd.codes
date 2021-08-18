@@ -14,6 +14,7 @@ const styles = {
     ".post-card-cover": {
       borderTopRadius: "md",
       opacity: "0.8",
+      height: "100%",
     },
   },
 }
