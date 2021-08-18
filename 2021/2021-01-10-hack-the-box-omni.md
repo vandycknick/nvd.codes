@@ -1,6 +1,6 @@
 ---
 id: 32c46470-bdde-411e-b1d1-8cff7b714d4f
-title: "Hack The Box Challenge Omni"
+title: "Hack The Box - Omni"
 description: In this post, I take on Omni from Hack The Box. It's labelled as an easy Windows challenge and puts a big emphasis and doing thorough reconnaissance. I very much enjoyed this box and proved to be quite a challenge.
 date: 2021-01-10T20:00:00+01:00
 categories: [hack-the-box, omni, windows, iot, web, powershell, python]
