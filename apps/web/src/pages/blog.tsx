@@ -1,11 +1,11 @@
 import React, { Fragment } from "react"
 import { GetServerSideProps } from "next"
-import { Box, Button, Heading, Text, VStack } from "@chakra-ui/react"
-import NextLink from "next/link"
+import { Heading, Text, VStack } from "@chakra-ui/react"
 
 import SEO from "components/Common/SEO"
 import { PostsList, PostsListProps } from "components/Blog/PostsList"
 import { listPosts } from "services/blog"
+import { PostsPager } from "components/Blog/PostsPager"
 
 type BlogProps = {
   posts: PostsListProps["posts"]
@@ -28,42 +28,7 @@ const Blog = ({ posts, pager }: BlogProps) => (
       </Text>
     </VStack>
     <PostsList posts={posts} />
-    <Box d="flex" justifyContent="center" py={4}>
-      {pager.current < 2 ? (
-        <Button colorScheme="teal" size="sm" w="70px" disabled>
-          Previous
-        </Button>
-      ) : (
-        <NextLink
-          href={pager.current === 2 ? "/blog" : "/blog/[page]"}
-          as={`/blog/${pager.current === 2 ? "" : pager.current - 1}`}
-          passHref
-        >
-          <Button colorScheme="teal" size="sm" w="70px" as="a">
-            Previous
-          </Button>
-        </NextLink>
-      )}
-
-      <Text d="flex" alignItems="center" mx={4}>
-        Page {pager.current} of {pager.total}
-      </Text>
-      {pager.current === pager.total ? (
-        <Button colorScheme="teal" size="sm" w="70px" disabled>
-          Next
-        </Button>
-      ) : (
-        <NextLink
-          href="/blog/[page]"
-          as={`/blog/${pager.current + 1}`}
-          passHref
-        >
-          <Button colorScheme="teal" size="sm" w="70px" as="a">
-            Next
-          </Button>
-        </NextLink>
-      )}
-    </Box>
+    <PostsPager {...pager} />
   </Fragment>
 )
 

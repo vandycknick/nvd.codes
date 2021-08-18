@@ -39,7 +39,7 @@ export const Image = ({
         w="full"
         h="full"
         css={placeholderCss}
-        style={{ filter: "blur(24px)", transform: "scale(1.2)" }}
+        style={{ filter: "blur(24px)" }}
       />
     )}
     <NextImage
@@ -48,6 +48,7 @@ export const Image = ({
       height={height ?? 300}
       width={width ?? 500}
       objectFit={objectFit}
+      layout="responsive"
       className={imageClassName}
     />
   </Box>
