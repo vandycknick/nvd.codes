@@ -33,7 +33,7 @@ export type PostCardProps = {
 
 export const PostCard = ({ post }: PostCardProps) => {
   const bg = useColorModeValue("transparent", "gray.700")
-  const textColor = useColorModeValue("gray.700", "gray.200")
+  const textColor = useColorModeValue("gray.600", "gray.200")
   return (
     <Flex
       key={post.id}
@@ -68,13 +68,13 @@ export const PostCard = ({ post }: PostCardProps) => {
             _hover={{ textDecoration: "none" }}
             _focus={{ outline: "hidden" }}
           >
-            <Heading as="h3" size="md" pb="2">
+            <Heading as="h3" size="md" mb="2">
               {post.title}
             </Heading>
           </Link>
         </NextLink>
         <Text
-          pb="4"
+          mb="6"
           flex="1"
           fontSize="medium"
           fontWeight="light"
@@ -86,7 +86,8 @@ export const PostCard = ({ post }: PostCardProps) => {
           direction="row"
           justifyContent="space-between"
           fontSize="small"
-          fontWeight="bold"
+          fontWeight="medium"
+          color={textColor}
         >
           <Box>
             <CalendarIcon mb="4px" mr="2" />
