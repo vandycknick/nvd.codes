@@ -20,9 +20,9 @@
     "bunyan": "^1.8.15",
     "koa": "^2.13.1",
     "koa-bunyan-logger": "^2.1.0",
-    "oci-common": "^2.1.0",
-    "oci-objectstorage": "^2.1.0",
-    "sharp": "^0.28.3"
+    "oci-common": "^2.2.0",
+    "oci-objectstorage": "^2.2.0",
+    "sharp": "^0.29.0"
   },
   "devDependencies": {
     "@nvd/tsconfig": "^1.0.0",
