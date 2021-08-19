@@ -247,6 +247,29 @@ resource "oci_core_security_list" "node_subnet_sec_list" {
     }
   }
 
+  ingress_security_rules {
+    protocol    = local.protocols.TCP
+    source      = module.subnet_addrs.network_cidr_blocks.service_lb_subnet
+    source_type = "CIDR_BLOCK"
+    stateless   = false
+
+    tcp_options {
+      max = 30973
+      min = 30973
+    }
+  }
+
+  ingress_security_rules {
+    protocol    = local.protocols.TCP
+    source      = module.subnet_addrs.network_cidr_blocks.service_lb_subnet
+    source_type = "CIDR_BLOCK"
+    stateless   = false
+
+    tcp_options {
+      max = 31954
+      min = 31954
+    }
+  }
 }
 
 resource "oci_core_subnet" "service_lb_subnet" {
@@ -296,6 +319,30 @@ resource "oci_core_security_list" "service_lb_sec_list" {
     tcp_options {
       max = 31728
       min = 31728
+    }
+  }
+
+  egress_security_rules {
+    destination      = module.subnet_addrs.network_cidr_blocks.node_subnet
+    destination_type = "CIDR_BLOCK"
+    protocol         = local.protocols.TCP
+    stateless        = false
+
+    tcp_options {
+      max = 30973
+      min = 30973
+    }
+  }
+
+  egress_security_rules {
+    destination      = module.subnet_addrs.network_cidr_blocks.node_subnet
+    destination_type = "CIDR_BLOCK"
+    protocol         = local.protocols.TCP
+    stateless        = false
+
+    tcp_options {
+      max = 31954
+      min = 31954
     }
   }
 
