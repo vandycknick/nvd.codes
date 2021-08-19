@@ -1,5 +1,5 @@
 resource "oci_identity_user" "nvd_codes_blog" {
-  compartment_id = var.tenancy_ocid
+  compartment_id = oci_identity_compartment.nvd_codes.id
   name           = "nvd-codes-blog"
   description    = "User used to authenticate blog-api with OCI"
 }
@@ -20,7 +20,7 @@ resource "oci_identity_api_key" "nvd_codes_blog_key" {
 }
 
 resource "oci_identity_group" "nvd_codes_bucket_wrangler" {
-  compartment_id = var.tenancy_ocid
+  compartment_id = oci_identity_compartment.nvd_codes.id
   name           = "nvd-codes-bucket-wrangler"
   description    = "Group to manage and read buckets and objects."
 }
@@ -31,14 +31,15 @@ resource "oci_identity_user_group_membership" "nvd_codes_blog_bucket_wrangler_me
 }
 
 resource "oci_identity_policy" "nvd_codes_bucket_wrangler_policy" {
-  compartment_id = var.tenancy_ocid
+  compartment_id = oci_identity_compartment.nvd_codes.id
   name           = "nvd-codes-bucket-wrangler"
   description    = "Gives access to nvd-codes-bucket-wrangler to manage and read buckets and objects."
 
   statements = [
     "Allow group nvd-codes-bucket-wrangler to read buckets in compartment nvd-codes",
     "Allow group nvd-codes-bucket-wrangler to read objects in compartment nvd-codes",
-    "Allow group nvd-codes-bucket-wrangler to manage objects in compartment nvd-codes where any {request.permission='OBJECT_CREATE', request.permission='OBJECT_INSPECT'}"
+    // https://docs.oracle.com/en-us/iaas/Content/Identity/Reference/objectstoragepolicyreference.htm#Details_for_Object_Storage_Archive_Storage_and_Data_Transfer
+    "Allow group nvd-codes-bucket-wrangler to manage objects in compartment nvd-codes where any {request.permission='OBJECT_CREATE', request.permission='OBJECT_INSPECT', request.permission='OBJECT_OVERWRITE'}"
   ]
 
   depends_on = [
