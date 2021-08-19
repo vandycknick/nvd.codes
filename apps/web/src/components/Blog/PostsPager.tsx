@@ -1,5 +1,6 @@
 import React from "react"
-import { Box, Flex } from "@chakra-ui/react"
+import { Box, Divider, Flex } from "@chakra-ui/react"
+import { ArrowBackIcon, ArrowForwardIcon } from "@chakra-ui/icons"
 import Link from "next/link"
 
 type PostsPagerProps = {
@@ -15,33 +16,79 @@ export const PostsPager = ({ total, current }: PostsPagerProps) => {
     .map((_, index) => index + 1)
 
   return (
-    <Flex justifyContent="center" my="8">
-      {pages.map((page) => {
-        const disabled = page === current
-        const href = getBlogUrl(page)
-        return (
-          <Link key={page} href={href} passHref>
-            <Box
-              as="a"
-              borderRadius="full"
-              backgroundColor={disabled ? "teal.600" : "teal.300"}
-              pt="5px"
-              mx="2"
-              width="30px"
-              height="30px"
-              fontWeight="bold"
-              textAlign="center"
-              // disabled={page === current}
-              _hover={{
-                bg: disabled ? "teal.600" : "teal.500",
-                cursor: disabled ? "not-allowed" : "pointer",
-              }}
-            >
-              {page}
-            </Box>
-          </Link>
-        )
-      })}
-    </Flex>
+    <Box mt="8" mb="12">
+      <Divider />
+      <Flex direction="row" justifyContent="space-between">
+        <Link href={getBlogUrl(1)} passHref>
+          <Box
+            as="a"
+            fontWeight="bold"
+            pt="4"
+            color="gray.200"
+            display="inline-flex"
+            alignSelf="center"
+            _hover={{
+              cursor: current === 1 ? "not-allowed" : "pointer",
+            }}
+          >
+            <ArrowBackIcon mr="2" top=".125em" position="relative" />
+            Previous
+          </Box>
+        </Link>
+        <Flex
+          display={{ base: "none", md: "flex" }}
+          justifyContent="center"
+          flex="1"
+        >
+          {pages.map((page) => {
+            const isCurrentPage = page === current
+            const href = getBlogUrl(page)
+            const onLinkClick = (event: React.MouseEvent) => {
+              if (isCurrentPage) {
+                event.preventDefault()
+                event.stopPropagation()
+              }
+            }
+
+            return (
+              <Link key={page} href={href} passHref>
+                <Box
+                  as="a"
+                  pt="4"
+                  px="5"
+                  mt="-1px"
+                  fontWeight="bold"
+                  color={isCurrentPage ? "teal.500" : "gray.200"}
+                  borderTop="2px solid"
+                  borderTopColor={isCurrentPage ? "teal.500" : "transparent"}
+                  _hover={{
+                    cursor: isCurrentPage ? "not-allowed" : "pointer",
+                  }}
+                  onClick={onLinkClick}
+                >
+                  {page}
+                </Box>
+              </Link>
+            )
+          })}
+        </Flex>
+        <Link href={getBlogUrl(total)} passHref>
+          <Box
+            as="a"
+            fontWeight="bold"
+            pt="4"
+            color="gray.200"
+            display="inline-flex"
+            alignSelf="center"
+            _hover={{
+              cursor: current === total ? "not-allowed" : "pointer",
+            }}
+          >
+            Next
+            <ArrowForwardIcon ml="2" top=".125em" position="relative" />
+          </Box>
+        </Link>
+      </Flex>
+    </Box>
   )
 }

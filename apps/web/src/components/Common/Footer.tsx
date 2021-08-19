@@ -5,7 +5,7 @@ import { ExternalLinkIcon } from "@chakra-ui/icons"
 const Footer = () => {
   const bg = useColorModeValue("gray.50", "gray.900")
   return (
-    <VStack bg={bg} py={4} as="footer">
+    <VStack bg={bg} pt="8" pb="4" as="footer">
       <Text>
         <strong>nvd.codes &nbsp;</strong>is handcrafted with ❤️&nbsp;
         <Link
