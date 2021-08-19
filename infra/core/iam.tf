@@ -1,5 +1,5 @@
 resource "oci_identity_user" "nvd_codes_blog" {
-  compartment_id = oci_identity_compartment.nvd_codes.id
+  compartment_id = var.tenancy_ocid
   name           = "nvd-codes-blog"
   description    = "User used to authenticate blog-api with OCI"
 }
@@ -20,7 +20,7 @@ resource "oci_identity_api_key" "nvd_codes_blog_key" {
 }
 
 resource "oci_identity_group" "nvd_codes_bucket_wrangler" {
-  compartment_id = oci_identity_compartment.nvd_codes.id
+  compartment_id = var.tenancy_ocid
   name           = "nvd-codes-bucket-wrangler"
   description    = "Group to manage and read buckets and objects."
 }
