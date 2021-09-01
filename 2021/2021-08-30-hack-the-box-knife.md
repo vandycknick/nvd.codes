@@ -1,6 +1,6 @@
 ---
 id: cb976831-a0d0-4709-9884-e7084b3b1aaf
-title: "Hack The Box Knife"
+title: "Hack The Box - Knife"
 description: In this post, I'll go over Knife from Hack the Box. It's an easy level Linux machine that shows what damage a supply chain attack on the PHP codebase could have caused if it would have slipped through the cracks and got released into the wild.
 date: 2021-08-30T20:00:00+01:00
 categories: [hack-the-box, writeup, knife, php, backdoor, chef]
