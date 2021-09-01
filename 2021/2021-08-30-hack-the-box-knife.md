@@ -9,7 +9,7 @@ cover: ./assets/2021-08-30-hack-the-box-knife/cover.jpg
 
 Knife is one of the easier boxes on HTB. There are only two significant steps involved. The first step is noticing a header in the HTTP request that contains a weird PHP version. Looking for this version online shows that this particular PHP version has a backdoor inserted when the PHP development servers were hacked back in March of 2021. Once on the box, there is a setuid binary called knife. This binary is part of Chef, which is a collection of DevOps tools. Going through the docs show that arbitrary code execution is possible to get access to the root user.
 
-# Enumeration
+## Enumeration
 I am kicking off a nmap scan to understand better what services and ports the target machine is exposing. With arguments`-sV` to enumerate versions, `-sC` to run all default scripts, and store the output in a file named `nmap.txt`. Dumping the output to a log file makes it easy to refer back to later, or if you want to embed it in your blog, as I do.
 
 ```sh
