@@ -1,23 +1,11 @@
 .DEFAULT_GOAL: build
 
-ROOT			:= $(shell pwd)
-NPM_BIN 		:= $(shell yarn bin)
+ROOT		:= $(shell pwd)
+NPM_BIN 	:= $(shell yarn bin)
 
-WATCH 			:= "0"
-WATCH_FLAGS 	:= $(if $(filter-out 1,$(WATCH)), "", "--watch")
-
-FIX 			:= "0"
-UPDATE_FLAGS 	:= $(if $(filter-out 1,$(FIX)), "", "--update-snapshot")
-
-INFRA			:= $(ROOT)/infra
-API_PROJECT 	:= $(ROOT)/apps/api
-BLOG_PROJECT	:= $(ROOT)/apps/blog
-IMAGES_PROJECT	:= $(ROOT)/apps/images
-WEB_PROJECT 	:= $(ROOT)/apps/web
-
-.PHONY: install
-install:
-	@$(MAKE) install.yarn install.pulumi
+.PHONY: setup
+setup:
+	@$(MAKE) install.yarn
 
 .PHONY: install.yarn
 install.yarn:
@@ -50,13 +38,18 @@ dev.images:
 dev.web:
 	@yarn workspace @nvd.codes/web dev
 
-
 .PHONY: check
 check:
-	$(NPM_BIN)/tsc -p $(API_PROJECT) --noEmit
-	$(NPM_BIN)/tsc -p $(BLOG_PROJECT) --noEmit
-	$(NPM_BIN)/tsc -p $(IMAGES_PROJECT) --noEmit
-	$(NPM_BIN)/tsc -p $(WEB_PROJECT) --noEmit
+	$(MAKE) check.types
+	$(MAKE) check.lint
+
+.PHONY: check.types
+check.types:
+	@find . -name 'package.json' -not -path '*/node_modules/*' | sed "s/\.\///" | \
+		xargs -n 1 dirname | grep -v "\." | xargs -n 1 -I% -P8 bash -c 'cd % && yarn tsc --noEmit'
+
+.PHONY: check.lint
+check.lint:
 	yarn eslint . --ext .ts --ext .tsx --ext .js --ext .json --ignore-path .gitignore
 
 .PHONY: test.unit
@@ -71,43 +64,17 @@ test.watch:
 test.fix:
 	NODE_ENV=test ${NPM_BIN}/jest --testPathIgnorePatterns '/(.dist|e2e)/' --update-snapshot
 
-.PHONY: build.libs
-build.libs:
-	yarn workspace @nvd.codes/contracts tsc
-	yarn workspace @nvd.codes/http tsc
-	yarn workspace @nvd.codes/utils tsc
-
 .PHONY: build
-build: clean build.libs
-	yarn workspace @nvd.codes/api build
-	yarn workspace @nvd.codes/blog build
-	yarn workspace @nvd.codes/images build
-	yarn workspace @nvd.codes/web build
+build: clean
+	@find . -name 'package.json' -path '*/libs/*' -not -path '*/node_modules/*' | sed "s/\.\///" | \
+		xargs -n 1 dirname | grep -v "\." | xargs -n 1 -I% -P2 bash -c 'cd % && yarn tsc'
+	@find . -name 'package.json' -path '*/apps/*' -not -path '*/node_modules/*' | sed "s/\.\///" | \
+		xargs -n 1 dirname | grep -v "\." | xargs -n 1 -I% -P8 bash -c 'cd % && yarn build'
 
 .PHONY: build.docker
+build.docker: COMMIT_SHA=$(shell git log -1 --pretty=format:"%H")
 build.docker:
-	$(MAKE) build.api
-	$(MAKE) build.blog
-	$(MAKE) build.images
-	$(MAKE) build.web
-
-.PHONY: build.api
-build.api: COMMIT_SHA=$(shell git log -1 --pretty=format:"%H")
-build.api:
-	docker buildx build --platform linux/arm64 -f apps/api/Dockerfile -t eu-amsterdam-1.ocir.io/axpksneljs3y/nvd-codes/api:${COMMIT_SHA} --push .
-
-.PHONY: build.blog
-build.blog: COMMIT_SHA=$(shell git log -1 --pretty=format:"%H")
-build.blog:
-	# docker build -f apps/blog/Dockerfile -t eu-amsterdam-1.ocir.io/axpksneljs3y/nvd-codes/blog:${COMMIT_SHA} .
-	docker buildx build --platform linux/arm64 -f apps/blog/Dockerfile -t eu-amsterdam-1.ocir.io/axpksneljs3y/nvd-codes/blog:${COMMIT_SHA} --push .
-
-.PHONY: build.images
-build.images: COMMIT_SHA=$(shell git log -1 --pretty=format:"%H")
-build.images:
-	docker buildx build --platform linux/arm64 -f apps/images/Dockerfile -t eu-amsterdam-1.ocir.io/axpksneljs3y/nvd-codes/images:${COMMIT_SHA} --push .
-
-.PHONY: build.web
-build.web: COMMIT_SHA=$(shell git log -1 --pretty=format:"%H")
-build.web:
-	docker buildx build --platform linux/arm64 -f apps/web/Dockerfile -t eu-amsterdam-1.ocir.io/axpksneljs3y/nvd-codes/web:${COMMIT_SHA} --push .
+	# $(MAKE) build
+	@find . -name 'package.json' -path '*/apps/*' -not -path '*/node_modules/*' | \
+		sed "s/\.\///" | xargs -n 1 dirname | grep -v "\." | \
+		xargs -n 1 -I% -P1 bash -c 'echo "Building image for %"; docker buildx build --platform linux/arm64 -f %/Dockerfile -t eu-amsterdam-1.ocir.io/axpksneljs3y/nvd-codes/$$(echo % | sed "s/apps\///"):${COMMIT_SHA} .'
