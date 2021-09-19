@@ -104,7 +104,9 @@ export const upsertPosts = async ({ job }: SyncPostsOptions) => {
     job.messages.push("Finished!")
   } catch (error) {
     logger.error({ ex: error })
-    job.error = error.message
+    if (error instanceof Error) {
+      job.error = error.message
+    }
   } finally {
     job.finishedAt = new Date(Date.now())
     await syncRepository.save(job).catch((error) => {

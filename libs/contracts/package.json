@@ -5,10 +5,10 @@
   "main": "./.dist/index.js",
   "license": "MIT",
   "dependencies": {
-    "@trpc/server": "^8.4.2",
-    "zod": "^3.7.2"
+    "@trpc/server": "^9.6.1",
+    "zod": "^3.8.2"
   },
   "devDependencies": {
-    "typescript": "^4.3.5"
+    "typescript": "^4.4.3"
   }
 }

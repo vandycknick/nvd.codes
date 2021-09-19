@@ -8,7 +8,7 @@ import bodyParser from "koa-bodyparser"
 import { createBlogRouter } from "@nvd.codes/contracts"
 
 import { createKoaMiddleware } from "./utils"
-import { AppContext, createContext } from "./context"
+import { createContext } from "./context"
 import { getHealth } from "./controllers/getHealth"
 import { getPostBySlug } from "./controllers/getPostBySlug"
 import { syncPosts } from "./controllers/syncPosts"
@@ -35,12 +35,6 @@ app.use(async (ctx, next) => {
   })
 })
 
-//TODO: FIX THIS
-app.use(async (ctx, next) => {
-  await createContext(ctx)
-  await next()
-})
-
 router.get("/health", async (ctx) => {
   const result = await getHealth(ctx)
   ctx.set(result.headers ?? {})
@@ -60,7 +54,7 @@ app.use(router.allowedMethods())
 
 app.use(
   createKoaMiddleware({
-    router: createBlogRouter<AppContext>({
+    router: createBlogRouter({
       getPostBySlug,
       listPosts,
     }),

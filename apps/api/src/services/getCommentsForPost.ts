@@ -122,7 +122,7 @@ const getCommentsForPost = async (slug: string): Promise<PostComments> => {
     }),
   })
 
-  const graph: GraphQLResponse = await response.json()
+  const graph = (await response.json()) as GraphQLResponse
 
   if (graph.data?.repository == undefined) {
     throw new Error("No data returned!")

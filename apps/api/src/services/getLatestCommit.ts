@@ -72,7 +72,7 @@ const getLatestCommit = async (): Promise<Commit> => {
     }),
   })
 
-  const graph: GraphQLResponse = await response.json()
+  const graph = (await response.json()) as GraphQLResponse
   const node = graph.data.viewer.repositories.nodes[0].object.history.nodes[0]
 
   return {

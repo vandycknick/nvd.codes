@@ -1,14 +1,11 @@
 import { BlogController } from "@nvd.codes/contracts"
-import { getRepository } from "typeorm"
 import { TRPCError } from "@trpc/server"
-
 import { AppContext } from "../context"
-import { PostEntity } from "../entity/Post"
 
 type GetPostBySlug = BlogController<AppContext>["getPostBySlug"]
 
-export const getPostBySlug: GetPostBySlug = async ({ input }) => {
-  const postsRepository = getRepository(PostEntity)
+export const getPostBySlug: GetPostBySlug = async ({ input, ctx }) => {
+  const { postsRepository } = ctx
 
   const post = await postsRepository.findOne(
     { slug: input.slug },
@@ -17,7 +14,7 @@ export const getPostBySlug: GetPostBySlug = async ({ input }) => {
 
   if (post == undefined) {
     throw new TRPCError({
-      code: "PATH_NOT_FOUND",
+      code: "NOT_FOUND",
       message: `No post found for ${input.slug}.`,
     })
   }
