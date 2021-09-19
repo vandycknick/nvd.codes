@@ -79,8 +79,8 @@ resource "oci_containerengine_node_pool" "nvd_codes_pool_2" {
   }
 
   node_source_details {
-    # https://docs.oracle.com/en-us/iaas/images/image/3ca33eae-c31d-4dac-b86e-914e32b19fb2/
-    image_id    = "ocid1.image.oc1.eu-amsterdam-1.aaaaaaaaavj6losrzcyol3spv3da2xf6qskfizyqw7fajq5xekimbcn74gsa"
+    # https://docs.oracle.com/en-us/iaas/images/image/6bf73d2b-8465-4dff-98b7-ad8798ec4dda/
+    image_id    = "ocid1.image.oc1.eu-amsterdam-1.aaaaaaaamlbp3cerkom2e5rcbvaxce4zunkhu6tt7y2jekqo2zq6onwmw74q"
     source_type = "image"
   }
 
