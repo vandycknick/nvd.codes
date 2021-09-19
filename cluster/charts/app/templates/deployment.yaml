@@ -24,6 +24,16 @@ spec:
         {{ toYaml . | nindent 8 }}
       {{- end }}
     spec:
+      affinity:
+        podAntiAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+          - labelSelector:
+              matchExpressions:
+              - key: app.kubernetes.io/name
+                operator: In
+                values:
+                - {{ include "app.name" . }}
+            topologyKey: "kubernetes.io/hostname"
       containers:
       - name: {{ include "app.name" . }}
         image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
