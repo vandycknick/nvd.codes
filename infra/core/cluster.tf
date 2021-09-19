@@ -27,7 +27,7 @@ resource "oci_containerengine_cluster" "nvd_codes_cluster" {
 }
 
 resource "oci_containerengine_node_pool" "nvd_codes_pool_1" {
-  count              = 1
+  count              = 0
   cluster_id         = oci_containerengine_cluster.nvd_codes_cluster.id
   compartment_id     = oci_identity_compartment.nvd_codes.id
   kubernetes_version = "v1.20.8"
@@ -69,7 +69,7 @@ resource "oci_containerengine_node_pool" "nvd_codes_pool_2" {
       availability_domain = data.oci_identity_availability_domains.ads.availability_domains[0].name
       subnet_id           = oci_core_subnet.node_subnet.id
     }
-    size = 1
+    size = 3
   }
   node_shape = "VM.Standard.A1.Flex"
 
