@@ -1,22 +1,9 @@
 import {
   AnyRouter,
-  CreateContextFn,
-  CreateContextFnOptions,
-  requestHandler,
+  inferRouterContext,
+  resolveHTTPResponse,
 } from "@trpc/server"
 import { Middleware } from "koa"
-import { IncomingMessage, ServerResponse } from "http"
-
-export type CreateKoaContextOptions = CreateContextFnOptions<
-  IncomingMessage,
-  ServerResponse
->
-
-export type CreateKoaContextFn<TRouter extends AnyRouter> = CreateContextFn<
-  TRouter,
-  IncomingMessage,
-  ServerResponse
->
 
 export const createKoaMiddleware =
   <TRouter extends AnyRouter>({
@@ -24,21 +11,35 @@ export const createKoaMiddleware =
     createContext,
   }: {
     router: TRouter
-    createContext: CreateKoaContextFn<TRouter>
+    createContext: () => Promise<inferRouterContext<TRouter>>
   }): Middleware =>
   async (context) => {
     const endpoint = context.request.path.substr(1) ?? ""
 
-    await requestHandler<
-      TRouter,
-      CreateKoaContextFn<TRouter>,
-      IncomingMessage,
-      ServerResponse
-    >({
+    const request = {
+      method: context.request.method,
+      query: new URLSearchParams(context.request.querystring),
+      headers: context.request.headers,
+      body: context.request.body,
+    }
+
+    const response = await resolveHTTPResponse({
       createContext,
-      req: context.req,
-      res: context.res,
+      req: request,
       path: endpoint,
       router,
     })
+
+    const headers = response.headers ?? {}
+
+    Object.keys(headers).forEach((header) => {
+      const value = headers[header]
+
+      if (value !== undefined) {
+        context.set(header, value)
+      }
+    })
+
+    context.response.status = response.status
+    context.response.body = response.body
   }

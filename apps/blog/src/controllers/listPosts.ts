@@ -1,13 +1,11 @@
 import { BlogController } from "@nvd.codes/contracts"
-import { getRepository } from "typeorm"
 import { AppContext } from "../context"
-import { PostEntity } from "../entity/Post"
 
 type ListPosts = BlogController<AppContext>["listPosts"]
 
-export const listPosts: ListPosts = async ({ input }) => {
+export const listPosts: ListPosts = async ({ input, ctx }) => {
   const { skip, take } = input
-  const postsRepository = getRepository(PostEntity)
+  const { postsRepository } = ctx
 
   const [posts, total] = await postsRepository.findAndCount({
     order: {

@@ -68,7 +68,7 @@ const getLatestRepositories = async (take = 6): Promise<Repository[]> => {
     }),
   })
 
-  const graph: GraphQLResponse = await response.json()
+  const graph = (await response.json()) as GraphQLResponse
   return graph.data.viewer.repositories.nodes.map((repo) => {
     return {
       id: repo.id,
