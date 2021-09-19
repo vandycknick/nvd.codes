@@ -2,6 +2,8 @@ image:
   repository: eu-amsterdam-1.ocir.io/axpksneljs3y/nvd-codes/images
   tag: bdec2e0f76c48e34f9be7ea19ddab0cbe148f56d
 
+replicas: 2
+
 container:
   env:
     - name: LOG_LEVEL
