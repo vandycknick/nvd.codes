@@ -74,7 +74,7 @@ build: clean
 .PHONY: build.docker
 build.docker: COMMIT_SHA=$(shell git log -1 --pretty=format:"%H")
 build.docker:
-	# $(MAKE) build
+	$(MAKE) build
 	@find . -name 'package.json' -path '*/apps/*' -not -path '*/node_modules/*' | \
 		sed "s/\.\///" | xargs -n 1 dirname | grep -v "\." | \
-		xargs -n 1 -I% -P1 bash -c 'echo "Building image for %"; docker buildx build --platform linux/arm64 -f %/Dockerfile -t eu-amsterdam-1.ocir.io/axpksneljs3y/nvd-codes/$$(echo % | sed "s/apps\///"):${COMMIT_SHA} .'
+		xargs -n 1 -I% -P1 bash -c 'echo "Building image for %"; docker buildx build --platform linux/arm64 -f %/Dockerfile -t eu-amsterdam-1.ocir.io/axpksneljs3y/nvd-codes/$$(echo % | sed "s/apps\///"):${COMMIT_SHA} --push .'
