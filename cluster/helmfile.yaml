@@ -29,15 +29,15 @@ releases:
   - name: traefik
     namespace: ingress
     chart: traefik/traefik
-    version: 10.1.1
+    version: 10.3.4
     values:
       - deployment:
           replicas: 3
         service:
           annotations:
             service.beta.kubernetes.io/oci-load-balancer-shape: "flexible"
-            service.beta.kubernetes.io/oci-load-balancer-shape-flex-min: 10
-            service.beta.kubernetes.io/oci-load-balancer-shape-flex-max: 10
+            service.beta.kubernetes.io/oci-load-balancer-shape-flex-min: "10"
+            service.beta.kubernetes.io/oci-load-balancer-shape-flex-max: "10"
 
   # https://artifacthub.io/packages/helm/cert-manager/cert-manager
   - name: cert-manager
