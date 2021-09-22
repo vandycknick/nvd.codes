@@ -1,4 +1,6 @@
-FROM node:16-alpine AS builder
+ARG NODE_VERSION
+
+FROM node:$NODE_VERSION-alpine AS builder
 
 ARG NODE_ENV=production
 ENV NODE_ENV=${NODE_ENV}
@@ -17,7 +19,7 @@ COPY libs/ libs/
 
 RUN yarn workspace @nvd.codes/blog install --frozen-lock-file
 
-FROM node:16.5.0-alpine as base
+FROM node:$NODE_VERSION-alpine as base
 
 ARG NODE_ENV=production
 ENV NODE_ENV=${NODE_ENV}
