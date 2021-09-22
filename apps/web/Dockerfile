@@ -1,4 +1,6 @@
-FROM node:16.5.0-alpine
+ARG NODE_VERSION
+
+FROM node:$NODE_VERSION-alpine
 
 ARG NODE_ENV=production
 ENV NODE_ENV=${NODE_ENV}
