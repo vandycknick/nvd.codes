@@ -10,17 +10,31 @@ export class ImageEntity {
   @Column()
   url: string
 
-  @Column({ type: "clob" })
-  placeholder: string
+  @Column()
+  width: number
+
+  @Column()
+  height: number
 
   @Column()
   sha256: string
 
+  @Column({ type: "clob" })
+  placeholder: string
+
   @ManyToOne(() => PostEntity, (post) => post.images)
   post!: PostEntity
 
-  constructor(url: string, sha256: string, placeholder: string) {
+  constructor(
+    url: string,
+    width: number,
+    height: number,
+    sha256: string,
+    placeholder: string,
+  ) {
     this.url = url
+    this.width = width
+    this.height = height
     this.sha256 = sha256
     this.placeholder = placeholder
   }

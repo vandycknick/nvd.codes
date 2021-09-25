@@ -20,6 +20,8 @@ export interface Post {
 export interface Image {
   url: string
   placeholder: string
+  width: number
+  height: number
 }
 
 export interface GetPostBySlugRequest {
