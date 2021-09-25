@@ -23,6 +23,7 @@
     "@trpc/server": "^9.6.1",
     "bunyan": "^1.8.15",
     "gray-matter": "^4.0.3",
+    "image-size": "^1.0.0",
     "koa": "^2.13.1",
     "koa-bodyparser": "^4.3.0",
     "koa-bunyan-logger": "^2.1.0",

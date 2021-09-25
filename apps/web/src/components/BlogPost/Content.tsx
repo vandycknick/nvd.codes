@@ -1,4 +1,4 @@
-import React, { createContext, ReactNode, useContext } from "react"
+import React, { createContext, ReactNode, useContext, useState } from "react"
 import ReactMarkdown, { Components } from "react-markdown"
 import gfm from "remark-gfm"
 import Image from "next/image"
@@ -24,7 +24,12 @@ import { dracula } from "react-syntax-highlighter/dist/cjs/styles/prism"
 
 import { imageLoader } from "components/Common/Image"
 
-const ContentsContext = createContext<Record<string, string>>({})
+type ImageData = {
+  placeholder: string
+  width: number
+  height: number
+}
+const ContentsContext = createContext<Record<string, ImageData>>({})
 
 type Props = { children?: ReactNode[]; className?: string }
 
@@ -137,20 +142,22 @@ const LinkComponent = ({ children, href }: Props & { href: string }) => (
 
 const ImageComponent = (props: Props & { src: string; alt: string }) => {
   const images = useContext(ContentsContext)
+  const [isPlaceHolderVisible, setPlaceHolderVisibility] = useState(true)
   const { src, alt } = props
-  const placeholder = images[src]
+  const img = images[src]
   return (
     <Box py="6" m="0 auto" maxW="800px">
       <Box position="relative">
         <Box
           css={{
-            backgroundImage: `url('${placeholder}')`,
+            backgroundImage: `url('${img.placeholder}')`,
             backgroundRepeat: "no-repeat",
             backgroundSize: "cover",
             overflow: "hidden",
             position: "absolute",
             filter: "blur(10px)",
             transform: "scale(0.96)",
+            display: isPlaceHolderVisible ? "block" : "none",
           }}
           w="100%"
           h="100%"
@@ -161,8 +168,12 @@ const ImageComponent = (props: Props & { src: string; alt: string }) => {
           loading="lazy"
           src={src}
           alt={alt}
-          width={600}
-          height={350}
+          width={img.width}
+          height={img.height}
+          onLoadingComplete={() => {
+            // TODO: FIX ME
+            setTimeout(() => setPlaceHolderVisibility(false), 300)
+          }}
         />
       </Box>
     </Box>
@@ -251,7 +262,7 @@ const components: Components = {
 
 type ContentsProps = {
   children: string
-  images: Record<string, string>
+  images: Record<string, ImageData>
 }
 
 const Contents = ({ children, images }: ContentsProps) => (

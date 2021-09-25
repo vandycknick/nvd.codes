@@ -35,6 +35,12 @@ app.use(async (ctx, next) => {
   })
 })
 
+//TODO: Required for non trpc endpoints. Because otherwise they don't work before executing a trpc call.
+app.use(async (_, next) => {
+  await createContext()
+  await next()
+})
+
 router.get("/health", async (ctx) => {
   const result = await getHealth(ctx)
   ctx.set(result.headers ?? {})

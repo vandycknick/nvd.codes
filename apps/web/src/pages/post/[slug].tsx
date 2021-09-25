@@ -71,9 +71,9 @@ const BlogPost = ({ post }: BlogPostProps) => {
         </VStack>
         <Contents
           images={post.images.reduce((map, image) => {
-            map[image.url] = image.placeholder
+            map[image.url] = image
             return map
-          }, {} as Record<string, string>)}
+          }, {} as Record<string, Image>)}
         >
           {post.content}
         </Contents>

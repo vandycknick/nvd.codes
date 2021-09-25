@@ -36,6 +36,8 @@ export const getPostBySlug: GetPostBySlug = async ({ input, ctx }) => {
     images: post.images.map((image) => ({
       url: image.url,
       placeholder: image.placeholder,
+      width: image.width,
+      height: image.height,
     })),
   }
 }
