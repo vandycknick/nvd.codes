@@ -146,22 +146,32 @@ const ImageComponent = (props: Props & { src: string; alt: string }) => {
   const { src, alt } = props
   const img = images[src]
   return (
-    <Box py="6" m="0 auto" maxW="800px">
-      <Box position="relative">
-        <Box
-          css={{
-            backgroundImage: `url('${img.placeholder}')`,
-            backgroundRepeat: "no-repeat",
-            backgroundSize: "cover",
-            overflow: "hidden",
-            position: "absolute",
-            filter: "blur(10px)",
-            transform: "scale(0.96)",
-            display: isPlaceHolderVisible ? "block" : "none",
-          }}
-          w="100%"
-          h="100%"
-        />
+    <Box my="6" mx="auto" maxW="800px" position="relative">
+      <Box
+        css={{
+          backgroundImage: `url('${img.placeholder}')`,
+          backgroundRepeat: "no-repeat",
+          backgroundSize: "cover",
+          overflow: "hidden",
+          position: "absolute",
+          filter: "blur(5px)",
+          transform: "scale(0.96)",
+          objectFit: "cover",
+          objectPosition: "center center",
+          opacity: isPlaceHolderVisible ? "1" : "0",
+          transitionDelay: "500ms",
+          top: 0,
+          bottom: 0,
+          right: 0,
+          left: 0,
+        }}
+      />
+      <Box
+        css={{
+          opacity: isPlaceHolderVisible ? 0 : 1,
+          transition: "opacity 500ms ease 0s",
+        }}
+      >
         <Image
           layout="responsive"
           loader={imageLoader}
