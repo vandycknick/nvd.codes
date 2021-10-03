@@ -27,11 +27,13 @@ type BlogPostProps = {
     Post,
     | "title"
     | "description"
+    | "cover"
     | "date"
     | "slug"
     | "readingTime"
     | "content"
     | "editUrl"
+    | "categories"
   > & { images: Image[] }
 }
 
@@ -48,7 +50,22 @@ const BlogPost = ({ post }: BlogPostProps) => {
 
   return (
     <Fragment>
-      <SEO title={post.title} description={post.description} />
+      <SEO
+        title={post.title}
+        description={post.description}
+        openGraph={{
+          type: "article",
+          url: `https://nvd.codes/post/${post.slug}`,
+          images: [
+            { url: `https://images.nvd.codes${post.cover}?w=1920&q=75` },
+          ],
+          article: {
+            publishedTime: post.date,
+            tags: post.categories,
+            authors: ["Nick Van Dyck"],
+          },
+        }}
+      />
       <Box as="article" w="100%" pb={4}>
         <VStack mb={8}>
           <Heading size="2xl" textAlign="center" pb={4}>
@@ -113,12 +130,14 @@ export const getServerSideProps: GetServerSideProps<
       "id",
       "title",
       "description",
+      "cover",
       "date",
       "slug",
       "readingTime",
       "content",
       "editUrl",
       "images",
+      "categories",
     ],
   }).catch(() => undefined)
 

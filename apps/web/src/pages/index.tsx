@@ -15,7 +15,14 @@ interface HomeProps {
 
 const Home: React.FC<HomeProps> = ({ latestPosts }) => (
   <Fragment>
-    <SEO title="Home" />
+    <SEO
+      title="Nick Van Dyck | nvd.codes"
+      description="Hi, I'm Nick and this is my blog. This is the place where I share about my experiences as journey through the world of Software Engineering."
+      openGraph={{
+        type: "website",
+        url: "https://nvd.codes",
+      }}
+    />
     <Greeting
       githubUrl="https://github.com/nickvdyck"
       siteUrl="https://nvd.codes"
