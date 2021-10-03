@@ -1,5 +1,5 @@
-import React from "react"
-import NextImage, { ImageLoaderProps, ImageProps } from "next/image"
+import React, { useState } from "react"
+import NextImage, { ImageLoaderProps } from "next/image"
 import { Box, BoxProps } from "@chakra-ui/react"
 
 export const imageLoader = ({
@@ -14,42 +14,74 @@ export const imageLoader = ({
   return `${host}${src}?w=${width}&q=${quality ?? 75}`
 }
 
-type PlaceholderProps = {
-  placeholderCss?: Record<string, string>
-}
+declare type ImgElementStyle = NonNullable<
+  JSX.IntrinsicElements["img"]["style"]
+>
 
-type ImageStylingProps = {
-  imageClassName?: string
-}
+type ImageWithPlaceholderProps = {
+  src: string
+  alt?: string
+  width?: number | string
+  height?: number | string
+  objectFit?: ImgElementStyle["objectFit"]
+  placeholder: string
+} & BoxProps
 
-export const Image = ({
+export const Image = NextImage
+
+export const ImageWithPlaceholder = ({
   src,
+  alt,
   height,
   width,
   objectFit,
-  placeholderCss,
-  imageClassName,
+  placeholder,
   ...rest
-}: ImageProps & BoxProps & PlaceholderProps & ImageStylingProps) => (
-  <Box position="relative" overflow="hidden" {...rest}>
-    {placeholderCss && (
+}: ImageWithPlaceholderProps) => {
+  const [isPlaceHolderVisible, setPlaceHolderVisibility] = useState(true)
+
+  return (
+    <Box position="relative" overflow="hidden" {...rest}>
       <Box
-        pos="absolute"
-        inset={0}
-        w="full"
-        h="full"
-        css={placeholderCss}
-        style={{ filter: "blur(24px)" }}
+        css={{
+          backgroundImage: `url('${placeholder}')`,
+          backgroundRepeat: "no-repeat",
+          backgroundSize: "cover",
+          overflow: "hidden",
+          position: "absolute",
+          filter: "blur(5px)",
+          transform: "scale(0.96)",
+          objectFit: "cover",
+          objectPosition: "center center",
+          opacity: isPlaceHolderVisible ? "1" : "0",
+          transitionDelay: "500ms",
+          top: 0,
+          bottom: 0,
+          right: 0,
+          left: 0,
+        }}
       />
-    )}
-    <NextImage
-      loader={imageLoader}
-      src={src as string}
-      height={height ?? 300}
-      width={width ?? 500}
-      objectFit={objectFit}
-      layout="responsive"
-      className={imageClassName}
-    />
-  </Box>
-)
+      <Box
+        css={{
+          opacity: isPlaceHolderVisible ? 0 : 1,
+          transition: "opacity 500ms ease 0s",
+        }}
+      >
+        <Image
+          layout="responsive"
+          loader={imageLoader}
+          loading="lazy"
+          src={src}
+          alt={alt}
+          width={width}
+          height={height}
+          objectFit={objectFit}
+          onLoadingComplete={() => {
+            // TODO: FIX ME
+            setTimeout(() => setPlaceHolderVisibility(false), 300)
+          }}
+        />
+      </Box>
+    </Box>
+  )
+}

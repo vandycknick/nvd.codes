@@ -1,7 +1,6 @@
-import React, { createContext, ReactNode, useContext, useState } from "react"
+import React, { createContext, ReactNode, useContext } from "react"
 import ReactMarkdown, { Components } from "react-markdown"
 import gfm from "remark-gfm"
-import Image from "next/image"
 import {
   Box,
   Table,
@@ -22,7 +21,7 @@ import { ExternalLinkIcon } from "@chakra-ui/icons"
 import { PrismAsyncLight as SyntaxHighlighter } from "react-syntax-highlighter"
 import { dracula } from "react-syntax-highlighter/dist/cjs/styles/prism"
 
-import { imageLoader } from "components/Common/Image"
+import { ImageWithPlaceholder } from "components/Common/Image"
 
 type ImageData = {
   placeholder: string
@@ -142,51 +141,20 @@ const LinkComponent = ({ children, href }: Props & { href: string }) => (
 
 const ImageComponent = (props: Props & { src: string; alt: string }) => {
   const images = useContext(ContentsContext)
-  const [isPlaceHolderVisible, setPlaceHolderVisibility] = useState(true)
   const { src, alt } = props
   const img = images[src]
+
   return (
-    <Box my="6" mx="auto" maxW="800px" position="relative">
-      <Box
-        css={{
-          backgroundImage: `url('${img.placeholder}')`,
-          backgroundRepeat: "no-repeat",
-          backgroundSize: "cover",
-          overflow: "hidden",
-          position: "absolute",
-          filter: "blur(5px)",
-          transform: "scale(0.96)",
-          objectFit: "cover",
-          objectPosition: "center center",
-          opacity: isPlaceHolderVisible ? "1" : "0",
-          transitionDelay: "500ms",
-          top: 0,
-          bottom: 0,
-          right: 0,
-          left: 0,
-        }}
-      />
-      <Box
-        css={{
-          opacity: isPlaceHolderVisible ? 0 : 1,
-          transition: "opacity 500ms ease 0s",
-        }}
-      >
-        <Image
-          layout="responsive"
-          loader={imageLoader}
-          loading="lazy"
-          src={src}
-          alt={alt}
-          width={img.width}
-          height={img.height}
-          onLoadingComplete={() => {
-            // TODO: FIX ME
-            setTimeout(() => setPlaceHolderVisibility(false), 300)
-          }}
-        />
-      </Box>
-    </Box>
+    <ImageWithPlaceholder
+      my="6"
+      mx="auto"
+      maxW="800px"
+      src={src}
+      alt={alt}
+      width={img.width}
+      height={img.height}
+      placeholder={img.placeholder}
+    />
   )
 }
 

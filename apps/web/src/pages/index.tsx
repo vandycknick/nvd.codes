@@ -7,7 +7,6 @@ import {
   LatestArticles,
   LatestArticlesProps,
 } from "components/Home/LatestArticles"
-import { LatestActivities } from "components/Home/LatestActivities"
 import { listPosts } from "services/blog"
 
 interface HomeProps {
@@ -23,17 +22,18 @@ const Home: React.FC<HomeProps> = ({ latestPosts }) => (
       twitterUrl="https://twitter.com/vandycknick"
     />
     <LatestArticles posts={latestPosts} />
-    <LatestActivities />
   </Fragment>
 )
 
 export const getServerSideProps: GetServerSideProps<HomeProps> = async () => {
   const [posts] = await listPosts({
     page: 1,
-    count: 3,
+    count: 4,
     fields: [
       "title",
       "description",
+      "cover",
+      "placeholder",
       "date",
       "readingTime",
       "categories",

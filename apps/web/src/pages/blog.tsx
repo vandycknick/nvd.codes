@@ -57,7 +57,7 @@ export const getServerSideProps: GetServerSideProps<BlogProps> = async ({
         "readingTime",
         "categories",
         "cover",
-        "placeholderCss",
+        "placeholder",
       ],
     })
 

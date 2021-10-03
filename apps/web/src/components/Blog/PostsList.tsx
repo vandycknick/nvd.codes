@@ -14,7 +14,7 @@ type PostPreview = Pick<
   | "readingTime"
   | "categories"
   | "cover"
-  | "placeholderCss"
+  | "placeholder"
 >
 
 export type PostsListProps = {
