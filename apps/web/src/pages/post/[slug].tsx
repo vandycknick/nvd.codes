@@ -81,7 +81,7 @@ const BlogPost = ({ post }: BlogPostProps) => {
       <Divider my={6} />
       <Box maxWidth="750px" width="100%" margin="0 auto" pb={4}>
         <DiscussionEmbed
-          shortname="nvd-codes"
+          shortname="nvd-codes-blog"
           config={{
             url: `https://nvd.codes/post/${post.slug}`,
             identifier: post.slug,
