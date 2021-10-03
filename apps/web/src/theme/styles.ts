@@ -11,11 +11,6 @@ const styles = {
         padding: "0 !important",
       },
     },
-    ".post-card-cover": {
-      borderTopRadius: "md",
-      opacity: "0.8",
-      height: "100%",
-    },
   },
 }
 

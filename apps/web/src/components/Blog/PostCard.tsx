@@ -12,7 +12,7 @@ import {
 import { TimeIcon, CalendarIcon } from "@chakra-ui/icons"
 
 import Time from "components/Common/Time"
-import { Image } from "components/Common/Image"
+import { ImageWithPlaceholder } from "components/Common/Image"
 
 type PostPreview = Pick<
   Post,
@@ -24,7 +24,7 @@ type PostPreview = Pick<
   | "readingTime"
   | "categories"
   | "cover"
-  | "placeholderCss"
+  | "placeholder"
 >
 
 export type PostCardProps = {
@@ -50,14 +50,13 @@ export const PostCard = ({ post }: PostCardProps) => {
           _hover={{ textDecoration: "none" }}
           _focus={{ outline: "hidden" }}
         >
-          <Image
-            src={post.cover || ""}
+          <ImageWithPlaceholder
+            src={post.cover}
             height={280}
             width={500}
             objectFit="cover"
             borderTopRadius="2xl"
-            placeholderCss={post.placeholderCss}
-            imageClassName="post-card-cover"
+            placeholder={post.placeholder}
           />
         </Link>
       </NextLink>
