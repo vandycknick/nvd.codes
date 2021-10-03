@@ -11,9 +11,9 @@ import {
   VStack,
 } from "@chakra-ui/react"
 import { Post, Image } from "@nvd.codes/contracts"
+import { DiscussionEmbed } from "disqus-react"
 
 import SEO from "components/Common/SEO"
-import { CommentList } from "components/BlogPost/CommentList"
 import Time from "components/Common/Time"
 import { Calendar } from "components/BlogPost/Icons/Calendar"
 import { Edit } from "components/BlogPost/Icons/Edit"
@@ -79,7 +79,16 @@ const BlogPost = ({ post }: BlogPostProps) => {
         </Contents>
       </Box>
       <Divider my={6} />
-      <CommentList slug={post.slug} />
+      <Box maxWidth="750px" width="100%" margin="0 auto" pb={4}>
+        <DiscussionEmbed
+          shortname="nvd-codes"
+          config={{
+            url: `https://nvd.codes/post/${post.slug}`,
+            identifier: post.slug,
+            title: post.title,
+          }}
+        />
+      </Box>
     </Fragment>
   )
 }
