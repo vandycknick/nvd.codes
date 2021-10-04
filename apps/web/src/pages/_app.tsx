@@ -7,6 +7,7 @@ import { pageView } from "services/gtag"
 import { Header } from "components/Common/Header"
 import { Footer } from "components/Common/Footer"
 import theme from "theme"
+import Head from "next/head"
 
 const PageProgress = () => {
   const [loading, setLoading] = useState(false)
@@ -50,24 +51,29 @@ const App = ({ Component, pageProps }: AppProps) => {
   }, [router])
 
   return (
-    <ChakraProvider theme={theme}>
-      <PageProgress />
-      <Header />
-      <Flex width="100%" maxWidth="100%" flex={1} as="main">
-        <Box
-          px={4}
-          flexGrow={1}
-          margin="0px auto"
-          position="relative"
-          width="100%"
-          maxW={{ xl: "1200px" }}
-          overflowX="hidden"
-        >
-          <Component {...pageProps} />
-        </Box>
-      </Flex>
-      <Footer />
-    </ChakraProvider>
+    <>
+      <Head>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+      </Head>
+      <ChakraProvider theme={theme}>
+        <PageProgress />
+        <Header />
+        <Flex width="100%" maxWidth="100%" flex={1} as="main">
+          <Box
+            px={4}
+            flexGrow={1}
+            margin="0px auto"
+            position="relative"
+            width="100%"
+            maxW={{ xl: "1200px" }}
+            overflowX="hidden"
+          >
+            <Component {...pageProps} />
+          </Box>
+        </Flex>
+        <Footer />
+      </ChakraProvider>
+    </>
   )
 }
 export default App
