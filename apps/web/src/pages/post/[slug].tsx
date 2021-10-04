@@ -65,6 +65,24 @@ const BlogPost = ({ post }: BlogPostProps) => {
             authors: ["Nick Van Dyck"],
           },
         }}
+        additionalMetaTags={[
+          {
+            name: "twitter:label1",
+            content: "Written by",
+          },
+          {
+            name: "twitter:data1",
+            content: "Nick Van Dyck",
+          },
+          {
+            name: "twitter:label2",
+            content: "Filed under",
+          },
+          {
+            name: "twitter:data2",
+            content: post.categories.join(", "),
+          },
+        ]}
       />
       <Box as="article" w="100%" pb={4}>
         <VStack mb={8}>

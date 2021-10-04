@@ -25,6 +25,9 @@ class MyDocument extends Document<DocumentProps> {
     return (
       <Html lang="en">
         <Head>
+          <meta httpEquiv="X-UA-Compatible" content="IE=edge" />
+          <meta name="HandheldFriendly" content="True" />
+          <meta name="MobileOptimized" content="320" />
           <meta name="author" content="Nick Van Dyck" />
           <link rel="shortcut icon" href="/favicon.png" />
           <script
