@@ -4,16 +4,16 @@ import { GetServerSideProps } from "next"
 import SEO from "components/Common/SEO"
 import { Greeting } from "components/Home/Greeting"
 import {
-  LatestArticles,
-  LatestArticlesProps,
-} from "components/Home/LatestArticles"
+  LatestBlogPosts,
+  LatestBlogPostsProps,
+} from "components/Home/LatestBlogPosts"
 import { listPosts } from "services/blog"
 
-interface HomeProps {
-  latestPosts: LatestArticlesProps["posts"]
+type HomeProps = {
+  latestPosts: LatestBlogPostsProps["posts"]
 }
 
-const Home: React.FC<HomeProps> = ({ latestPosts }) => (
+const Home = ({ latestPosts }: HomeProps) => (
   <Fragment>
     <SEO
       title="Nick Van Dyck | nvd.codes"
@@ -28,7 +28,7 @@ const Home: React.FC<HomeProps> = ({ latestPosts }) => (
       siteUrl="https://nvd.codes"
       twitterUrl="https://twitter.com/vandycknick"
     />
-    <LatestArticles posts={latestPosts} />
+    <LatestBlogPosts posts={latestPosts} />
   </Fragment>
 )
 

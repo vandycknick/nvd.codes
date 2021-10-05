@@ -32,20 +32,20 @@ type LatestPost = Pick<
   | "categories"
 >
 
-export type LatestArticlesProps = {
+export type LatestBlogPostsProps = {
   className?: string
   posts: LatestPost[]
 }
 
-export const LatestArticles = ({ className, posts }: LatestArticlesProps) => {
+export const LatestBlogPosts = ({ className, posts }: LatestBlogPostsProps) => {
   const bg = useColorModeValue("gray.50", "gray.900")
   const color = useColorModeValue("gray.700", "gray.200")
   const circleBg = useColorModeValue("black", "white")
   const circleColor = useColorModeValue("white", "black")
   return (
-    <VStack className={className} spacing={4} py={4} as="section">
+    <VStack className={className} spacing={4} py={4} pb={16} as="section">
       <Heading as="h4" py={4} size="lg">
-        Latest Articles
+        Latest Blog Posts
       </Heading>
       <Text pb={1}>
         While you are here, have a look at some of the latest articles I wrote.
