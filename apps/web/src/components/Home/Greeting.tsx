@@ -26,7 +26,7 @@ const Greeting: React.FC<GreetingProps> = ({
 }) => {
   const iconColor = useColorModeValue("black", "white")
   return (
-    <VStack as="section" mb={4}>
+    <VStack as="section" mb={16}>
       <Heading pt={6} fontWeight="normal">
         Hi 👋
       </Heading>
