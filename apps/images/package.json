@@ -18,10 +18,10 @@
     "@koa/router": "^10.1.1",
     "@nvd.codes/utils": "^1.0.0",
     "bunyan": "^1.8.15",
-    "koa": "^2.13.1",
+    "koa": "^2.13.3",
     "koa-bunyan-logger": "^2.1.0",
-    "oci-common": "^2.3.1",
-    "oci-objectstorage": "^2.3.1",
+    "oci-common": "^2.4.0",
+    "oci-objectstorage": "^2.4.0",
     "sharp": "^0.29.1"
   },
   "devDependencies": {
