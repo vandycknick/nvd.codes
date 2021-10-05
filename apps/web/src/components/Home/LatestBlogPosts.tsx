@@ -43,7 +43,7 @@ export const LatestBlogPosts = ({ className, posts }: LatestBlogPostsProps) => {
   const circleBg = useColorModeValue("black", "white")
   const circleColor = useColorModeValue("white", "black")
   return (
-    <VStack className={className} spacing={4} py={4} pb={16} as="section">
+    <VStack className={className} spacing={4} as="section">
       <Heading as="h4" py={4} size="lg">
         Latest Blog Posts
       </Heading>

@@ -106,10 +106,10 @@ const TypeWriter = ({ steps, loop }: TypeWriterProps) => {
   return (
     <Fragment>
       <Text ref={nodeRef} pr={1} />
-      <Text as="span" fontWeight="bolder" lineHeight={1}>
+      <Text as="span" fontWeight="bolder">
         <motion.span
           animate={controls}
-          transition={{ duration: 1.5, repeat: Infinity }}
+          transition={{ duration: 2, repeat: Infinity }}
         >
           |
         </motion.span>

@@ -61,6 +61,8 @@ const App = ({ Component, pageProps }: AppProps) => {
         <Flex width="100%" maxWidth="100%" flex={1} as="main">
           <Box
             px={4}
+            pt={6}
+            pb={14}
             flexGrow={1}
             margin="0px auto"
             position="relative"

@@ -84,7 +84,7 @@ const BlogPost = ({ post }: BlogPostProps) => {
           },
         ]}
       />
-      <Box as="article" w="100%" pb={4}>
+      <Box as="article" w="100%" pb={6}>
         <VStack mb={8}>
           <Heading size="2xl" textAlign="center" pb={4}>
             {post.title}
@@ -114,7 +114,7 @@ const BlogPost = ({ post }: BlogPostProps) => {
         </Contents>
       </Box>
       <Divider my={6} />
-      <Box maxWidth="750px" width="100%" margin="0 auto" pb={4}>
+      <Box maxWidth="750px" width="100%" margin="0 auto">
         <DiscussionEmbed
           shortname="nvdcodes"
           config={{

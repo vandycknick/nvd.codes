@@ -16,7 +16,7 @@ export const PostsPager = ({ total, current }: PostsPagerProps) => {
     .map((_, index) => index + 1)
 
   return (
-    <Box mt="8" mb="12">
+    <Box pt="8">
       <Divider />
       <Flex direction="row" justifyContent="space-between">
         <Link href={getBlogUrl(1)} passHref>
