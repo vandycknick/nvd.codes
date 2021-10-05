@@ -29,6 +29,13 @@ type ImageWithPlaceholderProps = {
 
 export const Image = NextImage
 
+const useForceUpdate = () => {
+  const [, setValue] = useState(0)
+  return () => setValue((value) => value + 1)
+}
+
+const imageCache = new Set()
+
 export const ImageWithPlaceholder = ({
   src,
   alt,
@@ -38,10 +45,33 @@ export const ImageWithPlaceholder = ({
   placeholder,
   ...rest
 }: ImageWithPlaceholderProps) => {
-  const [isPlaceHolderVisible, setPlaceHolderVisibility] = useState(true)
+  const [isImageVisible, setImageVisible] = useState(imageCache.has(src))
+  const forceUpdate = useForceUpdate()
+
+  const onLoadingComplete = (result: {
+    naturalWidth: number
+    naturalHeight: number
+  }) => {
+    if (result.naturalWidth > 1) {
+      setImageVisible(true)
+      imageCache.add(src)
+    } else {
+      forceUpdate()
+    }
+  }
 
   return (
-    <Box position="relative" overflow="hidden" {...rest}>
+    <Box
+      position="relative"
+      overflow="hidden"
+      {...rest}
+      css={{
+        "div > img": {
+          opacity: isImageVisible ? 1 : 0,
+          transition: "opacity 500ms ease 0s",
+        },
+      }}
+    >
       <Box
         css={{
           backgroundImage: `url('${placeholder}')`,
@@ -53,7 +83,7 @@ export const ImageWithPlaceholder = ({
           transform: "scale(0.96)",
           objectFit: "cover",
           objectPosition: "center center",
-          opacity: isPlaceHolderVisible ? "1" : "0",
+          opacity: isImageVisible ? "0" : "1",
           transitionDelay: "500ms",
           top: 0,
           bottom: 0,
@@ -61,27 +91,17 @@ export const ImageWithPlaceholder = ({
           left: 0,
         }}
       />
-      <Box
-        css={{
-          opacity: isPlaceHolderVisible ? 0 : 1,
-          transition: "opacity 500ms ease 0s",
-        }}
-      >
-        <Image
-          layout="responsive"
-          loader={imageLoader}
-          loading="lazy"
-          src={src}
-          alt={alt}
-          width={width}
-          height={height}
-          objectFit={objectFit}
-          onLoadingComplete={() => {
-            // TODO: FIX ME
-            setTimeout(() => setPlaceHolderVisibility(false), 300)
-          }}
-        />
-      </Box>
+      <Image
+        layout="responsive"
+        loader={imageLoader}
+        loading="lazy"
+        src={src}
+        alt={alt}
+        width={width}
+        height={height}
+        objectFit={objectFit}
+        onLoadingComplete={onLoadingComplete}
+      />
     </Box>
   )
 }
