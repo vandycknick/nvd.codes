@@ -54,7 +54,7 @@ resource "oci_containerengine_node_pool" "nvd_codes_pool_bleu" {
 
   initial_node_labels {
     key   = "name"
-    value = "pool1"
+    value = "pool-bleu"
   }
 }
 
