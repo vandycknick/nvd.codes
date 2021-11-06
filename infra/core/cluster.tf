@@ -4,7 +4,7 @@ data "oci_identity_availability_domains" "ads" {
 
 resource "oci_containerengine_cluster" "nvd_codes_cluster" {
   compartment_id     = oci_identity_compartment.nvd_codes.id
-  kubernetes_version = "v1.20.8"
+  kubernetes_version = "v1.20.11"
   name               = "nvd-codes-cluster"
   vcn_id             = module.vcn.vcn_id
 
