@@ -37,7 +37,7 @@ resource "oci_containerengine_node_pool" "nvd_codes_pool_bleu" {
       availability_domain = data.oci_identity_availability_domains.ads.availability_domains[0].name
       subnet_id           = oci_core_subnet.node_subnet.id
     }
-    size = 1
+    size = 3
   }
   node_shape = "VM.Standard.A1.Flex"
 
@@ -59,7 +59,7 @@ resource "oci_containerengine_node_pool" "nvd_codes_pool_bleu" {
 }
 
 resource "oci_containerengine_node_pool" "nvd_codes_pool_2" {
-  count              = 1
+  count              = 0
   cluster_id         = oci_containerengine_cluster.nvd_codes_cluster.id
   compartment_id     = oci_identity_compartment.nvd_codes.id
   kubernetes_version = "v1.20.8"
@@ -79,8 +79,8 @@ resource "oci_containerengine_node_pool" "nvd_codes_pool_2" {
   }
 
   node_source_details {
-    # https://docs.oracle.com/en-us/iaas/images/image/6bf73d2b-8465-4dff-98b7-ad8798ec4dda/
-    image_id    = "ocid1.image.oc1.eu-amsterdam-1.aaaaaaaamlbp3cerkom2e5rcbvaxce4zunkhu6tt7y2jekqo2zq6onwmw74q"
+    # https://docs.oracle.com/en-us/iaas/images/image/556cdc03-438b-4299-a7a3-599cac502943/
+    image_id    = "ocid1.image.oc1.eu-amsterdam-1.aaaaaaaaqwoghd6yp7lypgtzftprorlutxvr5aadtqwcmarfedn76hdzl6rq"
     source_type = "image"
   }
 
