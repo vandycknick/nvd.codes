@@ -15,12 +15,12 @@ releases:
   - name: datadog
     namespace: kube-system
     chart: datadog/datadog
-    version: 2.23.4
+    version: 2.27.7
     values:
       - datadog:
           site: {{requiredEnv "DATADOG_SITE"}}
           apiKey: {{requiredEnv "DATADOG_API_TOKEN"}}
-          containerExcludeLogs: "kube_namespace:kube-system"
+          containerExcludeLogs: "kube_namespace:kube-system kube_namespace:cert-manager"
           logs:
             enabled: true
             containerCollectAll: true
@@ -29,15 +29,50 @@ releases:
   - name: traefik
     namespace: ingress
     chart: traefik/traefik
-    version: 10.6.1
+    version: 10.7.1
     values:
       - deployment:
           replicas: 3
+          podAnnotations:
+            ad.datadoghq.com/traefik.logs: |
+              [{
+                "source": "traefik",
+                "service": "traefik",
+                "log_processing_rules": [{
+                  "type": "exclude_at_match",
+                  "name": "exclude_traefik_ping_requests",
+                  "pattern" : "\/ping"
+                }]
+              }]
         service:
           annotations:
             service.beta.kubernetes.io/oci-load-balancer-shape: "flexible"
             service.beta.kubernetes.io/oci-load-balancer-shape-flex-min: "10"
             service.beta.kubernetes.io/oci-load-balancer-shape-flex-max: "10"
+        logs:
+          general:
+            format: json
+            # Logging levels are DEBUG, PANIC, FATAL, ERROR, WARN, and INFO.
+            level: ERROR
+          access:
+            # To enable access logs
+            enabled: true
+            # By default, logs are written using the Common Log Format (CLF).
+            # To write logs in JSON, use json in the format option.
+            # If the given format is unsupported, the default (CLF) is used instead.
+            format: json
+            fields:
+              general:
+                defaultmode: keep
+                names:
+                  {}
+                  # Examples:
+                  # ClientUsername: drop
+              headers:
+                defaultmode: drop
+                names:
+                  User-Agent: keep
+                  X-Forwarded-For: keep
 
   # https://artifacthub.io/packages/helm/cert-manager/cert-manager
   - name: cert-manager
