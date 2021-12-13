@@ -1,6 +1,8 @@
-import { Column, Entity, PrimaryGeneratedColumn, OneToMany } from "typeorm"
+import pkg from "typeorm"
 
 import { ImageEntity } from "./Image"
+
+const { Column, Entity, PrimaryGeneratedColumn, OneToMany } = pkg
 
 @Entity({ name: "posts" })
 export class PostEntity {

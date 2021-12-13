@@ -65,6 +65,7 @@ export const parseMarkdownPost = async (
   const images: string[] = []
   const postAbsoluteDirectory = dirname(join(repoRootPath, postFilePath))
   const pipeline = unified()
+    // @ts-expect-error Weird remarkParse behavior
     .use(remarkParse)
     .use(remarkSlug)
     .use(remarkImages, {
@@ -72,6 +73,7 @@ export const parseMarkdownPost = async (
       postAbsoluteDirectory,
       images,
     })
+    //  @ts-expect-error Weird remarkParse behavior
     .use(remarkStringify)
 
   const contents = (await pipeline.process(content)).toString()

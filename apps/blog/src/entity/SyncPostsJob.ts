@@ -1,9 +1,6 @@
-import {
-  Column,
-  Entity,
-  PrimaryGeneratedColumn,
-  CreateDateColumn,
-} from "typeorm"
+import pkg from "typeorm"
+
+const { Column, Entity, PrimaryGeneratedColumn, CreateDateColumn } = pkg
 
 @Entity({ name: "syncpostsjob" })
 export class SyncPostsJob {

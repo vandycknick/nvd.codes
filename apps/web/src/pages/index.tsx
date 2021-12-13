@@ -17,7 +17,7 @@ const Home = ({ latestPosts }: HomeProps) => (
   <Fragment>
     <SEO
       title="Nick Van Dyck | nvd.codes"
-      description="Hi, I'm Nick and this is my blog. This is the place where I share about my experiences as journey through the world of Software Engineering."
+      description="Hi, I'm Nick and this is my blog. This is the place where I share about my experiences as I journey through the world of Software Engineering."
       openGraph={{
         type: "website",
         url: "https://nvd.codes",

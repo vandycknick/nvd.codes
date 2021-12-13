@@ -27,10 +27,6 @@ clean:
 dev:
 	@yarn concurrently -n web,api -c red,cyan "$(MAKE) dev.web" "$(MAKE) dev.api"
 
-.PHONY: dev.api
-dev.api:
-	@yarn workspace @nvd.codes/api dev
-
 .PHONY: dev.blog
 dev.blog:
 	@yarn workspace @nvd.codes/blog dev
