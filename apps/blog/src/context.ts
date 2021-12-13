@@ -1,11 +1,14 @@
+import pkg from "typeorm"
+
 import { inferAsyncReturnType } from "@trpc/server"
-import { getRepository, createConnection } from "typeorm"
 import { memoize } from "@nvd.codes/utils"
 
 import { entities } from "./entity"
 import { PostEntity } from "./entity/Post"
 import { SyncPostsJob } from "./entity/SyncPostsJob"
 import { getConfig } from "./config"
+
+const { getRepository, createConnection } = pkg
 
 const getRepositories = memoize(async () => {
   const config = getConfig()

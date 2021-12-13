@@ -2,7 +2,11 @@
   "extends": "@nvd/tsconfig",
   "compilerOptions": {
     "target": "esnext",
-    "lib": ["dom", "dom.iterable", "esnext"],
+    "lib": [
+      "dom",
+      "dom.iterable",
+      "esnext"
+    ],
     "noEmit": true,
     "module": "esnext",
     "resolveJsonModule": true,
@@ -10,8 +14,15 @@
     "jsx": "preserve",
     "allowJs": true,
     "baseUrl": "src",
-    "importHelpers": true
+    "importHelpers": true,
+    "incremental": true
   },
-  "exclude": ["node_modules"],
-  "include": ["next-env.d.ts", "src/**/*.ts", "src/**/*.tsx"]
+  "exclude": [
+    "node_modules"
+  ],
+  "include": [
+    "next-env.d.ts",
+    "src/**/*.ts",
+    "src/**/*.tsx"
+  ]
 }

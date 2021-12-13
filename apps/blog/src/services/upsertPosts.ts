@@ -1,4 +1,5 @@
-import { getRepository } from "typeorm"
+import pkg from "typeorm"
+
 import { createLogger } from "bunyan"
 import { promises } from "fs"
 
@@ -11,6 +12,7 @@ import { parseMarkdownPost } from "./parseMarkdownPost"
 import { cloneGithubRepo } from "./cloneGithubRepo"
 import { parseImage } from "./parseImage"
 
+const { getRepository } = pkg
 const { rm } = promises
 
 type SyncPostsOptions = {

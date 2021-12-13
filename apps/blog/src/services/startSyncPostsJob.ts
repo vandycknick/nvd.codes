@@ -1,7 +1,9 @@
-import { getRepository } from "typeorm"
+import pkg from "typeorm"
 
 import { SyncPostsJob } from "../entity/SyncPostsJob"
 import { upsertPosts } from "./upsertPosts"
+
+const { getRepository } = pkg
 
 type StartSyncPostsJob = {
   branch: string
