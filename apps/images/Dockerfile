@@ -20,7 +20,7 @@ COPY yarn.lock package.json ./
 COPY apps/images/package.json apps/images/
 COPY libs/ libs/
 
-RUN yarn workspace @nvd.codes/images install --frozen-lock-file
+RUN yarn workspace @nvd.codes/images install --frozen-lock-file --network-timeout 120000
 
 COPY apps/images apps/images
 

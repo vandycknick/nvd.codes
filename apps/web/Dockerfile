@@ -20,7 +20,7 @@ COPY yarn.lock package.json ./
 COPY apps/web/package.json apps/web/
 COPY libs/ libs/
 
-RUN yarn workspace @nvd.codes/web install --frozen-lock-file
+RUN yarn workspace @nvd.codes/web install --frozen-lock-file --network-timeout 120000
 
 COPY apps/web apps/web
 

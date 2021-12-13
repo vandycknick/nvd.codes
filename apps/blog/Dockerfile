@@ -7,7 +7,7 @@ ENV NODE_ENV=${NODE_ENV}
 
 WORKDIR /build
 
-RUN apk add python2 build-base curl
+RUN apk add python3 build-base curl
 
 ADD apps/blog/scripts /scripts
 
@@ -17,7 +17,7 @@ COPY yarn.lock package.json ./
 COPY apps/blog/package.json apps/blog/
 COPY libs/ libs/
 
-RUN yarn workspace @nvd.codes/blog install --frozen-lock-file
+RUN yarn workspace @nvd.codes/blog install --frozen-lock-file --network-timeout 120000
 
 FROM node:$NODE_VERSION-alpine as base
 
