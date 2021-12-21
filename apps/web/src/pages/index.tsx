@@ -24,7 +24,7 @@ const Home = ({ latestPosts }: HomeProps) => (
       }}
     />
     <Greeting
-      githubUrl="https://github.com/nickvdyck"
+      githubUrl="https://github.com/vandycknick"
       siteUrl="https://nvd.codes"
       twitterUrl="https://twitter.com/vandycknick"
     />
