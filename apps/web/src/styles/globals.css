@@ -1,0 +1,15 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+.image__transition span > img {
+  transition: opacity 500ms ease 0s;
+}
+
+.image__visible span > img {
+  opacity: 1 !important;
+}
+
+.image__hidden span > img {
+  opacity: 0;
+}

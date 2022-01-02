@@ -1,5 +1,4 @@
 import React from "react"
-import { ColorModeScript } from "@chakra-ui/react"
 import Document, {
   Html,
   Head,
@@ -9,7 +8,6 @@ import Document, {
 } from "next/document"
 
 import { GA_TRACKING_ID } from "services/gtag"
-import theme from "theme"
 
 type DocumentProps = { html: string }
 
@@ -23,7 +21,7 @@ class MyDocument extends Document<DocumentProps> {
 
   render(): JSX.Element {
     return (
-      <Html lang="en">
+      <Html lang="en" className="">
         <Head>
           <meta httpEquiv="X-UA-Compatible" content="IE=edge" />
           <meta name="HandheldFriendly" content="True" />
@@ -47,8 +45,7 @@ class MyDocument extends Document<DocumentProps> {
             }}
           />
         </Head>
-        <body>
-          <ColorModeScript initialColorMode={theme.config.initialColorMode} />
+        <body className="h-screen bg-nord-100 dark:bg-nord-900 transition transition-colors duration-300">
           <Main />
           <NextScript />
         </body>

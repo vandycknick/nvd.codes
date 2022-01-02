@@ -1,7 +1,8 @@
 import React from "react"
-import { Box, Divider, Flex } from "@chakra-ui/react"
-import { ArrowBackIcon, ArrowForwardIcon } from "@chakra-ui/icons"
 import Link from "next/link"
+
+import { Text } from "components/Common/Typography"
+import { ArrowSmallLeft, ArrowSmallRight } from "components/Common/Icons"
 
 type PostsPagerProps = {
   total: number
@@ -16,79 +17,39 @@ export const PostsPager = ({ total, current }: PostsPagerProps) => {
     .map((_, index) => index + 1)
 
   return (
-    <Box pt="8">
-      <Divider />
-      <Flex direction="row" justifyContent="space-between">
-        <Link href={getBlogUrl(1)} passHref>
-          <Box
-            as="a"
-            fontWeight="bold"
-            pt="4"
-            color="gray.200"
-            display="inline-flex"
-            alignSelf="center"
-            _hover={{
-              cursor: current === 1 ? "not-allowed" : "pointer",
-            }}
-          >
-            <ArrowBackIcon mr="2" top=".125em" position="relative" />
-            Previous
-          </Box>
-        </Link>
-        <Flex
-          display={{ base: "none", md: "flex" }}
-          justifyContent="center"
-          flex="1"
-        >
-          {pages.map((page) => {
-            const isCurrentPage = page === current
-            const href = getBlogUrl(page)
-            const onLinkClick = (event: React.MouseEvent) => {
-              if (isCurrentPage) {
-                event.preventDefault()
-                event.stopPropagation()
-              }
-            }
-
-            return (
-              <Link key={page} href={href} passHref>
-                <Box
-                  as="a"
-                  pt="4"
-                  px="5"
-                  mt="-1px"
-                  fontWeight="bold"
-                  color={isCurrentPage ? "teal.500" : "gray.200"}
-                  borderTop="2px solid"
-                  borderTopColor={isCurrentPage ? "teal.500" : "transparent"}
-                  _hover={{
-                    cursor: isCurrentPage ? "not-allowed" : "pointer",
-                  }}
-                  onClick={onLinkClick}
-                >
-                  {page}
-                </Box>
-              </Link>
-            )
-          })}
-        </Flex>
-        <Link href={getBlogUrl(total)} passHref>
-          <Box
-            as="a"
-            fontWeight="bold"
-            pt="4"
-            color="gray.200"
-            display="inline-flex"
-            alignSelf="center"
-            _hover={{
-              cursor: current === total ? "not-allowed" : "pointer",
-            }}
-          >
-            Next
-            <ArrowForwardIcon ml="2" top=".125em" position="relative" />
-          </Box>
-        </Link>
-      </Flex>
-    </Box>
+    <div className="mt-8 border-t-[2px] border-nord-300 dark:border-nord-700 flex justify-between">
+      <Link href={getBlogUrl(1)} passHref>
+        <a className="text-nord-600 dark:text-nord-100 flex font-bold pt-4 inline-flex align-center">
+          <ArrowSmallLeft className="mr-2" />
+          Previous
+        </a>
+      </Link>
+      <div className="none md:flex justify-center flex-1 mt-[-2px]">
+        {pages.map((page) => {
+          const isCurrentPage = page === current
+          const href = getBlogUrl(page)
+          return isCurrentPage ? (
+            <Text className="pt-4 px-5 border-t-[2px] flex font-bold text-frost-primary dark:text-frost-primary">
+              {page}
+            </Text>
+          ) : (
+            <Link key={page} href={href} passHref>
+              <a
+                style={{ borderColor: "transparent" }}
+                className="text-nord-600 border-t-[2px] border-transparent dark:text-nord-100 pt-4 px-5 flex font-bold"
+              >
+                {page}
+              </a>
+            </Link>
+          )
+        })}
+      </div>
+      <Link href={getBlogUrl(total)} passHref>
+        <a className="text-nord-600 dark:text-nord-100 flex font-bold pt-4 flex align-center">
+          Next
+          <ArrowSmallRight className="ml-2" />
+        </a>
+      </Link>
+    </div>
   )
 }

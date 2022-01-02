@@ -1,17 +1,32 @@
 import React from "react"
-import {
-  Button,
-  Heading,
-  HStack,
-  Text,
-  useColorModeValue,
-  VStack,
-} from "@chakra-ui/react"
+import cx from "classnames"
 
-import { Globe } from "components/Home/Icons/Globe"
-import { Github } from "components/Home/Icons/Github"
-import { Twitter } from "components/Home/Icons/Twitter"
-import TypeWriter from "components/Common/TypeWriter"
+import { GlobeIcon } from "./Icons/Globe"
+import { GitHubIcon } from "./Icons/Github"
+import { TwitterIcon } from "./Icons/Twitter"
+import { CodeExplosion } from "./CodeExplosion"
+
+import { HeadingOne, Paragraph, Text } from "components/Common/Typography"
+
+type LinkButtonProps = {
+  href: string
+  children: React.ReactNode
+  className?: string
+  icon: React.ReactNode
+}
+
+const LinkButton = ({ href, children, className, icon }: LinkButtonProps) => (
+  <a
+    href={href}
+    className={cx(
+      "rounded-lg bg-nord-600 font-semibold text-sm px-4 py-2 text-nord-50",
+      className,
+    )}
+  >
+    {icon}
+    <span className="inline-block align-middle">{children}</span>
+  </a>
+)
 
 type GreetingProps = {
   githubUrl: string
@@ -19,80 +34,54 @@ type GreetingProps = {
   siteUrl: string
 }
 
-const Greeting: React.FC<GreetingProps> = ({
-  githubUrl,
-  twitterUrl,
-  siteUrl,
-}) => {
-  const iconColor = useColorModeValue("black", "white")
-  return (
-    <VStack as="section" mb={16}>
-      <Heading pt={6} fontWeight="normal">
-        Hi 👋
-      </Heading>
-      <Heading as="h2" size="4xl" fontWeight="extrabold">
-        I
-        <Text
-          as="span"
-          bgGradient="linear(to-br, green.400, cyan.500)"
-          bgClip="text"
-        >
-          &#39;
+const Greeting = ({ githubUrl, twitterUrl, siteUrl }: GreetingProps) => (
+  <section className="pt-20 pb-12 flex flex-col md:flex-row">
+    <div className="w-full lg:w-1/2 lg:pr-5">
+      <HeadingOne>
+        Hey <Text className="not-italic">👋</Text>, I&apos;m{" "}
+        <Text className="underline decoration-4 decoration-frost-primary">
+          Nick
         </Text>
-        m Nick
-      </Heading>
-      <Heading as="h3" size="md" pt="4" fontWeight="normal" display="flex">
-        And I&#39;m a &nbsp;
-        <TypeWriter
-          steps={[
-            250,
-            "Develo",
-            500,
-            "Full Stack Engin",
-            500,
-            "DevOps Engineer",
-            250,
-            "Software",
-            250,
-            "Software Engineer",
-          ]}
-          loop={1}
-        />
-      </Heading>
-      <Text py="4" maxW="500px" textAlign="center">
-        I try to write code and blog about my experiences. Love writing,
-        speaking, travelling or making lots of random stuff. Mostly I can be
-        found playing around with Python, .NET, TypeScript or JavaScript.
-        Occasionally developing CLI tools and apps.
-      </Text>
-      <HStack pt="4">
-        <Button
-          as="a"
-          href={siteUrl}
-          bg="transparent"
-          leftIcon={<Globe width={5} height={5} color={iconColor} />}
-        >
-          Web
-        </Button>
-        <Button
-          as="a"
+        .
+      </HeadingOne>
+      <Paragraph>
+        Welcome to my little space on the web. I try to write code and blog
+        about my experiences. Love writing, speaking, travelling or making lots
+        of random stuff. Mostly I can be found playing around with Python, .NET,
+        TypeScript or JavaScript. Occasionally developing CLI tools and apps.
+      </Paragraph>
+      <div className="flex py-6">
+        <LinkButton
           href={githubUrl}
-          bg="transparent"
-          leftIcon={<Github w={5} h={5} color={iconColor} />}
+          icon={
+            <GitHubIcon className="fill-nord-50 w-5 h-5 inline-block pr-1" />
+          }
         >
-          Github
-        </Button>
-        <Button
-          as="a"
+          GitHub
+        </LinkButton>
+        <LinkButton
           href={twitterUrl}
-          bg="transparent"
-          leftIcon={<Twitter width={5} height={5} color={iconColor} />}
+          className="mx-5"
+          icon={
+            <TwitterIcon className="fill-nord-50 w-5 h-5 inline-block pr-1" />
+          }
         >
           Twitter
-        </Button>
-      </HStack>
-    </VStack>
-  )
-}
+        </LinkButton>
+        <LinkButton
+          href={siteUrl}
+          icon={
+            <GlobeIcon className="fill-nord-50 w-5 h-5 inline-block pr-1" />
+          }
+        >
+          Website
+        </LinkButton>
+      </div>
+    </div>
+    <aside className="hidden lg:block lg:w-1/2 lg:pl-5">
+      <CodeExplosion />
+    </aside>
+  </section>
+)
 
 export { Greeting }

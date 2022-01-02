@@ -1,16 +1,16 @@
-import React, { Fragment } from "react"
-import { Heading, Text } from "@chakra-ui/react"
+import React from "react"
+import { HeadingTwo, Text } from "components/Common/Typography"
 
 import SEO from "components/Common/SEO"
 
 const NotFoundPage = () => (
-  <Fragment>
+  <>
     <SEO title="404: Not found" />
     <section>
-      <Heading>NOT FOUND</Heading>
+      <HeadingTwo>NOT FOUND</HeadingTwo>
       <Text>You just hit a route that doesn&#39;t exist... 😔.</Text>
     </section>
-  </Fragment>
+  </>
 )
 
 export default NotFoundPage
