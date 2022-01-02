@@ -1,8 +1,8 @@
-import React, { Fragment } from "react"
+import React from "react"
 import { GetServerSideProps } from "next"
-import { Heading, Text, VStack } from "@chakra-ui/react"
 
 import SEO from "components/Common/SEO"
+import { HeadingTwo, Paragraph } from "components/Common/Typography"
 import { PostsList, PostsListProps } from "components/Blog/PostsList"
 import { listPosts } from "services/blog"
 import { PostsPager } from "components/Blog/PostsPager"
@@ -16,20 +16,20 @@ type BlogProps = {
 }
 
 const Blog = ({ posts, pager }: BlogProps) => (
-  <Fragment>
+  <>
     <SEO title="Blog" />
-    <VStack as="section" justify="center">
-      <Heading size="xl" pb={4}>
-        Blog
-      </Heading>
-      <Text>
-        Actively writing about technology, life-events and indie hacking. Here
-        are some of my most recent thoughts and hacks I&#39;ve published.
-      </Text>
-    </VStack>
-    <PostsList posts={posts} />
-    <PostsPager {...pager} />
-  </Fragment>
+    <div className="max-w-6xl w-full flex flex-col flex-1 mx-auto px-4 md:px-0 py-14">
+      <HeadingTwo className="pb-8">Blog</HeadingTwo>
+      <div className="flex pb-8">
+        <Paragraph>
+          Actively writing about technology, life-events and indie hacking. Here
+          are some of my most recent thoughts and hacks I&#39;ve published.
+        </Paragraph>
+      </div>
+      <PostsList posts={posts} />
+      <PostsPager {...pager} />
+    </div>
+  </>
 )
 
 const POSTS_PER_PAGE = 9

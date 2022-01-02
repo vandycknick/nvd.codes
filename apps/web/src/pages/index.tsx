@@ -1,4 +1,4 @@
-import React, { Fragment } from "react"
+import React from "react"
 import { GetServerSideProps } from "next"
 
 import SEO from "components/Common/SEO"
@@ -14,7 +14,7 @@ type HomeProps = {
 }
 
 const Home = ({ latestPosts }: HomeProps) => (
-  <Fragment>
+  <div className="max-w-6xl w-full flex flex-col flex-1 mx-auto px-4 xl:px-0">
     <SEO
       title="Nick Van Dyck | nvd.codes"
       description="Hi, I'm Nick and this is my blog. This is the place where I share about my experiences as I journey through the world of Software Engineering."
@@ -29,7 +29,7 @@ const Home = ({ latestPosts }: HomeProps) => (
       twitterUrl="https://twitter.com/vandycknick"
     />
     <LatestBlogPosts posts={latestPosts} />
-  </Fragment>
+  </div>
 )
 
 export const getServerSideProps: GetServerSideProps<HomeProps> = async () => {

@@ -1,16 +1,9 @@
 import React from "react"
 import NextLink from "next/link"
 import { Post } from "@nvd.codes/contracts"
-import {
-  Box,
-  Flex,
-  Heading,
-  Link,
-  Text,
-  useColorModeValue,
-} from "@chakra-ui/react"
-import { TimeIcon, CalendarIcon } from "@chakra-ui/icons"
+import { TimeIcon, CalendarIcon } from "components/Common/Icons"
 
+import { HeadingFour, Paragraph, Text } from "components/Common/Typography"
 import Time from "components/Common/Time"
 import { ImageWithPlaceholder } from "components/Common/Image"
 
@@ -32,72 +25,41 @@ export type PostCardProps = {
 }
 
 export const PostCard = ({ post }: PostCardProps) => {
-  const bg = useColorModeValue("transparent", "gray.700")
-  const textColor = useColorModeValue("gray.600", "gray.200")
   return (
-    <Flex
-      key={post.id}
-      direction="column"
-      boxShadow="md"
-      borderRadius="2xl"
-      border="1px"
-      borderColor={useColorModeValue("gray.100", "gray.900")}
-      bg={bg}
-    >
+    <div className="flex flex-col drop-shadow-md rounded-2xl bg-nord-50 dark:bg-nord-700 mb-6">
       <NextLink href="/post/[slug]" as={`/post/${post.slug}`} passHref>
-        <Link
-          textDecoration="none"
-          _hover={{ textDecoration: "none" }}
-          _focus={{ outline: "hidden" }}
-        >
+        <a>
           <ImageWithPlaceholder
             src={post.cover}
             height={280}
             width={500}
             objectFit="cover"
-            borderTopRadius="2xl"
+            className="rounded-t-2xl"
             placeholder={post.placeholder}
           />
-        </Link>
+        </a>
       </NextLink>
-      <Flex p={4} direction="column" height="full">
+      <div className="flex flex-col p-4 h-full">
         <NextLink href="/post/[slug]" as={`/post/${post.slug}`} passHref>
-          <Link
-            textDecoration="none"
-            _hover={{ textDecoration: "none" }}
-            _focus={{ outline: "hidden" }}
-          >
-            <Heading as="h3" size="md" mb="2">
-              {post.title}
-            </Heading>
-          </Link>
+          <a>
+            <HeadingFour className="mb-2">{post.title}</HeadingFour>
+          </a>
         </NextLink>
-        <Text
-          mb="6"
-          flex="1"
-          fontSize="medium"
-          fontWeight="light"
-          color={textColor}
-        >
+        <Paragraph className="flex-1 pb-4 text-sm">
           {post.description}
-        </Text>
-        <Flex
-          direction="row"
-          justifyContent="space-between"
-          fontSize="small"
-          fontWeight="medium"
-          color={textColor}
-        >
-          <Box>
-            <CalendarIcon mb="4px" mr="2" />
+        </Paragraph>
+        <div className="flex text-sm font-medium font-md justify-between">
+          <div>
+            <CalendarIcon className="h-4 w-4 mb-[2px] mr-2 fill-nord-50 dark:fill-nord-700" />
             <Time dateTime={post.date} />
-          </Box>
-          <Box>
-            <TimeIcon mb="4px" mr="2" />
-            <Text as="span">{post.readingTime}</Text>
-          </Box>
-        </Flex>
-      </Flex>
-    </Flex>
+          </div>
+          <div>
+            {" "}
+            <TimeIcon className="h-4 w-4 mb-[2px] mr-2 fill-nord-50 dark:fill-nord-700" />
+            <Text>{post.readingTime}</Text>
+          </div>
+        </div>
+      </div>
+    </div>
   )
 }

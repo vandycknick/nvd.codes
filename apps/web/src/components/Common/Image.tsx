@@ -1,6 +1,6 @@
 import React, { useState } from "react"
 import NextImage, { ImageLoaderProps } from "next/image"
-import { Box, BoxProps } from "@chakra-ui/react"
+import cx from "classnames"
 
 export const imageLoader = ({
   src,
@@ -23,9 +23,11 @@ type ImageWithPlaceholderProps = {
   alt?: string
   width?: number | string
   height?: number | string
+  as?: React.ElementType
   objectFit?: ImgElementStyle["objectFit"]
   placeholder: string
-} & BoxProps
+  className?: string
+}
 
 export const Image = NextImage
 
@@ -41,12 +43,14 @@ export const ImageWithPlaceholder = ({
   alt,
   height,
   width,
+  as,
   objectFit,
   placeholder,
-  ...rest
+  className,
 }: ImageWithPlaceholderProps) => {
   const [isImageVisible, setImageVisible] = useState(imageCache.has(src))
   const forceUpdate = useForceUpdate()
+  const Component = as ?? "div"
 
   const onLoadingComplete = (result: {
     naturalWidth: number
@@ -61,19 +65,18 @@ export const ImageWithPlaceholder = ({
   }
 
   return (
-    <Box
-      position="relative"
-      overflow="hidden"
-      {...rest}
-      css={{
-        "div > img": {
-          opacity: isImageVisible ? 1 : 0,
-          transition: "opacity 500ms ease 0s",
+    <Component
+      className={cx(
+        "relative truncate image__transition",
+        {
+          image__visible: isImageVisible,
+          image__hidden: !isImageVisible,
         },
-      }}
+        className,
+      )}
     >
-      <Box
-        css={{
+      <div
+        style={{
           backgroundImage: `url('${placeholder}')`,
           backgroundRepeat: "no-repeat",
           backgroundSize: "cover",
@@ -102,6 +105,6 @@ export const ImageWithPlaceholder = ({
         objectFit={objectFit}
         onLoadingComplete={onLoadingComplete}
       />
-    </Box>
+    </Component>
   )
 }

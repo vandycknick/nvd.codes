@@ -1,6 +1,5 @@
 import React from "react"
 import { Post } from "@nvd.codes/contracts"
-import { Grid } from "@chakra-ui/react"
 
 import { PostCard } from "components/Blog/PostCard"
 
@@ -22,19 +21,9 @@ export type PostsListProps = {
 }
 
 export const PostsList = ({ posts }: PostsListProps) => (
-  <Grid
-    as="section"
-    templateColumns={[
-      "repeat(1, 1fr)",
-      "repeat(1, 1fr)",
-      "repeat(2, 1fr)",
-      "repeat(3, 1fr)",
-    ]}
-    gap={4}
-    py={6}
-  >
+  <section className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-4 py-6">
     {posts.map((post) => (
       <PostCard key={post.id} post={post} />
     ))}
-  </Grid>
+  </section>
 )
