@@ -37,19 +37,29 @@ export const HeadingTwo = ({ as, children, className }: HeadingProps) => {
   )
 }
 
-export const HeadingThree = ({ as, children }: HeadingProps) => {
+export const HeadingThree = ({ as, children, className }: HeadingProps) => {
   const Component = as ?? "h3"
   return (
-    <Component className="text-3xl font-extrabold text-nord-600 leading-tight font-sans dark:text-nord-100 leading-normal pb-2">
+    <Component
+      className={cx(
+        "text-3xl font-extrabold text-nord-600 leading-tight font-sans dark:text-nord-100 leading-normal pb-2",
+        className,
+      )}
+    >
       {children}
     </Component>
   )
 }
 
-export const HeadingFour = ({ as, children }: HeadingProps) => {
-  const Component = as ?? "h3"
+export const HeadingFour = ({ as, children, className }: HeadingProps) => {
+  const Component = as ?? "h4"
   return (
-    <Component className="text-xl font-extrabold text-nord-600 leading-tight font-sans dark:text-nord-100 leading-normal pb-2">
+    <Component
+      className={cx(
+        "text-xl font-extrabold text-nord-600 leading-tight font-sans dark:text-nord-100 leading-normal pb-2",
+        className,
+      )}
+    >
       {children}
     </Component>
   )
