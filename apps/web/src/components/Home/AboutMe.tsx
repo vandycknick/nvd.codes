@@ -19,11 +19,14 @@ export const AboutMe = () => (
       <div className="max-w-5xl py-24 mx-auto text-center">
         <HeadingTwo className="text-nord-50 text-2xl">About Me</HeadingTwo>
         <Paragraph className="text-nord-50 px-4">
-          Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ullamcorper
-          nulla nunc quis molestie volutpat elementum at. Ultrices ipsum, enim
-          cursus lorem ac. Orci maecenas praesent arcu eget orci est orci
-          nullam. Leo purus est pellentesque massa at tortor, est. Aliquet
-          pulvinar a mattis sagittis. Suspendisse porta id elementum, massa.
+          I&apos;m an enthusiastic and passionate software engineer with over 6
+          years of experience. I&apos;m fond of all things web and always
+          striving to build user friendly, scalable and stable web solutions
+          that get users engaged. Trained in the dark arts of full stack
+          development I have gained experience in a broad range of technologies
+          and languages. Eventually I hope to pursue a role where I can have a
+          high impact on the product. In my spare time I like to hack on open
+          source or personal projects, read books or watch a good movie.
         </Paragraph>
       </div>
     </div>
