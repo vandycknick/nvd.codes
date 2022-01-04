@@ -3,6 +3,7 @@ import { GetServerSideProps } from "next"
 
 import SEO from "components/Common/SEO"
 import { Greeting } from "components/Home/Greeting"
+import { AboutMe } from "components/Home/AboutMe"
 import {
   LatestBlogPosts,
   LatestBlogPostsProps,
@@ -14,7 +15,7 @@ type HomeProps = {
 }
 
 const Home = ({ latestPosts }: HomeProps) => (
-  <div className="max-w-6xl w-full flex flex-col flex-1 mx-auto px-4 xl:px-0">
+  <div className="w-full flex flex-col flex-1">
     <SEO
       title="Nick Van Dyck | nvd.codes"
       description="Hi, I'm Nick and this is my blog. This is the place where I share about my experiences as I journey through the world of Software Engineering."
@@ -28,6 +29,7 @@ const Home = ({ latestPosts }: HomeProps) => (
       siteUrl="https://nvd.codes"
       twitterUrl="https://twitter.com/vandycknick"
     />
+    <AboutMe />
     <LatestBlogPosts posts={latestPosts} />
   </div>
 )

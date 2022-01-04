@@ -4,7 +4,7 @@ import cx from "classnames"
 import { GlobeIcon } from "./Icons/Globe"
 import { GitHubIcon } from "./Icons/Github"
 import { TwitterIcon } from "./Icons/Twitter"
-import { CodeExplosion } from "./CodeExplosion"
+import { CodeExplosionRight, CodeExplosionLeft } from "./CodeExplosion"
 
 import { HeadingOne, Paragraph, Text } from "components/Common/Typography"
 
@@ -35,22 +35,25 @@ type GreetingProps = {
 }
 
 const Greeting = ({ githubUrl, twitterUrl, siteUrl }: GreetingProps) => (
-  <section className="pt-20 pb-12 flex flex-col md:flex-row">
-    <div className="w-full lg:w-1/2 lg:pr-5">
-      <HeadingOne>
+  <section className="max-w-6xl mx-auto px-4 xl:px-0 pt-20 pb-12 flex justify-center">
+    <aside className="hidden lg:block">
+      <CodeExplosionLeft />
+    </aside>
+    <div className="pl-5 pr-3">
+      <HeadingOne className="text-center">
         Hey <Text className="not-italic">👋</Text>, I&apos;m{" "}
         <Text className="underline decoration-4 decoration-frost-primary">
           Nick
         </Text>
         .
       </HeadingOne>
-      <Paragraph>
+      <Paragraph className="text-center">
         Welcome to my little space on the web. I try to write code and blog
         about my experiences. Love writing, speaking, travelling or making lots
         of random stuff. Mostly I can be found playing around with Python, .NET,
         TypeScript or JavaScript. Occasionally developing CLI tools and apps.
       </Paragraph>
-      <div className="flex py-6">
+      <div className="flex justify-center py-6">
         <LinkButton
           href={githubUrl}
           icon={
@@ -79,7 +82,7 @@ const Greeting = ({ githubUrl, twitterUrl, siteUrl }: GreetingProps) => (
       </div>
     </div>
     <aside className="hidden lg:block lg:w-1/2 lg:pl-5">
-      <CodeExplosion />
+      <CodeExplosionRight />
     </aside>
   </section>
 )
