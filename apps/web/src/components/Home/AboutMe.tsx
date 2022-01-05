@@ -12,14 +12,11 @@ export const AboutMe = () => (
         ></div>
       </div>
     </div>
-    <div
-      className="bg-nord-500 dark:bg-nord-700 w-full shadow-inner -mt-16"
-      // style={{ backgroundImage: "url(/circuit-board.svg)" }}
-    >
+    <div className="bg-nord-500 dark:bg-nord-700 w-full shadow-inner -mt-16">
       <div className="max-w-5xl py-24 mx-auto text-center">
         <HeadingTwo className="text-nord-50 text-2xl">About Me</HeadingTwo>
         <Paragraph className="text-nord-50 px-4">
-          I&apos;m an enthusiastic and passionate software engineer with over 6
+          I&apos;m an enthusiastic and passionate software engineer with over 9
           years of experience. I&apos;m fond of all things web and always
           striving to build user friendly, scalable and stable web solutions
           that get users engaged. Trained in the dark arts of full stack

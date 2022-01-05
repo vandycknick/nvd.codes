@@ -65,6 +65,20 @@ export const HeadingFour = ({ as, children, className }: HeadingProps) => {
   )
 }
 
+export const HeadingFive = ({ as, children, className }: HeadingProps) => {
+  const Component = as ?? "h5"
+  return (
+    <Component
+      className={cx(
+        "text-lg font-extrabold text-nord-600 leading-tight font-sans dark:text-nord-100 leading-normal pb-2",
+        className,
+      )}
+    >
+      {children}
+    </Component>
+  )
+}
+
 export const HeadingSix = ({ as, children }: HeadingProps) => {
   const Component = as ?? "h6"
   return (

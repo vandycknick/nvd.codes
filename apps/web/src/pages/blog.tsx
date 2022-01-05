@@ -2,7 +2,7 @@ import React from "react"
 import { GetServerSideProps } from "next"
 
 import SEO from "components/Common/SEO"
-import { HeadingTwo, Paragraph } from "components/Common/Typography"
+import { HeadingOne, Paragraph } from "components/Common/Typography"
 import { PostsList, PostsListProps } from "components/Blog/PostsList"
 import { listPosts } from "services/blog"
 import { PostsPager } from "components/Blog/PostsPager"
@@ -19,13 +19,11 @@ const Blog = ({ posts, pager }: BlogProps) => (
   <>
     <SEO title="Blog" />
     <div className="max-w-6xl w-full flex flex-col flex-1 mx-auto px-4 md:px-0 py-14">
-      <HeadingTwo className="pb-8">Blog</HeadingTwo>
-      <div className="flex pb-8">
-        <Paragraph>
-          Actively writing about technology, life-events and indie hacking. Here
-          are some of my most recent thoughts and hacks I&#39;ve published.
-        </Paragraph>
-      </div>
+      <HeadingOne className="pb-8 text-center">Blog</HeadingOne>
+      <Paragraph className="pb-8 text-center">
+        Actively writing about technology, life-events and indie hacking. Here
+        are some of my most recent thoughts and hacks I&#39;ve published.
+      </Paragraph>
       <PostsList posts={posts} />
       <PostsPager {...pager} />
     </div>
