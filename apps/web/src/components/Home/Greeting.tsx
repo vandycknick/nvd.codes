@@ -48,10 +48,12 @@ const Greeting = ({ githubUrl, twitterUrl, siteUrl }: GreetingProps) => (
         .
       </HeadingOne>
       <Paragraph className="text-center">
-        Welcome to my little space on the web. I try to write code and blog
-        about my experiences. Love writing, speaking, travelling or making lots
-        of random stuff. Mostly I can be found playing around with Python, .NET,
-        TypeScript or JavaScript. Occasionally developing CLI tools and apps.
+        Welcome to my little corner on the web! Exactly the right place where I
+        can share my experiences in the world of software engineering or tell
+        you a little something about myself. Love writing, speaking, travelling
+        or hacking around open source or my home automation projects. If you
+        ever ask me about my favourite programming language, I&apos;ll tell you
+        for sure it&apos;s Python or C# or TypeScript or Go or Rust or ...
       </Paragraph>
       <div className="flex justify-center py-6">
         <LinkButton
