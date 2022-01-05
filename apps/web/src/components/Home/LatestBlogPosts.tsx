@@ -5,6 +5,7 @@ import {
   HeadingTwo,
   Paragraph,
   HeadingFour,
+  Text,
 } from "components/Common/Typography"
 import Link from "next/link"
 import Time from "components/Common/Time"
@@ -46,7 +47,7 @@ export const LatestBlogPosts = ({ posts }: LatestBlogPostsProps) => (
           <Paragraph className="hidden lg:flex pb-2">
             {post.description}
           </Paragraph>
-          <a className="text-frost-secondary font-bold">Read More</a>
+          <Text className="text-frost-secondary font-bold">Read More</Text>
         </a>
       </Link>
     ))}
