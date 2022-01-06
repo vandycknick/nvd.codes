@@ -18,6 +18,7 @@ import {
   RedditIcon,
   MailIcon,
 } from "components/Common/Icons"
+import { BackgroundImage } from "components/Common/Image"
 
 import { getPostBySlug } from "services/blog"
 
@@ -110,12 +111,11 @@ const BlogPost = ({ post }: BlogPostProps) => {
           },
         ]}
       />
-      <div
+      <BackgroundImage
         className="w-full h-24 md:h-56 opacity-80 saturate-50 blur-[2px] bg-center bg-cover dark:blur-sm"
-        style={{
-          backgroundImage: `url(http://localhost:5000${post.cover}?w=3840&q=75)`,
-        }}
-      ></div>
+        src={post.cover}
+        width={3840}
+      />
       <div className="max-w-6xl w-full flex flex-col flex-1 mx-auto px-4 xl:px-0 py-14">
         <div className="flex flex-col items-center">
           <HeadingOne className="pb-4 text-center">{post.title}</HeadingOne>
