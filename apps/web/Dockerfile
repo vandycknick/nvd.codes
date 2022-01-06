@@ -20,7 +20,7 @@ COPY yarn.lock package.json ./
 COPY apps/web/package.json apps/web/
 COPY libs/ libs/
 
-RUN yarn workspace @nvd.codes/web install --frozen-lock-file --network-timeout 120000
+RUN yarn workspace @nvd.codes/web install -frozen-lockfile --production --network-timeout 300000 && rm -rf "$(yarn cache dir)"
 
 COPY apps/web apps/web
 
