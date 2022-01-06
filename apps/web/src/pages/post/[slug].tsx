@@ -171,7 +171,7 @@ const BlogPost = ({ post }: BlogPostProps) => {
             </div>
           </div>
         </div>
-        <article className="bg-nord-50 p-6 dark:bg-nord-700 rounded-lg prose dark:prose-invert w-full max-w-6xl drop-shadow-xl">
+        <article className="bg-nord-50 p-6 dark:bg-nord-700 rounded-lg prose prose-gray dark:prose-invert w-full max-w-6xl drop-shadow-xl">
           <Contents
             images={post.images.reduce((map, image) => {
               map[image.url] = image

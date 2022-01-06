@@ -4,7 +4,8 @@ import gfm from "remark-gfm"
 import { PrismAsyncLight as SyntaxHighlighter } from "react-syntax-highlighter"
 import { nord } from "react-syntax-highlighter/dist/cjs/styles/prism"
 
-nord['pre[class*="language-"]']["background"] = "none"
+// nord['pre[class*="language-"]']["background"] = "none"
+nord['pre[class*="language-"]']["paddingBottom"] = "0"
 
 import { ImageWithPlaceholder } from "components/Common/Image"
 import { ExternalLinkIcon } from "components/Common/Icons"
@@ -24,21 +25,19 @@ const CodeComponent = ({
   children,
 }: Props & { inline?: boolean }) => {
   if (inline) {
-    return <code className="not-prose">{children}</code>
+    return <code>{children}</code>
   }
 
   const language = className?.split("language-")[1] ?? "text"
 
   return (
-    <div className="not-prose font-mono">
-      <SyntaxHighlighter
-        // showLineNumbers={showLineNumbers}
-        language={language}
-        style={nord}
-      >
-        {children}
-      </SyntaxHighlighter>
-    </div>
+    <SyntaxHighlighter
+      // showLineNumbers={showLineNumbers}
+      language={language}
+      style={nord}
+    >
+      {children}
+    </SyntaxHighlighter>
   )
 }
 
@@ -68,7 +67,7 @@ const components: Components = {
   code: CodeComponent,
 
   pre({ children }) {
-    return <pre className="not-prose p-0">{children}</pre>
+    return <>{children}</>
   },
 
   a({ href, children }) {

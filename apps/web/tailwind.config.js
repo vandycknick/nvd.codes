@@ -6,6 +6,27 @@ module.exports = {
   ],
   theme: {
     extend: {
+      typography: {
+        DEFAULT: {
+          css: {
+            code: {
+              color: "var(--tw-prose-pre-code)",
+              backgroundColor: "var(--tw-prose-pre-bg)",
+              paddingTop: "2px",
+              paddingBottom: "2px",
+              paddingLeft: "5px",
+              paddingRight: "5px",
+              borderRadius: ".25rem",
+            },
+            "code::before": {
+              content: '""',
+            },
+            "code::after": {
+              content: '""',
+            },
+          },
+        },
+      },
       fontFamily: {
         sans: "system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,Cantarell,Noto Sans,sans-serif,Helvetica,Arial,Apple Color Emoji,Segoe UI Emoji",
         mono: "SFMono-Regular,Menlo,Monaco,Consolas,'Liberation Mono','Courier New',monospace",
