@@ -108,3 +108,27 @@ export const ImageWithPlaceholder = ({
     </Component>
   )
 }
+
+type BackgroundImageProps = {
+  src: string
+  width: number
+  quality?: number
+  className?: string
+}
+
+export const BackgroundImage = ({
+  src,
+  width,
+  quality,
+  className,
+}: BackgroundImageProps) => {
+  const url = imageLoader({ src, width, quality })
+  return (
+    <div
+      className={cx("w-full", className)}
+      style={{
+        backgroundImage: `url(${url})`,
+      }}
+    />
+  )
+}
