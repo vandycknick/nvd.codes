@@ -4,7 +4,7 @@ title: "Add styling to an active link in Next.js"
 description: In this post I show how you can use router api to detect active link in Next.js
 date: 2022-01-08T20:00:00+01:00
 categories: [nextjs, react, javascript]
-cover: ./asssets/2022-01-07-creating-active-links-with-nextjs/cover.jpg
+cover: ./assets/2022-01-07-creating-active-links-with-nextjs/cover.jpg
 ---
 
 ## Setting the scene
