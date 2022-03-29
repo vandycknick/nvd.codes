@@ -43,7 +43,7 @@ export const upsertPosts = async ({ job }: SyncPostsOptions) => {
 
     for (const slugInfo of slugs) {
       const postForSlug = await postsRepository.findOne({
-        slug: slugInfo.slug,
+        where: { slug: slugInfo.slug },
       })
       const postContents = await getPostContents(slugInfo.filePath)
 
