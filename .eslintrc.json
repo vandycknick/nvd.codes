@@ -13,7 +13,7 @@
   "plugins": ["json", "react", "react-hooks"],
   "settings": {
     "react": {
-      "version": "latest"
+      "version": "detect"
     }
   },
   "env": {

@@ -2,17 +2,27 @@ import React, { useState } from "react"
 import NextImage, { ImageLoaderProps } from "next/image"
 import cx from "classnames"
 
-export const imageLoader = ({
+const imageLoaderInternal = ({
   src,
   width,
   quality,
-}: ImageLoaderProps): string => {
+}: {
+  src: string
+  width: number
+  quality?: number
+}) => {
   const host =
     process.env.NODE_ENV === "production"
       ? "https://images.nvd.codes"
       : "http://localhost:5000"
   return `${host}${src}?w=${width}&q=${quality ?? 75}`
 }
+
+export const imageLoader = ({
+  src,
+  width,
+  quality,
+}: ImageLoaderProps): string => imageLoaderInternal({ src, width, quality })
 
 declare type ImgElementStyle = NonNullable<
   JSX.IntrinsicElements["img"]["style"]
@@ -122,7 +132,7 @@ export const BackgroundImage = ({
   quality,
   className,
 }: BackgroundImageProps) => {
-  const url = imageLoader({ src, width, quality })
+  const url = imageLoaderInternal({ src, width, quality })
   return (
     <div
       className={cx("w-full", className)}

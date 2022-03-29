@@ -29,7 +29,10 @@ export const PostsPager = ({ total, current }: PostsPagerProps) => {
           const isCurrentPage = page === current
           const href = getBlogUrl(page)
           return isCurrentPage ? (
-            <Text className="pt-4 px-5 border-t-[2px] flex font-bold text-frost-primary dark:text-frost-primary">
+            <Text
+              key={page}
+              className="pt-4 px-5 border-t-[2px] flex font-bold text-frost-primary dark:text-frost-primary"
+            >
               {page}
             </Text>
           ) : (

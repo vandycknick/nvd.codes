@@ -7,10 +7,10 @@ type GetPostBySlug = BlogController<AppContext>["getPostBySlug"]
 export const getPostBySlug: GetPostBySlug = async ({ input, ctx }) => {
   const { postsRepository } = ctx
 
-  const post = await postsRepository.findOne(
-    { slug: input.slug },
-    { relations: ["images"] },
-  )
+  const post = await postsRepository.findOne({
+    where: { slug: input.slug },
+    relations: ["images"],
+  })
 
   if (post == undefined) {
     throw new TRPCError({
