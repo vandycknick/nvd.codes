@@ -59,7 +59,7 @@ resource "oci_containerengine_node_pool" "nvd_codes_pool_blue" {
 }
 
 resource "oci_containerengine_node_pool" "nvd_codes_green" {
-  count              = 1
+  count              = 0
   cluster_id         = oci_containerengine_cluster.nvd_codes_cluster.id
   compartment_id     = oci_identity_compartment.nvd_codes.id
   kubernetes_version = "v1.21.5"
