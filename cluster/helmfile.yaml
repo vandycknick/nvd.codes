@@ -15,7 +15,7 @@ releases:
   - name: datadog
     namespace: kube-system
     chart: datadog/datadog
-    version: 2.27.7
+    version: 2.32.4
     values:
       - datadog:
           site: {{requiredEnv "DATADOG_SITE"}}
@@ -29,7 +29,7 @@ releases:
   - name: traefik
     namespace: ingress
     chart: traefik/traefik
-    version: 10.7.1
+    version: 10.19.4
     values:
       - deployment:
           replicas: 3
@@ -78,7 +78,7 @@ releases:
   - name: cert-manager
     namespace: cert-manager
     chart: jetstack/cert-manager
-    version: v1.6.1
+    version: v1.8.0
     values:
       - installCRDs: true
 
