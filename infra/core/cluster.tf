@@ -4,7 +4,7 @@ data "oci_identity_availability_domains" "ads" {
 
 resource "oci_containerengine_cluster" "nvd_codes_cluster" {
   compartment_id     = oci_identity_compartment.nvd_codes.id
-  kubernetes_version = "v1.21.5"
+  kubernetes_version = "v1.22.5"
   name               = "nvd-codes-cluster"
   vcn_id             = module.vcn.vcn_id
 
@@ -26,18 +26,18 @@ resource "oci_containerengine_cluster" "nvd_codes_cluster" {
   }
 }
 
-resource "oci_containerengine_node_pool" "nvd_codes_pool_bleu" {
+resource "oci_containerengine_node_pool" "nvd_codes_pool_blue" {
   count              = 0
   cluster_id         = oci_containerengine_cluster.nvd_codes_cluster.id
   compartment_id     = oci_identity_compartment.nvd_codes.id
-  kubernetes_version = "v1.20.11"
-  name               = "nvd-codes-pool-bleu"
+  kubernetes_version = "v1.22.5"
+  name               = "nvd-codes-pool-blue"
   node_config_details {
     placement_configs {
       availability_domain = data.oci_identity_availability_domains.ads.availability_domains[0].name
       subnet_id           = oci_core_subnet.node_subnet.id
     }
-    size = 3
+    size = 2
   }
   node_shape = "VM.Standard.A1.Flex"
 
@@ -54,7 +54,7 @@ resource "oci_containerengine_node_pool" "nvd_codes_pool_bleu" {
 
   initial_node_labels {
     key   = "name"
-    value = "pool-bleu"
+    value = "pool-blue"
   }
 }
 
@@ -69,7 +69,7 @@ resource "oci_containerengine_node_pool" "nvd_codes_green" {
       availability_domain = data.oci_identity_availability_domains.ads.availability_domains[0].name
       subnet_id           = oci_core_subnet.node_subnet.id
     }
-    size = 1
+    size = 2
   }
   node_shape = "VM.Standard.A1.Flex"
 
