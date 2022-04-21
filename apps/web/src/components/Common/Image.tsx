@@ -41,11 +41,6 @@ type ImageWithPlaceholderProps = {
 
 export const Image = NextImage
 
-const useForceUpdate = () => {
-  const [, setValue] = useState(0)
-  return () => setValue((value) => value + 1)
-}
-
 const imageCache = new Set()
 
 export const ImageWithPlaceholder = ({
@@ -59,25 +54,19 @@ export const ImageWithPlaceholder = ({
   className,
 }: ImageWithPlaceholderProps) => {
   const [isImageVisible, setImageVisible] = useState(imageCache.has(src))
-  const forceUpdate = useForceUpdate()
-  const Component = as ?? "div"
+  const Component = as ?? "span"
 
-  const onLoadingComplete = (result: {
-    naturalWidth: number
-    naturalHeight: number
-  }) => {
-    if (result.naturalWidth > 1) {
-      setImageVisible(true)
-      imageCache.add(src)
-    } else {
-      forceUpdate()
-    }
+  const onLoadingComplete = () => {
+    if (isImageVisible) return
+
+    setImageVisible(true)
+    imageCache.add(src)
   }
 
   return (
     <Component
       className={cx(
-        "relative truncate image__transition",
+        "relative truncate image__transition block",
         {
           image__visible: isImageVisible,
           image__hidden: !isImageVisible,
@@ -85,7 +74,7 @@ export const ImageWithPlaceholder = ({
         className,
       )}
     >
-      <div
+      <span
         style={{
           backgroundImage: `url('${placeholder}')`,
           backgroundRepeat: "no-repeat",
