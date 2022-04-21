@@ -1,7 +1,7 @@
 .DEFAULT_GOAL: build
 
 NPM_BIN 		:= $(shell yarn bin)
-NODE_VERSION	:= 16.13.1
+NODE_VERSION	:= 16.14.2
 PUSH_IMAGES		?= false
 
 ifeq ($(PUSH_IMAGES),true)
