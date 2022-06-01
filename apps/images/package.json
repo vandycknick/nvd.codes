@@ -22,7 +22,7 @@
     "koa-bunyan-logger": "^2.1.0",
     "oci-common": "^2.22.0",
     "oci-objectstorage": "^2.22.0",
-    "sharp": "^0.30.4"
+    "sharp": "^0.30.5"
   },
   "devDependencies": {
     "@nvd/tsconfig": "^1.0.0",
