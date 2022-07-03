@@ -1,4 +1,0 @@
-apiVersion: v1
-description: Cloudflare Lets Encrypt Certificate Issuer
-name: cloudflare-cert-issuer-chart
-version: 0.1.0
