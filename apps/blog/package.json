@@ -1,5 +1,5 @@
 {
-  "name": "@nvd.codes/web",
+  "name": "@nvd.codes/blog",
   "private": true,
   "version": "1.0.0",
   "main": "index.js",
@@ -11,7 +11,6 @@
     "sitemap": "dotenv -- ts-node --project tsconfig.server.json src/utils/createSitemap.ts"
   },
   "dependencies": {
-    "@nvd.codes/contracts": "^1.0.0",
     "@trpc/client": "^9.22.0",
     "classnames": "^2.3.1",
     "disqus-react": "^1.1.2",

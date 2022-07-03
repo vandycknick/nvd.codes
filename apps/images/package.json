@@ -16,7 +16,6 @@
   "dependencies": {
     "@hapi/accept": "^5.0.2",
     "@koa/router": "^10.1.1",
-    "@nvd.codes/utils": "^1.0.0",
     "bunyan": "^1.8.15",
     "koa": "^2.13.4",
     "koa-bunyan-logger": "^2.1.0",
