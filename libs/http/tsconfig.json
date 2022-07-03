@@ -1,9 +1,0 @@
-{
-  "extends": "@nvd/tsconfig",
-  "compilerOptions": {
-    "outDir": ".dist",
-    "baseUrl": ".",
-    "declaration": true
-  },
-  "include": ["src/**/*.ts"]
-}
