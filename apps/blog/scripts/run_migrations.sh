@@ -1,1 +1,0 @@
-yarn typeorm migration:run
