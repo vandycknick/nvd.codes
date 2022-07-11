@@ -7,6 +7,7 @@ import { getRawPost } from "./getRawPost"
 import { RenderablePost } from "./models"
 import { heading } from "../nodes/heading"
 import { createImagePlaceHolderWorkaround, image } from "../nodes/image"
+import { fence } from "../nodes/fence"
 
 export const getRenderablePost = async (
   filePath: string,
@@ -21,6 +22,7 @@ export const getRenderablePost = async (
     nodes: {
       heading,
       image,
+      fence,
     },
     variables: {
       metadata: post,

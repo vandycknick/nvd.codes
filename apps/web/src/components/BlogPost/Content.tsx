@@ -1,21 +1,10 @@
-import React, { createContext, ReactNode, useContext } from "react"
-import ReactMarkdown, { Components } from "react-markdown"
-import gfm from "remark-gfm"
+import React, { ReactNode } from "react"
 import { PrismAsyncLight as SyntaxHighlighter } from "react-syntax-highlighter"
 import { nord } from "react-syntax-highlighter/dist/cjs/styles/prism"
-
-// nord['pre[class*="language-"]']["background"] = "none"
-nord['pre[class*="language-"]']["paddingBottom"] = "0"
+import { useTheme } from "../Common/ThemeProvider"
 
 import { ImageWithPlaceholder } from "components/Common/Image"
-import { ExternalLinkIcon } from "components/Common/Icons"
-
-type ImageData = {
-  placeholder: string
-  width: number
-  height: number
-}
-const ContentsContext = createContext<Record<string, ImageData>>({})
+// import { ExternalLinkIcon } from "components/Common/Icons"
 
 type Props = { children?: ReactNode[]; className?: string }
 
@@ -65,51 +54,36 @@ export const Image = ({
   )
 }
 
-export const components = {
-  Heading,
-  Image,
-}
-
-const CodeComponent = ({
-  className,
-  inline,
+const Fence = ({
   children,
-}: Props & { inline?: boolean }) => {
-  if (inline) {
-    return <code>{children}</code>
-  }
+  language,
+}: {
+  language: string
+  children: string
+}) => {
+  const { theme } = useTheme()
+  let style = nord
 
-  const language = className?.split("language-")[1] ?? "text"
+  if (theme === "dark") {
+    style['pre[class*="language-"]']["background"] = "#242933"
+    style = {
+      ...nord,
+    }
+  }
 
   return (
     <SyntaxHighlighter
       // showLineNumbers={showLineNumbers}
       language={language}
-      style={nord}
+      style={style}
     >
-      {children as unknown as string}
+      {children}
     </SyntaxHighlighter>
   )
 }
 
-const LinkComponent = ({ children, href }: Props & { href: string }) => (
-  <a href={href} rel="noopener noreferrer">
-    {children} <ExternalLinkIcon className="mx-1 h-5 w-5" />
-  </a>
-)
-
-const ImageComponent = (props: Props & { src: string; alt: string }) => {
-  const images = useContext(ContentsContext)
-  const { src, alt } = props
-  const img = images[src]
-
-  return (
-    <ImageWithPlaceholder
-      src={src}
-      alt={alt}
-      width={img.width}
-      height={img.height}
-      placeholder={img.placeholder}
-    />
-  )
+export const components = {
+  Heading,
+  Image,
+  Fence,
 }

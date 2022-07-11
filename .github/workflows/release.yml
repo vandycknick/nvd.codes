@@ -38,8 +38,8 @@ jobs:
       - name: Install build dependencies
         run: make install.yarn
 
-      - name: Build
-        run: make build
+      - name: Compile dependencies
+        run: make build.libs && make build.apps
 
       - name: Lint Code
         run: make check

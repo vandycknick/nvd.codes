@@ -67,10 +67,14 @@ build.libs:
 	@find . -name 'package.json' -path '*/libs/*' -not -path '*/node_modules/*' | sed "s/\.\///" | \
 		xargs -n 1 dirname | grep -v "\." | xargs -n 1 -I% -P2 bash -c 'cd % && yarn tsc'
 
+.PHONY: build.apps
+build.apps:
+	@find . -name 'package.json' -path '*/apps/*' -not -path '*/node_modules/*' -not -path '*/web/*' | sed "s/\.\///" | \
+		xargs -n 1 dirname | grep -v "\." | xargs -n 1 -I% -P8 bash -c 'cd % && yarn build'
+
 .PHONY: build.web
 build.web:
-	@yarn concurrently -n blog,web -c red,cyan "$(MAKE) dev.blog" "yarn workspace @nvd.codes/web build"
-	yarn workspace @nvd.codes/web build
+	@yarn concurrently -n blog,web -c red,cyan -s web -k "$(MAKE) dev.blog" "yarn workspace @nvd.codes/web build"
 
 .PHONY: build
-build: clean build.libs build.web
+build: clean build.libs build.apps build.web
