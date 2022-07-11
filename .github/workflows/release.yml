@@ -39,7 +39,7 @@ jobs:
         run: make install.yarn
 
       - name: Compile dependencies
-        run: make build.libs && make build.apps
+        run: make build.libs build.apps
 
       - name: Lint Code
         run: make check
