@@ -1,0 +1,10 @@
+{
+  "name": "@nvd.codes/utils",
+  "private": true,
+  "version": "1.0.0",
+  "main": "./.dist/index.js",
+  "license": "MIT",
+  "devDependencies": {
+    "typescript": "^4.7.4"
+  }
+}
