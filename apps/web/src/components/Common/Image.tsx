@@ -12,9 +12,7 @@ const imageLoaderInternal = ({
   quality?: number
 }) => {
   const host =
-    process.env.NODE_ENV === "production"
-      ? "https://images.nvd.codes"
-      : "http://localhost:4000"
+    process.env.NODE_ENV === "production" ? "" : "http://localhost:4000"
   return `${host}${src}?w=${width}&q=${quality ?? 75}`
 }
 

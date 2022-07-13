@@ -6,7 +6,7 @@
   "license": "MIT",
   "scripts": {
     "dev": "PORT=7000 dotenv -e ../../.env -- next dev",
-    "build": "next build && next export",
+    "build": "next build && next export -o $BUILD_DIR",
     "start": "next start",
     "sitemap": "dotenv -- ts-node --project tsconfig.server.json src/utils/createSitemap.ts"
   },

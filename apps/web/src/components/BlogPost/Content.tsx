@@ -58,12 +58,11 @@ const Fence = ({
   children,
   language,
 }: {
-  language: string
+  language?: string
   children: string
 }) => {
   const { theme } = useTheme()
   let style = nord
-
   if (theme === "dark") {
     style['pre[class*="language-"]']["background"] = "#242933"
     style = {
@@ -74,7 +73,7 @@ const Fence = ({
   return (
     <SyntaxHighlighter
       // showLineNumbers={showLineNumbers}
-      language={language}
+      language={language ?? ""}
       style={style}
     >
       {children}

@@ -3,10 +3,7 @@
 NPM_BIN 		:= $(shell yarn bin)
 NODE_VERSION	:= 16.14.2
 PUSH_IMAGES		?= false
-
-ifeq ($(PUSH_IMAGES),true)
-	BUILDX_ARGS = --push
-endif
+BUILD_DIR		:= $(shell pwd)/.dist
 
 .PHONY: setup
 setup:
@@ -74,7 +71,11 @@ build.apps:
 
 .PHONY: build.web
 build.web:
-	@yarn concurrently -n blog,web -c red,cyan -s web -k "$(MAKE) dev.blog" "yarn workspace @nvd.codes/web build"
+	@yarn concurrently --names blog,web \
+		--prefix-colors red,cyan --success command-web \
+		--kill-others \
+		"$(MAKE) dev.blog" "BUILD_DIR=${BUILD_DIR} yarn workspace @nvd.codes/web build"
+	@cp -r _posts ${BUILD_DIR}
 
 .PHONY: build
 build: clean build.libs build.apps build.web

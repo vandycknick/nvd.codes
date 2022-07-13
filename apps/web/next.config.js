@@ -4,7 +4,7 @@ module.exports = {
     domains: ["images.nvd.codes"],
   },
   experimental: { esmExternals: true, images: { unoptimized: true } },
-
+  trailingSlash: true,
   async rewrites() {
     return {
       beforeFiles: [
