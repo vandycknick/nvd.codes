@@ -30,6 +30,36 @@ const Document = (): JSX.Element => {
         />
       </Head>
       <body className="h-screen bg-nord-100 dark:bg-nord-900 transition transition-colors duration-300">
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `
+              (function() {
+                function setTheme(newTheme) {
+                  window.__theme = newTheme;
+                  preferredTheme = newTheme;
+                  document.documentElement.className = newTheme;
+                  var themeChangedEvent = new CustomEvent("themeChanged", { detail: newTheme })
+                  window.dispatchEvent(themeChangedEvent)
+                }
+                var preferredTheme;
+                try {
+                  preferredTheme = localStorage.getItem('theme');
+                } catch (err) { }
+                window.__setPreferredTheme = function(newTheme) {
+                  setTheme(newTheme);
+                  try {
+                    localStorage.setItem('theme', newTheme);
+                  } catch (err) {}
+                }
+                var darkQuery = window.matchMedia('(prefers-color-scheme: dark)');
+                darkQuery.addListener(function(e) {
+                  window.__setPreferredTheme(e.matches ? 'dark' : 'light')
+                });
+                setTheme(preferredTheme || (darkQuery.matches ? 'dark' : 'light'));
+              })();
+        `,
+          }}
+        ></script>
         <Main />
         <NextScript />
       </body>

@@ -32,43 +32,35 @@ const themeFlip: Record<ThemeMode, ThemeMode> = {
 
 const isBrowser = () => typeof window !== "undefined"
 
-const getDefaultTheme = (): ThemeMode => {
-  if (isBrowser()) {
-    return window.matchMedia &&
-      window.matchMedia("(prefers-color-scheme: dark)").matches
-      ? "dark"
-      : "light"
+declare global {
+  interface Window {
+    __theme: ThemeMode
+    __setPreferredTheme: (theme: ThemeMode) => void
   }
-
-  return "light"
 }
 
 export const ThemeProvider = ({ children }: ThemeProviderProps) => {
-  const [theme, setActiveTheme] = useState(getDefaultTheme())
-  const setDarkTheme = () => {
-    document.documentElement.classList.add("dark")
-    setActiveTheme("dark")
-  }
-  const setLightTheme = () => {
-    document.documentElement.classList.remove("dark")
-    setActiveTheme("light")
-  }
+  const [theme, setActiveTheme] = useState(
+    isBrowser() && window.__theme ? window.__theme : "light",
+  )
   const toggleTheme = useCallback(() => {
-    const themeChangedEvent = new Event("themeChanged")
-    document.dispatchEvent(themeChangedEvent)
     const updated = themeFlip[theme]
-    updated === "dark" ? setDarkTheme() : setLightTheme()
+    window.__setPreferredTheme(updated)
   }, [theme])
 
   useEffect(() => {
-    if (isBrowser()) {
-      if (theme == "dark") {
-        setDarkTheme()
-      } else {
-        setLightTheme()
-      }
+    const onThemeChanged = (event: CustomEvent<ThemeMode>) =>
+      setActiveTheme(event.detail)
+
+    window.addEventListener("themeChanged", onThemeChanged as EventListener)
+
+    return () => {
+      window.removeEventListener(
+        "themeChanged",
+        onThemeChanged as EventListener,
+      )
     }
-  })
+  }, [])
 
   return (
     <ThemeContext.Provider value={{ theme, toggleTheme }}>
