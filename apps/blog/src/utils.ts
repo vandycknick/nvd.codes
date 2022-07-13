@@ -20,7 +20,7 @@ export const createKoaMiddleware =
       method: context.request.method,
       query: new URLSearchParams(context.request.querystring),
       headers: context.request.headers,
-      body: context.request.body,
+      body: context.body,
     }
 
     const response = await resolveHTTPResponse({
