@@ -10,20 +10,26 @@ import { Text } from "components/Common/Typography"
 
 const menu = [
   { title: "Home", path: "/" },
-  { title: "Blog", path: "/blog" },
+  { title: "Blog", path: "/blog", activeLinkMatch: /\/blog[/0-9]*/ },
   { title: "About", path: "/about" },
 ]
 
 type NavItemProps = {
   title: string
   path: string
+  activeLinkMatch?: RegExp
   className?: string
 }
 
-const NavItem = ({ title, path, className }: NavItemProps) => {
+const NavItem = ({ title, path, activeLinkMatch, className }: NavItemProps) => {
   const router = useRouter()
+  const matcher = () => {
+    return activeLinkMatch
+      ? activeLinkMatch?.test(router.asPath)
+      : router.pathname === path
+  }
 
-  return router.pathname == path ? (
+  return matcher() ? (
     <Text
       className={cx(
         "line-through decoration-4 decoration-aurora-300",
@@ -66,6 +72,7 @@ const Header = () => {
               key={item.title}
               title={item.title}
               path={item.path}
+              activeLinkMatch={item.activeLinkMatch}
             />
           ))}
           <ToggleThemeButton />
@@ -103,6 +110,7 @@ const Header = () => {
                   key={item.title}
                   title={item.title}
                   path={item.path}
+                  activeLinkMatch={item.activeLinkMatch}
                 />
               ))}
               <ToggleThemeButton />
