@@ -1,4 +1,4 @@
-import { Tag, Schema, Node } from "@markdoc/markdoc"
+import { Tag, Schema, Node, Config } from "@markdoc/markdoc"
 import { join, dirname } from "node:path"
 import { getImageDimensions } from "../images/getImageDimensions"
 import { createPlaceHolders } from "../images/createPlaceholders"
@@ -25,7 +25,9 @@ export const createImagePlaceHolderWorkaround = async (
   return ast
 }
 
-export const image: Schema = {
+export const image: Schema<
+  Config & { settings: { postFilePath: string; postsDirectory: string } }
+> = {
   attributes: {
     src: { type: String, required: true },
     alt: { type: String },
@@ -37,7 +39,7 @@ export const image: Schema = {
   transform(node, config) {
     const attributes = node.transformAttributes(config)
     const children = node.transformChildren(config)
-    const { settings } = config as any
+    const { settings } = config
 
     const imageAbsolutePath = join(
       dirname(settings.postFilePath),

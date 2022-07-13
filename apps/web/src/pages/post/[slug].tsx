@@ -66,7 +66,7 @@ type BlogPostProps = {
     | "readingTime"
     | "editUrl"
     | "categories"
-  > & { images: any[]; content: RenderableTreeNode | RenderableTreeNode[] }
+  > & { content: RenderableTreeNode | RenderableTreeNode[] }
 }
 
 const BlogPost = ({ post }: BlogPostProps) => {
@@ -223,7 +223,6 @@ export const getStaticProps: GetStaticProps<
   const postView = {
     ...post,
     content,
-    images: [],
   }
 
   return {
