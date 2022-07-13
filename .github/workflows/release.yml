@@ -46,3 +46,6 @@ jobs:
 
       # - name: Unit Test
       #   run: make test.unit
+
+      - name: Build blog
+        run: make build
