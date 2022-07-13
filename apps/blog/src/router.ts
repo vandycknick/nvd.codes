@@ -29,7 +29,7 @@ export const blogRouter = trpc
       const sorted = posts.sort(
         (l, r) => new Date(r["date"]).getTime() - new Date(l["date"]).getTime(),
       )
-      const lower = clamp(skip - 1, 0, posts.length)
+      const lower = clamp(skip, 0, posts.length)
       const upper = clamp(take + skip, 0, posts.length)
       return {
         posts: sorted.slice(lower, upper),
