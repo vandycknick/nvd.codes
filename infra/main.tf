@@ -125,8 +125,28 @@ resource "aws_cloudfront_response_headers_policy" "security_headers_policy" {
 
 resource "aws_cloudfront_cache_policy" "default_cache_policy" {
   name        = "default_cache_policy"
-  comment     = "test comment"
-  default_ttl = 86400
+  comment     = "default cache policy"
+  default_ttl = 60
+  min_ttl     = 1
+  max_ttl     = 120
+
+  parameters_in_cache_key_and_forwarded_to_origin {
+    cookies_config {
+      cookie_behavior = "none"
+    }
+    headers_config {
+      header_behavior = "none"
+    }
+    query_strings_config {
+      query_string_behavior = "none"
+    }
+  }
+}
+
+resource "aws_cloudfront_cache_policy" "nextjs_cache_policy" {
+  name        = "nextjs_cache_policy"
+  comment     = "Cache policy for files in _next folder"
+  default_ttl = 3794400
   min_ttl     = 1
   max_ttl     = 31536000
 
@@ -143,10 +163,14 @@ resource "aws_cloudfront_cache_policy" "default_cache_policy" {
   }
 }
 
+locals {
+  s3_website_origin_id = "nvd.codes"
+}
+
 resource "aws_cloudfront_distribution" "s3_distribution" {
   origin {
     domain_name = aws_s3_bucket_website_configuration.website_config.website_endpoint
-    origin_id   = "nvd.codes"
+    origin_id   = local.s3_website_origin_id
 
     custom_origin_config {
       http_port              = "80"
@@ -169,6 +193,17 @@ resource "aws_cloudfront_distribution" "s3_distribution" {
   is_ipv6_enabled     = true
   default_root_object = "index.html"
   aliases             = ["nvd.codes", "www.nvd.codes"]
+
+  ordered_cache_behavior {
+    target_origin_id = local.s3_website_origin_id
+    path_pattern     = "/_next/*"
+
+    allowed_methods = ["GET", "HEAD"]
+    cached_methods  = ["GET", "HEAD"]
+
+    cache_policy_id        = aws_cloudfront_cache_policy.nextjs_cache_policy.id
+    viewer_protocol_policy = "redirect-to-https"
+  }
 
   default_cache_behavior {
     allowed_methods  = ["DELETE", "GET", "HEAD", "OPTIONS", "PATCH", "POST", "PUT"]

@@ -13,7 +13,7 @@ variable "domain_name" {
   default = "nvd.codes"
 }
 
-vairable "alternative_names" {
+variable "alternative_names" {
   type    = list(string)
   default = ["www.nvd.codes"]
 }
