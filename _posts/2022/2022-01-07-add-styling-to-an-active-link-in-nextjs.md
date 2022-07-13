@@ -1,5 +1,4 @@
 ---
-id: 0265ba46-a5f8-4ba5-b7c8-4ef544bf2711
 title: "Add styling to an active link in Next.js"
 description: In this post I show how you can use router api to detect active link in Next.js
 date: 2022-01-08T20:00:00+01:00

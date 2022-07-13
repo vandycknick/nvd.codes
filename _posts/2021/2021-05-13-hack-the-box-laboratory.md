@@ -1,5 +1,4 @@
 ---
-id: 8977f7d1-1d7d-4169-b6e8-1310ad6b8b10
 title: "Hack The Box - Laboratory"
 description: In this post, I'll walk you through Laboratory, an easy-level Linux machine on Hack the Box. It has a GitLab CVE vulnerability for the user and uses path file checking on a setuid binary for the root flag.
 date: 2021-05-13T20:00:00+01:00

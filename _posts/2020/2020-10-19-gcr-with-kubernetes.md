@@ -1,5 +1,4 @@
 ---
-id: e546368c-7b49-4ed5-9b6f-c0c998fe3e27
 title: Pulling images from GCR with Kubernetes
 description: In this post, I go through the process of connecting to a private google container registry (GCR) from Kubernetes. I show how to create a service account and how to configure to use these credentials to pull images from a given private registry.
 date: 2020-10-19T22:00:00+02:00
@@ -16,15 +15,15 @@ container "container-name" in pod "pod-name" is waiting to start: trying and fai
 Digging a bit deeper in the pod's event logs, I got a better idea of what was going on:
 
 ```bash
-Events:                                                                                                                                               
-  Type     Reason     Age                   From               Message                                                                                   
-  ----     ------     ----                  ----               -------                                                                                   
-  Normal   Pulling    11m (x4 over 12m)     kubelet, hostn     Pulling image "eu.gcr.io/gcr-name/imagename"                                              
-  Warning  Failed     11m (x4 over 12m)     kubelet, hostn     Failed to pull image "eu.gcr.io/gcr-name/imagename": rpc error: code = Unknown desc =     
-failed to resolve image "eu.gcr.io/gcr-name/imagename:latest": no available registry endpoint: unexpected status code                  
-https://eu.gcr.io/v2/gcr-name/imagename/manifests/latest: 401 Unauthorized                                                                    
-  Warning  Failed     11m (x4 over 12m)     kubelet, hostn     Error: ErrImagePull                                                                       
-  Warning  Failed     10m (x7 over 12m)     kubelet, hostn     Error: ImagePullBackOff                                                                   
+Events:
+  Type     Reason     Age                   From               Message
+  ----     ------     ----                  ----               -------
+  Normal   Pulling    11m (x4 over 12m)     kubelet, hostn     Pulling image "eu.gcr.io/gcr-name/imagename"
+  Warning  Failed     11m (x4 over 12m)     kubelet, hostn     Failed to pull image "eu.gcr.io/gcr-name/imagename": rpc error: code = Unknown desc =
+failed to resolve image "eu.gcr.io/gcr-name/imagename:latest": no available registry endpoint: unexpected status code
+https://eu.gcr.io/v2/gcr-name/imagename/manifests/latest: 401 Unauthorized
+  Warning  Failed     11m (x4 over 12m)     kubelet, hostn     Error: ErrImagePull
+  Warning  Failed     10m (x7 over 12m)     kubelet, hostn     Error: ImagePullBackOff
   Normal   BackOff    2m38s (x42 over 12m)  kubelet, hostn     Back-off pulling image "eu.gcr.io/gcr-name/imagename"
 ```
 
@@ -113,7 +112,7 @@ Finally, you have to add the secret to your default service account as `ImagePul
 kubectl patch serviceaccount default -p '{"imagePullSecrets": [{"name": "gcr-docker-json-secret"}]}'
 ```
 
-You can verify that everything is setup correctly with the following: 
+You can verify that everything is setup correctly with the following:
 
 ```bash
 kubectl get serviceaccount default -o yaml

@@ -1,5 +1,4 @@
 ---
-id: cb976831-a0d0-4709-9884-e7084b3b1aaf
 title: "Hack The Box - Knife"
 description: In this post, I'll go over Knife from Hack the Box. It's an easy level Linux machine that shows what damage a supply chain attack on the PHP codebase could have caused if it would have slipped through the cracks and got released into the wild.
 date: 2021-08-30T20:00:00+01:00
@@ -41,7 +40,7 @@ The result shows an ssh server running on port `22` and a simple web server host
 
 ![Website On Port 80](./assets/2021-08-30-hack-the-box-knife/website.png)
 
-After combing through the website for a minute or two, I decided to start a couple of gobuster scans. None yielded anything fruitful and it wasn't until I checked my `nikto` scan for the second time that I noticed something interesting . 
+After combing through the website for a minute or two, I decided to start a couple of gobuster scans. None yielded anything fruitful and it wasn't until I checked my `nikto` scan for the second time that I noticed something interesting .
 
 ```sh
 $ nikto -host 10.10.10.242 -output knife-nikto.txt
@@ -115,6 +114,6 @@ Digging through the docs I learned that `knife` has an [exec](https://docs.chef.
 But with the `-e` it could have been as easy as:
 
 ```
-james@knife:~$ sudo knife exec -E "exec '/bin/bash'"         
+james@knife:~$ sudo knife exec -E "exec '/bin/bash'"
 root@knife:/home/james#
 ```

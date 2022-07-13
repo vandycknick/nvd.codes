@@ -1,5 +1,4 @@
 ---
-id: cfd8a1a6-414d-4fac-bbf1-7823a8fd5b78
 title: "Hack The Box - Cap"
 description: In this post, I'll go over Cap from Hack the Box. An easy level Linux machine where the name is nice hint. An IDOR gives access to a PCAP with unencrypted traffic and misconfigured capabilites allow getting a shell as root.
 date: 2021-10-07T20:00:00+01:00

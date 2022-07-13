@@ -1,5 +1,4 @@
 ---
-id: 2ab81a33-949e-4ac8-903b-1ce89f968ae1
 title: "Hack The Box - Luanne"
 description: In this post I walk you through how I solved Luanne from Hack the Box. This is an easy difficulty NetBSD box, focussing on fuzzing and code injection via Lua.
 date: 2021-03-28T20:00:00+01:00

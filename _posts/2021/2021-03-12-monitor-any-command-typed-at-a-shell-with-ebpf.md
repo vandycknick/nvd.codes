@@ -1,5 +1,4 @@
 ---
-id: 85492f70-ffa0-4444-8d29-3035359d0c33
 title: Monitor any command typed at a shell with eBPF
 description: Ever wondered if it would be possible to monitor what is getting typed at other shells running on a Linux system. Well I have and in this post, I walk you through creating an eBPF program to monitor every command typed on a bash or zsh prompt.
 date: 2021-03-12T20:00:00+01:00
