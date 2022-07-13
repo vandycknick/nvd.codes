@@ -1,6 +1,6 @@
 {
   "private": true,
-  "workspaces": ["apps/*", "libs/*"],
+  "workspaces": ["apps/*", "libs/*", "tools/*"],
   "devDependencies": {
     "@types/jest-when": "^3.5.2",
     "@typescript-eslint/eslint-plugin": "^5.30.6",

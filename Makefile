@@ -79,3 +79,7 @@ build.web:
 
 .PHONY: build
 build: clean build.libs build.apps build.web
+
+.PHONY: deploy
+deploy:
+	@yarn workspace @nvd.codes/s3-deploy execute --bucket nvd.codes --directory ${BUILD_DIR}
