@@ -8,7 +8,6 @@ import Markdoc from "@markdoc/markdoc"
 
 import SEO from "components/Common/SEO"
 import Time from "components/Common/Time"
-// import { Contents } from "components/BlogPost/Content"
 import { components } from "components/BlogPost/Content"
 import { HeadingOne, Text } from "components/Common/Typography"
 import {
