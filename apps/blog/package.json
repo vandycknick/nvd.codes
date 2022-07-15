@@ -13,11 +13,14 @@
     "build": "tsc",
     "dev": "PORT=4000 dotenv -e .env.local -e .env -- nodemon --config nodemon.json src/index.ts"
   },
-  "files": [".dist"],
+  "files": [
+    ".dist"
+  ],
   "dependencies": {
     "@nvd.codes/blog-engine": "^1.0.0",
     "@nvd.codes/utils": "^1.0.0",
     "@trpc/server": "^9.25.3",
+    "chokidar": "^3.5.3",
     "koa": "^2.13.4",
     "koa-bunyan-logger": "^2.1.0",
     "koa-mount": "^4.0.0",
