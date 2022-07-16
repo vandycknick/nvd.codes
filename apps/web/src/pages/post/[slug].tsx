@@ -84,9 +84,7 @@ const BlogPost = ({ post }: BlogPostProps) => {
         openGraph={{
           type: "article",
           url: `https://nvd.codes/post/${post.slug}`,
-          images: [
-            { url: `https://images.nvd.codes${post.cover}?w=1920&q=75` },
-          ],
+          images: [{ url: `https://nvd.codes${post.cover}?w=1920&q=75` }],
           article: {
             publishedTime: post.date,
             tags: post.categories,
@@ -109,6 +107,10 @@ const BlogPost = ({ post }: BlogPostProps) => {
           {
             name: "twitter:data2",
             content: post.categories.join(", "),
+          },
+          {
+            name: "twitter:image",
+            content: `https://nvd.codes${post.cover}?w=1920&q=75`,
           },
         ]}
       />
