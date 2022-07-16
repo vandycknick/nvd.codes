@@ -2,7 +2,7 @@ import { inferAsyncReturnType } from "@trpc/server"
 import { createBlogEngine, Post } from "@nvd.codes/blog-engine"
 import { memoize } from "@nvd.codes/utils"
 
-import { watch } from "chokidar"
+// import { watch } from "chokidar"
 
 import { getConfig } from "./config"
 
@@ -14,15 +14,17 @@ const createBlogEngineWithCache = memoize(() => {
   })
   let cache: Promise<Post[]> | undefined
 
-  const watcher = watch(config.postsDirectory)
+  // const watcher = watch(config.postsDirectory)
 
-  watcher
-    .on("add", () => {
-      cache = engine.getAllPosts()
-    })
-    .on("change", () => {
-      cache = engine.getAllPosts()
-    })
+  // watcher
+  //   .on("add", (file) => {
+  //     cache = engine.getAllPosts()
+  //     console.log("add", file)
+  //   })
+  //   .on("change", (file) => {
+  //     cache = engine.getAllPosts()
+  //     console.log("change", file)
+  //   })
 
   return {
     ...engine,
