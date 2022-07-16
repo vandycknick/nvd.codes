@@ -1,6 +1,8 @@
 import React from "react"
 import Link from "next/link"
 
+import { clamp } from "@nvd.codes/utils"
+
 import { Text } from "components/Common/Typography"
 import { ArrowSmallLeft, ArrowSmallRight } from "components/Common/Icons"
 
@@ -15,10 +17,12 @@ export const PostsPager = ({ total, current }: PostsPagerProps) => {
   const pages = Array(total)
     .fill(0)
     .map((_, index) => index + 1)
+  const previous = clamp(current - 1, 1, total)
+  const next = clamp(current + 1, 1, total)
 
   return (
     <div className="mt-8 border-t-[2px] border-nord-300 dark:border-nord-700 flex justify-between">
-      <Link href={getBlogUrl(1)} passHref>
+      <Link href={getBlogUrl(previous)} passHref>
         <a className="text-nord-600 dark:text-nord-100 flex font-bold pt-4 inline-flex align-center">
           <ArrowSmallLeft className="mr-2" />
           Previous
@@ -47,7 +51,7 @@ export const PostsPager = ({ total, current }: PostsPagerProps) => {
           )
         })}
       </div>
-      <Link href={getBlogUrl(total)} passHref>
+      <Link href={getBlogUrl(next)} passHref>
         <a className="text-nord-600 dark:text-nord-100 flex font-bold pt-4 flex align-center">
           Next
           <ArrowSmallRight className="ml-2" />
