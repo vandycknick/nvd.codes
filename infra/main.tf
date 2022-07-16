@@ -44,14 +44,12 @@ data "aws_iam_policy_document" "s3_policy" {
     }
 
     dynamic "condition" {
-      #   for_each = local.password_enabled ? ["password"] : []
       for_each = [for r in random_password.referer : r.result]
 
       content {
         test     = "StringEquals"
         variable = "aws:referer"
-        # values   = [random_password.referer[0].result]
-        values = [condition.value]
+        values   = [condition.value]
       }
     }
   }
@@ -206,9 +204,9 @@ resource "aws_cloudfront_distribution" "s3_distribution" {
   }
 
   default_cache_behavior {
+    target_origin_id = local.s3_website_origin_id
     allowed_methods  = ["DELETE", "GET", "HEAD", "OPTIONS", "PATCH", "POST", "PUT"]
     cached_methods   = ["GET", "HEAD"]
-    target_origin_id = "nvd.codes"
 
     cache_policy_id            = aws_cloudfront_cache_policy.default_cache_policy.id
     response_headers_policy_id = aws_cloudfront_response_headers_policy.security_headers_policy.id
