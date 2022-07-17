@@ -53,7 +53,7 @@ const Header = () => {
   return (
     <header className="flex bg-nord-50 dark:bg-nord-600 transition transition-color duration-300 z-50 drop-shadow-md">
       <div className="m-auto max-w-6xl w-full flex justify-between py-3 px-4 xl:px-0">
-        <Link href="/" passHref>
+        {/* <Link href="/" passHref>
           <a className="flex justify-center items-center">
             <svg
               className="inline-block h-6 w-6 fill-frost-400 dark:fill-frost-100"
@@ -64,7 +64,8 @@ const Header = () => {
               <path d="M256 256c0-8.188-3.125-16.38-9.375-22.62l-192-192C48.38 35.13 40.19 32 32 32C14.95 32 0 45.73 0 64c0 8.188 3.125 16.38 9.375 22.62L178.8 256l-169.4 169.4C3.125 431.6 0 439.8 0 448c0 18.28 14.95 32 32 32c8.188 0 16.38-3.125 22.62-9.375l192-192C252.9 272.4 256 264.2 256 256zM544 416H256c-17.67 0-32 14.31-32 32s14.33 32 32 32h288c17.67 0 32-14.31 32-32S561.7 416 544 416z"></path>
             </svg>
           </a>
-        </Link>
+        </Link> */}
+        <div />
         <nav className="hidden lg:flex text-lg font-bold text-nord-500 items-center dark:text-nord-100">
           {menu.map((item) => (
             <NavItem
