@@ -59,27 +59,27 @@ const Greeting = ({ githubUrl, twitterUrl, siteUrl }: GreetingProps) => (
         <LinkButton
           href={githubUrl}
           icon={
-            <GitHubIcon className="fill-nord-50 w-5 h-5 inline-block pr-1" />
+            <GitHubIcon className="fill-nord-50 w-7 h-7 md:w-5 md:h5 inline-block pr-1" />
           }
         >
-          GitHub
+          <span className="hidden md:inline">GitHub</span>
         </LinkButton>
         <LinkButton
           href={twitterUrl}
           className="mx-5"
           icon={
-            <TwitterIcon className="fill-nord-50 w-5 h-5 inline-block pr-1" />
+            <TwitterIcon className="fill-nord-50 w-8 h-8 md:w-5 md:h5 inline-block pr-1" />
           }
         >
-          Twitter
+          <span className="hidden md:inline">Twitter</span>
         </LinkButton>
         <LinkButton
           href={siteUrl}
           icon={
-            <GlobeIcon className="fill-nord-50 w-5 h-5 inline-block pr-1" />
+            <GlobeIcon className="fill-nord-50 w-7 h-7 md:w-5 md:h5 inline-block pr-1" />
           }
         >
-          Website
+          <span className="hidden md:inline">Website</span>
         </LinkButton>
       </div>
     </div>
