@@ -28,7 +28,7 @@ export const PostsPager = ({ total, current }: PostsPagerProps) => {
           Previous
         </a>
       </Link>
-      <div className="none md:flex justify-center flex-1 mt-[-2px]">
+      <div className="hidden md:flex justify-center flex-1 mt-[-2px]">
         {pages.map((page) => {
           const isCurrentPage = page === current
           const href = getBlogUrl(page)
