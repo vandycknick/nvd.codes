@@ -1,8 +1,6 @@
 .DEFAULT_GOAL: build
 
 NPM_BIN 		:= $(shell yarn bin)
-NODE_VERSION	:= 16.14.2
-PUSH_IMAGES		?= false
 BUILD_DIR		:= $(shell pwd)/.dist
 
 .PHONY: setup
