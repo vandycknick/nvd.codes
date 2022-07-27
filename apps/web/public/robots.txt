@@ -1,7 +1,0 @@
-Sitemap: https://nvd.codes/sitemap.xml
-
-User-agent: *
-Allow: /*
-
-Disallow: /api/*
-Disallow: /search

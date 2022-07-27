@@ -1,4 +1,7 @@
-module.exports = {
+/**
+ * @type {import('next').NextConfig}
+ */
+const nextConfig = {
   swcMinify: true,
   images: {
     domains: ["images.nvd.codes"],
@@ -16,3 +19,5 @@ module.exports = {
     }
   },
 }
+
+module.exports = nextConfig

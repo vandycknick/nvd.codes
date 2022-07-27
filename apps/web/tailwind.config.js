@@ -1,4 +1,4 @@
-module.exports = {
+const config = {
   darkMode: "class",
   content: [
     "./src/pages/**/*.{js,ts,jsx,tsx}",
@@ -65,3 +65,5 @@ module.exports = {
   },
   plugins: [require("@tailwindcss/typography")],
 }
+
+module.exports = config

@@ -20,6 +20,7 @@ clean:
 	@rm -rf apps/*/.tmp
 	@rm -rf libs/*/.dist
 	@rm -rf **/*.log
+	@rm -rf .dist
 
 .PHONY: dev
 dev: build.libs
@@ -66,7 +67,7 @@ build.libs:
 
 .PHONY: build.apps
 build.apps:
-	@find . -name 'package.json' -path '*/apps/*' -not -path '*/node_modules/*' -not -path '*/web/*' | sed "s/\.\///" | \
+	@find . -name 'package.json' -path '*/apps/*' -not -path '*/node_modules/*' -not -path '*/apps/web/*' | sed "s/\.\///" | \
 		xargs -n 1 dirname | grep -v "\." | xargs -n 1 -I% -P8 bash -c 'cd % && yarn build'
 
 .PHONY: build.web
@@ -74,7 +75,9 @@ build.web:
 	@yarn concurrently --names blog,web \
 		--prefix-colors red,cyan --success command-web \
 		--kill-others \
-		"$(MAKE) dev.blog" "BUILD_DIR=${BUILD_DIR} yarn workspace @nvd.codes/web build"
+		"$(MAKE) dev.blog" "yarn workspace @nvd.codes/web build"
+	@mkdir -p ${BUILD_DIR}
+	@cp -r apps/web/out/* ${BUILD_DIR}
 	@cp -r _posts ${BUILD_DIR}
 
 .PHONY: build
