@@ -35,7 +35,7 @@ dnf update && dnf install bind-utils
 or on Amazon Linux
 
 ```sh
-yum update && yum instal bind-utils
+yum update && yum install bind-utils
 ```
 
 ## Installing on ArchLinux
