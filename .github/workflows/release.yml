@@ -61,6 +61,12 @@ jobs:
       - name: Build blog
         run: make build
 
+      - name: Archive blog
+        uses: actions/upload-artifact@v3
+        with:
+          name: dist-blog
+          path: ./.dist
+
   app-deploy:
     name: Deploy production
     runs-on: ubuntu-latest
@@ -89,6 +95,11 @@ jobs:
           aws-region: eu-central-1
           role-to-assume: ${{ secrets.AWS_ROLE_NAME }}
 
+      - name: Download blog artifact
+        uses: actions/download-artifact@v3
+        with:
+          name: dist-blog
+
       - name: Deploy
         run: make deploy
 
@@ -106,5 +117,8 @@ jobs:
         with:
           terraform_version: 1.2.4
 
-      - name: Init
-        run: make infra.init
+      - name: Lint
+        run: make check.infra
+
+      # - name: Init
+      #   run: make infra.init
