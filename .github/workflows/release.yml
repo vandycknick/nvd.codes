@@ -1,19 +1,20 @@
-name: MainWorkflow
+name: Release
 
 on:
-  pull_request:
-    branches:
-      - main
   push:
     branches:
       - main
+
+permissions:
+  id-token: write
 
 jobs:
   build:
     name: Test_Build_Release
     runs-on: ubuntu-latest
+    environment: production
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
         with:
           fetch-depth: 1
 
@@ -49,3 +50,12 @@ jobs:
 
       - name: Build blog
         run: make build
+
+      - name: Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          aws-region: eu-central-1
+          role-to-assume: ${{ secrets.AWS_ROLE_NAME }}
+
+      - name: Deploy
+        run: make deploy
