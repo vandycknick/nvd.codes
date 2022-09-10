@@ -2,6 +2,7 @@
 
 NPM_BIN 		:= $(shell yarn bin)
 BUILD_DIR		:= $(shell pwd)/.dist
+INFRA_DIR		:= $(shell pwd)/infra
 
 .PHONY: setup
 setup:
@@ -9,7 +10,7 @@ setup:
 
 .PHONY: install.yarn
 install.yarn:
-	yarn --frozen-lockfile
+	yarn --frozen-lockfile --immutable
 
 .PHONY: clean
 clean:
@@ -34,6 +35,11 @@ dev.web:
 
 .PHONY: check
 check:
+	$(MAKE) check.apps
+	$(MAKE) check.infra
+
+.PHONY: check.apps
+check.apps:
 	$(MAKE) check.types
 	$(MAKE) check.lint
 
@@ -45,6 +51,11 @@ check.types:
 .PHONY: check.lint
 check.lint:
 	yarn eslint . --ext .ts --ext .tsx --ext .js --ext .json --ignore-path .gitignore
+
+.PHONY: check.infra
+check.infra:
+	cd ${INFRA_DIR} && \
+		terraform fmt -check
 
 .PHONY: test.unit
 test.unit:
@@ -84,3 +95,10 @@ build: clean build.libs build.apps build.web
 .PHONY: deploy
 deploy:
 	@yarn workspace @nvd.codes/s3-deploy execute --bucket nvd.codes --directory ${BUILD_DIR}
+
+
+.PHONY: infra.init
+infra.init:
+	cd ${INFRA_DIR} && \
+		terraform init && \
+		terraform validate
