@@ -997,10 +997,10 @@
   dependencies:
     "@types/koa" "*"
 
-"@types/koa-mount@^4.0.1":
-  version "4.0.1"
-  resolved "https://registry.yarnpkg.com/@types/koa-mount/-/koa-mount-4.0.1.tgz#2994be86eaa3d9dc97365e6ebfa227cee3c5f157"
-  integrity sha512-HNeg80CVS9Dfq8dGYqCZZCAUm7g6jPCNJ1ydqVLEJxLrjmeburpvq+lOZkE4rxBZ6O38dr3tj9IA3IfbdoI05w==
+"@types/koa-mount@^4.0.2":
+  version "4.0.2"
+  resolved "https://registry.yarnpkg.com/@types/koa-mount/-/koa-mount-4.0.2.tgz#988f94995dfb94869817280763d1b7445bd80123"
+  integrity sha512-XnuGwV8bzw22nv2WqOs5a8wCHR2VgSnLLLuBQPzNTmhyiAvH0O6c+994rQVbMaBuwQJKefUInkvKoKuk+21uew==
   dependencies:
     "@types/koa" "*"
 
@@ -3722,10 +3722,10 @@ koa-static@^5.0.0:
     debug "^3.1.0"
     koa-send "^5.0.0"
 
-koa@^2.13.4:
-  version "2.13.4"
-  resolved "https://registry.yarnpkg.com/koa/-/koa-2.13.4.tgz#ee5b0cb39e0b8069c38d115139c774833d32462e"
-  integrity sha512-43zkIKubNbnrULWlHdN5h1g3SEKXOEzoAlRsHOTFpnlDu8JlAOZSMJBLULusuXRequboiwJcj5vtYXKB3k7+2g==
+koa@^2.14.1:
+  version "2.14.1"
+  resolved "https://registry.yarnpkg.com/koa/-/koa-2.14.1.tgz#defb9589297d8eb1859936e777f3feecfc26925c"
+  integrity sha512-USJFyZgi2l0wDgqkfD27gL4YGno7TfUkcmOe6UOLFOVuN+J7FwnNu4Dydl4CUQzraM1lBAiGed0M9OVJoT0Kqw==
   dependencies:
     accepts "^1.3.5"
     cache-content-type "^1.0.0"
@@ -4488,15 +4488,15 @@ node-releases@^2.0.6:
   resolved "https://registry.yarnpkg.com/node-releases/-/node-releases-2.0.6.tgz#8a7088c63a55e493845683ebf3c828d8c51c5503"
   integrity sha512-PiVXnNuFm5+iYkLBNeq5211hvO38y63T0i2KKh2KnUs3RpzJ+JtODFjkD8yjLwnDkTYF1eKXheUwdssR+NRZdg==
 
-nodemon@^2.0.19:
-  version "2.0.19"
-  resolved "https://registry.yarnpkg.com/nodemon/-/nodemon-2.0.19.tgz#cac175f74b9cb8b57e770d47841995eebe4488bd"
-  integrity sha512-4pv1f2bMDj0Eeg/MhGqxrtveeQ5/G/UVe9iO6uTZzjnRluSA4PVWf8CW99LUPwGB3eNIA7zUFoP77YuI7hOc0A==
+nodemon@^2.0.20:
+  version "2.0.20"
+  resolved "https://registry.yarnpkg.com/nodemon/-/nodemon-2.0.20.tgz#e3537de768a492e8d74da5c5813cb0c7486fc701"
+  integrity sha512-Km2mWHKKY5GzRg6i1j5OxOHQtuvVsgskLfigG25yTtbyfRGn/GNvIbRyOf1PSCKJ2aT/58TiuUsuOU5UToVViw==
   dependencies:
     chokidar "^3.5.2"
     debug "^3.2.7"
     ignore-by-default "^1.0.1"
-    minimatch "^3.0.4"
+    minimatch "^3.1.2"
     pstree.remy "^1.1.8"
     semver "^5.7.1"
     simple-update-notifier "^1.0.7"
@@ -5714,7 +5714,7 @@ ts-jest@28.0.5:
     semver "7.x"
     yargs-parser "^21.0.1"
 
-ts-node@^10.8.2:
+ts-node@^10.8.2, ts-node@^10.9.1:
   version "10.9.1"
   resolved "https://registry.yarnpkg.com/ts-node/-/ts-node-10.9.1.tgz#e73de9102958af9e1f0b168a6ff320e25adcff4b"
   integrity sha512-NtVysVPkxxrwFGUUxGYhfux8k78pQB3JqYBXlLRZgdGUqTO5wU/UyHop5p70iEbGhB7q5KmiZiU0Y3KlJrScEw==
@@ -6173,11 +6173,6 @@ yocto-queue@^0.1.0:
   version "0.1.0"
   resolved "https://registry.yarnpkg.com/yocto-queue/-/yocto-queue-0.1.0.tgz#0294eb3dee05028d31ee1a5fa2c556a6aaf10a1b"
   integrity sha512-rVksvsnNCdJ/ohGc6xgPwyN8eheCxsiLM8mxuE/t/mOVqJewPuO1miLpTHQiRgTKCLexL4MeAFVagts7HmNZ2Q==
-
-zod@^3.17.3:
-  version "3.17.9"
-  resolved "https://registry.yarnpkg.com/zod/-/zod-3.17.9.tgz#6ce737474e51677e7166602ed58f6f8ba8d89c86"
-  integrity sha512-QF1843pYoRk1jFP+/UiEySXaTSiIyFod3KyDzoO3qHKGZdX7z7RNXI4lEsiibvpnIZQwcDVU58ZrxP4pQ7BmTQ==
 
 zod@^3.20.2:
   version "3.20.2"
