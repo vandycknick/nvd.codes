@@ -64,7 +64,7 @@ class Deferred<T> implements Promise<T> {
     this._rejectSelf(reason)
   }
 
-  public [Symbol.toStringTag]: "Promise" = "Promise"
+  public [Symbol.toStringTag] = "Promise" as const
 }
 
 export { fetchJSON, Deferred }

@@ -1,5 +1,5 @@
-import React, { useState } from "react"
-import NextImage, { ImageLoaderProps } from "next/image"
+import React from "react"
+import Image, { ImageLoaderProps } from "next/image"
 import cx from "classnames"
 
 const imageLoaderInternal = ({
@@ -26,85 +26,42 @@ declare type ImgElementStyle = NonNullable<
   JSX.IntrinsicElements["img"]["style"]
 >
 
-type ImageWithPlaceholderProps = {
+type ImageWithLoaderProps = {
   src: string
   alt?: string
-  width?: number | string
-  height?: number | string
+  width?: number
+  height?: number
   as?: React.ElementType
+  fill?: boolean
   objectFit?: ImgElementStyle["objectFit"]
   placeholder: string
   className?: string
 }
 
-export const Image = NextImage
-
-const imageCache = new Set()
-
-export const ImageWithPlaceholder = ({
+export const ImageWithLoader = ({
   src,
   alt,
   height,
   width,
-  as,
   objectFit,
+  fill,
   placeholder,
   className,
-}: ImageWithPlaceholderProps) => {
-  const [isImageVisible, setImageVisible] = useState(imageCache.has(src))
-  const Component = as ?? "span"
-
-  const onLoadingComplete = () => {
-    if (isImageVisible) return
-
-    setImageVisible(true)
-    imageCache.add(src)
-  }
-
-  return (
-    <Component
-      className={cx(
-        "relative truncate image__transition block",
-        {
-          image__visible: isImageVisible,
-          image__hidden: !isImageVisible,
-        },
-        className,
-      )}
-    >
-      <span
-        style={{
-          backgroundImage: `url('${placeholder}')`,
-          backgroundRepeat: "no-repeat",
-          backgroundSize: "cover",
-          overflow: "hidden",
-          position: "absolute",
-          filter: "blur(5px)",
-          transform: "scale(0.96)",
-          objectFit: "cover",
-          objectPosition: "center center",
-          opacity: isImageVisible ? "0" : "1",
-          transitionDelay: "500ms",
-          top: 0,
-          bottom: 0,
-          right: 0,
-          left: 0,
-        }}
-      />
-      <Image
-        layout="responsive"
-        loader={imageLoader}
-        loading="lazy"
-        src={src}
-        alt={alt}
-        width={width}
-        height={height}
-        objectFit={objectFit}
-        onLoadingComplete={onLoadingComplete}
-      />
-    </Component>
-  )
-}
+}: ImageWithLoaderProps) => (
+  <Image
+    loader={imageLoader}
+    loading="lazy"
+    src={src}
+    alt={alt ?? ""}
+    width={width}
+    height={height}
+    fill={fill ?? false}
+    placeholder="blur"
+    blurDataURL={placeholder}
+    style={{ objectFit }}
+    className={className}
+  />
+)
 
 type BackgroundImageProps = {
   src: string

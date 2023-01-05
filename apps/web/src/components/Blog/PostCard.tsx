@@ -1,11 +1,11 @@
 import React from "react"
-import NextLink from "next/link"
+import Link from "next/link"
 import { Post } from "@nvd.codes/blog-engine"
 import { TimeIcon, CalendarIcon } from "components/Common/Icons"
 
 import { HeadingFour, Paragraph, Text } from "components/Common/Typography"
 import Time from "components/Common/Time"
-import { ImageWithPlaceholder } from "components/Common/Image"
+import { ImageWithLoader } from "components/Common/Image"
 
 type PostPreview = Pick<
   Post,
@@ -26,24 +26,23 @@ export type PostCardProps = {
 export const PostCard = ({ post }: PostCardProps) => {
   return (
     <div className="flex flex-col drop-shadow-md rounded-2xl bg-nord-50 dark:bg-nord-700 mb-6">
-      <NextLink href="/post/[slug]" as={`/post/${post.slug}`} passHref>
-        <a>
-          <ImageWithPlaceholder
+      <Link href="/post/[slug]" as={`/post/${post.slug}`} passHref>
+        <span
+          className={"relative truncate block rounded-t-2xl"}
+          style={{ height: 210 }}
+        >
+          <ImageWithLoader
             src={post.cover}
-            height={280}
-            width={500}
-            objectFit="cover"
-            className="rounded-t-2xl"
+            fill={true}
             placeholder={post.placeholder}
+            objectFit="cover"
           />
-        </a>
-      </NextLink>
+        </span>
+      </Link>
       <div className="flex flex-col p-4 h-full">
-        <NextLink href="/post/[slug]" as={`/post/${post.slug}`} passHref>
-          <a>
-            <HeadingFour className="mb-2">{post.title}</HeadingFour>
-          </a>
-        </NextLink>
+        <Link href="/post/[slug]" as={`/post/${post.slug}`} passHref>
+          <HeadingFour className="mb-2">{post.title}</HeadingFour>
+        </Link>
         <Paragraph className="flex-1 pb-4 text-sm">
           {post.description}
         </Paragraph>

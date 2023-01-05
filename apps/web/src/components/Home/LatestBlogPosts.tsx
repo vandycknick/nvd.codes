@@ -35,20 +35,22 @@ export const LatestBlogPosts = ({ posts }: LatestBlogPostsProps) => (
       there is more!
     </Paragraph>
     {posts.map((post) => (
-      <Link key={post.slug} href={`/post/${post.slug}`}>
-        <a className="p-3 flex flex-col bg-nord-50 dark:bg-nord-700 rounded-lg mb-4 drop-shadow-lg border-b-4 border-frost-200 hover:cursor-pointer hover:bg-nord-200 hover:dark:bg-nord-600">
-          <div className="flex flex-col md:flex-row flex-1 pb-2">
-            <HeadingFour className="flex-1 pb-0">{post.title}</HeadingFour>
-            <Time
-              className="font-semibold text-sm text-nord-400 md:text-base md:font-bold"
-              dateTime={post.date}
-            />
-          </div>
-          <Paragraph className="hidden lg:flex pb-2">
-            {post.description}
-          </Paragraph>
-          <Text className="text-frost-secondary font-bold">Read More</Text>
-        </a>
+      <Link
+        key={post.slug}
+        href={`/post/${post.slug}`}
+        className="p-3 flex flex-col bg-nord-50 dark:bg-nord-700 rounded-lg mb-4 drop-shadow-lg border-b-4 border-frost-200 hover:cursor-pointer hover:bg-nord-200 hover:dark:bg-nord-600"
+      >
+        <div className="flex flex-col md:flex-row flex-1 pb-2">
+          <HeadingFour className="flex-1 pb-0">{post.title}</HeadingFour>
+          <Time
+            className="font-semibold text-sm text-nord-400 md:text-base md:font-bold"
+            dateTime={post.date}
+          />
+        </div>
+        <Paragraph className="hidden lg:flex pb-2">
+          {post.description}
+        </Paragraph>
+        <Text className="text-frost-secondary font-bold">Read More</Text>
       </Link>
     ))}
   </section>

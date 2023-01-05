@@ -22,11 +22,13 @@ export const PostsPager = ({ total, current }: PostsPagerProps) => {
 
   return (
     <div className="mt-8 border-t-[2px] border-nord-300 dark:border-nord-700 flex justify-between">
-      <Link href={getBlogUrl(previous)} passHref>
-        <a className="text-nord-600 dark:text-nord-100 flex font-bold pt-4 inline-flex align-center">
-          <ArrowSmallLeft className="mr-2" />
-          Previous
-        </a>
+      <Link
+        href={getBlogUrl(previous)}
+        className="text-nord-600 dark:text-nord-100 flex font-bold pt-4 inline-flex align-center"
+        passHref
+      >
+        <ArrowSmallLeft className="mr-2" />
+        Previous
       </Link>
       <div className="hidden md:flex justify-center flex-1 mt-[-2px]">
         {pages.map((page) => {
@@ -40,22 +42,25 @@ export const PostsPager = ({ total, current }: PostsPagerProps) => {
               {page}
             </Text>
           ) : (
-            <Link key={page} href={href} passHref>
-              <a
-                style={{ borderColor: "transparent" }}
-                className="text-nord-600 border-t-[2px] border-transparent dark:text-nord-100 pt-4 px-5 flex font-bold"
-              >
-                {page}
-              </a>
+            <Link
+              key={page}
+              href={href}
+              passHref
+              style={{ borderColor: "transparent" }}
+              className="text-nord-600 border-t-[2px] border-transparent dark:text-nord-100 pt-4 px-5 flex font-bold"
+            >
+              {page}
             </Link>
           )
         })}
       </div>
-      <Link href={getBlogUrl(next)} passHref>
-        <a className="text-nord-600 dark:text-nord-100 flex font-bold pt-4 flex align-center">
-          Next
-          <ArrowSmallRight className="ml-2" />
-        </a>
+      <Link
+        href={getBlogUrl(next)}
+        passHref
+        className="text-nord-600 dark:text-nord-100 flex font-bold pt-4 flex align-center"
+      >
+        Next
+        <ArrowSmallRight className="ml-2" />
       </Link>
     </div>
   )

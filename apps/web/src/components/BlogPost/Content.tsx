@@ -3,8 +3,7 @@ import { PrismAsyncLight as SyntaxHighlighter } from "react-syntax-highlighter"
 import { nord } from "react-syntax-highlighter/dist/cjs/styles/prism"
 import { useTheme } from "../Common/ThemeProvider"
 
-import { ImageWithPlaceholder } from "components/Common/Image"
-// import { ExternalLinkIcon } from "components/Common/Icons"
+import { ImageWithLoader } from "components/Common/Image"
 
 type Props = { children?: ReactNode[]; className?: string }
 
@@ -44,7 +43,7 @@ export const Image = ({
   height: number
 }) => {
   return (
-    <ImageWithPlaceholder
+    <ImageWithLoader
       src={src}
       alt={alt}
       width={width}

@@ -5,8 +5,9 @@ const nextConfig = {
   swcMinify: true,
   images: {
     domains: ["images.nvd.codes"],
+    unoptimized: true,
   },
-  experimental: { esmExternals: true, images: { unoptimized: true } },
+  experimental: { esmExternals: true },
   trailingSlash: true,
   async rewrites() {
     return {

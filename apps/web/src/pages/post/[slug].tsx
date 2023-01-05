@@ -175,7 +175,7 @@ const BlogPost = ({ post }: BlogPostProps) => {
           </div>
         </div>
         <article className="bg-nord-50 p-6 dark:bg-nord-700 rounded-lg prose prose-gray dark:prose-invert w-full max-w-6xl drop-shadow-xl">
-          {Markdoc.renderers.react(post.content, React, {
+          {Markdoc.renderers.react(post.content, React as any, {
             components,
           })}
           <div className="" />

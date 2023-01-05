@@ -39,8 +39,8 @@ const NavItem = ({ title, path, activeLinkMatch, className }: NavItemProps) => {
       {title}
     </Text>
   ) : (
-    <Link key={title} href={path} passHref>
-      <a className={cx(className)}>{title}</a>
+    <Link key={title} href={path} className={cx(className)} passHref>
+      {title}
     </Link>
   )
 }
