@@ -2,6 +2,7 @@
 title: "Hack The Box - Luanne"
 description: In this post I walk you through how I solved Luanne from Hack the Box. This is an easy difficulty NetBSD box, focussing on fuzzing and code injection via Lua.
 date: 2021-03-28T20:00:00+01:00
+slug: hack-the-box-luanne
 categories: [hack-the-box, luanne, netbsd, web, lua, injection, fuzzing]
 cover: ~/assets/2021-03-28-hack-the-box-luanne/cover.jpg
 ---

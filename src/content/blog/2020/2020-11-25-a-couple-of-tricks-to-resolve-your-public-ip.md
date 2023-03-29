@@ -2,6 +2,7 @@
 title: A couple of tricks to easily resolve your public IP
 description: There may come a time when you need to know the public IP address of your router, as assigned by your ISP. In this post, I show a couple of neat tricks to quickly grab your public IP.
 date: 2020-11-25T07:30:00+02:00
+slug: a-couple-of-tricks-to-resolve-your-public-
 categories: [ip, public, dns, csharp, dotnet]
 cover: ~/assets/2020-11-25-a-couple-of-tricks-to-resolve-your-public-ip/cover.jpg
 ---

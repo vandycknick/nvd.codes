@@ -2,6 +2,7 @@
 title: Set up Docker from scratch on WSL 2
 description: In this post, I talk about some of the changes in WSL2 and how it allows you to run a wider range of applications. Then I walk through the process of setting up docker from scratch and how this compares to using Docker for Windows
 date: 2020-05-31T22:00:00+01:00
+slug: set-up-docker-from-scratch-on-wsl2
 categories: [wsl2, docker, linux]
 cover: ~/assets/2020-05-31-set-up-docker-from-scratch-on-wsl2/cover.jpg
 ---
