@@ -1,0 +1,97 @@
+---
+import { InferGetStaticPropsType } from 'astro';
+import { getCollection } from "astro:content"
+
+import MainLayout from "../../layouts/MainLayout.astro"
+import PostHeroImage from "../../components/Post/PostHeroImage.astro"
+import { HeadingOne, Text } from "../../components/Typography"
+import { TwitterIcon, LinkedInIcon, FacebookIcon, RedditIcon, MailIcon, CalendarIcon, EditIcon, TimeIcon } from "../../components/Icons"
+import Time from "../../components/Time"
+import { Comments } from "../../components/Comments"
+
+export async function getStaticPaths() {
+  const posts = await getCollection("blog", post => !post.data.draft)
+
+  return posts.map(entry => ({
+    params: { slug: entry.slug }, props: { entry },
+  }));
+}
+
+type Props = InferGetStaticPropsType<typeof getStaticPaths>;
+
+const { entry } = Astro.props as Props
+const { Content, remarkPluginFrontmatter } = await entry.render()
+
+const postFullUrl = `https://nvd.codes/post/${entry.slug}`
+const socialLinkTitle = `Nick Van Dyck: ${entry.data.title}`
+const editUrl = `https://github.com/vandycknick/nvd.codes/edit/main/src/content/blog/${entry.id}`
+const readingTime = remarkPluginFrontmatter.readingTime
+---
+
+<MainLayout>
+  <PostHeroImage image={entry.data.cover} />
+  <div class="max-w-6xl w-full flex flex-col flex-1 mx-auto px-4 xl:px-0 py-14">
+    <div class="flex flex-col items-center">
+      <HeadingOne className="pb-4 text-center">{entry.data.title}</HeadingOne>
+      <div class="flex pb-6">
+        <a
+          href={`https://twitter.com/share?url=${postFullUrl}&text=${socialLinkTitle}`}
+          class="bg-nord-600 p-2 rounded-full flex justify-center items-center mx-2"
+        >
+          <TwitterIcon className="h-4 w-4 fill-nord-50" />
+        </a>
+        <a
+          href={`https://www.linkedin.com/shareArticle?mini=true&url=${postFullUrl}`}
+          class="bg-nord-600 p-2 rounded-full flex justify-center items-center mx-2"
+        >
+          <LinkedInIcon className="h-4 w-4 fill-nord-50" />
+        </a>
+        <a
+          href={`https://www.facebook.com/sharer/sharer.php?u=${postFullUrl}`}
+          class="bg-nord-600 p-2 rounded-full flex justify-center items-center mx-2"
+        >
+          <FacebookIcon className="h-4 w-4 fill-nord-50" />
+        </a>
+        <a
+          href={`https://reddit.com/submit?url=${postFullUrl}&title=${socialLinkTitle}`}
+          class="bg-nord-600 p-2 rounded-full flex justify-center items-center mx-2"
+        >
+          <RedditIcon className="h-4 w-4 fill-nord-50" />
+        </a>
+        <a
+          href={`mailto:?subject=${socialLinkTitle}&body=${postFullUrl}`}
+          class="bg-nord-600 p-2 rounded-full flex justify-center items-center mx-2"
+        >
+          <MailIcon className="h-4 w-4 stroke-nord-50" />
+        </a>
+      </div>
+      <div class="flex pb-14">
+        <div class="flex justify-center items-center">
+          <CalendarIcon className="w-5 h-5 mr-1 font-medium text-nord-600 dark:text-nord-50" />
+          <Time className="font-medium" dateTime={entry.data.date} />
+        </div>
+        <div class="flex justify-center items-center px-4">
+          <EditIcon className="w-5 h-5 mr-1 font-medium text-nord-600 dark:text-nord-50" />
+          <a
+            class="font-medium text-nord-600 dark:text-nord-50"
+            href={editUrl}
+          >
+            suggest edit
+          </a>
+        </div>
+        <div class="flex justify-center items-center">
+          <TimeIcon className="w-5 h-5 mr-1 font-medium text-nord-600 dark:text-nord-50" />
+          <Text className="font-medium">{readingTime}</Text>
+        </div>
+      </div>
+    </div>
+    <article class="bg-nord-50 p-6 dark:bg-nord-700 rounded-lg prose prose-gray dark:prose-invert w-full max-w-6xl drop-shadow-xl">
+      <!-- {Markdoc.renderers.react(post.content, React as any, {
+        components,
+      })} -->
+      <Content />
+      <div></div>
+      <Comments slug={entry.slug} title={entry.data.title} />
+    </article>
+  </div>
+</MainLayout>

@@ -1,5 +1,9 @@
+.old
 # Obsidian
 .obsidian
+
+# Astro
+.astro
 
 # Node
 node_modules/
@@ -23,7 +27,6 @@ local.settings.json
 
 # Secrets
 .secrets
-
 
 # Created by https://www.toptal.com/developers/gitignore/api/node,macos,dotnetcore,visualstudiocode,terraform
 # Edit at https://www.toptal.com/developers/gitignore?templates=node,macos,dotnetcore,visualstudiocode,terraform

@@ -1,0 +1,37 @@
+---
+import { Header } from "../components/Header"
+import { Footer } from "../components/Footer"
+
+const path = new URL(Astro.url).pathname
+---
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="HandheldFriendly" content="True" />
+    <meta name="MobileOptimized" content="320" />
+    <meta name="author" content="Nick Van Dyck" />
+    <link rel="shortcut icon" href="/favicon.png" />
+
+    <meta name="viewport" content="width=device-width, initia-scale=1.0" />
+    <meta name="generator" content={Astro.generator} />
+    <title>Nick Van Dyck</title>
+  </head>
+  <body class="h-screen bg-nord-100 dark:bg-nord-900 transition transition-colors duration-300">
+    <div class="flex flex-col h-screen dark:text-nord-100">
+      <Header currentPath={path} />
+      <main class="flex flex-col flex-1 w-full max-w-full">
+       <slot />
+       <svg
+          class="w-full fill-nord-50 dark:fill-nord-600 transition transition-colors duration-300"
+          viewBox="0 0 1440 46"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <path d="M0 .058c117.505 18.386 269.602 22.114 456.294 11.185C562.076 5.051 730.784.911 885.297 3.273 1157.177 7.432 1386.981 21.329 1440 38.39v8.55H0V.058z"></path>
+        </svg>
+      </main>
+      <Footer />
+    </div>
+  </body>
+</html>

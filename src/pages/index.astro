@@ -1,0 +1,32 @@
+---
+import { getCollection } from "astro:content"
+
+import { Greeting } from "../components/Home/Greeting"
+import { AboutMe } from "../components/Home/AboutMe"
+import { LatestBlogPosts } from "../components/Home/LatestBlogPosts"
+
+import MainLayout from "../layouts/MainLayout.astro"
+
+const allBlogPosts = await getCollection('blog', post => !post.data.draft)
+
+const sorted = allBlogPosts.sort((l, r) => r.data.date.getTime() - l.data.date.getTime())
+const featuredPosts = sorted.slice(0, 4)
+const latestPosts = featuredPosts.map(post => ({
+  title: post.data.title,
+  description: post.data.description,
+  date: post.data.date,
+  slug: post.slug,
+}))
+---
+
+<MainLayout>
+  <div class="w-full flex flex-col flex-1">
+    <Greeting
+      githubUrl="https://github.com/vandycknick"
+      siteUrl="https://nvd.codes"
+      twitterUrl="https://twitter.com/vandycknick"
+    />
+    <AboutMe />
+    <LatestBlogPosts posts={latestPosts} />
+  </div>
+</MainLayout>
