@@ -34,7 +34,7 @@ export const PostsPager = ({ total, currentPage }: PostsPagerProps) => {
           return isCurrentPage ? (
             <Text
               key={page}
-              className="pt-4 px-5 border-t-[2px] flex font-bold text-frost-primary dark:text-frost-primary"
+              className="pt-4 px-5 border-t-[2px] flex font-bold text-frost-primary dark:!text-frost-primary"
             >
               {page}
             </Text>
