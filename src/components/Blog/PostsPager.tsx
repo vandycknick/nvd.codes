@@ -1,3 +1,4 @@
+import React from "react"
 import { clamp } from "../../utils"
 
 import { Text } from "../Typography"
