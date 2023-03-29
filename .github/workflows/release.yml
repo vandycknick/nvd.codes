@@ -32,7 +32,7 @@ jobs:
         run: make install.yarn
 
       - name: Lint Code
-        run: make check
+        run: make check.app
 
   app-build:
     name: Build
@@ -65,7 +65,7 @@ jobs:
         uses: actions/upload-artifact@v3
         with:
           name: dist-blog
-          path: ./.dist
+          path: ./dist
 
   app-deploy:
     name: Deploy production
@@ -102,7 +102,7 @@ jobs:
         uses: actions/download-artifact@v3
         with:
           name: dist-blog
-          path: .dist
+          path: dist
 
       # - name: Deploy
       #   run: make deploy

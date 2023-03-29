@@ -13,6 +13,7 @@ setup.yarn:
 	corepack enable
 	corepack prepare yarn@stable --activate
 	yarn --version
+	yarn config get cacheFolder
 
 .PHONY: install.yarn
 install.yarn:
@@ -29,9 +30,7 @@ dev:
 
 .PHONY: check
 check:
-	@yarn astro check
-	# $(MAKE) check.types
-	$(MAKE) check.lint
+	$(MAKE) check.app
 	$(MAKE) check.infra
 
 .PHONY: check.types
@@ -41,6 +40,12 @@ check.types:
 .PHONY: check.lint
 check.lint:
 	yarn eslint . --ext .ts --ext .tsx --ext .js --ext .json --ignore-path .gitignore
+
+.PHONY: check.app
+check.app:
+	@yarn astro check
+	# $(MAKE) check.types
+	$(MAKE) check.lint
 
 .PHONY: check.infra
 check.infra:
