@@ -8,6 +8,12 @@ INFRA_DIR		:= $(shell pwd)/infra
 setup:
 	@$(MAKE) install.yarn
 
+.PHONY: setup.yarn
+setup.yarn:
+	corepack enable
+	corepack prepare yarn@stable --activate
+	yarn --version
+
 .PHONY: install.yarn
 install.yarn:
 	yarn --frozen-lockfile --immutable

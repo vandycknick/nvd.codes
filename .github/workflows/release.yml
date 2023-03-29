@@ -25,14 +25,14 @@ jobs:
           node-version: 18
           cache: 'yarn'
 
+      - name: Use latest yarn
+        run: make setup.yarn
+
       - name: Install Dependencies
         run: make install.yarn
 
-      - name: Compile Libraries
-        run: make build.libs build.apps
-
       - name: Lint Code
-        run: make check.apps
+        run: make check
 
   app-build:
     name: Build
@@ -49,14 +49,14 @@ jobs:
       - name: Install Node
         uses: actions/setup-node@v3
         with:
-          node-version: 16
+          node-version: 18
           cache: 'yarn'
+
+      - name: Use latest yarn
+        run: make setup.yarn
 
       - name: Install Dependencies
         run: make install.yarn
-
-      - name: Compile Libraries
-        run: make build.libs build.apps
 
       - name: Build blog
         run: make build
@@ -83,8 +83,11 @@ jobs:
       - name: Install Node
         uses: actions/setup-node@v3
         with:
-          node-version: 16
+          node-version: 18
           cache: 'yarn'
+
+      - name: Use latest yarn
+        run: make setup.yarn
 
       - name: Install Dependencies
         run: make install.yarn
