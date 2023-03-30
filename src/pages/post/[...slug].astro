@@ -1,6 +1,7 @@
 ---
-import { InferGetStaticPropsType } from 'astro';
+import { InferGetStaticPropsType } from 'astro'
 import { getCollection } from "astro:content"
+import { getImage } from "astro:assets"
 
 import MainLayout from "../../layouts/MainLayout.astro"
 import PostHeroImage from "../../components/Post/PostHeroImage.astro"
@@ -26,9 +27,52 @@ const postFullUrl = `https://nvd.codes/post/${entry.slug}`
 const socialLinkTitle = `Nick Van Dyck: ${entry.data.title}`
 const editUrl = `https://github.com/vandycknick/nvd.codes/edit/main/src/content/blog/${entry.id}`
 const readingTime = remarkPluginFrontmatter.readingTime
+
+const coverImage = await getImage(entry.data.cover)
 ---
 
-<MainLayout>
+<MainLayout
+  title={entry.data.title}
+  description={entry.data.description}
+  openGraph={{
+    basic: {
+      type: "article",
+      title: entry.data.title,
+      image: `https://nvd.codes${coverImage.src}`,
+      url: postFullUrl,
+    },
+    article: {
+      publishedTime: entry.data.date.toISOString(),
+      tags: entry.data.categories,
+      authors: ["Nick Van Dyck"],
+    }
+  }}
+  twitter={{
+    card: "summary",
+    creator: "@vandycknick",
+    image: `https://nvd.codes${coverImage.src}`,
+  }}
+  extend={{
+    meta: [
+      {
+        name: "twitter:label1",
+        content: "Written by",
+      },
+      {
+        name: "twitter:data1",
+        content: "Nick Van Dyck",
+      },
+      {
+        name: "twitter:label2",
+        content: "Filed under",
+      },
+      {
+        name: "twitter:data2",
+        content: entry.data.categories.join(", "),
+      },
+    ]
+  }}>
+
   <PostHeroImage image={entry.data.cover} />
   <div class="max-w-6xl w-full flex flex-col flex-1 mx-auto px-4 xl:px-0 py-14">
     <div class="flex flex-col items-center">

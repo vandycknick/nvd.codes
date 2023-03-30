@@ -1,7 +1,18 @@
 ---
+import { SEO, Props as SEOProps } from "astro-seo";
+
 import { Header } from "../components/Header"
 import { Footer } from "../components/Footer"
 
+interface Props {
+  title?: string
+  description?: string
+  openGraph?: SEOProps["openGraph"]
+  twitter?: SEOProps["twitter"]
+  extend?: SEOProps["extend"]
+}
+
+const { title, description, openGraph, twitter, extend } = Astro.props
 const path = new URL(Astro.url).pathname
 ---
 
@@ -16,7 +27,21 @@ const path = new URL(Astro.url).pathname
 
     <meta name="viewport" content="width=device-width, initia-scale=1.0" />
     <meta name="generator" content={Astro.generator} />
-    <title>Nick Van Dyck</title>
+    <SEO
+      title={title ?? "Nick Van Dyck"}
+      titleTemplate="%s - nvd.codes"
+      description={description}
+      openGraph={openGraph ?? {
+        basic: {
+          title: "Nick's blog.",
+          type: "website",
+          url: "https://nvd.codes",
+          image: "",
+        }
+      }}
+      twitter={twitter}
+      extend={extend}
+    />
   </head>
   <body class="h-screen bg-nord-100 dark:bg-nord-900 transition transition-colors duration-300">
     <div class="flex flex-col h-screen dark:text-nord-100">

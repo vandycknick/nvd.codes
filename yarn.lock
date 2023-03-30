@@ -1453,6 +1453,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"astro-seo@npm:^0.7.2":
+  version: 0.7.2
+  resolution: "astro-seo@npm:0.7.2"
+  checksum: 263e90927748f656061f033eccbec0a5578f621e10e0b8bd26e7cd747fe2fe009799d394b38a3a76b50c813cfa8a635136336f03f48c0cddaad3a179d17d6b9a
+  languageName: node
+  linkType: hard
+
 "astro@npm:2.1.8":
   version: 2.1.8
   resolution: "astro@npm:2.1.8"
@@ -4822,6 +4829,7 @@ __metadata:
     "@typescript-eslint/eslint-plugin": ^5.57.0
     "@typescript-eslint/parser": ^5.57.0
     astro: 2.1.8
+    astro-seo: ^0.7.2
     classnames: ^2.3.2
     disqus-react: ^1.1.5
     eslint: ^8.36.0
