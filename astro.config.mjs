@@ -1,9 +1,9 @@
 import { defineConfig } from "astro/config"
 import tailwind from "@astrojs/tailwind"
 import react from "@astrojs/react"
-
 import getReadingTime from "reading-time"
 import { toString } from "mdast-util-to-string"
+import sitemap from "@astrojs/sitemap"
 
 export function remarkReadingTime() {
   return function (tree, { data }) {
@@ -15,7 +15,9 @@ export function remarkReadingTime() {
   }
 }
 
+// https://astro.build/config
 export default defineConfig({
+  site: "https://nvd.codes",
   markdown: {
     remarkPlugins: [remarkReadingTime],
     shikiConfig: {
@@ -30,7 +32,7 @@ export default defineConfig({
       wrap: true,
     },
   },
-  integrations: [tailwind(), react()],
+  integrations: [tailwind(), react(), sitemap()],
   experimental: {
     assets: true,
   },
