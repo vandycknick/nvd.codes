@@ -130,12 +130,9 @@ const coverImage = await getImage(entry.data.cover)
       </div>
     </div>
     <article class="bg-nord-50 p-6 dark:bg-nord-700 rounded-lg prose prose-gray dark:prose-invert w-full max-w-6xl drop-shadow-xl">
-      <!-- {Markdoc.renderers.react(post.content, React as any, {
-        components,
-      })} -->
       <Content />
       <div></div>
-      <Comments slug={entry.slug} title={entry.data.title} />
+      <Comments slug={entry.slug} title={entry.data.title} client:visible />
     </article>
   </div>
 </MainLayout>
