@@ -9,7 +9,7 @@ import { Text } from "./Typography"
 const menu = [
   { title: "Home", path: "/" },
   { title: "Blog", path: "/blog", activeLinkMatch: /\/blog[/0-9]*/ },
-  { title: "About", path: "/about" },
+  { title: "About", path: "/about", activeLinkMatch: /^\/about(\/)?$/ },
 ]
 
 type NavItemProps = {
