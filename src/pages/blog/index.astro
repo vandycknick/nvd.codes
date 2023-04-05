@@ -6,7 +6,7 @@ import Blog from "../../components/Blog/index.astro"
 import type { PostPreview } from "../../components/Blog/types"
 
 const posts = await getCollection("blog", post => !post.data.draft)
-const sorted = posts.sort((l, r) => r.data.date.getTime() - l.data.date.getTime())
+const sorted = posts.sort((l, r) => r.data.date.getTime() - l.data.date.getTime()).slice(0, 9)
 
 const previews: PostPreview[] = sorted.map(post => {
   return {
@@ -18,7 +18,7 @@ const previews: PostPreview[] = sorted.map(post => {
     cover: post.data.cover,
     readingTime: ""
   }
-}).slice(0, 9)
+})
 
 const pager = {
   total: Math.ceil(posts.length / 9),
