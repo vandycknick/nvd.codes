@@ -104,8 +104,8 @@ jobs:
           name: dist-blog
           path: dist
 
-      # - name: Deploy
-      #   run: make deploy
+      - name: Deploy
+        run: make deploy
 
   infra-init:
     name: Init Infrastructure
