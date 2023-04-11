@@ -6,6 +6,7 @@ INFRA_DIR		:= $(shell pwd)/infra
 
 .PHONY: setup
 setup:
+	@$(MAKE) setup.yarn
 	@$(MAKE) install.yarn
 
 .PHONY: setup.yarn
