@@ -21,8 +21,6 @@ if (path.startsWith("/_astro")) {
   path = `/dist${path}`
 }
 
-console.log(path)
-
 const image = await readFile(join(process.cwd(), path))
 const base64 = await getBase64(image)
 ---
