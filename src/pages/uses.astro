@@ -3,9 +3,16 @@ import SimpleLayout from "@/layouts/SimpleLayout.astro"
 import Uses from "@/components/Uses/index.astro"
 ---
 
-<SimpleLayout
-  title="Software I use, gadgets I love, and other things I recommend."
-  intro="I get asked a lot about the things I use to build software, stay productive, or buy to fool myself into thinking I’m being productive when I’m really just procrastinating. Here’s a big list of all of my favorite stuff."
->
+<SimpleLayout>
+  <span slot="title"
+    >Software I use, gadgets I love, and other things I recommend.</span
+  >
+  <span slot="intro"
+    >Make sure to check out <a
+      href="https://uses.tech/"
+      class="font-medium text-teal-500">uses.tech</a
+    > for a list of everyone's /uses pages! This is a list of the bits and bobs that
+    I use and recommend.</span
+  >
   <Uses />
 </SimpleLayout>
