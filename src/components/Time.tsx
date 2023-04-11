@@ -1,26 +1,35 @@
-import React from "react"
 import { getShortMonth } from "../utils"
-import cx from "classnames"
+
+type ParsedTimeFormat = "default" | "slick" | "short"
 
 type TimeProps = {
   dateTime: string | Date
   className?: string
+  format?: ParsedTimeFormat
 }
 
-const parseDate = (dateTime: string | Date): string => {
+const parseDate = (
+  dateTime: string | Date,
+  format: ParsedTimeFormat,
+): string => {
   const date = new Date(dateTime)
-  return `${date.getDate()} ${getShortMonth(date)} ${date.getFullYear()}`
+
+  switch (format) {
+    case "default":
+      return `${date.getDate()} ${getShortMonth(date)} ${date.getFullYear()}`
+    case "slick":
+      return `${getShortMonth(date)} ${date.getDate()}, ${date.getFullYear()}`
+    case "short":
+      return `${getShortMonth(date)} ${date.getFullYear()}`
+  }
 }
 
 const stringify = (dateTime: string | Date): string =>
   typeof dateTime === "string" ? dateTime : dateTime.toString()
 
-const Time = ({ dateTime, className }: TimeProps) => (
-  <time
-    className={cx("text-nord-600 dark:text-nord-100", className)}
-    dateTime={stringify(dateTime)}
-  >
-    {parseDate(dateTime)}
+export const Time = ({ dateTime, className, format }: TimeProps) => (
+  <time className={className} dateTime={stringify(dateTime)}>
+    {parseDate(dateTime, format ?? "default")}
   </time>
 )
 

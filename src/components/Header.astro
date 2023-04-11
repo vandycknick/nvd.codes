@@ -1,0 +1,118 @@
+---
+import type { CSSProperties } from "react"
+import { Container } from "@/components/Container"
+import { MobileNavigation, DesktopNavigation } from "@/components/Navigation"
+import { Avatar, AvatarContainer } from "@/components/Avatar"
+import ThemeToggle from "@/components/ThemeToggle.astro"
+
+const path = new URL(Astro.url).pathname
+---
+
+<header
+  class="pointer-events-none relative z-50 flex flex-col"
+  style={{
+    height: "var(--header-height)",
+    marginBottom: "var(--header-mb)",
+  }}
+>
+  <div
+    class="top-0 z-10 h-16 pt-6"
+    style={{ position: "var(--header-position)" }}
+    data-header-wrapper
+  >
+    <Container
+      className="top-[var(--header-top,theme(spacing.6))] w-full"
+      style={{
+        position: "var(--header-inner-position)" as CSSProperties["position"],
+      }}
+    >
+      <div class="relative flex gap-4">
+        <div class="flex flex-1">
+          <AvatarContainer>
+            <Avatar />
+          </AvatarContainer>
+        </div>
+        <div class="flex flex-1 justify-center">
+          <MobileNavigation
+            path={path}
+            className="pointer-events-auto md:hidden"
+            client:only="react"
+          />
+          <DesktopNavigation
+            path={path}
+            className="pointer-events-auto hidden md:block"
+          />
+        </div>
+        <div class="flex justify-end flex-1">
+          <div class="pointer-events-auto">
+            <ThemeToggle />
+          </div>
+        </div>
+      </div>
+    </Container>
+  </div>
+</header>
+
+<script>
+  import { clamp } from "../utils"
+  const header = document.querySelector("[data-header-wrapper]")
+  let isInitial = true
+  const upDelay = 64
+  const downDelay = 0
+
+  function setProperty(property: string, value: string) {
+    document.documentElement.style.setProperty(property, value)
+  }
+
+  function removeProperty(property: string) {
+    document.documentElement.style.removeProperty(property)
+  }
+
+  function updateHeaderStyles() {
+    if (header == null) return
+
+    const { top, height } = header.getBoundingClientRect()
+    const scrollY = clamp(
+      window.scrollY,
+      0,
+      document.body.scrollHeight - window.innerHeight,
+    )
+
+    if (isInitial) {
+      setProperty("--header-position", "sticky")
+    }
+
+    setProperty("--content-offset", `${downDelay}px`)
+
+    if (isInitial || scrollY < downDelay) {
+      setProperty("--header-height", `${downDelay + height}px`)
+      setProperty("--header-mb", `${-downDelay}px`)
+    } else if (top + height < -upDelay) {
+      let offset = Math.max(height, scrollY - upDelay)
+      setProperty("--header-height", `${offset}px`)
+      setProperty("--header-mb", `${height - offset}px`)
+    } else if (top === 0) {
+      setProperty("--header-height", `${scrollY + height}px`)
+      setProperty("--header-mb", `${-scrollY}px`)
+    }
+
+    if (top === 0 && scrollY > 0 && scrollY >= downDelay) {
+      setProperty("--header-inner-position", "fixed")
+      removeProperty("--header-top")
+      removeProperty("--avatar-top")
+    } else {
+      removeProperty("--header-inner-position")
+      setProperty("--header-top", "0px")
+      setProperty("--avatar-top", "0px")
+    }
+  }
+
+  function updateStyles() {
+    updateHeaderStyles()
+    isInitial = false
+  }
+
+  updateStyles()
+  window.addEventListener("scroll", updateStyles, { passive: true })
+  window.addEventListener("resize", updateStyles)
+</script>

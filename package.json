@@ -18,15 +18,19 @@
     "@astrojs/rss": "^2.3.1",
     "@astrojs/sitemap": "^1.2.1",
     "@astrojs/tailwind": "^3.1.1",
+    "@headlessui/react": "latest",
+    "@plaiceholder/base64": "^1.0.0",
     "@tailwindcss/typography": "^0.5.9",
     "astro": "2.1.8",
     "astro-seo": "^0.7.2",
     "classnames": "^2.3.2",
+    "clsx": "^1.2.1",
     "disqus-react": "^1.1.5",
     "mdast-util-to-string": "^3.1.1",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "reading-time": "^1.5.0",
+    "sharp": "^0.32.0",
     "tailwindcss": "^3.3.1"
   },
   "devDependencies": {
@@ -36,12 +40,14 @@
     "@typescript-eslint/parser": "^5.57.0",
     "eslint": "^8.37.0",
     "eslint-config-prettier": "^8.8.0",
+    "eslint-plugin-astro": "^0.26.1",
     "eslint-plugin-import": "^2.27.5",
     "eslint-plugin-jest": "^27.2.1",
     "eslint-plugin-json": "^3.1.0",
     "eslint-plugin-prettier": "^4.2.1",
     "eslint-plugin-react": "^7.32.2",
     "eslint-plugin-react-hooks": "^4.6.0",
-    "prettier": "^2.8.7"
+    "prettier": "^2.8.7",
+    "prettier-plugin-astro": "^0.8.0"
   }
 }

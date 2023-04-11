@@ -1,8 +1,8 @@
 ---
-import { SEO, Props as SEOProps } from "astro-seo";
+import { SEO, Props as SEOProps } from "astro-seo"
 
-import { Header } from "../components/Header"
-import { Footer } from "../components/Footer"
+import Header from "@/components/Header.astro"
+import { Footer } from "@/components/Footer"
 
 interface Props {
   title?: string
@@ -13,10 +13,9 @@ interface Props {
 }
 
 const { title, description, openGraph, twitter, extend } = Astro.props
-const path = new URL(Astro.url).pathname
 ---
 
-<html lang="en">
+<html class="h-full antialiased" lang="en">
   <head>
     <meta charset="utf-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
@@ -37,25 +36,67 @@ const path = new URL(Astro.url).pathname
           type: "website",
           url: "https://nvd.codes",
           image: "",
-        }
+        },
       }}
       twitter={twitter}
       extend={extend}
     />
-    <link rel="sitemap" href="/sitemap-index.xml">
+    <link rel="sitemap" href="/sitemap-index.xml" />
+    <script is:inline>
+      function updateMode() {
+        const isSystemDarkMode = darkModeMediaQuery.matches
+        const isDarkMode =
+          window.localStorage.isDarkMode === "true" ||
+          (!("isDarkMode" in window.localStorage) && isSystemDarkMode)
+
+        if (isDarkMode) {
+          document.documentElement.classList.add("dark")
+        } else {
+          document.documentElement.classList.remove("dark")
+        }
+
+        if (isDarkMode === isSystemDarkMode) {
+          delete window.localStorage.isDarkMode
+        }
+      }
+
+      function disableTransitionsTemporarily() {
+        document.documentElement.classList.add("[&_*]:!transition-none")
+        window.setTimeout(() => {
+          document.documentElement.classList.remove("[&_*]:!transition-none")
+        }, 0)
+      }
+
+      function updateModeWithoutTransitions() {
+        disableTransitionsTemporarily()
+        updateMode()
+      }
+
+      const darkModeMediaQuery = window.matchMedia(
+        "(prefers-color-scheme: dark)",
+      )
+
+      updateMode()
+      darkModeMediaQuery.addEventListener(
+        "change",
+        updateModeWithoutTransitions,
+      )
+      window.addEventListener("storage", updateModeWithoutTransitions)
+    </script>
   </head>
-  <body class="h-screen bg-nord-100 dark:bg-nord-900 transition transition-colors duration-300">
-    <div class="flex flex-col h-screen dark:text-nord-100">
-      <Header currentPath={path} />
-      <main class="flex flex-col flex-1 w-full max-w-full">
-       <slot />
-       <svg
-          class="w-full fill-nord-50 dark:fill-nord-600 transition transition-colors duration-300"
-          viewBox="0 0 1440 46"
-          xmlns="http://www.w3.org/2000/svg"
+  <body class="flex h-full flex-col bg-zinc-50 dark:bg-black">
+    <div class="fixed inset-0 flex justify-center sm:px-8">
+      <div class="flex w-full max-w-7xl lg:px-8">
+        <div
+          class="w-full bg-white ring-1 ring-zinc-100 dark:bg-zinc-900 dark:ring-zinc-300/20"
         >
-          <path d="M0 .058c117.505 18.386 269.602 22.114 456.294 11.185C562.076 5.051 730.784.911 885.297 3.273 1157.177 7.432 1386.981 21.329 1440 38.39v8.55H0V.058z"></path>
-        </svg>
+        </div>
+      </div>
+    </div>
+    <div class="relative">
+      <Header />
+      <main class="w-full max-w-full">
+        <slot />
       </main>
       <Footer />
     </div>

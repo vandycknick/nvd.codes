@@ -9,6 +9,9 @@ interface Props {
 const { posts } = Astro.props
 ---
 
-<section class="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-4 py-6">
+<!-- <section
+  class="mx-auto mt-16 grid max-w-2xl grid-cols-1 gap-x-8 gap-y-20 lg:mx-0 lg:max-w-none lg:grid-cols-3"
+> -->
+<section class="mt-16 space-y-20 lg:mt-20 lg:space-y-20">
   {posts.map((post) => <PostCard post={post} />)}
 </section>

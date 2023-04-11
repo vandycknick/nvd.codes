@@ -1,8 +1,7 @@
-import React from "react"
-import { clamp } from "../../utils"
+import clsx from "clsx"
+import { clamp } from "@/utils"
 
-import { Text } from "../Typography"
-import { ArrowSmallLeft, ArrowSmallRight } from "../Icons"
+import { ArrowSmallLeft, ArrowSmallRight } from "@/components/Icons"
 
 type PostsPagerProps = {
   total: number
@@ -19,44 +18,52 @@ export const PostsPager = ({ total, currentPage }: PostsPagerProps) => {
   const next = clamp(currentPage + 1, 1, total)
 
   return (
-    <div className="mt-8 border-t-[2px] border-nord-300 dark:border-nord-700 flex justify-between">
-      <a
-        href={getBlogUrl(previous)}
-        className="text-nord-600 dark:text-nord-100 flex font-bold pt-4 inline-flex align-center"
-      >
-        <ArrowSmallLeft className="mr-2" />
-        Previous
-      </a>
-      <div className="hidden md:flex justify-center flex-1 mt-[-2px]">
+    <nav className="flex items-center justify-between border-t border-zinc-200 px-4 sm:px-0 mt-32">
+      <div className="-mt-px flex w-0 flex-1">
+        <a
+          href={getBlogUrl(previous)}
+          className="inline-flex items-center border-t-2 border-transparent pr-1 pt-4 text-sm font-medium text-zinc-500 hover:border-zinc-300 hover:text-zinc-700"
+        >
+          <ArrowSmallLeft
+            className="mr-3 h-5 w-5 text-zinc-400"
+            aria-hidden="true"
+          />
+          Previous
+        </a>
+      </div>
+      <div className="hidden md:-mt-px md:flex">
         {pages.map((page) => {
           const isCurrentPage = page === currentPage
           const href = getBlogUrl(page)
-          return isCurrentPage ? (
-            <Text
-              key={page}
-              className="pt-4 px-5 border-t-[2px] flex font-bold text-frost-primary dark:!text-frost-primary"
-            >
-              {page}
-            </Text>
-          ) : (
+          return (
             <a
               key={page}
               href={href}
-              style={{ borderColor: "transparent" }}
-              className="text-nord-600 border-t-[2px] border-transparent dark:text-nord-100 pt-4 px-5 flex font-bold"
+              className={clsx(
+                "inline-flex items-center border-t-2 border-transparent px-4 pt-4 text-sm font-medium text-zinc-500 hover:border-zinc-300 hover:text-zinc-700",
+                {
+                  "border-teal-500": isCurrentPage,
+                  "text-teal-600": isCurrentPage,
+                },
+              )}
             >
               {page}
             </a>
           )
         })}
       </div>
-      <a
-        href={getBlogUrl(next)}
-        className="text-nord-600 dark:text-nord-100 flex font-bold pt-4 flex align-center"
-      >
-        Next
-        <ArrowSmallRight className="ml-2" />
-      </a>
-    </div>
+      <div className="-mt-px flex w-0 flex-1 justify-end">
+        <a
+          href={getBlogUrl(next)}
+          className="inline-flex items-center border-t-2 border-transparent pl-1 pt-4 text-sm font-medium text-zinc-500 hover:border-zinc-300 hover:text-zinc-700"
+        >
+          Next
+          <ArrowSmallRight
+            className="ml-3 h-5 w-5 text-zinc-400"
+            aria-hidden="true"
+          />
+        </a>
+      </div>
+    </nav>
   )
 }

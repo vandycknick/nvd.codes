@@ -1,14 +1,16 @@
 ---
-import { getCollection} from "astro:content"
+import { getCollection } from "astro:content"
 
-import MainLayout from "../../layouts/MainLayout.astro"
-import Blog from "../../components/Blog/index.astro"
-import type { PostPreview } from "../../components/Blog/types"
+import MainLayout from "@/layouts/MainLayout.astro"
+import Blog from "@/components/Blog/index.astro"
+import type { PostPreview } from "@/components/Blog/types"
 
-const posts = await getCollection("blog", post => !post.data.draft)
-const sorted = posts.sort((l, r) => r.data.date.getTime() - l.data.date.getTime()).slice(0, 9)
+const posts = await getCollection("blog", (post) => !post.data.draft)
+const sorted = posts
+  .sort((l, r) => r.data.date.getTime() - l.data.date.getTime())
+  .slice(0, 9)
 
-const previews: PostPreview[] = sorted.map(post => {
+const previews: PostPreview[] = sorted.map((post) => {
   return {
     title: post.data.title,
     date: post.data.date,
@@ -16,13 +18,13 @@ const previews: PostPreview[] = sorted.map(post => {
     description: post.data.description,
     categories: post.data.categories,
     cover: post.data.cover,
-    readingTime: ""
+    readingTime: "",
   }
 })
 
 const pager = {
   total: Math.ceil(posts.length / 9),
-  currentPage: 1
+  currentPage: 1,
 }
 ---
 

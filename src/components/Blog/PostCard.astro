@@ -1,43 +1,111 @@
 ---
 import { Image } from "astro:assets"
-import { TimeIcon, CalendarIcon } from "../Icons"
+import { readFile } from "node:fs/promises"
+import { join } from "node:path"
+import { getBase64 } from "@plaiceholder/base64"
 
-import { HeadingFour, Paragraph, Text } from "../Typography"
-import Time from "../Time"
-import type { PostPreview } from "./types"
+import Time from "@/components/Time"
+import { ChevronRightIcon, CalendarIcon } from "@/components/Icons"
+import type { PostPreview } from "@/components/Blog/types"
 
 interface Props {
   post: PostPreview
 }
 
 const { post } = Astro.props
+
+let path = new URL(post.cover.src, "http://localhost").pathname
+
+// TODO: Always lovely to see leaky implementation details. Anyways let's hope astro adds this at some point so I can remove this code.
+if (path.startsWith("/_astro")) {
+  path = `/dist${path}`
+}
+
+console.log(path)
+
+const image = await readFile(join(process.cwd(), path))
+const base64 = await getBase64(image)
 ---
-<div class="flex flex-col drop-shadow-md rounded-2xl bg-nord-50 dark:bg-nord-700 mb-6">
-  <a href={`/post/${post.slug}`}>
-    <span
-      class={"relative truncate block rounded-t-2xl"}
-      style={{ height: 210 }}
+
+<article
+  class="relative isolate flex flex-col gap-8 lg:flex-row hover:bg-zinc-50 dark:hover:bg-zinc-800/50 rounded-2xl inset-0 ring-1 ring-inset ring-zinc-900/10 dark:ring-zinc-800/50"
+>
+  <div
+    class="relative aspect-[16/9] sm:aspect-[2/1] lg:aspect-square lg:w-60 lg:shrink-0"
+  >
+    <image-loader>
+      <Image
+        src={post.cover}
+        alt="Cover image"
+        class="absolute inset-0 h-full w-full rounded-t-2xl md:rounded-l-2xl md:rounded-r-none bg-zinc-50 bg-no-repeat bg-cover object-cover"
+        style={`background-image: url("${base64}")`}
+        quality="mid"
+      />
+    </image-loader>
+    <div
+      class="absolute inset-0 rounded-t-2xl md:rounded-l-2xl md:rounded-r-none ring-1 ring-inset ring-zinc-900/10"
     >
-      <Image src={post.cover} alt="Cover image" />
-    </span>
-  </a>
-  <div class="flex flex-col p-4 h-full">
-    <a href={`/post/${post.slug}`}>
-      <HeadingFour className="mb-2">{post.title}</HeadingFour>
-    </a>
-    <Paragraph className="flex-1 pb-4 text-sm">
-      {post.description}
-    </Paragraph>
-    <div class="flex text-sm font-medium font-md justify-between">
-      <div>
-        <CalendarIcon className="h-4 w-4 mb-[2px] mr-2 fill-nord-50 dark:fill-nord-700" />
-        <Time dateTime={post.date} />
-      </div>
-      <div>
-        {" "}
-        <TimeIcon className="h-4 w-4 mb-[2px] mr-2 fill-nord-50 dark:fill-nord-700" />
-        <Text>{post.readingTime}</Text>
-      </div>
     </div>
   </div>
-</div>
+  <div class="py-4 px-4">
+    <div class="flex items-center gap-x-3 text-xs">
+      <CalendarIcon className="w-4 h-4 stroke-zinc-600 dark:stroke-zinc-400" />
+      <Time
+        dateTime={post.date}
+        className="text-zinc-600 dark:text-zinc-400"
+        format="default"
+      />
+      {
+        post.categories
+          .slice(0, 3)
+          .map((category) => (
+            <span class="relative z-10 rounded-lg px-2 py-1 font-medium text-tiny text-zinc-600 bg-zinc-200 hover:bg-zinc-300 dark:bg-zinc-50 dark:hover:bg-zinc-100">
+              {category}
+            </span>
+          ))
+      }
+    </div>
+    <div class="group relative max-w-xxl">
+      <h3
+        class="mt-3 text-lg font-semibold leading-6 text-zinc-800 dark:text-zinc-100 group-hover:text-zinc-600 dark:group-hover:text-zinc-300"
+      >
+        <a href={`/post/${post.slug}`}>
+          <span class="absolute inset-0"></span>
+          {post.title}
+        </a>
+      </h3>
+      <p class="mt-5 text-sm leading-6 text-zinc-600 dark:text-zinc-400">
+        {post.description}
+      </p>
+      <a
+        href={`/post/${post.slug}`}
+        aria-hidden="true"
+        class="relative z-10 mt-4 flex items-center text-sm font-medium text-teal-500"
+        >Read Article
+        <ChevronRightIcon className="ml-1 h-4 w-4 stroke-current" />
+      </a>
+    </div>
+  </div>
+</article>
+<script>
+  class ImageLoader extends HTMLElement {
+    private image: HTMLImageElement | null
+
+    constructor() {
+      super()
+
+      this.image = this.querySelector("img")
+
+      if (this.image != null) {
+        this.image.onload = this.onLoad
+        this.image.classList.add("blur-sm")
+      }
+    }
+
+    onLoad = () => {
+      this.image?.classList.remove("blur-sm")
+    }
+  }
+
+  customElements.define("image-loader", ImageLoader)
+</script>

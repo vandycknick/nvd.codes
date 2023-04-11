@@ -1,8 +1,8 @@
 ---
-import type { PostPreview } from "./types"
-import { HeadingOne, Paragraph } from "../../components/Typography"
-import PostsList from "./PostsList.astro"
-import { PostsPager } from "../../components/Blog/PostsPager"
+import type { PostPreview } from "@/components/Blog/types"
+import PostsList from "@/components/Blog/PostsList.astro"
+import { PostsPager } from "@/components/Blog/PostsPager"
+import { Container } from "@/components/Container"
 
 interface Props {
   posts: PostPreview[]
@@ -14,12 +14,21 @@ interface Props {
 
 const { posts, pager } = Astro.props
 ---
-<div class="max-w-6xl w-full flex flex-col flex-1 mx-auto px-4 md:px-0 py-14">
-  <HeadingOne className="pb-8 text-center">Blog</HeadingOne>
-  <Paragraph className="pb-8 text-center">
-    Actively writing about technology, life-events and indie hacking. Here are
-    some of my most recent thoughts and hacks I&#39;ve published.
-  </Paragraph>
+
+<Container className="sm:px-8 py-16">
+  <!-- <div class="mx-auto max-w-7xl px-6 lg:px-8"> -->
+  <div class="max-w-2xl">
+    <h1
+      class="text-4xl font-bold tracking-tight text-zinc-800 dark:text-zinc-100 sm:text-5xl"
+    >
+      Blog
+    </h1>
+    <p class="mt-6 text-base text-zinc-600 dark:text-zinc-400">
+      Actively writing about technology, life-events and indie hacking. Here are
+      some of my most recent thoughts and hacks I&#39;ve published.
+    </p>
+  </div>
   <PostsList posts={posts} />
   <PostsPager {...pager} />
-</div>
+  <!-- </div> -->
+</Container>

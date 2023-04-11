@@ -1,92 +1,66 @@
-import React from "react"
-import cx from "classnames"
-
-import { GlobeIcon } from "./Icons/Globe"
-import { GitHubIcon } from "./Icons/Github"
-import { TwitterIcon } from "./Icons/Twitter"
-import { CodeExplosionRight, CodeExplosionLeft } from "./CodeExplosion"
-
-import { HeadingOne, Paragraph, Text } from "../Typography"
-
-type LinkButtonProps = {
-  href: string
-  children: React.ReactNode
-  className?: string
-  icon: React.ReactNode
-}
-
-const LinkButton = ({ href, children, className, icon }: LinkButtonProps) => (
-  <a
-    href={href}
-    className={cx(
-      "rounded-lg bg-nord-600 font-semibold text-sm px-4 py-2 text-nord-50",
-      className,
-    )}
-  >
-    {icon}
-    <span className="inline-block align-middle">{children}</span>
-  </a>
-)
+import { Container } from "@/components/Container"
+import { TwitterIcon, GitHubIcon, LinkedInIcon } from "@/components/Icons"
 
 type GreetingProps = {
   githubUrl: string
   twitterUrl: string
-  siteUrl: string
+  linkedinUrl: string
 }
 
-const Greeting = ({ githubUrl, twitterUrl, siteUrl }: GreetingProps) => (
-  <section className="max-w-6xl mx-auto px-4 xl:px-0 pt-20 pb-12 flex justify-center">
-    <aside className="hidden lg:block">
-      <CodeExplosionLeft />
-    </aside>
-    <div className="pl-5 pr-3">
-      <HeadingOne className="text-center">
-        Hey <Text className="not-italic">👋</Text>, I&apos;m{" "}
-        <Text className="underline decoration-4 decoration-frost-primary">
-          Nick
-        </Text>
-        .
-      </HeadingOne>
-      <Paragraph className="text-center">
-        Welcome to my little corner on the web! Exactly the right place where I
-        can share my experiences in the world of software engineering or tell
-        you a little something about myself. Love writing, speaking, travelling
-        or hacking around open source or my home automation projects. If you
-        ever ask me about my favourite programming language, I&apos;ll tell you
-        for sure it&apos;s Python or C# or TypeScript or Go or Rust or ...
-      </Paragraph>
-      <div className="flex justify-center py-6">
-        <LinkButton
-          href={githubUrl}
-          icon={
-            <GitHubIcon className="fill-nord-50 w-7 h-7 md:w-5 md:h5 inline-block pr-1" />
-          }
-        >
-          <span className="hidden md:inline">GitHub</span>
-        </LinkButton>
-        <LinkButton
-          href={twitterUrl}
-          className="mx-5"
-          icon={
-            <TwitterIcon className="fill-nord-50 w-8 h-8 md:w-5 md:h5 inline-block pr-1" />
-          }
-        >
-          <span className="hidden md:inline">Twitter</span>
-        </LinkButton>
-        <LinkButton
-          href={siteUrl}
-          icon={
-            <GlobeIcon className="fill-nord-50 w-7 h-7 md:w-5 md:h5 inline-block pr-1" />
-          }
-        >
-          <span className="hidden md:inline">Website</span>
-        </LinkButton>
+const Greeting = ({ githubUrl, twitterUrl, linkedinUrl }: GreetingProps) => (
+  <Container as="section" className="py-16">
+    <div className="flex justify-center">
+      <div className="max-w-2xl">
+        <h1 className="text-4xl italic font-black leading-tight font-sans tracking-tight text-zinc-800 text-center dark:text-zinc-100 sm:text-5xl">
+          Hey <span className="not-italic">👋</span>, I&apos;m{" "}
+          <span className="underline decoration-4 decoration-teal-600">
+            Nick
+          </span>
+          .
+        </h1>
+        <p className="mt-6 mb-6 text-base text-center text-zinc-600 dark:text-zinc-400">
+          Welcome to my little corner on the web! Exactly the right place where
+          I can share my experiences in the world of software engineering or
+          tell you a little something about myself. Love writing, speaking,
+          traveling or hacking around open source or my home automation
+          projects. If you ever ask me about my favourite programming language,
+          I&apos;ll tell you for sure it&apos;s Python or C# or TypeScript or Go
+          or Rust or ...
+        </p>
+        <div className="flex justify-center">
+          <div className="rounded-full bg-nord-500 dark:bg-nord-700 p-2">
+            <div
+              className="rounded-full w-40 h-40 bg-cover"
+              style={{ backgroundImage: "url(/images/me.jpg)" }}
+            ></div>
+          </div>
+        </div>
+        <div className="mt-6 flex gap-6 justify-center">
+          <a
+            className="group -m-1 p-1"
+            href={twitterUrl}
+            aria-label="Follow on Twitter"
+          >
+            <TwitterIcon className="h-6 w-6 fill-zinc-500 transition group-hover:fill-zinc-600 dark:fill-zinc-400 dark:group-hover:fill-zinc-300" />
+          </a>
+          <a
+            className="group -m-1 p-1"
+            href={githubUrl}
+            aria-label="Follow on GitHub"
+          >
+            <GitHubIcon className="h-6 w-6 fill-zinc-500 transition group-hover:fill-zinc-600 dark:fill-zinc-400 dark:group-hover:fill-zinc-300" />
+          </a>
+          <a
+            className="group -m-1 p-1"
+            href={linkedinUrl}
+            aria-label="Follow on LinkedIn"
+          >
+            <LinkedInIcon className="h-6 w-6 fill-zinc-500 transition group-hover:fill-zinc-600 dark:fill-zinc-400 dark:group-hover:fill-zinc-300" />
+          </a>
+        </div>
       </div>
     </div>
-    <aside className="hidden lg:block lg:w-1/2 lg:pl-5">
-      <CodeExplosionRight />
-    </aside>
-  </section>
+  </Container>
 )
 
 export { Greeting }

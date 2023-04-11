@@ -1,4 +1,4 @@
-import React, { useEffect } from "react"
+import { useEffect } from "react"
 import { DiscussionEmbed } from "disqus-react"
 
 interface IDisquss {

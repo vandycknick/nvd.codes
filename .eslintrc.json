@@ -7,7 +7,8 @@
     "plugin:import/typescript",
     "plugin:@typescript-eslint/recommended",
     "prettier",
-    "plugin:prettier/recommended"
+    "plugin:prettier/recommended",
+    "plugin:astro/recommended"
   ],
   "plugins": ["json", "react", "react-hooks"],
   "settings": {
@@ -31,7 +32,8 @@
     "react/prop-types": "off",
     "react-hooks/rules-of-hooks": "error",
     "react-hooks/exhaustive-deps": "error",
-    "@typescript-eslint/explicit-module-boundary-types": "off"
+    "@typescript-eslint/explicit-module-boundary-types": "off",
+    "react/react-in-jsx-scope": "off"
   },
   "overrides": [
     {
@@ -46,6 +48,14 @@
       },
       "rules": {
         "import/no-extraneous-dependencies": "off"
+      }
+    },
+    {
+      "files": ["*.astro"],
+      "parser": "astro-eslint-parser",
+      "parserOptions": {
+        "parser": "@typescript-eslint/parser",
+        "extraFileExtensions": [".astro"]
       }
     }
   ]

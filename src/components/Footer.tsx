@@ -1,42 +1,39 @@
-import React from "react"
+import { ComponentPropsWithoutRef } from "react"
+import { Container } from "../components/Container"
 
-import { HeadingSix, Text } from "./Typography"
+function NavLink({ href, children }: ComponentPropsWithoutRef<"a">) {
+  return (
+    <a
+      href={href}
+      className="transition hover:text-teal-500 dark:hover:text-teal-400"
+    >
+      {children}
+    </a>
+  )
+}
 
-// const Footer = () => {
-//   const bg = useColorModeValue("gray.50", "gray.900")
-//   return (
-//     <VStack bg={bg} pt="8" pb="4" as="footer">
-//       <Text>
-//         <strong>nvd.codes &nbsp;</strong>is handcrafted with ❤️&nbsp;
-//         <Link
-//           href="https://github.com/nickvdyck/nvd.codes"
-//           isExternal
-//           rel="noopener noreferrer"
-//           display="inline-flex"
-//         >
-//           view source
-//           <ExternalLinkIcon mx={1} mt="2px" />
-//         </Link>
-//       </Text>
-//       <Text>all materials © Nick Van Dyck 2021</Text>
-//     </VStack>
-//   )
-// }
-
-const Footer = () => (
-  <footer className="flex p-4 bg-nord-50 dark:bg-nord-600 transition-color transition duration-300">
-    <div className="max-w-6xl w-full mx-auto px-4 md:px-0">
-      <aside>
-        <HeadingSix>nvd.codes</HeadingSix>
-        <Text as="div" className="text-sm">
-          all materials © Nick Van Dyck 2021
-        </Text>
-        <Text as="div" className="text-sm">
-          Made with ❤️ in Belgium
-        </Text>
-      </aside>
-    </div>
-  </footer>
-)
-
-export { Footer }
+export function Footer() {
+  return (
+    <footer className="pt-16">
+      <Container.Outer>
+        <div className="border-t border-zinc-100 pb-16 pt-10 dark:border-zinc-700/40">
+          <Container.Inner>
+            <div className="flex flex-col items-center justify-between gap-6 sm:flex-row">
+              <div className="flex gap-6 text-sm font-medium text-zinc-800 dark:text-zinc-200">
+                <NavLink href="/">Home</NavLink>
+                <NavLink href="/blog">Blog</NavLink>
+                <NavLink href="/about">About</NavLink>
+                <NavLink href="/uses">Uses</NavLink>
+              </div>
+              <p className="text-sm text-zinc-400 dark:text-zinc-500 text-center">
+                all materials &copy; Nick Van Dyck {new Date().getFullYear()}.
+                <br />
+                <span>made with ❤️ in Belgium.</span>
+              </p>
+            </div>
+          </Container.Inner>
+        </div>
+      </Container.Outer>
+    </footer>
+  )
+}

@@ -10,6 +10,7 @@ const background = await getImage(Astro.props.image)
 ---
 
 <div
-  class="w-full h-24 md:h-56 opacity-80 saturate-50 blur-[2px] bg-center bg-cover dark:blur-sm"
+  class="w-full h-24 md:h-56 opacity-80 dark:opacity-40 bg-center bg-cover rounded-2xl"
   style={`background-image: url(${background.src})`}
-/>
+>
+</div>

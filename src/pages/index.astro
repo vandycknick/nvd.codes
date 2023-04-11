@@ -1,32 +1,36 @@
 ---
 import { getCollection } from "astro:content"
 
-import { Greeting } from "../components/Home/Greeting"
-import { AboutMe } from "../components/Home/AboutMe"
-import { LatestBlogPosts } from "../components/Home/LatestBlogPosts"
+import { Greeting } from "@/components/Home/Greeting"
+import { LatestBlogPosts } from "@/components/Home/LatestBlogPosts"
+import { Divider } from "@/components/Divider"
+import { Container } from "@/components/Container"
 
-import MainLayout from "../layouts/MainLayout.astro"
+import MainLayout from "@/layouts/MainLayout.astro"
 
-const allBlogPosts = await getCollection('blog', post => !post.data.draft)
+const allBlogPosts = await getCollection("blog", (post) => !post.data.draft)
 
-const sorted = allBlogPosts.sort((l, r) => r.data.date.getTime() - l.data.date.getTime())
-const featuredPosts = sorted.slice(0, 4)
-const latestPosts = featuredPosts.map(post => ({
+const sorted = allBlogPosts.sort(
+  (l, r) => r.data.date.getTime() - l.data.date.getTime(),
+)
+const featuredPosts = sorted.slice(0, 3)
+const latestPosts = featuredPosts.map((post) => ({
   title: post.data.title,
   description: post.data.description,
   date: post.data.date,
   slug: post.slug,
+  cover: post.data.cover,
 }))
 ---
 
 <MainLayout>
-  <div class="w-full flex flex-col flex-1">
-    <Greeting
-      githubUrl="https://github.com/vandycknick"
-      siteUrl="https://nvd.codes"
-      twitterUrl="https://twitter.com/vandycknick"
-    />
-    <AboutMe />
-    <LatestBlogPosts posts={latestPosts} />
-  </div>
+  <Greeting
+    twitterUrl="https://twitter.com/vandycknick"
+    githubUrl="https://github.com/vandycknick"
+    linkedinUrl="https://www.linkedin.com/in/nickvandyck/"
+  />
+  <Container as="section">
+    <Divider />
+  </Container>
+  <LatestBlogPosts posts={latestPosts} />
 </MainLayout>
