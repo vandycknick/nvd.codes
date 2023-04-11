@@ -17,4 +17,4 @@ Get all dependencies installed with:
 make setup
 ```
 
-Running `make dev` will start up a dev server available on `http://localhost:7000`
+Running `make dev` will start up a dev server available on `http://localhost:3000`
