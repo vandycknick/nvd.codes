@@ -94,15 +94,15 @@ const base64 = await getBase64(image)
 
       this.image = this.querySelector("img")
 
-      if (this.image != null) {
-        this.image.onload = this.onLoad
-        this.image.classList.add("blur-sm")
-      }
+      // null check is mostly done to convince the type system that
+      // after this line this.image is definitely defined.
+      if (this.image == null || this.image?.complete === true) return
+
+      this.image.onload = this.onLoad
+      this.image.classList.add("blur-sm")
     }
 
-    onLoad = () => {
-      this.image?.classList.remove("blur-sm")
-    }
+    onLoad = () => this.image?.classList.remove("blur-sm")
   }
 
   customElements.define("image-loader", ImageLoader)
