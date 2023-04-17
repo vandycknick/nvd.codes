@@ -2,15 +2,12 @@
   "parser": "@typescript-eslint/parser",
   "extends": [
     "eslint:recommended",
-    "plugin:react/recommended",
     "plugin:json/recommended",
     "plugin:import/typescript",
     "plugin:@typescript-eslint/recommended",
-    "prettier",
-    "plugin:prettier/recommended",
-    "plugin:astro/recommended"
+    "plugin:prettier/recommended"
   ],
-  "plugins": ["json", "react", "react-hooks"],
+  "plugins": ["json"],
   "settings": {
     "react": {
       "version": "detect"
@@ -20,42 +17,49 @@
     "browser": true
   },
   "parserOptions": {
-    "ecmaVersion": 2018,
-    "sourceType": "module",
-    "ecmaFeatures": {
-      "jsx": true
-    }
+    "ecmaVersion": 2019,
+    "sourceType": "module"
   },
   "rules": {
     "no-console": "error",
     "no-undef": "off",
-    "react/prop-types": "off",
-    "react-hooks/rules-of-hooks": "error",
-    "react-hooks/exhaustive-deps": "error",
-    "@typescript-eslint/explicit-module-boundary-types": "off",
-    "react/react-in-jsx-scope": "off"
+    "@typescript-eslint/explicit-module-boundary-types": "off"
   },
   "overrides": [
     {
-      "files": [
-        "**/*/setupTests.ts",
-        "**/*.test.ts",
-        "**/*.test.tsx",
-        "**/__mocks__ /**"
-      ],
-      "env": {
-        "jest": true
-      },
+      "files": ["*.tsx"],
+      "extends": ["plugin:react/recommended"],
+      "plugins": ["react", "react-hooks"],
       "rules": {
-        "import/no-extraneous-dependencies": "off"
+        "react/prop-types": "off",
+        "react-hooks/rules-of-hooks": "error",
+        "react-hooks/exhaustive-deps": "error",
+        "react/react-in-jsx-scope": "off"
+      },
+      "parserOptions": {
+        "ecmaFeatures": {
+          "jsx": true
+        }
       }
     },
     {
       "files": ["*.astro"],
       "parser": "astro-eslint-parser",
+      "extends": ["plugin:astro/recommended"],
       "parserOptions": {
         "parser": "@typescript-eslint/parser",
-        "extraFileExtensions": [".astro"]
+        "extraFileExtensions": [".astro"],
+        "sourceType": "module"
+      },
+      "rules": {
+        "@typescript-eslint/no-unused-vars": "off"
+      }
+    },
+    {
+      "files": ["**/*.astro/*.js", "*.astro/*.js"],
+      "parser": "@typescript-eslint/parser",
+      "rules": {
+        "prettier/prettier": "off"
       }
     }
   ]
