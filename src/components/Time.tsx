@@ -6,6 +6,7 @@ type TimeProps = {
   dateTime: string | Date
   className?: string
   format?: ParsedTimeFormat
+  label?: string
 }
 
 const parseDate = (
@@ -25,11 +26,11 @@ const parseDate = (
 }
 
 const stringify = (dateTime: string | Date): string =>
-  typeof dateTime === "string" ? dateTime : dateTime.toString()
+  typeof dateTime === "string" ? dateTime : dateTime.toISOString()
 
-export const Time = ({ dateTime, className, format }: TimeProps) => (
+export const Time = ({ dateTime, className, format, label }: TimeProps) => (
   <time className={className} dateTime={stringify(dateTime)}>
-    {parseDate(dateTime, format ?? "default")}
+    {label ? label : parseDate(dateTime, format ?? "default")}
   </time>
 )
 

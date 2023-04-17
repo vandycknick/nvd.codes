@@ -125,9 +125,17 @@ export function Resume() {
                     : role.end.getFullYear()
                 }`}
               >
-                <Time dateTime={role.start} format="short" />{" "}
+                <Time
+                  dateTime={role.start}
+                  format="short"
+                  label={role.start.label}
+                />{" "}
                 <span aria-hidden="true">—</span>{" "}
-                <Time dateTime={role.end} format="short" />
+                <Time
+                  dateTime={role.end}
+                  format="short"
+                  label={role.end.label}
+                />
               </dd>
             </dl>
           </li>
