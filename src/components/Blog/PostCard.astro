@@ -34,8 +34,8 @@ const base64 = await getBase64(image)
     <image-loader>
       <Image
         src={post.cover}
-        alt="Cover image"
-        class="absolute inset-0 h-full w-full rounded-t-2xl md:rounded-l-2xl md:rounded-r-none bg-zinc-50 bg-no-repeat bg-cover object-cover"
+        alt="Blog Post Cover Image"
+        class="absolute inset-0 h-full w-full rounded-t-2xl lg:rounded-l-2xl lg:rounded-r-none bg-zinc-50 bg-no-repeat bg-cover object-cover"
         style={`background-image: url("${base64}")`}
         quality="mid"
       />
