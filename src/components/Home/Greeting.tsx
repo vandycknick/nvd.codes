@@ -19,13 +19,13 @@ const Greeting = ({ githubUrl, twitterUrl, linkedinUrl }: GreetingProps) => (
           .
         </h1>
         <p className="mt-6 mb-6 text-base text-center text-zinc-600 dark:text-zinc-400">
-          Welcome to my little corner on the web! Exactly the right place where
-          I can share my experiences in the world of software engineering or
-          tell you a little something about myself. Love writing, speaking,
-          traveling or hacking around open source or my home automation
-          projects. If you ever ask me about my favourite programming language,
-          I&apos;ll tell you for sure it&apos;s Python or C# or TypeScript or Go
-          or Rust or ...
+          Welcome to my little slice of the internet! This is the perfect place
+          for me to share my experiences in software engineering and insights
+          into my passions. Whether I&apos;m writing, speaking, or tinkering
+          with my latest open-source or home automation project, I&apos;m always
+          exploring new ways to challenge myself and push the boundaries of
+          what&apos;s possible. Thanks for stopping by, and I hope you find
+          something useful here.
         </p>
         <div className="flex justify-center">
           <div className="rounded-full bg-nord-500 dark:bg-nord-700 p-2">
