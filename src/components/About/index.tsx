@@ -28,30 +28,55 @@ export function About() {
           </h1>
           <div className="mt-6 space-y-7 text-base text-zinc-600 dark:text-zinc-400">
             <p>
-              I’ve loved making things for as long as I can remember, and wrote
-              my first program when I was 6 years old, just two weeks after my
-              mom brought home the brand new Macintosh LC 550 that I taught
-              myself to type on.
+              My passion for programming started at a young age and has only
+              grown stronger over the years. I hold a degree in Applied Computer
+              Sciences and have been fortunate enough to work with a diverse
+              range of companies, honing my skills as a all round Software
+              Engineer.
             </p>
             <p>
-              The only thing I loved more than computers as a kid was space.
-              When I was 8, I climbed the 40-foot oak tree at the back of our
-              yard while wearing my older sister’s motorcycle helmet, counted
-              down from three, and jumped — hoping the tree was tall enough that
-              with just a bit of momentum I’d be able to get to orbit.
+              I started my career as a contractor, gaining experience in web
+              development and learning how to deliver small incremental value to
+              customers. I helped clients build enticing frontends during the
+              early days of Single Page Web app Development.
             </p>
             <p>
-              I spent the next few summers indoors working on a rocket design,
-              while I recovered from the multiple surgeries it took to fix my
-              badly broken legs. It took nine iterations, but when I was 15 I
-              sent my dad’s Blackberry into orbit and was able to transmit a
-              photo back down to our family computer from space.
+              In 2015, I relocated to London to join the team at Marks and
+              Spencer. Using Python and Flask, our team delivered a brand new
+              platform that resulted in a significant uplift in sales year after
+              year. It was an incredible experience, demonstrating my ability to
+              deliver high-quality software while working with a diverse range
+              of people and cultures.
             </p>
             <p>
-              Today, I’m the founder of Planetaria, where we’re working on
-              civilian space suits and manned shuttle kits you can assemble at
-              home so that the next generation of kids really <em>can</em> make
-              it to orbit — from the comfort of their own backyards.
+              Following that, I worked at MOO as part of a small team building a
+              new application focused on enabling professional and hobbyist
+              designers to create astonishing print products. Using a
+              test-driven first approach and good CI/CD practices, we delivered
+              new features to customers daily. Additionally, I led the creation
+              of a shared design, style, and component library that enabled
+              faster delivery of UI features and reduced duplication across the
+              company.
+            </p>
+            <p>
+              Currently, I work at DataCamp, an online learning platform
+              teaching data science, where I transitioned into a
+              DevOps/Infrastructure engineering role. Here, I gained experience
+              building scalable, reliable, and secure infrastructure to support
+              the needs of a rapidly growing business. Throughout my career,
+              I&apos;ve demonstrated a strong passion for software engineering
+              and a commitment to delivering high-quality products that meet
+              customer needs. I&apos;m an excellent collaborator and a quick
+              learner, always eager to tackle new challenges and stay up-to-date
+              with the latest technologies.
+            </p>
+            <p>
+              When not working on software projects, I enjoy tinkering with my
+              home automation systems and spending time with my family. If
+              you&apos;re interested in learning more about my experiences or
+              exploring opportunities for building great software together, give
+              me a shout at info@nvd.codes. I&apos;m always happy to chat, so
+              feel free to reach out!
             </p>
           </div>
         </div>
