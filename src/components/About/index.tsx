@@ -81,7 +81,7 @@ export function About() {
           </div>
         </div>
         <div className="lg:pl-20">
-          <ul role="list">
+          <ul role="list" className="pb-20">
             <SocialLink href="#" icon={TwitterIcon}>
               Follow on Twitter
             </SocialLink>
@@ -99,8 +99,8 @@ export function About() {
               info@nvd.codes
             </SocialLink>
           </ul>
+          <Resume />
         </div>
-        <Resume />
       </div>
     </Container>
   )
