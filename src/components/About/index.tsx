@@ -30,15 +30,17 @@ export function About() {
             <p>
               My passion for programming started at a young age and has only
               grown stronger over the years. I hold a degree in Applied Computer
-              Sciences and have been fortunate enough to work with a diverse
-              range of companies, honing my skills as a all round Software
+              Sciences and have been fortunate enough to work for a diverse
+              range of companies, honing my skills as a Junior Software
               Engineer.
             </p>
             <p>
-              I started my career as a contractor, gaining experience in web
-              development and learning how to deliver small incremental value to
-              customers. I helped clients build enticing frontends during the
-              early days of Single Page Web app Development.
+              I started my career as a contractor in the early days of SPA web
+              development. I helped clients navigate these newfound waters by
+              building enticing reactive frontends. This experience helped me
+              gain better understand of the ins and outs of web development, all
+              while learning how to deliver small incremental value to
+              customers.
             </p>
             <p>
               In 2015, I relocated to London to join the team at Marks and
