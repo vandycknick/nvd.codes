@@ -31,8 +31,7 @@ export function About() {
               My passion for programming started at a young age and has only
               grown stronger over the years. I hold a degree in Applied Computer
               Sciences and have been fortunate enough to work for a diverse
-              range of companies, honing my skills as a Junior Software
-              Engineer.
+              range of companies, honing my skills as a Software Engineer.
             </p>
             <p>
               I started my career as a contractor in the early days of SPA web
