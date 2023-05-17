@@ -141,9 +141,9 @@ resource "aws_cloudfront_cache_policy" "default_cache_policy" {
   }
 }
 
-resource "aws_cloudfront_cache_policy" "nextjs_cache_policy" {
-  name        = "nextjs_cache_policy"
-  comment     = "Cache policy for files in _next folder"
+resource "aws_cloudfront_cache_policy" "astro_cache_policy" {
+  name        = "astro_cache_policy"
+  comment     = "Cache policy for files in _astro folder"
   default_ttl = 3794400
   min_ttl     = 1
   max_ttl     = 31536000
@@ -194,12 +194,12 @@ resource "aws_cloudfront_distribution" "s3_distribution" {
 
   ordered_cache_behavior {
     target_origin_id = local.s3_website_origin_id
-    path_pattern     = "/_next/*"
+    path_pattern     = "/_astro/*"
 
     allowed_methods = ["GET", "HEAD"]
     cached_methods  = ["GET", "HEAD"]
 
-    cache_policy_id        = aws_cloudfront_cache_policy.nextjs_cache_policy.id
+    cache_policy_id        = aws_cloudfront_cache_policy.astro_cache_policy.id
     viewer_protocol_policy = "redirect-to-https"
   }
 
