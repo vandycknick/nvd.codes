@@ -18,7 +18,7 @@ setup.yarn:
 
 .PHONY: install.yarn
 install.yarn:
-	yarn --frozen-lockfile --immutable
+	yarn --immutable
 
 .PHONY: clean
 clean:
