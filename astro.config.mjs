@@ -32,7 +32,13 @@ export default defineConfig({
       wrap: true,
     },
   },
-  integrations: [tailwind(), react(), sitemap()],
+  integrations: [
+    tailwind(),
+    react(),
+    sitemap({
+      filter: (page) => page !== "https://nvd.codes/gmm-cashless/",
+    }),
+  ],
   experimental: {
     assets: true,
   },

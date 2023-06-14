@@ -109,13 +109,13 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@astrojs/sitemap@npm:^1.3.1":
-  version: 1.3.1
-  resolution: "@astrojs/sitemap@npm:1.3.1"
+"@astrojs/sitemap@npm:^1.3.3":
+  version: 1.3.3
+  resolution: "@astrojs/sitemap@npm:1.3.3"
   dependencies:
     sitemap: ^7.1.1
     zod: ^3.17.3
-  checksum: 105ec8a85ecbce47e239291fcdc1999cb12fd39fc7940c3969619251613e60a3c22f11fe56a7eb3ac82ed884db149d670e889be124ae98a71803ec41edcf8f4d
+  checksum: 791a21935a806bdb2b4660e0ddc944514d6caaa6199e155a565753a7509f368df7e306e54c16bc554a865b1e62bcfa7bf2d88e44b8eb43dedfbf5117a5e01d76
   languageName: node
   linkType: hard
 
@@ -5395,7 +5395,7 @@ __metadata:
   dependencies:
     "@astrojs/react": ^2.1.3
     "@astrojs/rss": ^2.4.1
-    "@astrojs/sitemap": ^1.3.1
+    "@astrojs/sitemap": ^1.3.3
     "@astrojs/tailwind": ^3.1.2
     "@headlessui/react": latest
     "@plaiceholder/base64": ^1.0.0

@@ -16,7 +16,7 @@
   "dependencies": {
     "@astrojs/react": "^2.1.3",
     "@astrojs/rss": "^2.4.1",
-    "@astrojs/sitemap": "^1.3.1",
+    "@astrojs/sitemap": "^1.3.3",
     "@astrojs/tailwind": "^3.1.2",
     "@headlessui/react": "latest",
     "@plaiceholder/base64": "^1.0.0",

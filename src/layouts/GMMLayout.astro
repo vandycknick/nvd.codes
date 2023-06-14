@@ -1,0 +1,37 @@
+---
+const title = "GMM Cashless"
+---
+
+<html class="h-full w-full antialiased" lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="HandheldFriendly" content="True" />
+    <meta name="MobileOptimized" content="320" />
+    <meta name="robots" content="noindex" />
+    <meta name="author" content="Nick Van Dyck" />
+    <link rel="shortcut icon" href="/favicon.png" />
+    <title>{title}</title>
+    <meta name="viewport" content="width=device-width, initia-scale=1.0" />
+    <meta name="generator" content={Astro.generator} />
+  </head>
+  <body class="flex h-full w-full flex-col bg-slate-950">
+    <header class="flex justify-center ph-5 pt-10">
+      <img
+        src="https://www.graspop.be/assets/website/components/header/logo.678f91d2.svg"
+      />
+    </header>
+    <aside
+      class="flex flex-col items-center justify-center pt-5 ph-5 text-[#c2b87b]"
+    >
+      <p>
+        The Unofficial Cashless App<p>
+          <p>Because the official just sucks!</p>
+        </p>
+        <main class="flex h-full w-full flex-col p-5">
+          <slot />
+        </main>
+      </p>
+    </aside>
+  </body>
+</html>
