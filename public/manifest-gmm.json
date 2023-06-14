@@ -1,0 +1,25 @@
+{
+  "short_name": "GMM Cashless Unofficial",
+  "name": "The Unofficial GMM Cashless App",
+  "lang": "en-US",
+  "start_url": "/gmm-cashless/",
+  "scope": "/gmm-cashless/",
+  "display": "standalone",
+  "orientation": "portrait",
+  "theme_color": "#000",
+  "background_color": "#000",
+  "icons": [
+    {
+      "src": "https://www.graspop.be/assets/website/components/favicon/images/android-chrome-192x192.a8c45a69.png",
+      "sizes": "192x192",
+      "type": "image\/png"
+    },
+    {
+      "src": "https://www.graspop.be/assets/website/components/favicon/images/android-chrome-512x512.a8c45a69.png",
+      "sizes": "512x512",
+      "type": "image\/png"
+    }
+  ]
+}
+
+

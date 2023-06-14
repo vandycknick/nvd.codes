@@ -13,6 +13,14 @@ const title = "GMM Cashless"
     <link rel="shortcut icon" href="/favicon.png" />
     <title>{title}</title>
     <meta name="viewport" content="width=device-width, initia-scale=1.0" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, maximum-scale=1, minimum-scale=1, user-scalable=0, viewport-fit=cover"
+    />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+    <meta name="theme-color" content="black" />
+    <link rel="manifest" href="/manifest-gmm.json" />
     <meta name="generator" content={Astro.generator} />
   </head>
   <body class="flex h-full w-full flex-col bg-slate-950">
@@ -24,7 +32,7 @@ const title = "GMM Cashless"
     <aside
       class="flex flex-col items-center justify-center pt-5 ph-5 text-[#c2b87b]"
     >
-      <p>The Unofficial Cashless App</p>
+      <p>The Unofficial {title} App</p>
       <p>Because the official just sucks!</p>
     </aside>
     <main class="flex h-full w-full flex-col p-5">
