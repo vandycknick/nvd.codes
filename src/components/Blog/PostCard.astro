@@ -14,14 +14,15 @@ interface Props {
 
 const { post } = Astro.props
 
-let path = new URL(post.cover.src, "http://localhost").pathname
+let path = new URL(post.cover.src, "http://localhost").pathname.replace(/^(\/\@fs)/, "")
 
-// TODO: Always lovely to see leaky implementation details. Anyways let's hope astro adds this at some point so I can remove this code.
+// TODO: Always lovely to see leaky implementation details.
+// Anyways let's hope astro adds this at some point so I can remove this code.
 if (path.startsWith("/_astro")) {
-  path = `/dist${path}`
+  path = join(process.cwd(), "dist", path)
 }
 
-const image = await readFile(join(process.cwd(), path))
+const image = await readFile(path)
 const base64 = await getBase64(image)
 ---
 

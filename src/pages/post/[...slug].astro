@@ -38,7 +38,7 @@ const socialLinkTitle = `Nick Van Dyck: ${entry.data.title}`
 const editUrl = `https://github.com/vandycknick/nvd.codes/edit/main/src/content/blog/${entry.id}`
 const readingTime = remarkPluginFrontmatter.readingTime
 
-const coverImage = await getImage(entry.data.cover)
+const coverImage = entry.data.cover
 ---
 
 <MainLayout

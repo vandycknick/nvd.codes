@@ -5,12 +5,10 @@ import { getImage } from "astro:assets"
 interface Props {
   image: ImageTransform
 }
-
-const background = await getImage(Astro.props.image)
 ---
 
 <div
   class="w-full h-24 md:h-56 opacity-80 dark:opacity-40 bg-center bg-cover rounded-2xl"
-  style={`background-image: url(${background.src})`}
+  style={`background-image: url(${Astro.props.image.src})`}
 >
 </div>
