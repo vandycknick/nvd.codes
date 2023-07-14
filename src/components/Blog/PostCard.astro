@@ -14,7 +14,10 @@ interface Props {
 
 const { post } = Astro.props
 
-let path = new URL(post.cover.src, "http://localhost").pathname.replace(/^(\/\@fs)/, "")
+let path = new URL(post.cover.src, "http://localhost").pathname.replace(
+  /^(\/@fs)/,
+  "",
+)
 
 // TODO: Always lovely to see leaky implementation details.
 // Anyways let's hope astro adds this at some point so I can remove this code.
