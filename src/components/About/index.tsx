@@ -83,13 +83,24 @@ export function About() {
         </div>
         <div className="lg:pl-20">
           <ul role="list" className="pb-20">
-            <SocialLink href="#" icon={TwitterIcon}>
+            <SocialLink
+              href="https://twitter.com/vandycknick"
+              icon={TwitterIcon}
+            >
               Follow on Twitter
             </SocialLink>
-            <SocialLink href="#" icon={GitHubIcon} className="mt-4">
+            <SocialLink
+              href="https://github.com/vandycknick"
+              icon={GitHubIcon}
+              className="mt-4"
+            >
               Follow on GitHub
             </SocialLink>
-            <SocialLink href="#" icon={LinkedInIcon} className="mt-4">
+            <SocialLink
+              href="https://www.linkedin.com/in/nickvandyck/"
+              icon={LinkedInIcon}
+              className="mt-4"
+            >
               Follow on LinkedIn
             </SocialLink>
             <SocialLink
