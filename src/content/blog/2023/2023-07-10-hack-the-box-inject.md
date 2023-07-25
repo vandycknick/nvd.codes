@@ -50,11 +50,11 @@ Service detection performed. Please report any incorrect results at https://nmap
 Nmap done: 1 IP address (1 host up) scanned in 8.96 seconds
 ```
 
-Based on the [OpenSSH](https://packages.ubuntu.com/search?keywords=openssh-server) version, the host is likely running Ubuntu 20.04 focal. Port 8080 is also open, but Nmap is having difficulties identifying the service running behind this port. It’s a web server, so I can open it in Firefox by browsing to `[http://10.10.11.204:8080](http://10.10.11.204:8080)`.
+Based on the [OpenSSH](https://packages.ubuntu.com/search?keywords=openssh-server) version, the host is likely running Ubuntu 20.04 focal. Port 8080 is also open, but Nmap is having difficulties identifying the service running behind this port. It’s a web server, so I can open it in Firefox by browsing to `http://10.10.11.204:8080`.
 
 ## The webservice
 
-When the request finishes loading, I get presented with the following web page. Seems like I’m dealing with some storage provider. I start a gobuster scan in the background (`gobuster dir -u [http://10.10.11.204:8080/](http://10.10.11.204:8080/) -w /usr/share/seclists/Discovery/Web-Content/raft-small-words.txt -o 4_gobuster_root`) while I start browsing around and discover a couple of interesting pages.
+When the request finishes loading, I get presented with the following web page. Seems like I’m dealing with some storage provider. I start a gobuster scan in the background (`gobuster dir -u http://10.10.11.204:8080/ -w /usr/share/seclists/Discovery/Web-Content/raft-small-words.txt -o 4_gobuster_root`) while I start browsing around and discover a couple of interesting pages.
 
 ![Untitled](../../../assets/2023-07-10-hack-the-box-inject/Untitled.png)
 
@@ -104,7 +104,7 @@ One interesting result I didn’t bump into during my manual recon is the `/show
 
 ```bash
 $ curl http://10.10.11.204:8080/show_image
-                                                                                                                                                                                         127 ⨯
+
 {"timestamp":"2023-07-06T20:28:29.549+00:00","status":400,"error":"Bad Request","message":"Required request parameter 'img' for method parameter type String is not present","path":"/show_image"}
 ```
 
@@ -145,7 +145,7 @@ Seems there are 2 folder, I decide to look at `/var/www/html` first but that fol
 
 The file that immediately draws my attention is `HELP.md`, which returns the following:
 
-```bash
+```txt
 HTTP/1.1 200
 Accept-Ranges: bytes
 Content-Type: image/jpeg
