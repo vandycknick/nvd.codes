@@ -36,7 +36,7 @@ export default defineConfig({
     tailwind(),
     react(),
     sitemap({
-      filter: (page) => page !== "https://nvd.codes/gmm-cashless/",
+      filter: (page) => page !== "", // Was used at some point. Left it empty for now to show usage. Hopefully it doesn't came back to haunt me.
     }),
   ],
   experimental: {
