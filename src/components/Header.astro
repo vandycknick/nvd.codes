@@ -39,6 +39,7 @@ const path = new URL(Astro.url).pathname
             client:only="react"
           />
           <DesktopNavigation
+            client:idle
             path={path}
             className="pointer-events-auto hidden md:block"
           />

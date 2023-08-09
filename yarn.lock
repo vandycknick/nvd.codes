@@ -1328,6 +1328,17 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@tailwindcss/forms@npm:^0.5.4":
+  version: 0.5.4
+  resolution: "@tailwindcss/forms@npm:0.5.4"
+  dependencies:
+    mini-svg-data-uri: ^1.2.3
+  peerDependencies:
+    tailwindcss: ">=3.0.0 || >= 3.0.0-alpha.1"
+  checksum: 3b8c6fe6fd02bf0e346a8c7a7386b6a7df2052ba36292037ce79db3ce51562ef34fee43798984a06c0626c041d9b8de5e3b89fa81790f9b8927594d0da72a53d
+  languageName: node
+  linkType: hard
+
 "@tailwindcss/typography@npm:^0.5.9":
   version: 0.5.9
   resolution: "@tailwindcss/typography@npm:0.5.9"
@@ -5881,6 +5892,15 @@ __metadata:
   languageName: node
   linkType: hard
 
+"mini-svg-data-uri@npm:^1.2.3":
+  version: 1.4.4
+  resolution: "mini-svg-data-uri@npm:1.4.4"
+  bin:
+    mini-svg-data-uri: cli.js
+  checksum: 997f1fbd8d59a70f03761e18626d335197a3479cb9d1ff75678e4b64b864d32a0b8fc18115eabde035e5299b8b4a354a78e57dd6ac10f9d604162a6170898d09
+  languageName: node
+  linkType: hard
+
 "minimatch@npm:^3.0.4, minimatch@npm:^3.0.5, minimatch@npm:^3.1.1, minimatch@npm:^3.1.2":
   version: 3.1.2
   resolution: "minimatch@npm:3.1.2"
@@ -6203,6 +6223,7 @@ __metadata:
     "@astrojs/tailwind": ^4.0.0
     "@headlessui/react": latest
     "@plaiceholder/base64": ^1.0.0
+    "@tailwindcss/forms": ^0.5.4
     "@tailwindcss/typography": ^0.5.9
     "@types/react": ^18.2.18
     "@types/react-dom": ^18.2.7
@@ -6223,10 +6244,12 @@ __metadata:
     eslint-plugin-react: ^7.33.1
     eslint-plugin-react-hooks: ^4.6.0
     mdast-util-to-string: ^4.0.0
+    pagefind: ^0.12.0
     prettier: ^3.0.1
     prettier-plugin-astro: ^0.11.0
     react: ^18.2.0
     react-dom: ^18.2.0
+    react-hotkeys-hook: ^4.4.1
     reading-time: ^1.5.0
     sharp: ^0.32.4
     tailwindcss: ^3.3.3
@@ -6456,6 +6479,18 @@ __metadata:
   version: 2.2.0
   resolution: "p-try@npm:2.2.0"
   checksum: f8a8e9a7693659383f06aec604ad5ead237c7a261c18048a6e1b5b85a5f8a067e469aa24f5bc009b991ea3b058a87f5065ef4176793a200d4917349881216cae
+  languageName: node
+  linkType: hard
+
+"pagefind@npm:^0.12.0":
+  version: 0.12.0
+  resolution: "pagefind@npm:0.12.0"
+  dependencies:
+    https-proxy-agent: ^5.0.0
+    proxy-from-env: ^1.1.0
+  bin:
+    pagefind: lib/index.js
+  checksum: 7189127d113cea57b098a4970e00cc6d1f8c2b21f1ef57dd2811c864440bf8eeac75310b080e0bd60d271e0f262e39d6f3839ecb5969180be526b40a4cba2b11
   languageName: node
   linkType: hard
 
@@ -6844,6 +6879,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"proxy-from-env@npm:^1.1.0":
+  version: 1.1.0
+  resolution: "proxy-from-env@npm:1.1.0"
+  checksum: ed7fcc2ba0a33404958e34d95d18638249a68c430e30fcb6c478497d72739ba64ce9810a24f53a7d921d0c065e5b78e3822759800698167256b04659366ca4d4
+  languageName: node
+  linkType: hard
+
 "pump@npm:^3.0.0":
   version: 3.0.0
   resolution: "pump@npm:3.0.0"
@@ -6912,6 +6954,16 @@ __metadata:
   peerDependencies:
     react: ^18.2.0
   checksum: 7d323310bea3a91be2965f9468d552f201b1c27891e45ddc2d6b8f717680c95a75ae0bc1e3f5cf41472446a2589a75aed4483aee8169287909fcd59ad149e8cc
+  languageName: node
+  linkType: hard
+
+"react-hotkeys-hook@npm:^4.4.1":
+  version: 4.4.1
+  resolution: "react-hotkeys-hook@npm:4.4.1"
+  peerDependencies:
+    react: ">=16.8.1"
+    react-dom: ">=16.8.1"
+  checksum: c03d5d013ec41f3a63a3dd7d704d2fc98fba227811f7a1222af8651705f1cef983b7ccc4325f9910fec920156b14b4f05101882dc7d0bde1601ba56c01d5f162
   languageName: node
   linkType: hard
 

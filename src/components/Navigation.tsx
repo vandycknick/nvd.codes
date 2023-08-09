@@ -42,7 +42,7 @@ export function MobileNavigation({ className }: NavigationProps) {
           leaveFrom="opacity-100"
           leaveTo="opacity-0"
         >
-          <Popover.Overlay className="fixed inset-0 z-50 bg-zinc-800/40 backdrop-blur-sm dark:bg-black/80" />
+          <Popover.Overlay className="fixed inset-0 z-40 bg-zinc-800/40 backdrop-blur-sm dark:bg-black/80" />
         </Transition.Child>
         <Transition.Child
           as={Fragment}
@@ -55,7 +55,7 @@ export function MobileNavigation({ className }: NavigationProps) {
         >
           <Popover.Panel
             focus
-            className="fixed inset-x-4 top-8 z-50 origin-top rounded-3xl bg-white p-8 ring-1 ring-zinc-900/5 dark:bg-zinc-900 dark:ring-zinc-800"
+            className="fixed inset-x-4 top-8 z-40 origin-top rounded-3xl bg-white p-8 ring-1 ring-zinc-900/5 dark:bg-zinc-900 dark:ring-zinc-800"
           >
             <div className="flex flex-row-reverse items-center justify-between">
               <Popover.Button aria-label="Close menu" className="-m-1 p-1">
@@ -131,6 +131,23 @@ export function DesktopNavigation(props: NavigationProps) {
             {item.title}
           </NavItem>
         ))}
+        <li className="relative block mx-2 my-2 px-3 py-2 transition hover:text-teal-500 dark:hover:text-teal-400 hover:cursor-pointer">
+          <svg
+            className="absolute block left-0 top-[2px] h-5 w-5"
+            viewBox="0 0 20 20"
+            fill="currentColor"
+            aria-hidden="true"
+            onClick={() =>
+              document.dispatchEvent(new CustomEvent("toggleSearch"))
+            }
+          >
+            <path
+              fillRule="evenodd"
+              d="M9 3.5a5.5 5.5 0 100 11 5.5 5.5 0 000-11zM2 9a7 7 0 1112.452 4.391l3.328 3.329a.75.75 0 11-1.06 1.06l-3.329-3.328A7 7 0 012 9z"
+              clipRule="evenodd"
+            />
+          </svg>
+        </li>
       </ul>
     </nav>
   )

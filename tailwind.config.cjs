@@ -2,7 +2,7 @@
 module.exports = {
   content: ["./src/**/*.{astro,html,js,jsx,md,mdx,svelte,ts,tsx,vue}"],
   darkMode: "class",
-  plugins: [require("@tailwindcss/typography")],
+  plugins: [require("@tailwindcss/typography"),require('@tailwindcss/forms'),],
   theme: {
     fontSize: {
       tiny: ["0.7rem", { lineHeight: "1rem" }],
@@ -95,8 +95,8 @@ module.exports = {
             marginBottom: theme("spacing.10"),
           },
           p: {
-            marginTop: theme("spacing.7"),
-            marginBottom: theme("spacing.7"),
+            marginTop: theme("spacing.5"),
+            marginBottom: theme("spacing.5"),
           },
 
           // Headings
@@ -183,16 +183,18 @@ module.exports = {
           // Lists
           ul: {
             listStyleType: "disc",
+            marginTop: theme("spacing.2"),
+            marginBottom: theme("spacing.2"),
           },
           ol: {
             listStyleType: "decimal",
           },
           "ul, ol": {
-            paddingLeft: theme("spacing.6"),
+            paddingLeft: theme("spacing.3"),
           },
           li: {
-            marginTop: theme("spacing.6"),
-            marginBottom: theme("spacing.6"),
+            marginTop: theme("spacing.1"),
+            marginBottom: theme("spacing.1"),
             paddingLeft: theme("spacing[3.5]"),
           },
           "li::marker": {
