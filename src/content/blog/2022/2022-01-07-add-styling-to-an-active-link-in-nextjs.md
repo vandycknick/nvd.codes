@@ -4,7 +4,7 @@ description: In this post I show how you can use router api to detect active lin
 slug: add-styling-to-an-active-link-in-nextjs
 date: 2022-01-08T20:00:00+01:00
 categories: [nextjs, react, javascript]
-cover: ~/assets/2022-01-07-creating-active-links-with-nextjs/cover.jpg
+cover: ../../../assets/2022-01-07-creating-active-links-with-nextjs/cover.jpg
 ---
 
 ## Setting the scene

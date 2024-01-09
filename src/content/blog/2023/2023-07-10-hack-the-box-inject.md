@@ -4,7 +4,7 @@ description: Inject is an easily level Linux challenge on Hack the box. It expos
 slug: hack-the-box-inject
 date: 2023-07-10T20:00:00+01:00
 categories: [hack-the-box, writeup, nmap, lfi, snyk, tomcat, java, maven, ansible]
-cover: ~/assets/2023-07-10-hack-the-box-inject/cover.png
+cover: ../../../assets/2023-07-10-hack-the-box-inject/cover.png
 ---
 
 Inject is an Easy Difficulty Linux machine featuring a website with file upload functionality vulnerable to Local File Inclusion (LFI). By exploiting the LFI vulnerability, files on the system can be enumerated, revealing that the web application uses a specific version of the `Spring-Cloud-Function-Web` module susceptible to `CVE-2022-22963`. Exploiting this vulnerability grants an initial foothold as the frank user. Lateral movement is achieved by further file enumeration, which discloses a plain text password for phil. A cronjob running on the machine can then be exploited to execute a malicious Ansible playbook, ultimately obtaining a reverse shell as the `root` user.

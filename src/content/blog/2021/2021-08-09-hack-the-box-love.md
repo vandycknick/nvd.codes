@@ -4,7 +4,7 @@ description: In this post, I'll walk you through Love, an easy-level Windows mac
 date: 2021-08-09T20:00:00+01:00
 slug: hack-the-box-love
 categories: [hack-the-box, writeup, love, windows]
-cover: ~/assets/2021-08-09-hack-the-box-love/cover.jpg
+cover: ../../../assets/2021-08-09-hack-the-box-love/cover.jpg
 ---
 
 In this post, I walk you through Love from Hack the Box, an easy Windows box where good enumeration is the key to success. The box contains a bunch of open ports, the main interesting ones serving HTTP are 80, 443 and 5000. This last one gives access denied, but on ports 80 and 443 you will find a voting system secured by a login prompt. Via the certificate on port 443 you can leak some extra domains that give access to a tool that contains a CSRF that allows you to access services on localhost. This way, you get access to the service running on port 5000, which has admin credentials that grant access to the voting system. Once in the voting system, we can leverage a known CVE to upload a malicious payload and get a reverse shell on the box. On the box, you then execute an `msi` to get root. With all that said, let's dive right in and start our port scan enumeration.

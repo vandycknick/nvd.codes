@@ -4,7 +4,7 @@ description: .
 date: 2021-02-05T20:00:00+01:00
 categories: [docker, linux, capabilities, containers]
 draft: true
-cover: ~/assets/2022-07-15-wheres-dig/cover.jpg
+cover: ../../../assets/2022-07-15-wheres-dig/cover.jpg
 ---
 
 ## Introduction

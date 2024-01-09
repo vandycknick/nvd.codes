@@ -4,7 +4,7 @@ description: In this post, I take on Omni from Hack The Box. It's labelled as an
 date: 2021-01-10T20:00:00+01:00
 slug: hack-the-box-omni
 categories: [hack-the-box, omni, windows, iot, web, powershell, python]
-cover: ~/assets/2021-01-10-hack-the-box-omni/cover.jpg
+cover: ../../../assets/2021-01-10-hack-the-box-omni/cover.jpg
 ---
 
 ## Introduction

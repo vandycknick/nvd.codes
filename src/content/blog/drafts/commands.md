@@ -4,7 +4,7 @@ description: ""
 date: 2022-07-15T20:00:00+01:00
 categories: []
 draft: true
-cover: ~/assets/2022-07-15-wheres-dig/cover.jpg
+cover: ../../../assets/2022-07-15-wheres-dig/cover.jpg
 ---
 
 # Living off the land in Linux for good or evil.

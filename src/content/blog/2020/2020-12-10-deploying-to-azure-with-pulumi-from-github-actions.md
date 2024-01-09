@@ -4,7 +4,7 @@ description: Let's say we're building a new service and are tasked with spinning
 date: 2020-12-10T22:30:00+02:00
 slug: deploying-to-azure-with-pulumi-from-github-actions
 categories: [azure, github, github-actions, pulumi]
-cover: ~/assets/2020-12-10-deploying-to-azure-with-pulumi-from-github-actions/cover.jpg
+cover: ../../../assets/2020-12-10-deploying-to-azure-with-pulumi-from-github-actions/cover.jpg
 ---
 
 Let's say we're building a new service and are tasked with spinning up the infrastructure required to run our application. We've already defined this infrastructure as code in our favourite programming language with Pulumi. The only thing left to do is setting up a gitops flow to automate the deployment of this infrastructure. In this post, I'll walk you through the steps of setting up a gitops flow with GitHub actions and automatically deploy any changes to Azure on each commit.

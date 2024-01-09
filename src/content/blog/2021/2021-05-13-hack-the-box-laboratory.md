@@ -5,7 +5,7 @@ date: 2021-05-13T20:00:00+01:00
 slug: hack-the-box-laboratory
 categories:
   [hack-the-box, writeup, laboratory, gitlab, python, ruby, cve-2020-10977]
-cover: ~/assets/2021-05-13-hack-the-box-laboratory/cover.jpg
+cover: ../../../assets/2021-05-13-hack-the-box-laboratory/cover.jpg
 ---
 
 In this write-up, I'm going over Laboratory from Hack the Box, a fun and enjoyable machine that got labelled as an easy box. The whole challenge mainly revolves around two exploits in a GitLab instance that will give you a user shell on the box. Especially the second vulnerability is pretty exciting and shows the importance of keeping your application secrets safe. Many apps will serialize data and send it over to the user in the form of a cookie. They mainly do this to keep their app stateless. That way, they don't have to worry about keeping track of the whole session state themselves. But that puts a lot of trust in the fact that the user can't modify this cookie, which is often considered safe because it got signed with a secret unknown to the user. However, if this secret is somehow leaked, like for example, in this case through an LFI, then as a malicious actor, you can send a custom payload and execute a deserialization attack. The first exploit will trigger the LFI and use the GitLab app secret to sign a payload to get a shell on the box. Then via a custom setuid binary with path file checking, we'll get access to the root account. With all that said, let's dive right in and start our enumeration.

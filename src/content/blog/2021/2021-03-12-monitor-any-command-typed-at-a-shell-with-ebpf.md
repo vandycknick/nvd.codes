@@ -4,7 +4,7 @@ description: Ever wondered if it would be possible to monitor what is getting ty
 date: 2021-03-12T20:00:00+01:00
 slug: monitor-any-command-typed-at-a-shell-with-ebpf
 categories: [linux, bpftrace, ebpf, internals]
-cover: ~/assets/2021-03-12-monitor-any-command-typed-at-a-shell-with-ebpf/cover.jpg
+cover: ../../../assets/2021-03-12-monitor-any-command-typed-at-a-shell-with-ebpf/cover.jpg
 ---
 
 Have you ever logged on to a server or workstation and asked yourself "I wonder what other users are executing right now?". Well, I certainly have and I'm always curious about what is running processes on a system. But figuring out what is currently running on a system is not that difficult of a question to answer. Any Linux system comes preinstalled with tools like `top` that can exactly show you all the running processes on the system. But that's not what I'm talking about here, I want a record of every command typed at any shell new or old currently in use on the system. This seems like a pretty tough challenge, but there are hidden powers inside the Linux kernel that make this task rather straight forward.

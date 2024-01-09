@@ -4,7 +4,7 @@ description: .
 date: 2021-02-05T20:00:00+01:00
 categories: [docker, linux, capabilities, containers]
 draft: true
-cover: ~/assets/2022-07-15-wheres-dig/cover.jpg
+cover: ../../../assets/2022-07-15-wheres-dig/cover.jpg
 ---
 
 Security is something that is often taken for granted when working with docker containers. We are used to spinning up containers and expect them to be secure by default. But is this actually the case and what do container runtimes like docker actually use to lock down the sandbox our app is running on? As you can already derive from the title, one thing it uses is a feature inside the Linux kernel named capabilities. Linux capabilities and how they interact with users and containers can often even confuse the most experienced engineers. At first glance, it might seem straightforward, but things can get more complex rather quick and information often seems spread around on the internet in git repos or blog posts. Which sometimes makes it hard to start piecing these things together. They play an important role in container security, so let's dive and have a look at why this is the case!

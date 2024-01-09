@@ -4,7 +4,7 @@ description: Nowadays, it is relatively common to find a stripped-down docker co
 slug: wheres-dig
 date: 2022-07-15T20:00:00+01:00
 categories: [linux, containers, devops]
-cover: ~/assets/2022-07-15-wheres-dig/cover.jpg
+cover: ../../../assets/2022-07-15-wheres-dig/cover.jpg
 ---
 
 As a DevOps engineer, I often get asked to help troubleshoot particular issues within our containerized environments. When these issues are networking-related, one of the first things I like to check is DNS. For this tools like dig or nslookup are exactly built to provide me with what I'm looking for. But with modern containers being stripped down, it often means these tools aren't installed by default anymore. This further complicates the debugging process. Making matters worse is that dig or nslookup aren't installed by the same package. Hence I often forget to which package this belongs to in different distros, causing me to dive into google until I find the right package name. Well, in this post, I want to fix this once and for all and give an overview on how to install dig in all linux distros I run into:

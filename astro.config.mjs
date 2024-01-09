@@ -39,9 +39,6 @@ export default defineConfig({
       filter: (page) => page !== "", // Was used at some point. Left it empty for now to show usage. Hopefully it doesn't came back to haunt me.
     }),
   ],
-  experimental: {
-    assets: true,
-  },
   image: {
     service: {
       entrypoint: "astro/assets/services/sharp",

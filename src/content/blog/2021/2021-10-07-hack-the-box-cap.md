@@ -4,7 +4,7 @@ description: In this post, I'll go over Cap from Hack the Box. An easy level Lin
 slug: hack-the-box-cap
 date: 2021-10-07T20:00:00+01:00
 categories: [hack-the-box, writeup, cap, idor, pcap, capabilities]
-cover: ~/assets/2021-10-07-hack-the-box-cap/cover.jpg
+cover: ../../../assets/2021-10-07-hack-the-box-cap/cover.jpg
 ---
 
 Cap is an easy Linux challenge on HTB. The name of the machine is a nice hint guiding the way to solve this challenge. First, it leads to an IDOR or insecure direct object reference that gives access to a PCAP. This PCAP contains unencrypted traffic from another user connecting and logging in over FTP. These credentials then give access FTP but also allow logging in as this user. Once on the box, a setuid capability is granted to the Python binary, making it easy to spawn a new shell as the root user.

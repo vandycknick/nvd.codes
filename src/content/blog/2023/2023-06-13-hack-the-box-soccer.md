@@ -4,7 +4,7 @@ description: This is a write-up of Soccer, a CTF challenge on the Hack the Box p
 slug: hack-the-box-soccer
 date: 2023-06-13T20:00:00+01:00
 categories: [hack-the-box, writeup, nmap, tiny-file-manager, webshel, php, websocket, sqlmap, doas, stat]
-cover: ~/assets/2023-06-13-hack-the-box-soccer/cover.png
+cover: ../../../assets/2023-06-13-hack-the-box-soccer/cover.png
 ---
 
 

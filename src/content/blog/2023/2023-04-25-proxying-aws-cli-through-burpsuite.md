@@ -4,7 +4,7 @@ description: In this post, I walk you through how to configure the AWS CLI to pr
 slug: proxying-aws-through-burp
 date: 2023-04-25T20:00:00+01:00
 categories: [aws, cli, burpsuite, proxy, internals]
-cover: ~/assets/2023-04-25-proxying-aws-cli-through-burpsuite/cover.png
+cover: ../../../assets/2023-04-25-proxying-aws-cli-through-burpsuite/cover.png
 ---
 
 HTTP Proxies such as Burp Suite or [mitmproxy](https://mitmproxy.org/) often get associated with web application security, pentesting or security research in general. But they can be handy tools during development, testing or when exploring APIs. I actually find myself using Burp a lot more for learning or reverse engineering a particular API. In this post, I want to show you how you can leverage Burp to take a look 'under the hood' and learn how the AWS CLI makes HTTP requests. But before we can get started, we must ensure we have the right tools installed. On a Mac with homebrew ready to go, this is relatively straightforward:

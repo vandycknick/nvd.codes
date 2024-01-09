@@ -4,7 +4,7 @@ description: There may come a time when you need to know the public IP address o
 date: 2020-11-25T07:30:00+02:00
 slug: a-couple-of-tricks-to-resolve-your-public-
 categories: [ip, public, dns, csharp, dotnet]
-cover: ~/assets/2020-11-25-a-couple-of-tricks-to-resolve-your-public-ip/cover.jpg
+cover: ../../../assets/2020-11-25-a-couple-of-tricks-to-resolve-your-public-ip/cover.jpg
 ---
 
 There may come a time when you need to know the public IP address of your router, you know that one assigned by your ISP. Not too difficult to find, when you know where and how to look. This can be particularly handy when quickly verifying if your VPN is working, setting up ddns, ... Most of the time this need just suddenly creeps up on you. So having a quick and easy way to grab you public IP could be an amazing time saver. The easiest way to check your router's public IP is to go to your favourite search engine, type in `what is my IP` and press enter.

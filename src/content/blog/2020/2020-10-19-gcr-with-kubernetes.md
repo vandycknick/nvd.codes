@@ -4,7 +4,7 @@ description: In this post, I go through the process of connecting to a private g
 date: 2020-10-19T22:00:00+02:00
 slug: gcr-with-kubernetes
 categories: [kubernetes, gcp, registry, containers]
-cover: ~/assets/2020-10-19-gcr-with-kubernetes/cover.jpg
+cover: ../../../assets/2020-10-19-gcr-with-kubernetes/cover.jpg
 ---
 
 I have been using containers for a while now and I love playing around and experimenting with them. For one of my projects, I needed access to a private container registry from a Kubernetes cluster. There are numerous options out there that help you get up and running with a private registry in no time. Briefly, I considered self-hosting a registry on a spare Raspberry PI or a cheap VM, it was a personal project after all so both options were worth considering. But I quickly decided against this and looked at some cloud providers for a hosted solution. In the end, I chose to give Google Container Registry (GCR) a try. Overall I was pretty impressed with the process to get this up and running on GCP. I created a new project via the GCP console, enabled the GCR API's and followed the steps described here to be able to push images to this new registry. All in all, this took me about 10 min to get up and running. Which is pretty impressive if you ask me, but I'm starting to digress. With this brand new registry set up, I immediately got to work. I created an image, pushed it to the registry then created a deployment and boom the following errors started showing up in my container logs:

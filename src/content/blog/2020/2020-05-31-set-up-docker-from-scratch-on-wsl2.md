@@ -4,7 +4,7 @@ description: In this post, I talk about some of the changes in WSL2 and how it a
 date: 2020-05-31T22:00:00+01:00
 slug: set-up-docker-from-scratch-on-wsl2
 categories: [wsl2, docker, linux]
-cover: ~/assets/2020-05-31-set-up-docker-from-scratch-on-wsl2/cover.jpg
+cover: ../../../assets/2020-05-31-set-up-docker-from-scratch-on-wsl2/cover.jpg
 ---
 
 Just recently Microsoft released its latest update to Windows and with it comes an update to WSL. Previously it was using a translation layer that translated Linux system calls into NT system calls. This allowed running unmodified native ELF binaries directly under Windows albeit with some restrictions. It's exactly those restrictions that made it impossible to run Docker natively on the subsystem. The reason for this is that for a good chunk of the API's to make namespaces, cgroups, ... work the implementation just wasn't there and seemed non-trivial to implement. This all changed as of WSL2 as Windows now ships with a full-fledged Linux kernel, using virtualization technologies to improve file system performance and adding full system call compatibility.

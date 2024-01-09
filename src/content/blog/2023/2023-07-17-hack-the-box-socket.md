@@ -4,7 +4,7 @@ description: Socket is a Medium Difficulty Linux machine that requires reversing
 slug: hack-the-box-socket
 date: 2023-07-17T20:00:00+01:00
 categories: [hack-the-box, writeup, nmap, sqlmap, websocket, sqlmap-proxy, proxy, python, wscat]
-cover: ~/assets/2023-07-17-hack-the-box-socket/cover.png
+cover: ../../../assets/2023-07-17-hack-the-box-socket/cover.png
 ---
 
 Socket is a Medium Difficulty Linux machine that requires reversing a Linux/Windows desktop application. This reveals an endpoint that is vulnerable to `SQL` injection via a websocket. Dumping the database leaks hashes that, once cracked, yield `SSH` access to the box. Finally, a `PyInstaller` script can be executed with elevated privileges that grant root access to the machine.
