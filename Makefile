@@ -42,6 +42,10 @@ check.types:
 check.lint:
 	yarn eslint . --ext .ts --ext .tsx --ext .js --ext .jsx --ext .mjs --ext .json --ext .astro --ignore-path .gitignore
 
+.PHONY: check.fixlint
+check.fixlint:
+	yarn eslint . --ext .ts --ext .tsx --ext .js --ext .jsx --ext .mjs --ext .json --ext .astro --ignore-path .gitignore --fix
+
 .PHONY: check.app
 check.app:
 	@yarn astro check

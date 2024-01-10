@@ -14,13 +14,12 @@ export async function getStaticPaths({ paginate }: GetStaticPathsOptions) {
 
   const previews: PostPreview[] = sorted.map((post) => ({
     title: post.data.title,
+    description: post.data.description,
     date: post.data.date,
     slug: post.slug,
-    description: post.data.description,
+    readingTime: "",
     categories: post.data.categories,
     cover: post.data.cover,
-    placeholder: "",
-    readingTime: "",
   }))
 
   return paginate(previews, { pageSize: 9 })
