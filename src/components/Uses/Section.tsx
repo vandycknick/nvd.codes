@@ -1,4 +1,5 @@
-import { ComponentPropsWithoutRef, useId } from "react"
+import type { ComponentPropsWithoutRef } from "react"
+import { useId } from "react"
 
 export type SectionProps = {
   title: string

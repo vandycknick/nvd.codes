@@ -1,4 +1,4 @@
-import { ComponentPropsWithoutRef, Fragment } from "react"
+import type { ComponentPropsWithoutRef, Fragment } from "react"
 import clsx from "clsx"
 import { Popover, Transition } from "@headlessui/react"
 

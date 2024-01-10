@@ -1,6 +1,6 @@
+import type { ComponentPropsWithoutRef } from "react"
 import { Card } from "@/components/Card"
 import { Section, SectionProps } from "@/components/Uses/Section"
-import { ComponentPropsWithoutRef } from "react"
 
 export function ToolsSection({ children, ...props }: SectionProps) {
   return (

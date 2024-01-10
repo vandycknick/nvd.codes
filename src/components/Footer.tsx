@@ -1,4 +1,4 @@
-import { ComponentPropsWithoutRef } from "react"
+import type { ComponentPropsWithoutRef } from "react"
 import { Container } from "../components/Container"
 
 function NavLink({ href, children }: ComponentPropsWithoutRef<"a">) {

@@ -1,6 +1,6 @@
-import clsx from "clsx"
-import { ComponentPropsWithoutRef, ComponentType } from "react"
+import type { ComponentPropsWithoutRef, ComponentType } from "react"
 import type { IconProps } from "@/components/Icons"
+import clsx from "clsx"
 
 type SocialLinkProps = {
   icon: ComponentType<IconProps>
