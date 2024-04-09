@@ -49,7 +49,7 @@ check.fixlint:
 .PHONY: check.app
 check.app:
 	@yarn astro check
-	# $(MAKE) check.types
+	$(MAKE) check.types
 	$(MAKE) check.lint
 
 .PHONY: check.infra
