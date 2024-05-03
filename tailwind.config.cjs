@@ -2,7 +2,7 @@
 module.exports = {
   content: ["./src/**/*.{astro,html,js,jsx,md,mdx,svelte,ts,tsx,vue}"],
   darkMode: "class",
-  plugins: [require("@tailwindcss/typography"),require('@tailwindcss/forms'),],
+  plugins: [require("@tailwindcss/typography"), require("@tailwindcss/forms")],
   theme: {
     fontSize: {
       tiny: ["0.7rem", { lineHeight: "1rem" }],
@@ -214,6 +214,11 @@ module.exports = {
           "li :is(li, p)": {
             marginTop: theme("spacing.3"),
             marginBottom: theme("spacing.3"),
+          },
+
+          ".expressive-code": {
+            marginTop: theme("spacing.4"),
+            marginBottom: theme("spacing.4"),
           },
 
           // Code blocks

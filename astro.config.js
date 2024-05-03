@@ -4,6 +4,7 @@ import react from "@astrojs/react"
 import getReadingTime from "reading-time"
 import { toString } from "mdast-util-to-string"
 import sitemap from "@astrojs/sitemap"
+import expressiveCode from "astro-expressive-code"
 
 export function remarkReadingTime() {
   return function (tree, { data }) {
@@ -20,23 +21,20 @@ export default defineConfig({
   site: "https://nvd.codes",
   markdown: {
     remarkPlugins: [remarkReadingTime],
-    shikiConfig: {
-      // Choose from Shiki's built-in themes (or add your own)
-      // https://github.com/shikijs/shiki/blob/main/docs/themes.md
-      theme: "github-dark",
-      // Add custom languages
-      // Note: Shiki has countless langs built-in, including .astro!
-      // https://github.com/shikijs/shiki/blob/main/docs/languages.md
-      langs: [],
-      // Enable word wrap to prevent horizontal scrolling
-      wrap: true,
-    },
   },
   integrations: [
     tailwind(),
     react(),
     sitemap({
-      filter: (page) => page !== "", // Was used at some point. Left it empty for now to show usage. Hopefully it doesn't came back to haunt me.
+      filter: (page) => page !== "", // Was used at some point. Left it empty for now to show usage. Hopefully it doesn't come back to haunt me.
+    }),
+    expressiveCode({
+      themes: ["github-dark"],
+      styleOverrides: {
+        frames: {
+          frameBoxShadowCssValue: "0rem",
+        },
+      },
     }),
   ],
   image: {

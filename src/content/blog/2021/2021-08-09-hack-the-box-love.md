@@ -181,7 +181,7 @@ Copied to: /home/nickvd/HTB/Love/hack/49445.py
 
 As is, the script doesn't work, so we'll need to make a couple of changes. First, we'll need to add the correct URL, username, and password in the settings area. Besides that, we'll also need to change the hardcoded URL's. The script assumes that the whole app is running behind `/votesystem`, but in our case everything is hosted behind `/`:
 
-```diff
+```diff lang="python"
  import requests
 
  # --- Edit your settings here ----

@@ -432,7 +432,7 @@ server {
 
 Time to update my `/etc/hosts` file again:
 
-```bash
+```text title="/etc/hosts"
 10.10.11.194    soccer.htb soc-player.soccer.htb
 ```
 
