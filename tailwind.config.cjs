@@ -95,8 +95,8 @@ module.exports = {
             marginBottom: theme("spacing.10"),
           },
           p: {
-            marginTop: theme("spacing.5"),
-            marginBottom: theme("spacing.5"),
+            marginTop: theme("spacing.4"),
+            marginBottom: theme("spacing.4"),
           },
 
           // Headings
@@ -183,8 +183,9 @@ module.exports = {
           // Lists
           ul: {
             listStyleType: "disc",
-            marginTop: theme("spacing.2"),
-            marginBottom: theme("spacing.2"),
+            marginTop: theme("spacing.1"),
+            marginBottom: theme("spacing.1"),
+            marginLeft: theme("spacing.2"),
           },
           ol: {
             listStyleType: "decimal",
@@ -195,7 +196,7 @@ module.exports = {
           li: {
             marginTop: theme("spacing.1"),
             marginBottom: theme("spacing.1"),
-            paddingLeft: theme("spacing[3.5]"),
+            // paddingLeft: theme("spacing[3.5]"),
           },
           "li::marker": {
             fontSize: theme("fontSize.sm")[0],
