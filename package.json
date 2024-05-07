@@ -19,6 +19,7 @@
     "@astrojs/rss": "^4.0.5",
     "@astrojs/sitemap": "^3.1.4",
     "@astrojs/tailwind": "^5.1.0",
+    "@expressive-code/plugin-line-numbers": "^0.35.3",
     "@headlessui/react": "latest",
     "@plaiceholder/base64": "^1.0.0",
     "@tailwindcss/forms": "^0.5.7",
@@ -56,5 +57,6 @@
     "prettier": "^3.2.5",
     "prettier-plugin-astro": "^0.13.0",
     "typescript": "^5.4.5"
-  }
+  },
+  "packageManager": "yarn@4.2.1"
 }

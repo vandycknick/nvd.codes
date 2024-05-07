@@ -1072,6 +1072,15 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@expressive-code/plugin-line-numbers@npm:^0.35.3":
+  version: 0.35.3
+  resolution: "@expressive-code/plugin-line-numbers@npm:0.35.3"
+  dependencies:
+    "@expressive-code/core": "npm:^0.35.3"
+  checksum: 10/24cfc13785c3c4e9055f810d7a3476c339e20884fbb80aae37fc5d3b9674740594b613afa50aa666d8b20c1941963c614d2f25b4fe7315965f2cbe1691650b67
+  languageName: node
+  linkType: hard
+
 "@expressive-code/plugin-shiki@npm:^0.35.3":
   version: 0.35.3
   resolution: "@expressive-code/plugin-shiki@npm:0.35.3"
@@ -7330,6 +7339,7 @@ __metadata:
     "@astrojs/rss": "npm:^4.0.5"
     "@astrojs/sitemap": "npm:^3.1.4"
     "@astrojs/tailwind": "npm:^5.1.0"
+    "@expressive-code/plugin-line-numbers": "npm:^0.35.3"
     "@headlessui/react": "npm:latest"
     "@plaiceholder/base64": "npm:^1.0.0"
     "@tailwindcss/forms": "npm:^0.5.7"
