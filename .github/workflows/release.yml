@@ -46,6 +46,9 @@ jobs:
         with:
           fetch-depth: 1
 
+      - name: Enable Corepack
+        run: corepack enable
+
       - name: Install Node
         uses: actions/setup-node@v4
         with:
