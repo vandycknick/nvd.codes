@@ -40,7 +40,7 @@ check.types:
 
 .PHONY: check.lint
 check.lint:
-	yarn eslint . --ext .ts --ext .tsx --ext .js --ext .jsx --ext .mjs --ext .json --ext .astro --ignore-path .gitignore
+	yarn eslint -c ./eslint.config.js
 
 .PHONY: check.fixlint
 check.fixlint:
