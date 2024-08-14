@@ -40,7 +40,7 @@ check.types:
 
 .PHONY: check.lint
 check.lint:
-	yarn eslint -c ./eslint.config.js
+	yarn eslint -c ./eslint.config.js ./src
 
 .PHONY: check.fixlint
 check.fixlint:
