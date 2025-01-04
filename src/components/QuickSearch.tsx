@@ -1,6 +1,15 @@
 import { Fragment, useEffect, useState, useCallback } from "react"
 import { MagnifyingGlassIcon } from "@/components/Icons"
-import { Combobox, Dialog, Transition } from "@headlessui/react"
+import {
+  Combobox,
+  ComboboxInput,
+  ComboboxOption,
+  ComboboxOptions,
+  Dialog,
+  DialogPanel,
+  Transition,
+  TransitionChild,
+} from "@headlessui/react"
 import clsx from "clsx"
 import { useRef } from "react"
 import { useHotkeys } from "react-hotkeys-hook"
@@ -111,14 +120,14 @@ export const QuickSearch = () => {
   })
 
   return (
-    <Transition.Root
+    <Transition
       show={open}
       as={Fragment}
       afterLeave={() => setQuery("")}
       appear
     >
       <Dialog as="div" className="relative z-50" onClose={setOpen}>
-        <Transition.Child
+        <TransitionChild
           as={Fragment}
           enter="ease-out duration-300"
           enterFrom="opacity-0"
@@ -128,10 +137,10 @@ export const QuickSearch = () => {
           leaveTo="opacity-0"
         >
           <div className="fixed inset-0 z-50 bg-zinc-800/40 backdrop-blur-sm dark:bg-black/80" />
-        </Transition.Child>
+        </TransitionChild>
 
         <div className="fixed inset-0 z-50 overflow-y-auto p-4 sm:p-6 md:p-20">
-          <Transition.Child
+          <TransitionChild
             as={Fragment}
             enter="ease-out duration-300"
             enterFrom="opacity-0 scale-95"
@@ -140,14 +149,14 @@ export const QuickSearch = () => {
             leaveFrom="opacity-100 scale-100"
             leaveTo="opacity-0 scale-95"
           >
-            <Dialog.Panel className="mt-20 mx-auto max-w-xl transform divide-y divide-gray-100 overflow-hidden rounded-xl bg-white shadow-2xl ring-1 ring-black ring-opacity-5 transition-all">
+            <DialogPanel className="mt-20 mx-auto max-w-xl transform divide-y divide-gray-100 overflow-hidden rounded-xl bg-white shadow-2xl ring-1 ring-black ring-opacity-5 transition-all">
               <Combobox onChange={(url: Location) => (window.location = url)}>
                 <div className="relative">
                   <MagnifyingGlassIcon
                     className="pointer-events-none absolute left-4 top-3.5 h-5 w-5 text-gray-400"
                     aria-hidden="true"
                   />
-                  <Combobox.Input
+                  <ComboboxInput
                     className="h-12 w-full border-0 bg-transparent pl-11 pr-4 text-gray-900 placeholder:text-gray-400 focus:ring-0 sm:text-sm"
                     placeholder="Search..."
                     onChange={(event) => {
@@ -158,28 +167,28 @@ export const QuickSearch = () => {
                 </div>
 
                 {value && value.length > 0 && (
-                  <Combobox.Options
+                  <ComboboxOptions
                     static
                     className="max-h-72 scroll-py-2 overflow-y-auto py-2 text-sm text-gray-800"
                   >
                     {value.map((result) => (
-                      <Combobox.Option
+                      <ComboboxOption
                         key={result.url}
                         value={result.url}
-                        className={({ active }) =>
+                        className={({ focus }) =>
                           clsx(
                             "cursor-default select-none px-4 py-2",
-                            active && "bg-zinc-200 text-white",
+                            focus && "bg-zinc-200 text-white",
                           )
                         }
                       >
-                        {({ active }) => (
+                        {({ focus }) => (
                           <>
                             <div className="flex-auto">
                               <p
                                 className={clsx(
                                   "text-sm font-medium",
-                                  active ? "text-gray-900" : "text-gray-700",
+                                  focus ? "text-gray-900" : "text-gray-700",
                                 )}
                               >
                                 {result.meta.title}
@@ -187,7 +196,7 @@ export const QuickSearch = () => {
                               <p
                                 className={clsx(
                                   "text-sm",
-                                  active ? "text-gray-700" : "text-gray-500",
+                                  focus ? "text-gray-700" : "text-gray-500",
                                 )}
                                 dangerouslySetInnerHTML={{
                                   __html: result.excerpt,
@@ -196,9 +205,9 @@ export const QuickSearch = () => {
                             </div>
                           </>
                         )}
-                      </Combobox.Option>
+                      </ComboboxOption>
                     ))}
-                  </Combobox.Options>
+                  </ComboboxOptions>
                 )}
 
                 {query !== "" && !loading && value?.length === 0 && (
@@ -207,10 +216,10 @@ export const QuickSearch = () => {
                   </p>
                 )}
               </Combobox>
-            </Dialog.Panel>
-          </Transition.Child>
+            </DialogPanel>
+          </TransitionChild>
         </div>
       </Dialog>
-    </Transition.Root>
+    </Transition>
   )
 }
