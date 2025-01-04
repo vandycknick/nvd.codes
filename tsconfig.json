@@ -6,7 +6,6 @@
     "paths": {
       "@/*": ["src/*"]
     },
-    "moduleResolution": "Node",
     "jsx": "react-jsx",
     "jsxImportSource": "react",
     "importsNotUsedAsValues": "remove"

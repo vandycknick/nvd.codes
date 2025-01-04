@@ -1,0 +1,3 @@
+[tools]
+terraform = "1"
+yarn = "4"

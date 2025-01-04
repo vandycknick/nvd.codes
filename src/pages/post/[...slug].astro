@@ -1,6 +1,6 @@
 ---
 import type { InferGetStaticPropsType } from "astro"
-import { getCollection } from "astro:content"
+import { getCollection, render } from "astro:content"
 
 import MainLayout from "@/layouts/MainLayout.astro"
 import { Container } from "@/components/Container"
@@ -22,7 +22,7 @@ export async function getStaticPaths() {
   const posts = await getCollection("blog", (post) => !post.data.draft)
 
   return posts.map((entry) => ({
-    params: { slug: entry.slug },
+    params: { slug: entry.id },
     props: { entry },
   }))
 }
@@ -30,9 +30,9 @@ export async function getStaticPaths() {
 type Props = InferGetStaticPropsType<typeof getStaticPaths>
 
 const { entry } = Astro.props as Props
-const { Content, remarkPluginFrontmatter } = await entry.render()
+const { Content, remarkPluginFrontmatter } = await render(entry)
 
-const postFullUrl = `https://nvd.codes/post/${entry.slug}`
+const postFullUrl = `https://nvd.codes/post/${entry.id}`
 const socialLinkTitle = `Nick Van Dyck: ${entry.data.title}`
 const editUrl = `https://github.com/vandycknick/nvd.codes/edit/main/src/content/blog/${entry.id}`
 const readingTime = remarkPluginFrontmatter.readingTime
@@ -160,11 +160,7 @@ const coverImage = entry.data.cover
                 </a>
               </div>
             </div>
-            <Comments
-              slug={entry.slug}
-              title={entry.data.title}
-              client:visible
-            />
+            <Comments slug={entry.id} title={entry.data.title} client:visible />
           </div>
         </article>
       </div>

@@ -22,7 +22,7 @@ export const get: APIRoute = async function get({ site }) {
       title: post.data.title,
       pubDate: post.data.date,
       description: post.data.description,
-      link: `/post/${post.slug}`,
+      link: `/post/${post.id}`,
     })),
     // (optional) inject custom xml
     customData: `<language>en-us</language>`,

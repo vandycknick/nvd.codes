@@ -16,7 +16,7 @@ export async function getStaticPaths({ paginate }: GetStaticPathsOptions) {
     title: post.data.title,
     description: post.data.description,
     date: post.data.date,
-    slug: post.slug,
+    slug: post.id,
     readingTime: "",
     categories: post.data.categories,
     cover: post.data.cover,

@@ -85,7 +85,7 @@ const imp = (path: string) => import(/* @vite-ignore */ path)
 export const QuickSearch = () => {
   const [query, setQuery] = useState("")
   const [open, setOpen] = useState(false)
-  const pagefindRef = useRef<PagefindSdk>()
+  const pagefindRef = useRef<PagefindSdk>(null)
 
   useHotkeys("ctrl+k,cmd+k", (event) => {
     setOpen(true)
