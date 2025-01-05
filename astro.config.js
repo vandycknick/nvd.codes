@@ -25,9 +25,7 @@ export default defineConfig({
   integrations: [
     tailwind(),
     react(),
-    sitemap({
-      filter: (page) => page !== "", // Was used at some point. Left it empty for now to show usage. Hopefully it doesn't come back to haunt me.
-    }),
+    sitemap(),
     expressiveCode({
       themes: ["github-dark"],
       styleOverrides: {

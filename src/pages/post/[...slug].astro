@@ -34,7 +34,7 @@ const { Content, remarkPluginFrontmatter } = await render(entry)
 
 const postFullUrl = `https://nvd.codes/post/${entry.id}`
 const socialLinkTitle = `Nick Van Dyck: ${entry.data.title}`
-const editUrl = `https://github.com/vandycknick/nvd.codes/edit/main/src/content/blog/${entry.id}`
+const editUrl = `https://github.com/vandycknick/nvd.codes/edit/main/${entry.filePath}`
 const readingTime = remarkPluginFrontmatter.readingTime
 
 const coverImage = entry.data.cover
