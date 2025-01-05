@@ -12,7 +12,7 @@ setup:
 .PHONY: setup.yarn
 setup.yarn:
 	corepack enable
-	corepack prepare yarn@stable --activate
+	corepack install
 	yarn --version
 	yarn config get cacheFolder
 
