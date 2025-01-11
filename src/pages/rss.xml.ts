@@ -2,7 +2,7 @@ import type { APIRoute } from "astro"
 import rss from "@astrojs/rss"
 import { getCollection } from "astro:content"
 
-export const get: APIRoute = async function get({ site }) {
+export const GET: APIRoute = async function get({ site }) {
   const posts = await getCollection("blog", (post) => !post.data.draft)
   const sorted = posts.sort(
     (l, r) => r.data.date.getTime() - l.data.date.getTime(),

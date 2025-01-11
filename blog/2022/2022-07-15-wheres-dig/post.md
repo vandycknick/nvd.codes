@@ -3,7 +3,9 @@ title: "Where's dig"
 description: Nowadays, it is relatively common to find a stripped-down docker container. While great to save precious bytes on hard drives, this might complicate things when you quickly need to debug something. This post explains how you can quickly install dig or nslookup within your container on different distros.
 slug: wheres-dig
 date: 2022-07-15T20:00:00+01:00
-categories: [linux, containers, devops]
+categories:
+  - linux
+  - dig
 cover: ./images/cover.jpg
 ---
 

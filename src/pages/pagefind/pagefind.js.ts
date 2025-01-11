@@ -1,5 +1,3 @@
-export async function get() {
-  return {
-    body: "export const search = () => {return {results: []}}",
-  }
+export async function GET() {
+  return new Response("export const search = () => {return {results: []}}")
 }
