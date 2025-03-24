@@ -129,12 +129,12 @@ export const QuickSearch = () => {
     return items
   })
 
-  const goToUrl = (url: Location | null | undefined) => {
+  const goToUrl = (url?: string) => {
     if (url == undefined) {
       return
     }
 
-    window.location = url
+    window.location.assign(url)
   }
 
   return (
