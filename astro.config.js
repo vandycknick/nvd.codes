@@ -1,10 +1,11 @@
 import { defineConfig } from "astro/config"
-import tailwind from "@astrojs/tailwind"
 import react from "@astrojs/react"
 import getReadingTime from "reading-time"
 import { toString } from "mdast-util-to-string"
 import sitemap from "@astrojs/sitemap"
 import expressiveCode from "astro-expressive-code"
+
+import tailwindcss from "@tailwindcss/vite"
 
 export function remarkReadingTime() {
   return function (tree, { data }) {
@@ -19,11 +20,12 @@ export function remarkReadingTime() {
 // https://astro.build/config
 export default defineConfig({
   site: "https://nvd.codes",
+
   markdown: {
     remarkPlugins: [remarkReadingTime],
   },
+
   integrations: [
-    tailwind(),
     react(),
     sitemap(),
     expressiveCode({
@@ -35,9 +37,14 @@ export default defineConfig({
       },
     }),
   ],
+
   image: {
     service: {
       entrypoint: "astro/assets/services/sharp",
     },
+  },
+
+  vite: {
+    plugins: [tailwindcss()],
   },
 })
