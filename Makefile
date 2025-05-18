@@ -63,7 +63,7 @@ build:
 	@yarn postbuild
 
 .PHONY: preview
-preview:
+preview: build
 	@yarn preview
 
 .PHONY: deploy
