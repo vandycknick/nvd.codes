@@ -9,7 +9,7 @@ export function AvatarContainer({
     <div
       className={clsx(
         className,
-        "h-10 w-10 rounded-full bg-white/90 p-0.5 shadow-lg shadow-zinc-800/5 ring-1 ring-zinc-900/5 backdrop-blur dark:bg-zinc-800/90 dark:ring-white/10",
+        "h-11 w-11 rounded-full bg-white/90 p-0.5 shadow-lg shadow-zinc-800/5 ring-1 ring-zinc-900/5 backdrop-blur dark:bg-zinc-800/90 dark:ring-white/10",
       )}
       {...props}
     />
@@ -31,10 +31,10 @@ export function Avatar({ large = false, className }: AvatarProps) {
       <img
         src="/images/me.jpg"
         alt=""
-        sizes={large ? "4rem" : "2.25rem"}
+        sizes={large ? "4rem" : "2.3rem"}
         className={clsx(
           "rounded-full bg-zinc-100 object-cover dark:bg-zinc-800",
-          large ? "h-16 w-16" : "h-9 w-9",
+          large ? "h-16 w-16" : "h-full w-full",
         )}
       />
     </a>
