@@ -1,7 +1,8 @@
 ---
 import type { CSSProperties } from "react"
 import { Container } from "@/components/Container"
-import { MobileNavigation, DesktopNavigation } from "@/components/Navigation"
+import { NavBar } from "@/components/NavBar.tsx"
+import { Home, Notebook, User, Drill } from "lucide-react"
 import { Avatar, AvatarContainer } from "@/components/Avatar"
 import ThemeToggle from "@/components/ThemeToggle.astro"
 
@@ -9,6 +10,8 @@ const path = new URL(Astro.url).pathname
 ---
 
 <header
+  transition:name="header"
+  transition:animate="none"
   class="pointer-events-none relative z-50 flex flex-col"
   style={{
     height: "var(--header-height)",
@@ -33,15 +36,32 @@ const path = new URL(Astro.url).pathname
           </AvatarContainer>
         </div>
         <div class="flex flex-1 justify-center">
-          <MobileNavigation
-            path={path}
-            className="pointer-events-auto md:hidden"
-            client:only="react"
-          />
-          <DesktopNavigation
-            client:idle
-            path={path}
-            className="pointer-events-auto hidden md:block"
+          <NavBar
+            client:load
+            transition:persist
+            items={[
+              { name: "Home", url: "/", icon: Home },
+              {
+                name: "Blog",
+                url: "/blog",
+                icon: Notebook,
+                activeLinkMatch: /(^\/blog[/0-9]*)|(^\/post[/\w-]*)/,
+              },
+              {
+                name: "About",
+                url: "/about",
+                icon: User,
+                activeLinkMatch: /^\/about(\/)?$/,
+              },
+              {
+                name: "Uses",
+                url: "/uses",
+                icon: Drill,
+                activeLinkMatch: /^\/uses(\/)?$/,
+              },
+            ]}
+            currentPath={path}
+            className="h-full"
           />
         </div>
         <div class="flex justify-end flex-1">
@@ -56,10 +76,11 @@ const path = new URL(Astro.url).pathname
 
 <script>
   import { clamp } from "../utils"
-  const header = document.querySelector("[data-header-wrapper]")
+
+  let header = document.querySelector("[data-header-wrapper]")
   let isInitial = true
-  const upDelay = 64
-  const downDelay = 0
+  let upDelay = 64
+  let downDelay = 0
 
   function setProperty(property: string, value: string) {
     document.documentElement.style.setProperty(property, value)
@@ -113,7 +134,15 @@ const path = new URL(Astro.url).pathname
     isInitial = false
   }
 
-  updateStyles()
+  document.addEventListener("astro:after-swap", () => {
+    header = document.querySelector("[data-header-wrapper]")
+    isInitial = true
+    upDelay = 64
+    downDelay = 0
+
+    updateStyles()
+  })
+
   window.addEventListener("scroll", updateStyles, { passive: true })
   window.addEventListener("resize", updateStyles)
 </script>
