@@ -1,17 +1,22 @@
 import clsx from "clsx"
 
 import { ChevronRightIcon } from "@/components/Icons"
-import type { ComponentPropsWithoutRef, ElementType } from "react"
+import type {
+  ComponentProps,
+  ComponentPropsWithoutRef,
+  PropsWithChildren,
+} from "react"
 
-type CardProps = {
-  as?: ElementType
-} & ComponentPropsWithoutRef<"div">
+type Props<As extends React.ElementType = "div"> = {
+  as?: As
+} & ComponentProps<As> &
+  PropsWithChildren
 
-export function Card({
+export function Card<T extends React.ElementType = "div">({
   as: Component = "div",
   className,
   children,
-}: CardProps) {
+}: Props<T>) {
   return (
     <Component
       className={clsx(className, "group relative flex flex-col items-start")}
@@ -36,16 +41,11 @@ Card.Link = function CardLink({
   )
 }
 
-type CardTitleProps = {
-  as?: ElementType
-  href?: string
-} & ComponentPropsWithoutRef<"div">
-
-Card.Title = function CardTitle({
+Card.Title = function CardTitle<T extends React.ElementType = "h2">({
   as: Component = "h2",
   href,
   children,
-}: CardTitleProps) {
+}: Props<T> & { href: string }) {
   return (
     <Component className="text-base font-semibold tracking-tight text-zinc-800 dark:text-zinc-100">
       {href ? <Card.Link href={href}>{children}</Card.Link> : children}
@@ -75,18 +75,13 @@ Card.Cta = function CardCta({ children }: ComponentPropsWithoutRef<"div">) {
   )
 }
 
-type CardEyebrowProps = {
-  as?: ElementType
-  decorate?: boolean
-} & ComponentPropsWithoutRef<"p">
-
 Card.Eyebrow = function CardEyebrow({
   as: Component = "p",
   decorate = false,
   className,
   children,
   ...props
-}: CardEyebrowProps) {
+}: Props<"p"> & { decorate: boolean }) {
   return (
     <Component
       className={clsx(

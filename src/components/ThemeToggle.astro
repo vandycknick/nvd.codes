@@ -16,39 +16,48 @@ import { SunIcon, MoonIcon } from "lucide-react"
   />
 </button>
 
-<script>
+<script is:inline>
+  console.log("themetoggle")
+  function disableTransitionsTemporarily() {
+    document.documentElement.classList.add("[&_*]:!transition-none")
+    window.setTimeout(() => {
+      document.documentElement.classList.remove("[&_*]:!transition-none")
+    }, 0)
+  }
+
+  function toggleMode() {
+    disableTransitionsTemporarily()
+
+    const darkModeMediaQuery = window.matchMedia("(prefers-color-scheme: dark)")
+    const isSystemDarkMode = darkModeMediaQuery.matches
+    const isDarkMode = document.documentElement.classList.toggle("dark")
+
+    if (isDarkMode === isSystemDarkMode) {
+      delete window.localStorage.isDarkMode
+    } else {
+      window.localStorage.isDarkMode = isDarkMode
+    }
+
+    document.dispatchEvent(
+      new CustomEvent("themeChanged", {
+        detail: isDarkMode ? "dark" : "light",
+      }),
+    )
+  }
+
   document.addEventListener("astro:page-load", () => {
-    function disableTransitionsTemporarily() {
-      document.documentElement.classList.add("[&_*]:!transition-none")
-      window.setTimeout(() => {
-        document.documentElement.classList.remove("[&_*]:!transition-none")
-      }, 0)
-    }
-
-    function toggleMode() {
-      disableTransitionsTemporarily()
-
-      const darkModeMediaQuery = window.matchMedia(
-        "(prefers-color-scheme: dark)",
-      )
-      const isSystemDarkMode = darkModeMediaQuery.matches
-      const isDarkMode = document.documentElement.classList.toggle("dark")
-
-      if (isDarkMode === isSystemDarkMode) {
-        delete window.localStorage.isDarkMode
-      } else {
-        window.localStorage.isDarkMode = isDarkMode
-      }
-
-      document.dispatchEvent(
-        new CustomEvent("themeChanged", {
-          detail: isDarkMode ? "dark" : "light",
-        }),
-      )
-    }
-
     const buttons = document.querySelectorAll("[data-toggle-theme-button]")
 
     buttons.forEach((button) => button.addEventListener("click", toggleMode))
+  })
+
+  function applyTheme(document) {
+    localStorage.isDarkMode
+      ? document.documentElement.classList.remove("dark")
+      : document.documentElement.classList.add("dark")
+  }
+
+  document.addEventListener("astro:before-swap", (event) => {
+    applyTheme(event.newDocument)
   })
 </script>

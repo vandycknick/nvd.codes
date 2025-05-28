@@ -208,7 +208,7 @@ export default {
             color: "var(--tw-prose-pre-code)",
             fontSize: theme("fontSize.sm")[0],
             fontWeight: theme("fontWeight.medium"),
-            backgroundColor: "var(--tw-prose-pre-bg) !important",
+            // backgroundColor: "var(--tw-prose-pre-bg) !important",
             borderRadius: theme("borderRadius.2xl"),
             marginTop: theme("spacing.4"),
             marginBottom: theme("spacing.4"),

@@ -42,12 +42,12 @@ void main() {
   vec3 color = u_colors[int(show_offset * 6.0)];
 
   // --- Animation Timing Logic ---
-  float animation_speed_factor = 0.9; // Extract speed from shader string
+  float animation_speed_factor = 0.7; // Extract speed from shader string
   vec2 center_grid = u_resolution / 2.0 / u_total_size;
   float dist_from_center = distance(center_grid, st2);
 
   // Calculate timing offset for Intro (from center)
-  float timing_offset_intro = dist_from_center * 0.05 + (random(st2) * 0.15);
+  float timing_offset_intro = dist_from_center * 0.01 + (random(st2) * 0.15);
 
   // Calculate timing offset for Outro (from edges)
   // Max distance from center to a corner of the grid
@@ -63,10 +63,12 @@ void main() {
     opacity *= clamp((step(current_timing_offset + 0.1, u_time * animation_speed_factor)) * 1.25, 1.0, 1.25);
   } else {
     current_timing_offset = timing_offset_intro;
+    float visual_time = u_time * animation_speed_factor + 0.2; // 0.4 makes ~20% of dots visible at start
     // Intro logic: opacity starts 0, goes to base opacity when time passes offset
-    opacity *= step(current_timing_offset, u_time * animation_speed_factor);
+    opacity *= step(current_timing_offset, visual_time);
     // Clamp for fade-in transition
-    opacity *= clamp((1.0 - step(current_timing_offset + 0.1, u_time * animation_speed_factor)) * 1.25, 1.0, 1.25);
+    // opacity *= clamp((1.0 - step(current_timing_offset + 0.1, u_time * animation_speed_factor)) * 1.25, 1.0, 1.25);
+    opacity *= clamp((1.0 - step(current_timing_offset + 0.1, visual_time)) * 1.25, 1.0, 1.25);
   }
 
   fragColor = vec4(color, opacity);

@@ -29,31 +29,16 @@ const white: [Color, Color] = [
   [0, 0, 0],
   [0, 0, 0],
 ]
-const sleep = () => new Promise((res) => setTimeout(res, 5000))
 
 export const DotMatrixThemedAnimation = () => {
   const [colors, setColors] = useState<[Color, Color]>(
     window.localStorage.isDarkMode === "false" ? white : black,
   )
-  const [reverse, setReverse] = useState(false)
-  console.log(reverse)
 
   useEffect(() => {
-    // document.addEventListener("astro:before-preparation", (event) => {
-    //   const originalLoader = event.loader
-    //   setReverse(true)
-    //
-    //   event.loader = async function () {
-    //     await sleep()
-    //     await originalLoader()
-    //     event.loader = originalLoader
-    //   }
-    // })
-
-    document.addEventListener("themeChanged", ({ detail }: CustomEvent) => {
-      console.log(detail, window.localStorage)
+    document.addEventListener("themeChanged", (({ detail }: CustomEvent) => {
       setColors(detail === "dark" ? black : white)
-    })
+    }) as unknown as EventListener)
   }, [])
 
   return (
@@ -61,7 +46,7 @@ export const DotMatrixThemedAnimation = () => {
       className="dark:bg-zinc-950"
       colors={colors}
       dotSize={6}
-      reverse={reverse}
+      reverse={false}
     />
   )
 }

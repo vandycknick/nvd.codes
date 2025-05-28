@@ -1,14 +1,19 @@
-import type { ComponentPropsWithoutRef, ElementType } from "react"
+import type { ComponentProps, PropsWithChildren } from "react"
 import clsx from "clsx"
 
-type ContainerProps = {
-  as?: ElementType
-} & ComponentPropsWithoutRef<"div">
+type Props<As extends React.ElementType = "div"> = {
+  as?: As
+} & ComponentProps<As> &
+  PropsWithChildren
 
-function OuterContainer({ className, children, as, ...props }: ContainerProps) {
+function OuterContainer<T extends React.ElementType = "div">({
+  className,
+  children,
+  as,
+}: Props<T>) {
   const Component = as ?? "div"
   return (
-    <Component className={clsx("sm:px-8", className)} {...props}>
+    <Component className={clsx("sm:px-8", className)}>
       <div className="mx-auto max-w-7xl lg:px-8">{children}</div>
     </Component>
   )
@@ -18,7 +23,7 @@ const InnerContainer = function InnerContainer({
   className,
   children,
   ...props
-}: ContainerProps) {
+}: Props<"div">) {
   return (
     <div
       className={clsx("relative px-4 sm:px-8 lg:px-12", className)}
@@ -29,10 +34,7 @@ const InnerContainer = function InnerContainer({
   )
 }
 
-export const Container = function Container({
-  children,
-  ...props
-}: ContainerProps) {
+export const Container = function Container({ children, ...props }: Props) {
   return (
     <OuterContainer {...props}>
       <InnerContainer>{children}</InnerContainer>

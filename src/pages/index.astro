@@ -4,13 +4,21 @@ import { ClientRouter } from "astro:transitions"
 
 import { Greeting } from "@/components/Home/Greeting"
 import { LatestBlogPosts } from "@/components/Home/LatestBlogPosts"
-import { Divider } from "@/components/Divider"
-import { Container } from "@/components/Container"
 import { DotMatrixThemedAnimation } from "@/components/Home/DotMatrix"
 import "../styles/global.css"
 
-import MainLayout from "@/layouts/MainLayout.astro"
 import Header from "@/components/Header.astro"
+import { SEO, type SEOProps } from "astro-seo"
+
+interface Props {
+  title?: string
+  description?: string
+  openGraph?: SEOProps["openGraph"]
+  twitter?: SEOProps["twitter"]
+  extend?: SEOProps["extend"]
+}
+
+const { title, description, openGraph, twitter, extend } = Astro.props
 
 const allBlogPosts = await getCollection("blog", (post) => !post.data.draft)
 
@@ -38,21 +46,21 @@ const latestPosts = featuredPosts.map((post) => ({
 
     <meta name="viewport" content="width=device-width, initia-scale=1.0" />
     <meta name="generator" content={Astro.generator} />
-    <!-- <SEO -->
-    <!--   title={title ?? "Nick Van Dyck"} -->
-    <!--   titleTemplate="%s - nvd.codes" -->
-    <!--   description={description} -->
-    <!--   openGraph={openGraph ?? { -->
-    <!--     basic: { -->
-    <!--       title: "Nick's blog.", -->
-    <!--       type: "website", -->
-    <!--       url: "https://nvd.codes", -->
-    <!--       image: "", -->
-    <!--     }, -->
-    <!--   }} -->
-    <!--   twitter={twitter} -->
-    <!--   extend={extend} -->
-    <!-- /> -->
+    <SEO
+      title={title ?? "Nick Van Dyck"}
+      titleTemplate="%s - nvd.codes"
+      description={description}
+      openGraph={openGraph ?? {
+        basic: {
+          title: "Nick's blog.",
+          type: "website",
+          url: "https://nvd.codes",
+          image: "",
+        },
+      }}
+      twitter={twitter}
+      extend={extend}
+    />
     <link rel="sitemap" href="/sitemap-index.xml" />
     <ClientRouter />
     <script is:inline>
@@ -82,7 +90,7 @@ const latestPosts = featuredPosts.map((post) => ({
       }
 
       function updateModeWithoutTransitions() {
-        // disableTransitionsTemporarily()
+        disableTransitionsTemporarily()
         updateMode()
       }
 
@@ -109,10 +117,10 @@ const latestPosts = featuredPosts.map((post) => ({
       <Header />
 
       <div class="absolute inset-0">
-        <DotMatrixThemedAnimation client:only />
+        <DotMatrixThemedAnimation client:only transition:persist />
       </div>
       <div
-        class="absolute inset-0 bg-[radial-gradient(circle_at_center,_white_0%,_transparent_100%)] dark:bg-[radial-gradient(circle_at_center,_rgba(0,0,0,1)_0%,_transparent_100%)]"
+        class="absolute inset-0 bg-[radial-gradient(circle_at_center,_white_20%,_transparent_100%)] dark:bg-[radial-gradient(circle_at_center,_rgba(0,0,0,1)_20%,_transparent_100%)]"
       >
       </div>
       <div
