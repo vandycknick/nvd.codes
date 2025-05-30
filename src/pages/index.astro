@@ -4,7 +4,10 @@ import { ClientRouter } from "astro:transitions"
 
 import { Greeting } from "@/components/Home/Greeting"
 import { LatestBlogPosts } from "@/components/Home/LatestBlogPosts"
-import { DotMatrixThemedAnimation } from "@/components/Home/DotMatrix"
+import {
+  DotMatrixThemedAnimation,
+  DotMatrixThemedWebGLAnimation,
+} from "@/components/Home/DotMatrix"
 import "../styles/global.css"
 
 import Header from "@/components/Header.astro"
@@ -117,7 +120,7 @@ const latestPosts = featuredPosts.map((post) => ({
       <Header />
 
       <div class="absolute inset-0">
-        <DotMatrixThemedAnimation client:only transition:persist />
+        <DotMatrixThemedWebGLAnimation client:only transition:persist />
       </div>
       <div
         class="absolute inset-0 bg-[radial-gradient(circle_at_center,_white_20%,_transparent_100%)] dark:bg-[radial-gradient(circle_at_center,_rgba(0,0,0,1)_20%,_transparent_100%)]"

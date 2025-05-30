@@ -13,16 +13,16 @@
   },
   "devDependencies": {
     "@types/mime-types": "^2.1.4",
-    "@types/node": "^22.15.21",
+    "@types/node": "^22.15.24",
     "@types/yargs": "^17.0.33",
     "typescript": "^5.8.3"
   },
   "dependencies": {
-    "@aws-sdk/client-s3": "^3.816.0",
-    "@aws-sdk/lib-storage": "^3.816.0",
+    "@aws-sdk/client-s3": "^3.817.0",
+    "@aws-sdk/lib-storage": "^3.817.0",
     "@nvd/tsconfig": "^1.0.0",
     "mime-types": "^3.0.1",
     "ts-node": "^10.9.2",
-    "yargs": "^17.7.2"
+    "yargs": "^18.0.0"
   }
 }
