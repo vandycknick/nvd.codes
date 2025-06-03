@@ -54,11 +54,18 @@ function toDate(month: string, year: number) {
 
 const resume: ResumeEntry[] = [
   {
+    company: "Intigriti",
+    title: "Lead Site Reliability Engineer",
+    logo: "/images/resume/intigriti-logo.jpg",
+    start: toDate("Mar", 2024),
+    end: presentDay(),
+  },
+  {
     company: "DataCamp",
     title: "Software Engineer",
     logo: "/images/resume/datacamp-logo.jpg",
     start: toDate("Mar", 2019),
-    end: presentDay(),
+    end: toDate("Mar", 2024),
   },
   {
     company: "Moo",
