@@ -12,7 +12,7 @@ const Greeting = ({ githubUrl, twitterUrl, linkedinUrl }: GreetingProps) => (
       <div className="max-w-2xl mt-[-60px]">
         <h1 className="text-4xl text-center font-bold  tracking-tight text-zinc-800 dark:text-zinc-100 sm:text-5xl mb-6">
           {" "}
-          Hi I'm,<span className="not-italic">👋</span> Nick!
+          Hi, I'm<span className="not-italic">👋</span> Nick!
         </h1>
         <div className="flex justify-center">
           <div className="rounded-full bg-nord-500 dark:bg-nord-700 p-2">
