@@ -12,8 +12,8 @@
     "execute": "node --experimental-specifier-resolution=node --loader ts-node/esm src/index.ts"
   },
   "devDependencies": {
-    "@types/mime-types": "^2.1.4",
-    "@types/node": "^22.15.33",
+    "@types/mime-types": "^3.0.1",
+    "@types/node": "^22.15.34",
     "@types/yargs": "^17.0.33",
     "typescript": "^5.8.3"
   },
