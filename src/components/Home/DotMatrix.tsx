@@ -147,6 +147,14 @@ const useAnimationFrame = (callback: (time: number) => void) => {
 
 let skipIntro = false
 
+type DotMatrixProps = {
+  colors: [Color, Color?, Color?]
+  dotSize: number
+  reverse: boolean
+  opacities: Opacities
+  totalSize: number
+}
+
 export const DotMatrixWebGLCanvas = ({
   opacities = [0.3, 0.3, 0.3, 0.5, 0.5, 0.5, 0.8, 0.8, 0.8, 1],
   colors = [[0, 255, 255]],
