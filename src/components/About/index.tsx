@@ -30,54 +30,58 @@ export function About() {
             <p>
               My passion for programming started at a young age and has only
               grown stronger over the years. I hold a degree in Applied Computer
-              Sciences and have been fortunate enough to work for a diverse
-              range of companies, honing my skills as a Software Engineer.
+              Sciences and have had the opportunity to work with a variety of
+              companies, continuously developing my skills as a Software
+              Engineer.
             </p>
             <p>
-              I started my career as a contractor in the early days of SPA web
-              development. I helped clients navigate these newfound waters by
-              building enticing reactive frontends. This experience helped me
-              gain better understand of the ins and outs of web development, all
-              while learning how to deliver small incremental value to
-              customers.
+              I began my career as a contractor during the early days of
+              single-page application development. I worked closely with clients
+              to build engaging, reactive frontends and helped them navigate
+              this new era of web development. This gave me a solid foundation
+              in delivering incremental value while learning the broader
+              dynamics of building for the web.
             </p>
             <p>
-              In 2015, I relocated to London to join the team at Marks and
-              Spencer. Using Python and Flask, our team delivered a brand new
-              platform that resulted in a significant uplift in sales year after
-              year. It was an incredible experience, demonstrating my ability to
-              deliver high-quality software while working with a diverse range
-              of people and cultures.
+              In 2015, I moved to London to join Marks and Spencer. There, I
+              worked with a team using Python and Flask to build a new platform
+              that consistently improved sales year after year. It was a
+              rewarding experience that reinforced the value of working with
+              diverse teams and delivering software that makes a tangible
+              impact.
             </p>
             <p>
-              Following that, I worked at MOO as part of a small team building a
-              new application focused on enabling professional and hobbyist
-              designers to create astonishing print products. Using a
-              test-driven first approach and good CI/CD practices, we delivered
-              new features to customers daily. Additionally, I led the creation
-              of a shared design, style, and component library that enabled
-              faster delivery of UI features and reduced duplication across the
-              company.
+              After that, I joined MOO, where I helped build a new application
+              for designers to create custom print products. We followed a
+              test-driven approach and strong CI/CD practices, shipping features
+              to customers daily. I also led the development of a shared design
+              and component library that sped up UI development and reduced
+              duplication across teams.
             </p>
             <p>
-              Currently, I work at DataCamp, an online learning platform
-              teaching data science, where I transitioned into a
-              DevOps/Infrastructure engineering role. Here, I gained experience
-              building scalable, reliable, and secure infrastructure to support
-              the needs of a rapidly growing business. Throughout my career,
-              I&apos;ve demonstrated a strong passion for software engineering
-              and a commitment to delivering high-quality products that meet
-              customer needs. I&apos;m an excellent collaborator and a quick
-              learner, always eager to tackle new challenges and stay up-to-date
-              with the latest technologies.
+              I later moved into a DevOps and Infrastructure role at DataCamp,
+              where I focused on improving security and building internal
+              tooling to support developer productivity. One of my key
+              contributions was delivering a self-serve portal that allowed
+              developers to spin up new applications with a single click—fully
+              equipped with secure defaults, deployment pipelines, monitoring,
+              and logging. I also managed the infrastructure behind the learning
+              platform and DataCamp Studio, enabling students to launch
+              interactive development and learning environments directly in the
+              browser.
             </p>
             <p>
-              When not working on software projects, I enjoy tinkering with my
-              home automation systems and spending time with my family. If
-              you&apos;re interested in learning more about my experiences or
-              exploring opportunities for building great software together, give
-              me a shout at info@nvd.codes. I&apos;m always happy to chat, so
-              feel free to reach out!
+              Currently, I work at Intigriti, a bug bounty and security platform
+              that connects ethical hackers with companies to identify and fix
+              vulnerabilities. As Lead Site Reliability Engineer, I focus on
+              building secure, resilient systems that help keep our platform
+              running smoothly.
+            </p>
+            <p>
+              Outside of work, I enjoy tinkering with home automation and
+              spending time with my family. If you'd like to get in touch or
+              chat about building great software, feel free to reach out at
+              info@nvd.codes — always happy to connect.
             </p>
           </div>
         </div>
