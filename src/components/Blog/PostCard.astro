@@ -1,113 +1,96 @@
 ---
-import { Image } from "astro:assets"
-import { readFile } from "node:fs/promises"
-import { join } from "node:path"
-import { getBase64 } from "@plaiceholder/base64"
-
-import Time from "@/components/Time"
-import { ChevronRightIcon, CalendarIcon } from "@/components/Icons"
+import { formatDate } from "@/utils"
 import type { PostPreview } from "@/components/Blog/types"
+import { CalendarIcon } from "@/components/Icons"
 
 interface Props {
   post: PostPreview
+  pill?: boolean
+  transition?: boolean
 }
 
-const { post } = Astro.props
+const { post, pill, transition } = Astro.props
 
-let path = new URL(post.cover.src, "http://localhost").pathname.replace(
-  /^(\/@fs)/,
-  "",
-)
-
-// TODO: Always lovely to see leaky implementation details.
-// Anyways let's hope astro adds this at some point so I can remove this code.
-if (path.startsWith("/_astro")) {
-  path = join(process.cwd(), "dist", path)
-}
-
-const image = await readFile(path)
-const base64 = await getBase64(image)
----
-
-<article
-  class="relative isolate flex flex-col gap-8 lg:flex-row hover:bg-zinc-50 dark:hover:bg-zinc-800/50 rounded-2xl inset-0 ring-1 ring-inset ring-zinc-900/10 dark:ring-zinc-800/50"
->
-  <div
-    class="relative aspect-[16/9] sm:aspect-[2/1] lg:aspect-square lg:w-60 lg:shrink-0"
-  >
-    <image-loader>
-      <Image
-        src={post.cover}
-        alt="Blog Post Cover Image"
-        class="absolute inset-0 h-full w-full rounded-t-2xl lg:rounded-l-2xl lg:rounded-r-none bg-zinc-50 bg-no-repeat bg-cover object-cover"
-        style={`background-image: url("${base64}")`}
-        quality="mid"
-      />
-    </image-loader>
-    <div
-      class="absolute inset-0 rounded-t-2xl md:rounded-l-2xl md:rounded-r-none ring-1 ring-inset ring-zinc-900/10"
-    >
-    </div>
-  </div>
-  <div class="py-4 px-4">
-    <div class="flex items-center gap-x-3 text-xs">
-      <CalendarIcon className="w-4 h-4 stroke-zinc-600 dark:stroke-zinc-400" />
-      <Time
-        dateTime={post.date}
-        className="text-zinc-600 dark:text-zinc-400"
-        format="default"
-      />
-      {
-        post.categories
-          .slice(0, 3)
-          .map((category) => (
-            <span class="relative z-10 rounded-lg px-2 py-1 font-medium text-tiny text-zinc-600 bg-zinc-200 hover:bg-zinc-300 dark:bg-zinc-50 dark:hover:bg-zinc-100">
-              {category}
-            </span>
-          ))
-      }
-    </div>
-    <div class="group relative max-w-xxl">
-      <h3
-        class="mt-3 text-lg font-semibold leading-6 text-zinc-800 dark:text-zinc-100 group-hover:text-zinc-600 dark:group-hover:text-zinc-300"
-      >
-        <a href={`/post/${post.slug}`}>
-          <span class="absolute inset-0"></span>
-          {post.title}
-        </a>
-      </h3>
-      <p class="mt-5 text-sm leading-6 text-zinc-600 dark:text-zinc-400">
-        {post.description}
-      </p>
-      <a
-        href={`/post/${post.slug}`}
-        aria-hidden="true"
-        class="relative z-10 mt-4 flex items-center text-sm font-medium text-teal-500"
-        >Read Article
-        <ChevronRightIcon className="ml-1 h-4 w-4 stroke-current" />
-      </a>
-    </div>
-  </div>
-</article>
-<script>
-  class ImageLoader extends HTMLElement {
-    private image: HTMLImageElement | null
-
-    constructor() {
-      super()
-
-      this.image = this.querySelector("img")
-
-      // null check is mostly done to convince the type system that
-      // after this line this.image is definitely defined.
-      if (this.image == null || this.image?.complete === true) return
-
-      this.image.onload = this.onLoad
-      this.image.classList.add("blur-sm")
-    }
-
-    onLoad = () => this.image?.classList.remove("blur-sm")
+const createTransitionLabels = () => {
+  if (transition === false) {
+    return { title: "", description: "", details: "" }
   }
 
-  customElements.define("image-loader", ImageLoader)
-</script>
+  return {
+    title: `post-title-${post.slug}`,
+    description: `post-description-${post.slug}`,
+    details: `post-details-${post.slug}`,
+  }
+}
+
+const labels = createTransitionLabels()
+---
+
+<a
+  href={`/post/${post.slug}`}
+  class="group p-4 gap-3 flex items-center border rounded-lg hover:bg-black/5 hover:dark:bg-white/10 border-black/15 dark:border-white/20 transition-colors duration-300 ease-in-out"
+>
+  <div class="w-full group-hover:text-black group-hover:dark:text-white blend">
+    <div class="flex flex-wrap items-center text-sm gap-2">
+      <!-- <div class="text-sm uppercase" transition:name={labels.details}> -->
+      <!--   {formatDate(post.date)} -->
+      <!-- </div> -->
+
+      <!-- <svg class="size-4 stroke-current"> -->
+      <!--   <use href="/ui.svg#calendar"></use> -->
+      <!-- </svg> -->
+      <CalendarIcon className="size-5" />
+      <span class="text-sm uppercase">
+        {formatDate(post.date)}
+      </span>
+      <!-- <div class="flex items-center gap-2"> -->
+      <!--   <svg class="size-5 stroke-current"> -->
+      <!--     <use href="/ui.svg#book-open"></use> -->
+      <!--   </svg> -->
+      <!--   {post.readingTime} -->
+      <!-- </div> -->
+    </div>
+    <h1
+      class="font-semibold mt-3 text-black dark:text-white"
+      transition:name={labels.title}
+    >
+      {post.title}
+    </h1>
+
+    <div class="text-sm line-clamp-2" transition:name={labels.description}>
+      {post.description}
+    </div>
+    <ul class="flex flex-wrap mt-2 gap-1">
+      {
+        post.tags.map((tag) => (
+          <li class="text-xs uppercase py-0.5 px-1 rounded bg-black/5 dark:bg-white/20 text-black/75 dark:text-white/75">
+            {tag}
+          </li>
+        ))
+      }
+    </ul>
+  </div>
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    width="20"
+    height="20"
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke-width="2.5"
+    stroke-linecap="round"
+    stroke-linejoin="round"
+    class="stroke-current group-hover:stroke-black group-hover:dark:stroke-white"
+  >
+    <line
+      x1="5"
+      y1="12"
+      x2="19"
+      y2="12"
+      class="scale-x-0 group-hover:scale-x-100 translate-x-4 group-hover:translate-x-1 transition-all duration-300 ease-in-out"
+    ></line>
+    <polyline
+      points="12 5 19 12 12 19"
+      class="translate-x-0 group-hover:translate-x-1 transition-all duration-300 ease-in-out"
+    ></polyline>
+  </svg>
+</a>

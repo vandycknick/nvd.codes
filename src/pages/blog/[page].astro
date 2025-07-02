@@ -3,7 +3,7 @@ import type { GetStaticPathsOptions, Page } from "astro"
 import { getCollection } from "astro:content"
 
 import MainLayout from "@/layouts/MainLayout.astro"
-import Blog from "@/components/Blog/index.astro"
+import Blog from "@/components/Blog/Blog.astro"
 import type { PostPreview } from "@/components/Blog/types"
 
 export async function getStaticPaths({ paginate }: GetStaticPathsOptions) {
@@ -12,24 +12,22 @@ export async function getStaticPaths({ paginate }: GetStaticPathsOptions) {
     (l, r) => r.data.date.getTime() - l.data.date.getTime(),
   )
 
-  const previews: PostPreview[] = sorted.map((post) => ({
-    title: post.data.title,
-    description: post.data.description,
-    date: post.data.date,
-    slug: post.id,
-    readingTime: "",
-    categories: post.data.categories,
-    cover: post.data.cover,
-  }))
-
-  return paginate(previews, { pageSize: 9 })
-}
-
-interface Props {
-  page: Page<PostPreview>
+  return paginate(sorted, { pageSize: 9 })
 }
 
 const { page } = Astro.props
+
+const previews: PostPreview[] = page.data.map((post) => {
+  return {
+    title: post.data.title,
+    date: post.data.date,
+    slug: post.id,
+    description: post.data.description,
+    tags: post.data.categories,
+    cover: post.data.cover,
+    readingTime: "",
+  }
+})
 
 const pager = {
   total: Math.ceil(page.total / 9),
@@ -38,5 +36,5 @@ const pager = {
 ---
 
 <MainLayout title="Blog">
-  <Blog posts={page.data} pager={pager} />
+  <Blog posts={previews} pager={pager} />
 </MainLayout>

@@ -1,67 +1,84 @@
-import clsx from "clsx"
 import { clamp } from "@/utils"
 
-import { ArrowSmallLeft, ArrowSmallRight } from "@/components/Icons"
-
-type PostsPagerProps = {
+type Props = {
   total: number
   currentPage: number
+  className: string
 }
 
 const getBlogUrl = (page: number) => (page === 1 ? "/blog" : `/blog/${page}`)
 
-export const PostsPager = ({ total, currentPage }: PostsPagerProps) => {
-  const pages = Array(total)
-    .fill(0)
-    .map((_, index) => index + 1)
+export const PostsPager = ({ total, currentPage, className }: Props) => {
   const previous = clamp(currentPage - 1, 1, total)
   const next = clamp(currentPage + 1, 1, total)
 
   return (
-    <nav className="flex items-center justify-between border-t border-zinc-200 px-4 sm:px-0 mt-32">
-      <div className="-mt-px flex w-0 flex-1">
+    <nav className={className}>
+      <div className="flex items-center justify-between w-full">
         <a
           href={getBlogUrl(previous)}
-          className="inline-flex items-center border-t-2 border-transparent pr-1 pt-4 text-sm font-medium text-zinc-500 hover:border-zinc-300 hover:text-zinc-700"
+          className="group w-fit min-w-[6.5rem] p-1.5 gap-1.5 text-sm flex items-center border rounded hover:bg-black/5 hover:dark:bg-white/10 border-black/15 dark:border-white/20 transition-colors duration-300 ease-in-out"
         >
-          <ArrowSmallLeft
-            className="mr-3 h-5 w-5 text-zinc-400"
-            aria-hidden="true"
-          />
-          Previous
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="20"
+            height="20"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke-width="2.5"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            className="stroke-current group-hover:stroke-black group-hover:dark:stroke-white"
+          >
+            <line
+              x1="19"
+              y1="12"
+              x2="5"
+              y2="12"
+              className="scale-x-0 group-hover:scale-x-100 translate-x-3 group-hover:translate-x-0 transition-all duration-300 ease-in-out"
+            ></line>
+            <polyline
+              points="12 19 5 12 12 5"
+              className="translate-x-1 group-hover:translate-x-0 transition-all duration-300 ease-in-out"
+            ></polyline>
+          </svg>
+          <div className="w-full group-hover:text-black group-hover:dark:text-white transition-colors duration-300 ease-in-out">
+            Previous
+          </div>
         </a>
-      </div>
-      <div className="hidden md:-mt-px md:flex">
-        {pages.map((page) => {
-          const isCurrentPage = page === currentPage
-          const href = getBlogUrl(page)
-          return (
-            <a
-              key={page}
-              href={href}
-              className={clsx(
-                "inline-flex items-center border-t-2 border-transparent px-4 pt-4 text-sm font-medium text-zinc-500 hover:border-zinc-300 hover:text-zinc-700",
-                {
-                  "border-teal-500": isCurrentPage,
-                  "text-teal-600": isCurrentPage,
-                },
-              )}
-            >
-              {page}
-            </a>
-          )
-        })}
-      </div>
-      <div className="-mt-px flex w-0 flex-1 justify-end">
+        <div className="flex flex-1 w-full justify-center text-md uppercase">
+          PAGE {currentPage} OF {total}
+        </div>
         <a
           href={getBlogUrl(next)}
-          className="inline-flex items-center border-t-2 border-transparent pl-1 pt-4 text-sm font-medium text-zinc-500 hover:border-zinc-300 hover:text-zinc-700"
+          className="group w-fit p-1.5 gap-1.5 text-sm flex items-center min-w-[6.5rem] border rounded hover:bg-black/5 hover:dark:bg-white/10 border-black/15 dark:border-white/20 transition-colors duration-300 ease-in-out"
         >
-          Next
-          <ArrowSmallRight
-            className="ml-3 h-5 w-5 text-zinc-400"
-            aria-hidden="true"
-          />
+          <div className="w-full group-hover:text-black group-hover:dark:text-white transition-colors duration-300 ease-in-out">
+            Next
+          </div>
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="20"
+            height="20"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke-width="2.5"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            className="stroke-current group-hover:stroke-black group-hover:dark:stroke-white"
+          >
+            <line
+              x1="5"
+              y1="12"
+              x2="19"
+              y2="12"
+              className="scale-x-0 group-hover:scale-x-100 translate-x-4 group-hover:translate-x-1 transition-all duration-300 ease-in-out"
+            ></line>
+            <polyline
+              points="12 5 19 12 12 19"
+              className="translate-x-0 group-hover:translate-x-1 transition-all duration-300 ease-in-out"
+            ></polyline>
+          </svg>
         </a>
       </div>
     </nav>

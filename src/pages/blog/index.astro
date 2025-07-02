@@ -2,7 +2,7 @@
 import { getCollection } from "astro:content"
 
 import MainLayout from "@/layouts/MainLayout.astro"
-import Blog from "@/components/Blog/index.astro"
+import Blog from "@/components/Blog/Blog.astro"
 import type { PostPreview } from "@/components/Blog/types"
 
 const posts = await getCollection("blog", (post) => !post.data.draft)
@@ -16,7 +16,7 @@ const previews: PostPreview[] = sorted.map((post) => {
     date: post.data.date,
     slug: post.id,
     description: post.data.description,
-    categories: post.data.categories,
+    tags: post.data.categories,
     cover: post.data.cover,
     readingTime: "",
   }
