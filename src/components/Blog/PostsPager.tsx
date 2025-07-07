@@ -25,9 +25,9 @@ export const PostsPager = ({ total, currentPage, className }: Props) => {
             height="20"
             viewBox="0 0 24 24"
             fill="none"
-            stroke-width="2.5"
-            stroke-linecap="round"
-            stroke-linejoin="round"
+            strokeWidth="2.5"
+            strokeLinecap="round"
+            strokeLinejoin="round"
             className="stroke-current group-hover:stroke-black group-hover:dark:stroke-white"
           >
             <line
@@ -62,9 +62,9 @@ export const PostsPager = ({ total, currentPage, className }: Props) => {
             height="20"
             viewBox="0 0 24 24"
             fill="none"
-            stroke-width="2.5"
-            stroke-linecap="round"
-            stroke-linejoin="round"
+            strokeWidth="2.5"
+            strokeLinecap="round"
+            strokeLinejoin="round"
             className="stroke-current group-hover:stroke-black group-hover:dark:stroke-white"
           >
             <line

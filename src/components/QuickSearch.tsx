@@ -1,5 +1,5 @@
 import { useEffect, useState, useCallback } from "react"
-import { MagnifyingGlassIcon } from "@/components/Icons"
+import { SearchIcon } from "lucide-react"
 import {
   Combobox,
   ComboboxInput,
@@ -167,7 +167,7 @@ export const QuickSearch = () => {
                   refetch()
                 }}
               />
-              <MagnifyingGlassIcon
+              <SearchIcon
                 className="pointer-events-none col-start-1 row-start-1 ml-4 size-5 self-center text-gray-400"
                 aria-hidden="true"
               />

@@ -1,5 +1,5 @@
 import { LinkButton } from "@/components/Button"
-import { BriefcaseIcon, ArrowDownIcon } from "@/components/Icons"
+import { BriefcaseIcon, ArrowDownIcon } from "lucide-react"
 import { Time } from "@/components/Time"
 
 type LabelledDate = Date & { label?: string }
@@ -101,7 +101,7 @@ export function Resume() {
   return (
     <div className="rounded-2xl border border-zinc-100 p-6 dark:border-zinc-700/40">
       <h2 className="flex text-sm font-semibold text-zinc-900 dark:text-zinc-100">
-        <BriefcaseIcon className="h-6 w-6 flex-none" />
+        <BriefcaseIcon className="h-6 w-6 flex-none fill-zinc-100 stroke-zinc-400 dark:fill-zinc-100/10 dark:stroke-zinc-500" />
         <span className="ml-3">Work</span>
       </h2>
       <ol className="mt-6 space-y-4">

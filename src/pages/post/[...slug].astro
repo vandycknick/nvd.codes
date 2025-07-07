@@ -1,7 +1,7 @@
 ---
 import { type CollectionEntry, getCollection, render } from "astro:content"
 import { fade } from "astro:transitions"
-import { Calendar, Book } from "lucide-react"
+import { CalendarIcon, BookIcon, EditIcon } from "lucide-react"
 
 import PostHeroImage from "@/components/Post/PostHeroImage.astro"
 import MainLayout from "@/layouts/MainLayout.astro"
@@ -81,32 +81,40 @@ const next = items[(index + 1) % items.length]
 >
   <Container className="mt-16 sm:mt-32">
     <PostHeroImage image={post.data.cover} />
-    <h1
-      class="text-4xl font-bold tracking-tight text-zinc-800 dark:text-zinc-100 sm:text-5xl pb-5"
-      transition:name={`post-title-${post.id}`}
-    >
-      {title}
-    </h1>
-    <div class="flex flex-wrap text-sm uppercase pb-8 gap-3 opacity-75">
-      <div
-        class="flex items-center gap-2"
-        transition:name={`post-details-${post.id}`}
+    <header class="flex flex-col items-center">
+      <h1
+        class="mt-6 text-4xl text-center font-bold tracking-tight text-zinc-800 dark:text-zinc-100 sm:text-5xl"
       >
-        <Calendar size={18} strokeWidth={2.5} />
-        {formatDate(date)}
+        {post.data.title}
+      </h1>
+      <div class="flex pt-6 opacity-75" data-pagefind-ignore>
+        <div class="flex justify-center items-center">
+          <CalendarIcon
+            className="w-5 h-5 mr-1 font-medium text-zinc-600 dark:text-zinc-50"
+          />
+          {formatDate(date)}
+        </div>
+        <div class="flex justify-center items-center px-4">
+          <EditIcon
+            className="w-5 h-5 mr-1 font-medium text-zinc-600 dark:text-zinc-50"
+          />
+          <a class="font-medium text-zinc-600 dark:text-zinc-50" href={editUrl}>
+            suggest edit
+          </a>
+        </div>
+        <div class="flex justify-center items-center">
+          <BookIcon
+            className="w-5 h-5 mr-1 font-medium text-zinc-600 dark:text-zinc-50"
+          />
+          <span class="font-medium text-zinc-600 dark:text-zinc-50"
+            >{readingTime}</span
+          >
+        </div>
       </div>
-      <div class="flex items-center gap-2">
-        <Book size={18} strokeWidth={2.5} />
-        {readingTime}
-      </div>
-    </div>
-    <div transition:name={`post-description-${post.id}`}>
-      {description}
-    </div>
+    </header>
     <section class="flex-1">
       <article
         class="mt-8 prose dark:prose-invert"
-        transition:name={`post-content-{post.id}`}
         transition:animate={fade({ duration: "0.5s" })}
       >
         <Content />

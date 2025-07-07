@@ -1,7 +1,7 @@
 ---
 import { formatDate } from "@/utils"
 import type { PostPreview } from "@/components/Blog/types"
-import { CalendarIcon } from "@/components/Icons"
+import { CalendarIcon } from "lucide-react"
 
 interface Props {
   post: PostPreview
@@ -9,7 +9,7 @@ interface Props {
   transition?: boolean
 }
 
-const { post, pill, transition } = Astro.props
+const { post, transition } = Astro.props
 
 const createTransitionLabels = () => {
   if (transition === false) {
@@ -39,7 +39,7 @@ const labels = createTransitionLabels()
       <!-- <svg class="size-4 stroke-current"> -->
       <!--   <use href="/ui.svg#calendar"></use> -->
       <!-- </svg> -->
-      <CalendarIcon className="size-5" />
+      <CalendarIcon size={18} strokeWidth={2.5} />
       <span class="text-sm uppercase">
         {formatDate(post.date)}
       </span>

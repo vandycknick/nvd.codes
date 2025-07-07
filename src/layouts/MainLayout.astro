@@ -97,14 +97,15 @@ const { title, description, openGraph, twitter, extend } = Astro.props
     <QuickSearch client:only="react" />
 
     <div class="relative">
-      <Header />
+      <slot name="header">
+        <Header />
+      </slot>
       <main class="w-full max-w-full" transition:name="main">
         <slot />
       </main>
 
       <Footer />
     </div>
-    <!-- <ViewTransitions  /> -->
     <script>
       document.addEventListener("astro:before-swap", (e) =>
         [...e.newDocument.head.querySelectorAll('link[as="font"]')].forEach(
