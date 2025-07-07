@@ -1,24 +1,13 @@
 ---
 import { getCollection } from "astro:content"
-import { ClientRouter } from "astro:transitions"
 
+import MainLayout from "@/layouts/MainLayout.astro"
 import { Greeting } from "@/components/Home/Greeting"
 import { LatestBlogPosts } from "@/components/Home/LatestBlogPosts"
 import { DotMatrixThemedWebGLAnimation } from "@/components/Home/DotMatrix"
 import "../styles/global.css"
 
 import Header from "@/components/Header.astro"
-import { SEO, type SEOProps } from "astro-seo"
-
-interface Props {
-  title?: string
-  description?: string
-  openGraph?: SEOProps["openGraph"]
-  twitter?: SEOProps["twitter"]
-  extend?: SEOProps["extend"]
-}
-
-const { title, description, openGraph, twitter, extend } = Astro.props
 
 const allBlogPosts = await getCollection("blog", (post) => !post.data.draft)
 
@@ -35,108 +24,32 @@ const latestPosts = featuredPosts.map((post) => ({
 }))
 ---
 
-<html class="h-full antialiased" lang="en">
-  <head>
-    <meta charset="utf-8" />
-    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-    <meta name="HandheldFriendly" content="True" />
-    <meta name="MobileOptimized" content="320" />
-    <meta name="author" content="Nick Van Dyck" />
-    <link rel="shortcut icon" href="/favicon.png" />
-
-    <meta name="viewport" content="width=device-width, initia-scale=1.0" />
-    <meta name="generator" content={Astro.generator} />
-    <SEO
-      title={title ?? "Nick Van Dyck"}
-      titleTemplate="%s - nvd.codes"
-      description={description}
-      openGraph={openGraph ?? {
-        basic: {
-          title: "Nick's blog.",
-          type: "website",
-          url: "https://nvd.codes",
-          image: "",
-        },
-      }}
-      twitter={twitter}
-      extend={extend}
-    />
-    <link rel="sitemap" href="/sitemap-index.xml" />
-    <ClientRouter />
-    <script is:inline>
-      console.log("inline theme check")
-      function updateMode() {
-        const isSystemDarkMode = darkModeMediaQuery.matches
-        const isDarkMode =
-          window.localStorage.isDarkMode === "true" ||
-          (!("isDarkMode" in window.localStorage) && isSystemDarkMode)
-
-        if (isDarkMode) {
-          document.documentElement.classList.add("dark")
-        } else {
-          document.documentElement.classList.remove("dark")
-        }
-
-        if (isDarkMode === isSystemDarkMode) {
-          delete window.localStorage.isDarkMode
-        }
-      }
-
-      function disableTransitionsTemporarily() {
-        document.documentElement.classList.add("[&_*]:!transition-none")
-        window.setTimeout(() => {
-          document.documentElement.classList.remove("[&_*]:!transition-none")
-        }, 0)
-      }
-
-      function updateModeWithoutTransitions() {
-        disableTransitionsTemporarily()
-        updateMode()
-      }
-
-      const darkModeMediaQuery = window.matchMedia(
-        "(prefers-color-scheme: dark)",
-      )
-
-      updateMode()
-      darkModeMediaQuery.addEventListener(
-        "change",
-        updateModeWithoutTransitions,
-      )
-      window.addEventListener("storage", updateModeWithoutTransitions)
-      document.addEventListener(
-        "astro:after-swap",
-        updateModeWithoutTransitions,
-      )
-    </script>
-  </head>
-  <body class="flex h-full flex-col bg-white dark:bg-zinc-950">
-    <div
-      class="flex w-[100%] flex-col min-h-screen bg-white dark:bg-zinc-950 relative"
-    >
-      <Header />
-
-      <div class="absolute inset-0">
-        <DotMatrixThemedWebGLAnimation client:only transition:persist />
-      </div>
-      <div
-        class="absolute inset-0 bg-[radial-gradient(circle_at_center,_white_20%,_transparent_100%)] dark:bg-[radial-gradient(circle_at_center,_rgba(0,0,0,1)_20%,_transparent_100%)]"
-      >
-      </div>
-      <div
-        class="absolute top-0 left-0 right-0 h-1/3 bg-gradient-to-b from-white dark:from-zinc-950 to-transparent"
-      >
-      </div>
-      <div
-        class="absolute inset-0 bg-gradient-to-t from-white dark:from-zinc-950 to-transparent"
-      >
-      </div>
-      <Greeting
-        twitterUrl="https://twitter.com/vandycknick"
-        githubUrl="https://github.com/vandycknick"
-        linkedinUrl="https://www.linkedin.com/in/nickvandyck/"
-      />
+<MainLayout>
+  <span slot="header"></span>
+  <div
+    class="flex w-[100%] flex-col min-h-screen bg-white dark:bg-zinc-950 relative"
+  >
+    <Header />
+    <div class="absolute inset-0">
+      <DotMatrixThemedWebGLAnimation client:only transition:persist />
     </div>
-    <LatestBlogPosts posts={latestPosts} />
-  </body>
-</html>
+    <div
+      class="absolute inset-0 bg-[radial-gradient(circle_at_center,_white_20%,_transparent_100%)] dark:bg-[radial-gradient(circle_at_center,_rgba(0,0,0,1)_20%,_transparent_100%)]"
+    >
+    </div>
+    <div
+      class="absolute top-0 left-0 right-0 h-1/3 bg-gradient-to-b from-white dark:from-zinc-950 to-transparent"
+    >
+    </div>
+    <div
+      class="absolute inset-0 bg-gradient-to-t from-white dark:from-zinc-950 to-transparent"
+    >
+    </div>
+    <Greeting
+      twitterUrl="https://twitter.com/vandycknick"
+      githubUrl="https://github.com/vandycknick"
+      linkedinUrl="https://www.linkedin.com/in/nickvandyck/"
+    />
+  </div>
+  <LatestBlogPosts posts={latestPosts} />
+</MainLayout>

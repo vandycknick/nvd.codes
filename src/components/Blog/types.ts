@@ -4,7 +4,7 @@ export type PostPreview = {
   date: Date
   slug: string
   readingTime: string
-  categories: string[]
+  tags: string[]
   cover: {
     src: string
     width: number

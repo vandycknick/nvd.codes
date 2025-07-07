@@ -1,60 +1,55 @@
 ---
-import type { InferGetStaticPropsType } from "astro"
-import { getCollection, render } from "astro:content"
+import { type CollectionEntry, getCollection, render } from "astro:content"
+import { fade } from "astro:transitions"
+import { CalendarIcon, BookIcon, EditIcon } from "lucide-react"
 
-import MainLayout from "@/layouts/MainLayout.astro"
-import { Container } from "@/components/Container"
 import PostHeroImage from "@/components/Post/PostHeroImage.astro"
-import {
-  TwitterIconRound,
-  LinkedInIconRound,
-  FacebookIconRound,
-  RedditIconRound,
-  MailIconRound,
-  CalendarIcon,
-  EditIcon,
-  TimeIcon,
-} from "@/components/Icons"
-import Time from "@/components/Time"
-import { Comments } from "@/components/Comments"
+import MainLayout from "@/layouts/MainLayout.astro"
+import { formatDate } from "@/utils"
+import { Container } from "@/components/Container.tsx"
 
 export async function getStaticPaths() {
-  const posts = await getCollection("blog", (post) => !post.data.draft)
-
-  return posts.map((entry) => ({
-    params: { slug: entry.id },
-    props: { entry },
+  const posts = await getCollection("blog")
+  return posts.map((post) => ({
+    params: { slug: post.id },
+    props: post,
   }))
 }
 
-//type Params = InferGetStaticParamsType<typeof getStaticPaths>
-type Props = InferGetStaticPropsType<typeof getStaticPaths>
+type Props = CollectionEntry<"blog">
+const post = Astro.props
+const { title, description, date, categories } = post.data
+const { Content, remarkPluginFrontmatter } = await render(post)
 
-const { entry } = Astro.props
-const { Content, remarkPluginFrontmatter } = await render(entry)
-
-const postFullUrl = `https://nvd.codes/post/${entry.id}`
-const socialLinkTitle = `Nick Van Dyck: ${entry.data.title}`
-const editUrl = `https://github.com/vandycknick/nvd.codes/edit/main/${entry.filePath}`
+const postFullUrl = `https://nvd.codes/post/${post.id}`
+const socialLinkTitle = `Nick Van Dyck: ${post.data.title}`
+const editUrl = `https://github.com/vandycknick/nvd.codes/edit/main/${post.filePath}`
 const readingTime = remarkPluginFrontmatter.readingTime
 
-const coverImage = entry.data.cover
-const labels = `${entry.data.categories.join(", ")}`
+const coverImage = post.data.cover
+const labels = `${post.data.categories.join(", ")}`
+
+const items = (await getCollection("blog"))
+  .filter((post) => !post.data.draft)
+  .sort((a, b) => b.data.date.getTime() - a.data.date.getTime())
+const index = items.findIndex((x) => x.id === post.id)
+const prev = items[(index - 1 + items.length) % items.length]
+const next = items[(index + 1) % items.length]
 ---
 
 <MainLayout
-  title={entry.data.title}
-  description={entry.data.description}
+  title={title}
+  description={description}
   openGraph={{
     basic: {
       type: "article",
-      title: entry.data.title,
+      title: title,
       image: `https://nvd.codes${coverImage.src}`,
       url: postFullUrl,
     },
     article: {
-      publishedTime: entry.data.date.toISOString(),
-      tags: entry.data.categories,
+      publishedTime: date.toISOString(),
+      tags: categories,
       authors: ["Nick Van Dyck"],
     },
   }}
@@ -84,88 +79,122 @@ const labels = `${entry.data.categories.join(", ")}`
     ],
   }}
 >
-  <Container className="mt-16 lg:mt-32" data-pagefind-body>
-    <div class="xl:relative">
-      <div class="mx-auto max-w-4xl">
-        <PostHeroImage image={entry.data.cover} />
-        <article>
-          <header class="flex flex-col items-center">
-            <h1
-              class="mt-6 text-4xl text-center font-bold tracking-tight text-zinc-800 dark:text-zinc-100 sm:text-5xl"
-            >
-              {entry.data.title}
-            </h1>
-            <div class="flex pt-6" data-pagefind-ignore>
-              <div class="flex justify-center items-center">
-                <CalendarIcon
-                  className="w-5 h-5 mr-1 font-medium text-zinc-600 dark:text-zinc-50"
-                />
-                <Time
-                  className="font-medium text-zinc-600 dark:text-zinc-50"
-                  dateTime={entry.data.date}
-                />
-              </div>
-              <div class="flex justify-center items-center px-4">
-                <EditIcon
-                  className="w-5 h-5 mr-1 font-medium text-zinc-600 dark:text-zinc-50"
-                />
-                <a
-                  class="font-medium text-zinc-600 dark:text-zinc-50"
-                  href={editUrl}
-                >
-                  suggest edit
-                </a>
-              </div>
-              <div class="flex justify-center items-center">
-                <TimeIcon
-                  className="w-5 h-5 mr-1 font-medium text-zinc-600 dark:text-zinc-50"
-                />
-                <span class="font-medium text-zinc-600 dark:text-zinc-50"
-                  >{readingTime}</span
-                >
-              </div>
-            </div>
-          </header>
-          <div class="mt-8 prose dark:prose-invert">
-            <Content />
-            <div class="flex flex-col items-center" data-pagefind-ignore>
-              <div class="flex">
-                <a
-                  href={`https://twitter.com/share?url=${postFullUrl}&text=${socialLinkTitle}`}
-                  class="bg-zinc-600 p-2 rounded-full flex justify-center items-center mx-2"
-                >
-                  <TwitterIconRound className="h-4 w-4 fill-zinc-50" />
-                </a>
-                <a
-                  href={`https://www.linkedin.com/shareArticle?mini=true&url=${postFullUrl}`}
-                  class="bg-zinc-600 p-2 rounded-full flex justify-center items-center mx-2"
-                >
-                  <LinkedInIconRound className="h-4 w-4 fill-zinc-50" />
-                </a>
-                <a
-                  href={`https://www.facebook.com/sharer/sharer.php?u=${postFullUrl}`}
-                  class="bg-zinc-600 p-2 rounded-full flex justify-center items-center mx-2"
-                >
-                  <FacebookIconRound className="h-4 w-4 fill-zinc-50" />
-                </a>
-                <a
-                  href={`https://reddit.com/submit?url=${postFullUrl}&title=${socialLinkTitle}`}
-                  class="bg-zinc-600 p-2 rounded-full flex justify-center items-center mx-2"
-                >
-                  <RedditIconRound className="h-4 w-4 fill-zinc-50" />
-                </a>
-                <a
-                  href={`mailto:?subject=${socialLinkTitle}&body=${postFullUrl}`}
-                  class="bg-zinc-600 p-2 rounded-full flex justify-center items-center mx-2"
-                >
-                  <MailIconRound className="h-4 w-4 stroke-zinc-50" />
-                </a>
-              </div>
-            </div>
-            <Comments slug={entry.id} title={entry.data.title} client:visible />
-          </div>
-        </article>
+  <Container className="mt-16 sm:mt-32">
+    <PostHeroImage image={post.data.cover} />
+    <header class="flex flex-col items-center">
+      <h1
+        class="mt-6 text-4xl text-center font-bold tracking-tight text-zinc-800 dark:text-zinc-100 sm:text-5xl"
+      >
+        {post.data.title}
+      </h1>
+      <div class="flex pt-6 opacity-75" data-pagefind-ignore>
+        <div class="flex justify-center items-center">
+          <CalendarIcon
+            className="w-5 h-5 mr-1 font-medium text-zinc-600 dark:text-zinc-50"
+          />
+          {formatDate(date)}
+        </div>
+        <div class="flex justify-center items-center px-4">
+          <EditIcon
+            className="w-5 h-5 mr-1 font-medium text-zinc-600 dark:text-zinc-50"
+          />
+          <a class="font-medium text-zinc-600 dark:text-zinc-50" href={editUrl}>
+            suggest edit
+          </a>
+        </div>
+        <div class="flex justify-center items-center">
+          <BookIcon
+            className="w-5 h-5 mr-1 font-medium text-zinc-600 dark:text-zinc-50"
+          />
+          <span class="font-medium text-zinc-600 dark:text-zinc-50"
+            >{readingTime}</span
+          >
+        </div>
       </div>
-    </div>
+    </header>
+    <section class="flex-1">
+      <article
+        class="mt-8 prose dark:prose-invert"
+        transition:animate={fade({ duration: "0.5s" })}
+      >
+        <Content />
+      </article>
+      <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+        <a
+          href={`/post/${prev.id}`}
+          class="group p-4 gap-3 flex items-center border rounded-lg hover:bg-black/5 hover:dark:bg-white/10 border-black/15 dark:border-white/20 blend"
+        >
+          <div
+            class="order-2 w-full h-full group-hover:text-black group-hover:dark:text-white blend"
+          >
+            <div class="flex flex-wrap gap-2">
+              <div class="text-sm uppercase">Prev</div>
+            </div>
+            <div class="font-semibold mt-3 text-black dark:text-white">
+              {prev.data.title}
+            </div>
+          </div>
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="20"
+            height="20"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke-width="2.5"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            class="order-1 stroke-current group-hover:stroke-black group-hover:dark:stroke-white rotate-180"
+          >
+            <line
+              x1="5"
+              y1="12"
+              x2="19"
+              y2="12"
+              class="scale-x-0 group-hover:scale-x-100 translate-x-4 group-hover:translate-x-1 transition-all duration-300 ease-in-out"
+            ></line>
+            <polyline
+              points="12 5 19 12 12 19"
+              class="translate-x-0 group-hover:translate-x-1 transition-all duration-300 ease-in-out"
+            ></polyline>
+          </svg>
+        </a>
+        <a
+          href={`/post/${next.id}`}
+          class="group p-4 gap-3 flex items-center border rounded-lg hover:bg-black/5 hover:dark:bg-white/10 border-black/15 dark:border-white/20 transition-colors duration-300 ease-in-out"
+        >
+          <div
+            class="w-full h-full text-right group-hover:text-black group-hover:dark:text-white blend"
+          >
+            <div class="text-sm uppercase">Next</div>
+            <div class="font-semibold mt-3 text-black dark:text-white">
+              {next.data.title}
+            </div>
+          </div>
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="20"
+            height="20"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke-width="2.5"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            class="stroke-current group-hover:stroke-black group-hover:dark:stroke-white"
+          >
+            <line
+              x1="5"
+              y1="12"
+              x2="19"
+              y2="12"
+              class="scale-x-0 group-hover:scale-x-100 translate-x-4 group-hover:translate-x-1 transition-all duration-300 ease-in-out"
+            ></line>
+            <polyline
+              points="12 5 19 12 12 19"
+              class="translate-x-0 group-hover:translate-x-1 transition-all duration-300 ease-in-out"
+            ></polyline>
+          </svg>
+        </a>
+      </div>
+    </section>
   </Container>
 </MainLayout>
