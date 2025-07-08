@@ -92,14 +92,16 @@ const next = items[(index + 1) % items.length]
           <CalendarIcon
             className="w-5 h-5 mr-1 font-medium text-zinc-600 dark:text-zinc-50"
           />
-          {formatDate(date)}
+          <span class="font-medium text-zinc-600 dark:text-zinc-50">
+            {formatDate(date)}
+          </span>
         </div>
         <div class="flex justify-center items-center px-4">
           <EditIcon
             className="w-5 h-5 mr-1 font-medium text-zinc-600 dark:text-zinc-50"
           />
           <a class="font-medium text-zinc-600 dark:text-zinc-50" href={editUrl}>
-            suggest edit
+            edit post
           </a>
         </div>
         <div class="flex justify-center items-center">

@@ -25,16 +25,15 @@ const latestPosts = featuredPosts.map((post) => ({
 ---
 
 <MainLayout>
-  <span slot="header"></span>
   <div
-    class="flex w-[100%] flex-col min-h-screen bg-white dark:bg-zinc-950 relative"
+    class="flex w-[100%] flex-col min-h-screen bg-white dark:bg-zinc-950 absolute"
+    slot="background"
   >
-    <Header />
     <div class="absolute inset-0">
       <DotMatrixThemedWebGLAnimation client:only transition:persist />
     </div>
     <div
-      class="absolute inset-0 bg-[radial-gradient(circle_at_center,_white_20%,_transparent_100%)] dark:bg-[radial-gradient(circle_at_center,_rgba(0,0,0,1)_20%,_transparent_100%)]"
+      class="absolute inset-0 landscape:mt-8 bg-[radial-gradient(circle_at_center,_white_20%,_transparent_100%)] dark:bg-[radial-gradient(circle_at_center,_rgba(0,0,0,1)_20%,_transparent_100%)]"
     >
     </div>
     <div
@@ -45,11 +44,12 @@ const latestPosts = featuredPosts.map((post) => ({
       class="absolute inset-0 bg-gradient-to-t from-white dark:from-zinc-950 to-transparent"
     >
     </div>
-    <Greeting
-      twitterUrl="https://twitter.com/vandycknick"
-      githubUrl="https://github.com/vandycknick"
-      linkedinUrl="https://www.linkedin.com/in/nickvandyck/"
-    />
   </div>
+  <Greeting
+    twitterUrl="https://twitter.com/vandycknick"
+    githubUrl="https://github.com/vandycknick"
+    linkedinUrl="https://www.linkedin.com/in/nickvandyck/"
+    className="landscape:mt-8"
+  />
   <LatestBlogPosts posts={latestPosts} />
 </MainLayout>

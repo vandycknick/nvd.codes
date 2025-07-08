@@ -1,14 +1,26 @@
 import { TwitterIcon, GitHubIcon, LinkedInIcon } from "@/components/Icons"
+import { cn } from "@/utils"
 
 type GreetingProps = {
   githubUrl: string
   twitterUrl: string
   linkedinUrl: string
+  className: string
 }
 
-const Greeting = ({ githubUrl, twitterUrl, linkedinUrl }: GreetingProps) => (
-  <section className="relative mx-auto max-w-7xl px-8 h-full min-h-screen flex justify-center items-center">
-    <div className="max-w-2xl mt-[-60px]">
+const Greeting = ({
+  githubUrl,
+  twitterUrl,
+  linkedinUrl,
+  className,
+}: GreetingProps) => (
+  <section
+    className={cn(
+      "relative mx-auto max-w-7xl px-8 h-full min-h-screen flex justify-center items-center",
+      className,
+    )}
+  >
+    <div className="max-w-2xl">
       <h1 className="text-4xl text-center font-bold  tracking-tight text-zinc-800 dark:text-zinc-100 sm:text-5xl mb-6">
         {" "}
         Hi, I'm<span className="not-italic">👋</span> Nick!

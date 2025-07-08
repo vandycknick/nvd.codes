@@ -73,7 +73,7 @@ const { title, description, openGraph, twitter, extend } = Astro.props
       }
 
       function updateModeWithoutTransitions() {
-        disableTransitionsTemporarily()
+        // disableTransitionsTemporarily()
         updateMode()
       }
 
@@ -97,9 +97,8 @@ const { title, description, openGraph, twitter, extend } = Astro.props
     <QuickSearch client:only="react" />
 
     <div class="relative">
-      <slot name="header">
-        <Header />
-      </slot>
+      <slot name="background" />
+      <Header />
       <main class="w-full max-w-full" transition:name="main">
         <slot />
       </main>
