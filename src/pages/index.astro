@@ -7,8 +7,6 @@ import { LatestBlogPosts } from "@/components/Home/LatestBlogPosts"
 import { DotMatrixThemedWebGLAnimation } from "@/components/Home/DotMatrix"
 import "../styles/global.css"
 
-import Header from "@/components/Header.astro"
-
 const allBlogPosts = await getCollection("blog", (post) => !post.data.draft)
 
 const sorted = allBlogPosts.sort(

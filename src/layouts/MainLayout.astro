@@ -73,7 +73,7 @@ const { title, description, openGraph, twitter, extend } = Astro.props
       }
 
       function updateModeWithoutTransitions() {
-        // disableTransitionsTemporarily()
+        disableTransitionsTemporarily()
         updateMode()
       }
 
@@ -99,7 +99,12 @@ const { title, description, openGraph, twitter, extend } = Astro.props
     <div class="relative">
       <slot name="background" />
       <Header />
-      <main class="w-full max-w-full" transition:name="main">
+
+      <main
+        class="w-full max-w-full"
+        transition:name="main"
+        transition:animate="fade"
+      >
         <slot />
       </main>
 

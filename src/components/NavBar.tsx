@@ -1,13 +1,13 @@
 import { useState } from "react"
 import { motion } from "framer-motion"
-import { Drill, Home, Notebook, User, type LucideIcon } from "lucide-react"
+import { Home, Search } from "lucide-react"
 import { cn } from "@/lib/utils"
 import { navigate } from "astro:transitions/client"
 
 type NavItem = {
-  name: string
+  name?: string
   url: string
-  icon: LucideIcon
+  icon?: "Home" | "Search"
   activeLinkMatch?: RegExp
 }
 
@@ -17,39 +17,30 @@ type NavBarProps = {
   currentPath: string
 }
 
-const items = [
-  { name: "Home", url: "/", icon: Home },
-  {
-    name: "Blog",
-    url: "/blog",
-    icon: Notebook,
-    activeLinkMatch: /(^\/blog[/0-9]*)|(^\/post[/\w-]*)/,
-  },
-  {
-    name: "About",
-    url: "/about",
-    icon: User,
-    activeLinkMatch: /^\/about(\/)?$/,
-  },
-  {
-    name: "Uses",
-    url: "/uses",
-    icon: Drill,
-    activeLinkMatch: /^\/uses(\/)?$/,
-  },
-]
+const resolveIcon = (iconRef: NonNullable<NavItem["icon"]>) => {
+  switch (iconRef) {
+    case "Home":
+      return Home
+    case "Search":
+      return Search
+    default: {
+      const exhaustiveCheck: never = iconRef
+      throw new Error(`Unhandled color case: ${exhaustiveCheck}`)
+    }
+  }
+}
 
 const isActiveTab = (path: string, matcher: RegExp | string) => {
   return matcher instanceof RegExp ? matcher.test(path) : path === matcher
 }
 
-export const NavBar = ({ className, currentPath }: NavBarProps) => {
+export const NavBar = ({ className, currentPath, items }: NavBarProps) => {
   const [currentTab, setCurrentTab] = useState(currentPath)
   return (
     <nav className={cn("pointer-events-auto h-full flex", className)}>
-      <div className="flex items-center gap-3 bg-background/5 bg-white dark:bg-black opacity-90 border border-border backdrop-blur-xs py-1 px-1 rounded-full shadow-lg">
+      <div className="flex items-center gap-1 md:gap-2 bg-background/5 bg-white dark:bg-black opacity-90 border border-border backdrop-blur-xs py-1 px-1 rounded-full shadow-lg">
         {items.map((item) => {
-          const Icon = item.icon
+          const Icon = item.icon ? resolveIcon(item.icon) : undefined
           const isActive = isActiveTab(
             currentTab,
             item.activeLinkMatch ?? item.url,
@@ -57,7 +48,7 @@ export const NavBar = ({ className, currentPath }: NavBarProps) => {
 
           return (
             <a
-              key={item.name}
+              key={item.url}
               href={item.url}
               onClick={(e) => {
                 e.preventDefault()
@@ -65,14 +56,25 @@ export const NavBar = ({ className, currentPath }: NavBarProps) => {
                 navigate(item.url)
               }}
               className={cn(
-                "relative cursor-pointer text-sm font-semibold px-4 py-2 md:py-1 rounded-full transition-colors",
+                "relative cursor-pointer text-sm md:text-base font-semibold px-4 py-2 md:py-1 rounded-full transition-colors",
                 "text-foreground/80 hover:text-primary",
                 isActive && "bg-muted text-primary",
+                "self-stretch",
               )}
             >
-              <span className="hidden md:inline">{item.name}</span>
-              <span className="md:hidden">
-                <Icon size={18} strokeWidth={2.5} />
+              <span className="flex items-center h-full">
+                {Icon && (
+                  <Icon
+                    size={18}
+                    strokeWidth={2.5}
+                    className={cn(item.name && "md:mr-2")}
+                  />
+                )}
+                {item.name && (
+                  <span className={cn(item.icon && "hidden md:inline")}>
+                    {item.name}
+                  </span>
+                )}
               </span>
               {isActive && (
                 <motion.div
