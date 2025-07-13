@@ -6,9 +6,11 @@ interface Props {
 }
 ---
 
-<div
-  class="w-full h-24 md:h-56 opacity-80 dark:opacity-40 bg-center bg-cover rounded-xl"
-  style={`background-image: url(${Astro.props.image.src})`}
-  data-pagefind-meta={`cover:${Astro.props.image.src}`}
->
+<div class="w-full absolute top-0">
+  <div
+    class="mx-auto max-w-2xl lg:max-w-5xl w-full h-56 opacity-80 dark:opacity-40 bg-center bg-cover md:rounded-b-md"
+    style={`background-image: url(${Astro.props.image.src})`}
+    data-pagefind-meta={`cover:${Astro.props.image.src}`}
+  >
+  </div>
 </div>

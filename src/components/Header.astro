@@ -15,17 +15,8 @@ const path = new URL(Astro.url).pathname
     marginBottom: "var(--header-mb)",
   }}
 >
-  <div
-    class="top-0 z-10 h-16 pt-6"
-    style={{ position: "var(--header-position)" }}
-    data-header-wrapper
-  >
-    <Container
-      className="top-[var(--header-top,theme(spacing.6))] w-full"
-      style={{
-        position: "var(--header-inner-position)" as CSSProperties["position"],
-      }}
-    >
+  <div class="top-0 sticky z-10 pt-6 pb-6" data-header-wrapper>
+    <Container className="w-full">
       <div class="relative flex gap-4">
         <div class="hidden md:flex flex-1">
           <slot name="head-left" />
@@ -79,19 +70,14 @@ const path = new URL(Astro.url).pathname
   import { clamp } from "../utils"
 
   let header = document.querySelector("[data-header-wrapper]")
-  let isInitial = true
-  let upDelay = 64
-  let downDelay = 0
+  const upDelay = 64
+  const downDelay = 0
 
   function setProperty(property: string, value: string) {
     document.documentElement.style.setProperty(property, value)
   }
 
-  function removeProperty(property: string) {
-    document.documentElement.style.removeProperty(property)
-  }
-
-  function updateHeaderStyles() {
+  function updateStyles(reset: boolean) {
     if (header == null) return
 
     const { top, height } = header.getBoundingClientRect()
@@ -101,49 +87,29 @@ const path = new URL(Astro.url).pathname
       document.body.scrollHeight - window.innerHeight,
     )
 
-    if (isInitial) {
-      setProperty("--header-position", "sticky")
-    }
-
-    setProperty("--content-offset", `${downDelay}px`)
-
-    if (isInitial || scrollY < downDelay) {
+    if (reset) {
       setProperty("--header-height", `${downDelay + height}px`)
       setProperty("--header-mb", `${-downDelay}px`)
-    } else if (top + height < -upDelay) {
-      let offset = Math.max(height, scrollY - upDelay)
+    }
+
+    if (top + height < -upDelay) {
+      const offset = Math.max(height, scrollY - upDelay)
       setProperty("--header-height", `${offset}px`)
       setProperty("--header-mb", `${height - offset}px`)
     } else if (top === 0) {
       setProperty("--header-height", `${scrollY + height}px`)
       setProperty("--header-mb", `${-scrollY}px`)
     }
-
-    if (top === 0 && scrollY > 0 && scrollY >= downDelay) {
-      setProperty("--header-inner-position", "fixed")
-      removeProperty("--header-top")
-      removeProperty("--avatar-top")
-    } else {
-      removeProperty("--header-inner-position")
-      setProperty("--header-top", "0px")
-      setProperty("--avatar-top", "0px")
-    }
-  }
-
-  function updateStyles() {
-    updateHeaderStyles()
-    isInitial = false
   }
 
   document.addEventListener("astro:after-swap", () => {
     header = document.querySelector("[data-header-wrapper]")
-    isInitial = true
-    upDelay = 64
-    downDelay = 0
 
-    updateStyles()
+    updateStyles(true)
   })
-
-  window.addEventListener("scroll", updateStyles, { passive: true })
-  window.addEventListener("resize", updateStyles)
+  window.addEventListener("DOMContentLoaded", () => updateStyles(true), false)
+  window.addEventListener("scroll", () => updateStyles(false), {
+    passive: true,
+  })
+  window.addEventListener("resize", () => updateStyles(false))
 </script>

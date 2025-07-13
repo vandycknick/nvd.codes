@@ -19,7 +19,7 @@ interface Props {
 const { title, description, openGraph, twitter, extend } = Astro.props
 ---
 
-<html class="h-full antialiased" lang="en">
+<html class="h-full min-h-screen antialiased" lang="en">
   <head>
     <meta charset="utf-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
@@ -93,7 +93,7 @@ const { title, description, openGraph, twitter, extend } = Astro.props
       )
     </script>
   </head>
-  <body class="flex h-full flex-col bg-white dark:bg-zinc-950">
+  <body class="flex flex-col flex-1 bg-white dark:bg-zinc-950">
     <QuickSearch client:only="react" />
 
     <div class="relative">
