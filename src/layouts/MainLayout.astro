@@ -93,23 +93,24 @@ const { title, description, openGraph, twitter, extend } = Astro.props
       )
     </script>
   </head>
-  <body class="flex flex-col flex-1 bg-white dark:bg-zinc-950">
+  <body class="flex flex-col min-h-screen bg-white dark:bg-zinc-950">
     <QuickSearch client:only="react" />
 
     <div class="relative">
       <slot name="background" />
-      <Header />
-
-      <main
-        class="w-full max-w-full"
-        transition:name="main"
-        transition:animate="fade"
-      >
-        <slot />
-      </main>
-
-      <Footer />
     </div>
+
+    <Header />
+
+    <main
+      class="flex-1 w-full max-w-full"
+      transition:name="main"
+      transition:animate="fade"
+    >
+      <slot />
+    </main>
+
+    <Footer />
     <script>
       document.addEventListener("astro:before-swap", (e) =>
         [...e.newDocument.head.querySelectorAll('link[as="font"]')].forEach(

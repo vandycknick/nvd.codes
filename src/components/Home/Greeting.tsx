@@ -5,7 +5,7 @@ type GreetingProps = {
   githubUrl: string
   twitterUrl: string
   linkedinUrl: string
-  className: string
+  className?: string
 }
 
 const Greeting = ({
@@ -16,7 +16,7 @@ const Greeting = ({
 }: GreetingProps) => (
   <section
     className={cn(
-      "relative mx-auto max-w-7xl px-8 h-full min-h-screen flex justify-center items-center",
+      "relative mx-auto max-w-7xl px-8 min-h-[calc(100vh-94px)] flex justify-center items-center",
       className,
     )}
   >
