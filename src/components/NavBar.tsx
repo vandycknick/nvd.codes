@@ -1,8 +1,11 @@
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import { motion } from "framer-motion"
 import { Home, Search } from "lucide-react"
 import { cn } from "@/lib/utils"
-import { navigate } from "astro:transitions/client"
+import {
+  navigate,
+  type TransitionBeforeSwapEvent,
+} from "astro:transitions/client"
 
 type NavItem = {
   name?: string
@@ -36,6 +39,15 @@ const isActiveTab = (path: string, matcher: RegExp | string) => {
 
 export const NavBar = ({ className, currentPath, items }: NavBarProps) => {
   const [currentTab, setCurrentTab] = useState(currentPath)
+
+  useEffect(() => {
+    const routeChanges = (e: TransitionBeforeSwapEvent) =>
+      setCurrentTab(e.to.pathname)
+
+    document.addEventListener("astro:before-swap", routeChanges)
+    return () => document.removeEventListener("astro:before-swap", routeChanges)
+  }, [setCurrentTab])
+
   return (
     <nav className={cn("pointer-events-auto h-full flex", className)}>
       <div className="flex items-center gap-1 md:gap-2 bg-background/5 bg-white dark:bg-black opacity-90 border border-border backdrop-blur-xs py-1 px-1 rounded-full shadow-lg">
@@ -52,6 +64,7 @@ export const NavBar = ({ className, currentPath, items }: NavBarProps) => {
               href={item.url}
               onClick={(e) => {
                 e.preventDefault()
+                if (location.pathname === item.url) return
                 setCurrentTab(item.url)
                 navigate(item.url)
               }}
