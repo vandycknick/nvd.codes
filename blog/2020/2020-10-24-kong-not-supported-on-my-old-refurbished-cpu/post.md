@@ -17,7 +17,7 @@ SSE4 (Streaming SIMD Extensions 4) is a SIMD CPU instruction set used in the Int
 
 To detect support for these extensions on a Linux machine you need to have a look at the `/proc/cpuinfo` file:
 
-```bash
+```bash withOutput
 $ cat /proc/cpuinfo
 
 processor       : 0
