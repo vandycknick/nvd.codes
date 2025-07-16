@@ -50,7 +50,7 @@ export const NavBar = ({ className, currentPath, items }: NavBarProps) => {
 
   return (
     <nav className={cn("pointer-events-auto h-full flex", className)}>
-      <div className="flex items-center gap-1 md:gap-2 bg-background/5 bg-white dark:bg-black opacity-90 border border-border backdrop-blur-xs py-1 px-1 rounded-full shadow-lg">
+      <div className="flex items-center gap-1 md:gap-2 retina:gap-1 bg-background/5 bg-white dark:bg-black opacity-90 border border-border backdrop-blur-xs py-1 px-1 rounded-full shadow-lg">
         {items.map((item) => {
           const Icon = item.icon ? resolveIcon(item.icon) : undefined
           const isActive = isActiveTab(
@@ -69,7 +69,7 @@ export const NavBar = ({ className, currentPath, items }: NavBarProps) => {
                 navigate(item.url)
               }}
               className={cn(
-                "relative cursor-pointer text-sm md:text-base font-semibold px-4 py-2 md:py-1 rounded-full transition-colors",
+                "relative cursor-pointer text-sm md:text-base retina:text-sm font-semibold px-4 py-2 md:py-1 rounded-full transition-colors",
                 "text-foreground/80 hover:text-primary",
                 isActive && "bg-muted text-primary",
                 "self-stretch",

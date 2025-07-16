@@ -3,7 +3,6 @@ import { type CollectionEntry, getCollection, render } from "astro:content"
 import { fade } from "astro:transitions"
 import { CalendarIcon, BookIcon, EditIcon } from "lucide-react"
 
-import PostHeroImage from "@/components/Post/PostHeroImage.astro"
 import MainLayout from "@/layouts/MainLayout.astro"
 import { formatDate } from "@/utils"
 import { Container } from "@/components/Container.tsx"
@@ -81,14 +80,14 @@ const next = items[(index + 1) % items.length]
 >
   <div class="w-full absolute top-0 z-10" slot="background">
     <div
-      class="lg:mx-auto max-w-full lg:max-w-5xl w-full h-100 opacity-80 bg-center bg-cover lg:rounded-b-md"
+      class="lg:mx-auto max-w-full lg:max-w-5xl w-full h-80 opacity-80 bg-center bg-cover lg:rounded-b-md"
       style={`background-image: url(${post.data.cover.src})`}
       data-pagefind-meta={`cover:${post.data.cover.src}`}
     >
     </div>
 
     <div
-      class="absolute left-0 right-0 bottom-0 mx-auto max-w-full lg:max-w-5xl backdrop-blur-xl bg-black/70 pt-16 pb-6 lg:rounded-b-md"
+      class="absolute left-0 right-0 bottom-0 mx-auto max-w-full lg:max-w-5xl backdrop-blur-xl bg-black/60 pt-12 pb-6 lg:rounded-b-sm"
       style="mask-image: linear-gradient(
         to bottom,
         hsla(0, 0%, 0%, 0) 0%,
@@ -110,12 +109,12 @@ const next = items[(index + 1) % items.length]
     );"
     >
       <h1
-        class="text-3xl text-center font-bold tracking-tight text-white sm:text-5xl"
+        class="text-3xl sm:text-4xl text-center font-bold tracking-tight text-white"
       >
         {post.data.title}
       </h1>
       <section class="flex flex-col items-center">
-        <div class="flex pt-6 opacity-100" data-pagefind-ignore>
+        <div class="flex pt-6" data-pagefind-ignore>
           <div class="flex justify-center items-center">
             <CalendarIcon className="w-5 h-5 mr-1 font-bold text-white" />
             <span class="font-bold text-white">
@@ -135,7 +134,7 @@ const next = items[(index + 1) % items.length]
     </div>
   </div>
 
-  <Container className="pt-80">
+  <Container className="pt-60">
     <header class="flex flex-col items-center"></header>
     <section class="flex-1">
       <article

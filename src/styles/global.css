@@ -7,6 +7,13 @@
 
 @custom-variant dark (&:where(.dark, .dark *));
 
+@custom-variant retina {
+  /* Use standard resolution query + WebKit fallback for older Safari */
+  @media (-webkit-min-device-pixel-ratio: 2), (min-resolution: 2dppx) {
+    @slot;
+  }
+}
+
 @theme {
   --text-xs: 0.8125rem;
   --text-xs--line-height: 1.5rem;
