@@ -159,7 +159,8 @@ jobs:
 
   infra-deploy-staging:
     uses: ./.github/workflows/terraform-deploy.yml
+    needs:
+      - infra-init
     with:
       environment: staging
-      aws-region: ${{ vars.AWS_REGION }}
       terraform-version: 1.12.2

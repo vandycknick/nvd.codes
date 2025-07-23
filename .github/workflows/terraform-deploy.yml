@@ -1,10 +1,6 @@
 on:
   workflow_call:
     inputs:
-      aws-region:
-        required: true
-        type: string
-
       terraform-version:
         required: true
         type: string
@@ -32,7 +28,7 @@ jobs:
       - name: Assume AWS Role
         uses: aws-actions/configure-aws-credentials@v4
         with:
-          aws-region: ${{ inputs.aws-region }}
+          aws-region: ${{ vars.AWS_REGION }}
           role-to-assume: ${{ secrets.AWS_TERRAFORM_ROLE }}
 
       - name: Terraform Init
