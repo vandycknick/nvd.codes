@@ -48,9 +48,9 @@ jobs:
           TF_WORKSPACE: ${{ inputs.environment }}
 
       - name: Terraform Plan
-        run: terraform plan
+        run: ls -alh . && terraform plan
         working-directory: ${{ inputs.working-directory }}
         env:
           TF_WORKSPACE: ${{ inputs.environment }}
-          TF_CLI_ARGS_plan: '-var-file="environments/${{ inputs.environment }}.tfvars"'
+          TF_CLI_ARGS_plan: '-var-file=./environments/${{ inputs.environment }}.tfvars'
           CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
