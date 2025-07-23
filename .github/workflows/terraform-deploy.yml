@@ -8,6 +8,12 @@ on:
       environment:
         required: true
         type: string
+
+      working-directory:
+        required: false
+        type: string
+        default: .
+
     secrets:
       AWS_TERRAFORM_ROLE:
         required: true
@@ -37,11 +43,13 @@ jobs:
 
       - name: Terraform Init
         run: terraform init
+        working-directory: ${{ inputs.working-directory }}
         env:
           TF_WORKSPACE: ${{ inputs.environment }}
 
       - name: Terraform Plan
         run: terraform plan
+        working-directory: ${{ inputs.working-directory }}
         env:
           TF_WORKSPACE: ${{ inputs.environment }}
           TF_CLI_ARGS_plan: '-var-file="environments/${{ inputs.environment }}.tfvars"'
