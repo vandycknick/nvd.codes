@@ -13,7 +13,7 @@ on:
         required: true
         type: string
 
-job:
+jobs:
   deploy:
     name: Terraform Deploy
     runs-on: ubuntu-latest
