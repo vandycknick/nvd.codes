@@ -11,10 +11,8 @@ on:
     secrets:
       AWS_TERRAFORM_ROLE:
         required: true
-        type: string
       CLOUDFLARE_API_TOKEN:
         required: true
-        type: string
 jobs:
   deploy:
     name: Deploy
