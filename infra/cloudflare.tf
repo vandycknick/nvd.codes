@@ -1,5 +1,5 @@
 data "cloudflare_zones" "sh" {
-  name = var.domain_name
+  name = var.zone
 }
 
 locals {

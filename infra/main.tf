@@ -3,7 +3,7 @@ resource "aws_s3_bucket" "website_sh" {
 
   tags = {
     app         = "website"
-    environment = "production"
+    environment = terraform.workspace
   }
 }
 
@@ -32,7 +32,7 @@ resource "aws_s3_bucket_server_side_encryption_configuration" "website_sh" {
 }
 
 resource "aws_cloudfront_origin_access_control" "website_sh" {
-  name                              = "oac-${replace(aws_s3_bucket.website_sh.bucket, ".", "-")}"
+  name                              = "oac-${replace(var.domain_name, ".", "-")}"
   description                       = "OAC for ${aws_s3_bucket.website_sh.bucket}"
   origin_access_control_origin_type = "s3"
   signing_behavior                  = "always" # always sign origin requests
@@ -52,12 +52,12 @@ resource "aws_acm_certificate" "cert_sh" {
 
   tags = {
     app         = "website"
-    environment = "production"
+    environment = terraform.workspace
   }
 }
 
 resource "aws_cloudfront_response_headers_policy" "security_headers_policy" {
-  name = "security_headers_policy"
+  name = "security-headers-policy-${terraform.workspace}"
 
   security_headers_config {
     content_type_options {
@@ -101,7 +101,7 @@ resource "aws_cloudfront_response_headers_policy" "security_headers_policy" {
 }
 
 resource "aws_cloudfront_cache_policy" "default_cache_policy" {
-  name        = "default_cache_policy"
+  name        = "default-cache-policy-${terraform.workspace}"
   comment     = "default cache policy"
   default_ttl = 60
   min_ttl     = 1
@@ -121,7 +121,7 @@ resource "aws_cloudfront_cache_policy" "default_cache_policy" {
 }
 
 resource "aws_cloudfront_cache_policy" "astro_cache_policy" {
-  name        = "astro_cache_policy"
+  name        = "astro-cache-policy-${terraform.workspace}"
   comment     = "Cache policy for files in _astro folder"
   default_ttl = 3794400
   min_ttl     = 1
@@ -141,7 +141,7 @@ resource "aws_cloudfront_cache_policy" "astro_cache_policy" {
 }
 
 resource "aws_cloudfront_function" "website_sh_dir_indexes" {
-  name    = "dir-indexes-nvd-sh"
+  name    = "dir-indexes-${terraform.workspace}"
   runtime = "cloudfront-js-2.0"
   comment = "Append index.html for directory-style URLs"
   publish = true
@@ -219,7 +219,7 @@ resource "aws_cloudfront_distribution" "website_sh" {
 
   tags = {
     app         = "website"
-    environment = "production"
+    environment = terraform.workspace
   }
 }
 

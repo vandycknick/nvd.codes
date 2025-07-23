@@ -1,0 +1,46 @@
+on:
+  workflow_call:
+    inputs:
+      aws-region:
+        required: true
+        type: string
+
+      terraform-version:
+        required: true
+        type: string
+
+      environment:
+        required: true
+        type: string
+
+job:
+  deploy:
+    name: Terraform Deploy
+    runs-on: ubuntu-latest
+    environment: ${{ inputs.environment }}
+    steps:
+      - name: Clone Repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
+
+      - name: Install Terraform
+        uses: hashicorp/setup-terraform@v3
+        with:
+          terraform_version: ${{ inputs.terraform-version }}
+
+      - name: Assume AWS Role
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          aws-region: ${{ inputs.aws-region }}
+          role-to-assume: ${{ secrets.AWS_TERRAFORM_ROLE }}
+
+      - name: Terraform Init
+        run: terraform init
+
+      - name: Terraform Plan
+        run: terraform plan
+        env:
+          TF_WORKSPACE: ${{ inputs.environment }}
+          TF_CLI_ARGS_plan: '-var-file="environments/${{ inputs.environment }}.tfvars"'
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
