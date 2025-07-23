@@ -157,10 +157,14 @@ jobs:
       - name: Validate
         run: make check.infra
 
-  infra-deploy-staging:
+  infra-staging:
+    name: Infra Staging
     uses: ./.github/workflows/terraform-deploy.yml
     needs:
       - infra-init
     with:
       environment: staging
       terraform-version: 1.12.2
+    secrets:
+      AWS_TERRAFORM_ROLE: ${{ secrets.AWS_TERRAFORM_ROLE }}
+      CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}

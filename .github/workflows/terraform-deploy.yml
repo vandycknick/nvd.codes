@@ -8,10 +8,16 @@ on:
       environment:
         required: true
         type: string
-
+    secrets:
+      AWS_TERRAFORM_ROLE:
+        required: true
+        type: string
+      CLOUDFLARE_API_TOKEN:
+        required: true
+        type: string
 jobs:
   deploy:
-    name: Terraform Deploy
+    name: Deploy
     runs-on: ubuntu-latest
     environment: ${{ inputs.environment }}
     steps:
@@ -33,6 +39,8 @@ jobs:
 
       - name: Terraform Init
         run: terraform init
+        env:
+          TF_WORKSPACE: ${{ inputs.environment }}
 
       - name: Terraform Plan
         run: terraform plan
