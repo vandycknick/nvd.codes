@@ -116,9 +116,10 @@ jobs:
   #     - name: Deploy
   #       run: make deploy
 
-  infra-test:
+  infra-init:
     name: Init Infrastructure
     runs-on: ubuntu-latest
+    environment: staging
     steps:
       - name: Clone Repository
         uses: actions/checkout@v4
@@ -148,6 +149,15 @@ jobs:
         env:
           # https://github.com/terraform-linters/tflint/blob/master/docs/user-guide/plugins.md#avoiding-rate-limiting
           GITHUB_TOKEN: ${{ github.token }}
+
+      - name: Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          aws-region: ${{ env.AWS_REGION }}
+          role-to-assume: ${{ secrets.AWS_TERRAFORM_ROLE }}
+
+      - name: Validate
+        run: terraform init
 
       - name: Validate
         run: make check.infra
