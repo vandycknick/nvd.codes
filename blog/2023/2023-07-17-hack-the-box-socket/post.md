@@ -790,7 +790,7 @@ select * from versions where version = "[version]";
 
 ### Using SQLMap
 
-Because of the weird websocket implementation, I can’t use `sqlmap` directly as I did in [Soccer.](https://nvd.codes/post/hack-the-box-soccer/) While reading online, I found [this](https://rayhan0x01.github.io/ctf/2021/04/02/blind-sqli-over-websocket-automation.html) article describing how to do a blind SQLi over a websocket connection. While `sqlmap` nowadays natively supports websocket connections, it still has some limitations. But in this case, I can use the same idea to abstract the weird web socket implementation behind a simple `GET` request.
+Because of the weird websocket implementation, I can’t use `sqlmap` directly as I did in [Soccer.](https://nvd.sh/post/hack-the-box-soccer/) While reading online, I found [this](https://rayhan0x01.github.io/ctf/2021/04/02/blind-sqli-over-websocket-automation.html) article describing how to do a blind SQLi over a websocket connection. While `sqlmap` nowadays natively supports websocket connections, it still has some limitations. But in this case, I can use the same idea to abstract the weird web socket implementation behind a simple `GET` request.
 
 The idea is that I’ll spin up a webserver on [localhost](http://localhost) that exposes a `GET` endpoint with a vulnerable query parameter that will then correctly forward this request to the websocket endpoint. All I have to do then is point `sqlmap` to my local proxy. I modified the script slightly to use the `json` module instead manually wrangling JSON payloads and I cleaned up a few more related to error handling to make debugging easier. My server looked something like this
 

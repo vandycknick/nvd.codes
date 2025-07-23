@@ -55,7 +55,9 @@ check.app:
 .PHONY: check.infra
 check.infra:
 	cd ${INFRA_DIR} && \
-		terraform fmt -check
+		terraform fmt -check && \
+		terraform validate && \
+		tflint
 
 .PHONY: build
 build:
@@ -68,7 +70,7 @@ preview: build
 
 .PHONY: deploy
 deploy:
-	@yarn workspace @nvd.codes/s3-deploy execute --bucket nvd.codes --directory ${BUILD_DIR}
+	@yarn workspace @nvd.codes/s3-deploy execute --bucket nvd.sh --prefix be4dd99 --directory ${BUILD_DIR}
 
 .PHONY: infra.init
 infra.init:

@@ -10,113 +10,113 @@ permissions:
   id-token: write
 
 jobs:
-  app-test:
-    name: Test
-    runs-on: ubuntu-latest
-    steps:
-      - name: Clone Repository
-        uses: actions/checkout@v4
-        with:
-          fetch-depth: 1
+  # app-test:
+  #   name: Test
+  #   runs-on: ubuntu-latest
+  #   steps:
+  #     - name: Clone Repository
+  #       uses: actions/checkout@v4
+  #       with:
+  #         fetch-depth: 1
+  #
+  #     - name: Enable Corepack
+  #       run: corepack enable
+  #
+  #     - name: Install Node
+  #       uses: actions/setup-node@v4
+  #       with:
+  #         node-version: 20
+  #         cache: 'yarn'
+  #
+  #     - name: Use latest yarn
+  #       run: make setup.yarn
+  #
+  #     - name: Install Dependencies
+  #       run: make install.yarn
+  #
+  #     - name: Lint Code
+  #       run: make check.app
+  #
+  # app-build:
+  #   name: Build
+  #   runs-on: ubuntu-latest
+  #   environment: production
+  #   needs:
+  #     - app-test
+  #   steps:
+  #     - name: Clone Repository
+  #       uses: actions/checkout@v4
+  #       with:
+  #         fetch-depth: 1
+  #
+  #     - name: Enable Corepack
+  #       run: corepack enable
+  #
+  #     - name: Install Node
+  #       uses: actions/setup-node@v4
+  #       with:
+  #         node-version: 20
+  #         cache: 'yarn'
+  #
+  #     - name: Use latest yarn
+  #       run: make setup.yarn
+  #
+  #     - name: Install Dependencies
+  #       run: make install.yarn
+  #
+  #     - name: Build blog
+  #       run: make build
+  #
+  #     - name: Archive blog
+  #       uses: actions/upload-artifact@v4
+  #       with:
+  #         name: dist-blog
+  #         path: ./dist
+  #
+  # app-deploy:
+  #   name: Deploy production
+  #   runs-on: ubuntu-latest
+  #   environment: production
+  #   needs:
+  #     - app-test
+  #     - app-build
+  #   steps:
+  #     - name: Clone Repository
+  #       uses: actions/checkout@v4
+  #       with:
+  #         fetch-depth: 1
+  #
+  #     - name: Enable Corepack
+  #       run: corepack enable
+  #
+  #     - name: Install Node
+  #       uses: actions/setup-node@v4
+  #       with:
+  #         node-version: 20
+  #         cache: 'yarn'
+  #
+  #     - name: Use latest yarn
+  #       run: make setup.yarn
+  #
+  #     - name: Install Dependencies
+  #       run: make install.yarn
+  #
+  #     - name: Configure AWS Credentials
+  #       uses: aws-actions/configure-aws-credentials@v4
+  #       with:
+  #         aws-region: eu-central-1
+  #         role-to-assume: ${{ secrets.AWS_ROLE_NAME }}
+  #
+  #     - name: Download blog artifact
+  #       uses: actions/download-artifact@v4
+  #       with:
+  #         name: dist-blog
+  #         path: dist
+  #
+  #     - name: Deploy
+  #       run: make deploy
 
-      - name: Enable Corepack
-        run: corepack enable
-
-      - name: Install Node
-        uses: actions/setup-node@v4
-        with:
-          node-version: 20
-          cache: 'yarn'
-
-      - name: Use latest yarn
-        run: make setup.yarn
-
-      - name: Install Dependencies
-        run: make install.yarn
-
-      - name: Lint Code
-        run: make check.app
-
-  app-build:
-    name: Build
-    runs-on: ubuntu-latest
-    environment: production
-    needs:
-      - app-test
-    steps:
-      - name: Clone Repository
-        uses: actions/checkout@v4
-        with:
-          fetch-depth: 1
-
-      - name: Enable Corepack
-        run: corepack enable
-
-      - name: Install Node
-        uses: actions/setup-node@v4
-        with:
-          node-version: 20
-          cache: 'yarn'
-
-      - name: Use latest yarn
-        run: make setup.yarn
-
-      - name: Install Dependencies
-        run: make install.yarn
-
-      - name: Build blog
-        run: make build
-
-      - name: Archive blog
-        uses: actions/upload-artifact@v4
-        with:
-          name: dist-blog
-          path: ./dist
-
-  app-deploy:
-    name: Deploy production
-    runs-on: ubuntu-latest
-    environment: production
-    needs:
-      - app-test
-      - app-build
-    steps:
-      - name: Clone Repository
-        uses: actions/checkout@v4
-        with:
-          fetch-depth: 1
-
-      - name: Enable Corepack
-        run: corepack enable
-
-      - name: Install Node
-        uses: actions/setup-node@v4
-        with:
-          node-version: 20
-          cache: 'yarn'
-
-      - name: Use latest yarn
-        run: make setup.yarn
-
-      - name: Install Dependencies
-        run: make install.yarn
-
-      - name: Configure AWS Credentials
-        uses: aws-actions/configure-aws-credentials@v4
-        with:
-          aws-region: eu-central-1
-          role-to-assume: ${{ secrets.AWS_ROLE_NAME }}
-
-      - name: Download blog artifact
-        uses: actions/download-artifact@v4
-        with:
-          name: dist-blog
-          path: dist
-
-      - name: Deploy
-        run: make deploy
-
-  infra-init:
+  infra-test:
     name: Init Infrastructure
     runs-on: ubuntu-latest
     steps:
@@ -128,10 +128,26 @@ jobs:
       - name: Install Terraform
         uses: hashicorp/setup-terraform@v3
         with:
-          terraform_version: 1.2.4
+          terraform_version: 1.12.2
 
-      - name: Lint
+      - uses: actions/cache@v4
+        name: Cache tflint plugins
+        with:
+          path: ~/.tflint.d/plugins
+          key: ${{ matrix.os }}-tflint-${{ hashFiles('.tflint.hcl') }}
+
+      - uses: terraform-linters/setup-tflint@v4
+        name: InstallTFLint
+        with:
+          tflint_version: v0.52.0
+      - name: Show version
+        run: tflint --version
+
+      - name: Init TFLint
+        run: tflint --init
+        env:
+          # https://github.com/terraform-linters/tflint/blob/master/docs/user-guide/plugins.md#avoiding-rate-limiting
+          GITHUB_TOKEN: ${{ github.token }}
+
+      - name: Validate
         run: make check.infra
-
-      # - name: Init
-      #   run: make infra.init

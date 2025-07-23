@@ -1,6 +1,6 @@
 import { readdir } from "node:fs/promises"
 import { createReadStream } from "node:fs"
-import { resolve, relative, extname } from "node:path"
+import { resolve, relative, extname, join } from "node:path"
 import yargs from "yargs"
 import { hideBin } from "yargs/helpers"
 import { Upload } from "@aws-sdk/lib-storage"
@@ -32,9 +32,14 @@ const main = async (args: string[]) => {
       alias: "b",
       type: "string",
     })
+    .option("prefix", {
+      alias: "p",
+      type: "string",
+      default: "",
+    })
     .parseAsync()
 
-  const { directory, bucket } = argv
+  const { directory, bucket, prefix } = argv
 
   if (directory === undefined || bucket === undefined) {
     throw new Error("--directory or --bucket should be set!")
@@ -60,7 +65,7 @@ const main = async (args: string[]) => {
     const response = await new Upload({
       client: s3,
       params: {
-        Key: rel,
+        Key: join(prefix, rel),
         Bucket: bucket,
         Body: createReadStream(filePath),
         ContentType: contentType,
@@ -68,7 +73,7 @@ const main = async (args: string[]) => {
     }).done()
     cnt++
     printf(
-      `Uploaded ${rel} as ${contentType}, ${cnt}/${files.length} completed!`,
+      `Uploaded ${join(prefix, rel)} as ${contentType}, ${cnt}/${files.length} completed!`,
     )
     return response
   })

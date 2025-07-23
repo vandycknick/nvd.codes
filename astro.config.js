@@ -20,7 +20,7 @@ export function remarkReadingTime() {
 
 // https://astro.build/config
 export default defineConfig({
-  site: "https://nvd.codes",
+  site: "https://nvd.sh",
 
   markdown: {
     remarkPlugins: [remarkReadingTime],

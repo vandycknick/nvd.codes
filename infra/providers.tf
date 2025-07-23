@@ -3,7 +3,7 @@ terraform {
 
   required_providers {
     aws = {
-      version = "~> 5.97"
+      version = "~> 6.4"
       source  = "hashicorp/aws"
     }
 
@@ -16,6 +16,13 @@ terraform {
       source  = "hashicorp/random"
       version = "~> 3.7"
     }
+  }
+
+  backend "s3" {
+    bucket       = "nvd-codes-terraform"
+    key          = "blog.tfstate"
+    use_lockfile = true
+    encrypt      = true
   }
 }
 

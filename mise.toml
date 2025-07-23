@@ -1,4 +1,4 @@
 [tools]
 node = "22"
-terraform = "1.11"
+terraform = "1.12"
 yarn = "4"

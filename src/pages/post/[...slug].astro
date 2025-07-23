@@ -20,9 +20,9 @@ const post = Astro.props
 const { title, description, date, categories } = post.data
 const { Content, remarkPluginFrontmatter } = await render(post)
 
-const postFullUrl = `https://nvd.codes/post/${post.id}`
+const postFullUrl = `https://nvd.sh/post/${post.id}`
 const socialLinkTitle = `Nick Van Dyck: ${post.data.title}`
-const editUrl = `https://github.com/vandycknick/nvd.codes/edit/main/${post.filePath}`
+const editUrl = `https://github.com/vandycknick/nvd.sh/edit/main/${post.filePath}`
 const readingTime = remarkPluginFrontmatter.readingTime
 
 const coverImage = post.data.cover
@@ -43,7 +43,7 @@ const next = items[(index + 1) % items.length]
     basic: {
       type: "article",
       title: title,
-      image: `https://nvd.codes${coverImage.src}`,
+      image: `https://nvd.sh{coverImage.src}`,
       url: postFullUrl,
     },
     article: {
@@ -55,7 +55,7 @@ const next = items[(index + 1) % items.length]
   twitter={{
     card: "summary",
     creator: "@vandycknick",
-    image: `https://nvd.codes${coverImage.src}`,
+    image: `https://nvd.sh{coverImage.src}`,
   }}
   extend={{
     meta: [

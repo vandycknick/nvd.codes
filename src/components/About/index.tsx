@@ -77,7 +77,7 @@ export function About() {
               Outside of work, I enjoy tinkering with home automation and
               spending time with my family. If you'd like to get in touch or
               chat about building great software, feel free to reach out at
-              info@nvd.codes — always happy to connect.
+              info@nvd.sh — always happy to connect.
             </p>
           </div>
         </div>
@@ -104,13 +104,13 @@ export function About() {
               Follow on LinkedIn
             </SocialLink>
             <SocialLink
-              href="mailto:info@nvd.codes"
+              href="mailto:info@nvd.sh"
               icon={MailOpenIcon}
               fill="fill-zinc-100 dark:fill-zinc-500"
               stroke="stroke-zinc-400  dark:stroke-zinc-700"
               className="mt-8 border-t border-zinc-100 pt-8 dark:border-zinc-700/40"
             >
-              info@nvd.codes
+              info@nvd.sh
             </SocialLink>
           </ul>
           <Resume />

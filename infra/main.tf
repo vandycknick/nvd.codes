@@ -1,79 +1,58 @@
-resource "aws_s3_bucket" "website" {
-  bucket = "nvd.codes"
+resource "aws_s3_bucket" "website_sh" {
+  bucket = var.domain_name
 
   tags = {
-    Name = "Blog"
+    app         = "website"
+    environment = "production"
   }
 }
 
-resource "aws_s3_bucket_acl" "website_acl" {
-  bucket = aws_s3_bucket.website.id
-  acl    = "private"
-}
-
-resource "aws_s3_bucket_website_configuration" "website_config" {
-  bucket = aws_s3_bucket.website.id
-  index_document {
-    suffix = "index.html"
-  }
-
-  error_document {
-    key = "404.html"
+resource "aws_s3_bucket_ownership_controls" "website_sh" {
+  bucket = aws_s3_bucket.website_sh.id
+  rule {
+    object_ownership = "BucketOwnerEnforced"
   }
 }
 
-resource "random_password" "referer" {
-  count = var.password_enabled ? 1 : 0
-
-  length  = 32
-  special = false
+resource "aws_s3_bucket_public_access_block" "website_sh" {
+  bucket                  = aws_s3_bucket.website_sh.id
+  block_public_acls       = true
+  block_public_policy     = true
+  ignore_public_acls      = true
+  restrict_public_buckets = true
 }
 
-# resource "aws_cloudfront_origin_access_identity" "origin_access_identity" {
-#   comment = "nvd.codes Cloudfront origin access identity"
-# }
-
-data "aws_iam_policy_document" "s3_policy" {
-  statement {
-    actions   = ["s3:GetObject"]
-    resources = ["${aws_s3_bucket.website.arn}/*"]
-
-    principals {
-      type        = "AWS"
-      identifiers = ["*"]
-    }
-
-    dynamic "condition" {
-      for_each = [for r in random_password.referer : r.result]
-
-      content {
-        test     = "StringEquals"
-        variable = "aws:referer"
-        values   = [condition.value]
-      }
+resource "aws_s3_bucket_server_side_encryption_configuration" "website_sh" {
+  bucket = aws_s3_bucket.website_sh.id
+  rule {
+    apply_server_side_encryption_by_default {
+      sse_algorithm = "AES256"
     }
   }
 }
 
-resource "aws_s3_bucket_policy" "website_s3_policy" {
-  bucket = aws_s3_bucket.website.id
-  policy = data.aws_iam_policy_document.s3_policy.json
+resource "aws_cloudfront_origin_access_control" "website_sh" {
+  name                              = "oac-${replace(aws_s3_bucket.website_sh.bucket, ".", "-")}"
+  description                       = "OAC for ${aws_s3_bucket.website_sh.bucket}"
+  origin_access_control_origin_type = "s3"
+  signing_behavior                  = "always" # always sign origin requests
+  signing_protocol                  = "sigv4"  # required for S3
 }
 
-resource "aws_s3_bucket_public_access_block" "website_access" {
-  bucket = aws_s3_bucket.website.id
-}
-
-# Certs for cloudfront have to be created in us-east-1
-resource "aws_acm_certificate" "cert" {
-  domain_name               = "nvd.codes"
+resource "aws_acm_certificate" "cert_sh" {
+  domain_name               = var.domain_name
   validation_method         = "DNS"
-  subject_alternative_names = ["www.nvd.codes"]
+  subject_alternative_names = var.alternative_names
 
   provider = aws.us_east_1
 
   lifecycle {
     create_before_destroy = true
+  }
+
+  tags = {
+    app         = "website"
+    environment = "production"
   }
 }
 
@@ -161,39 +140,40 @@ resource "aws_cloudfront_cache_policy" "astro_cache_policy" {
   }
 }
 
-locals {
-  s3_website_origin_id = "nvd.codes"
+resource "aws_cloudfront_function" "website_sh_dir_indexes" {
+  name    = "dir-indexes-nvd-sh"
+  runtime = "cloudfront-js-2.0"
+  comment = "Append index.html for directory-style URLs"
+  publish = true
+  code    = <<-EOF
+  function handler(event) {
+    var request = event.request;
+    var uri = request.uri;
+    if (uri.endsWith('/')) {
+      request.uri += 'index.html';
+    } else if (uri.indexOf('.') === -1) {
+      request.uri += '/index.html';
+    }
+    return request;
+  }
+EOF
 }
 
-resource "aws_cloudfront_distribution" "s3_distribution" {
-  origin {
-    domain_name = aws_s3_bucket_website_configuration.website_config.website_endpoint
-    origin_id   = local.s3_website_origin_id
-
-    custom_origin_config {
-      http_port              = "80"
-      https_port             = "443"
-      origin_protocol_policy = "http-only"
-      origin_ssl_protocols   = ["TLSv1", "TLSv1.1", "TLSv1.2"]
-    }
-
-    dynamic "custom_header" {
-      for_each = [for referrer in random_password.referer : { "name" : "referer", "value" : referrer.result }]
-
-      content {
-        name  = custom_header.value["name"]
-        value = custom_header.value["value"]
-      }
-    }
-  }
-
+resource "aws_cloudfront_distribution" "website_sh" {
   enabled             = true
   is_ipv6_enabled     = true
   default_root_object = "index.html"
-  aliases             = ["nvd.codes", "www.nvd.codes"]
+  aliases             = concat([var.domain_name], var.alternative_names)
+  http_version        = "http2and3"
+
+  origin {
+    domain_name              = aws_s3_bucket.website_sh.bucket_regional_domain_name
+    origin_id                = aws_s3_bucket.website_sh.id
+    origin_access_control_id = aws_cloudfront_origin_access_control.website_sh.id
+  }
 
   ordered_cache_behavior {
-    target_origin_id = local.s3_website_origin_id
+    target_origin_id = aws_s3_bucket.website_sh.id
     path_pattern     = "/_astro/*"
 
     allowed_methods = ["GET", "HEAD"]
@@ -204,7 +184,7 @@ resource "aws_cloudfront_distribution" "s3_distribution" {
   }
 
   default_cache_behavior {
-    target_origin_id = local.s3_website_origin_id
+    target_origin_id = aws_s3_bucket.website_sh.id
     allowed_methods  = ["DELETE", "GET", "HEAD", "OPTIONS", "PATCH", "POST", "PUT"]
     cached_methods   = ["GET", "HEAD"]
 
@@ -212,6 +192,17 @@ resource "aws_cloudfront_distribution" "s3_distribution" {
     response_headers_policy_id = aws_cloudfront_response_headers_policy.security_headers_policy.id
 
     viewer_protocol_policy = "redirect-to-https"
+
+    function_association {
+      event_type   = "viewer-request"
+      function_arn = aws_cloudfront_function.website_sh_dir_indexes.arn
+    }
+  }
+
+  viewer_certificate {
+    acm_certificate_arn      = aws_acm_certificate.cert_sh.arn
+    minimum_protocol_version = "TLSv1.2_2021" # https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/secure-connections-supported-viewer-protocols-ciphers.html
+    ssl_support_method       = "sni-only"
   }
 
   restrictions {
@@ -220,9 +211,41 @@ resource "aws_cloudfront_distribution" "s3_distribution" {
     }
   }
 
-  viewer_certificate {
-    acm_certificate_arn      = aws_acm_certificate.cert.arn
-    minimum_protocol_version = "TLSv1.2_2021" # https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/secure-connections-supported-viewer-protocols-ciphers.html
-    ssl_support_method       = "sni-only"
+  lifecycle {
+    ignore_changes = [
+      origin
+    ]
   }
+
+  tags = {
+    app         = "website"
+    environment = "production"
+  }
+}
+
+data "aws_iam_policy_document" "website_sh_allow_cloudfront" {
+  statement {
+    principals {
+      type        = "Service"
+      identifiers = ["cloudfront.amazonaws.com"]
+    }
+
+    actions = ["s3:GetObject"]
+
+    resources = [
+      aws_s3_bucket.website_sh.arn,
+      "${aws_s3_bucket.website_sh.arn}/*"
+    ]
+
+    condition {
+      test     = "StringEquals"
+      variable = "AWS:SourceArn"
+      values   = [aws_cloudfront_distribution.website_sh.arn]
+    }
+  }
+}
+
+resource "aws_s3_bucket_policy" "website_sh" {
+  bucket = aws_s3_bucket.website_sh.id
+  policy = data.aws_iam_policy_document.website_sh_allow_cloudfront.json
 }
