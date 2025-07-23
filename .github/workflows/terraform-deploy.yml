@@ -48,7 +48,7 @@ jobs:
           TF_WORKSPACE: ${{ inputs.environment }}
 
       - name: Terraform Plan
-        run: ls -alh . && terraform plan
+        run: terraform plan
         working-directory: ${{ inputs.working-directory }}
         env:
           TF_WORKSPACE: ${{ inputs.environment }}
