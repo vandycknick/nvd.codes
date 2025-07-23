@@ -75,4 +75,5 @@ deploy:
 .PHONY: infra.init
 infra.init:
 	cd ${INFRA_DIR} && \
+		tflint --init && \
 		terraform init

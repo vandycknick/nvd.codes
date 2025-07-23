@@ -141,14 +141,9 @@ jobs:
         name: InstallTFLint
         with:
           tflint_version: v0.52.0
+
       - name: Show version
         run: tflint --version
-
-      - name: Init TFLint
-        run: tflint --init
-        env:
-          # https://github.com/terraform-linters/tflint/blob/master/docs/user-guide/plugins.md#avoiding-rate-limiting
-          GITHUB_TOKEN: ${{ github.token }}
 
       - name: Configure AWS Credentials
         uses: aws-actions/configure-aws-credentials@v4
@@ -158,6 +153,9 @@ jobs:
 
       - name: Init Workspace
         run: make infra.init
+        env:
+          # https://github.com/terraform-linters/tflint/blob/master/docs/user-guide/plugins.md#avoiding-rate-limiting
+          GITHUB_TOKEN: ${{ github.token }}
 
       - name: Validate
         run: make check.infra
