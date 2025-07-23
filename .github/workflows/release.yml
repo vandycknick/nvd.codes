@@ -156,8 +156,8 @@ jobs:
           aws-region: ${{ vars.AWS_REGION }}
           role-to-assume: ${{ secrets.AWS_TERRAFORM_ROLE }}
 
-      - name: Validate
-        run: terraform init
+      - name: Init Workspace
+        run: make infra.init
 
       - name: Validate
         run: make check.infra

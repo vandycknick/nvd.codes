@@ -75,5 +75,4 @@ deploy:
 .PHONY: infra.init
 infra.init:
 	cd ${INFRA_DIR} && \
-		terraform init && \
-		terraform validate
+		terraform init
