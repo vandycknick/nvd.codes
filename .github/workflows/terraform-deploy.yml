@@ -33,7 +33,7 @@ jobs:
       - id: setup-terraform
         uses: ./.github/actions/setup-terraform
         with:
-          terraform_version: ${{ inputs.terraform-version }}
+          terraform-version: ${{ inputs.terraform-version }}
 
       - name: Assume AWS Role
         uses: aws-actions/configure-aws-credentials@v4

@@ -127,7 +127,7 @@ jobs:
       - id: setup-terraform
         uses: ./.github/actions/setup-terraform
         with:
-          terraform_version: ${{ inputs.terraform-version }}
+          terraform-version: ${{ inputs.terraform-version }}
 
       - uses: actions/cache@v4
         name: Cache tflint plugins
