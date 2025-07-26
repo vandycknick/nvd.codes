@@ -11,7 +11,7 @@ permissions:
 
 jobs:
   app-test:
-    name: Test
+    name: App Test
     runs-on: ubuntu-latest
     steps:
       - name: Clone Repository
@@ -38,7 +38,7 @@ jobs:
         run: make check.app
 
   app-build:
-    name: Build
+    name: App Build
     runs-on: ubuntu-latest
     needs:
       - app-test
@@ -66,10 +66,10 @@ jobs:
       - name: Build blog
         run: make build
 
-      - name: Archive blog
+      - name: Upload App
         uses: actions/upload-artifact@v4
         with:
-          name: dist-blog
+          name: app
           path: ./dist
 
   # app-deploy:
@@ -124,10 +124,10 @@ jobs:
         with:
           fetch-depth: 1
 
-      - name: Install Terraform
-        uses: hashicorp/setup-terraform@v3
+      - id: setup-terraform
+        uses: ./.github/actions/setup-terraform.yml
         with:
-          terraform_version: 1.12.2
+          terraform_version: ${{ inputs.terraform-version }}
 
       - uses: actions/cache@v4
         name: Cache tflint plugins
@@ -153,13 +153,12 @@ jobs:
           GITHUB_TOKEN: ${{ github.token }}
           TF_WORKSPACE: staging
 
-
       - name: Validate
         run: make check.infra
         env:
           TF_WORKSPACE: staging
 
-  infra-staging:
+  infra-deploy-staging:
     name: Infra Staging
     uses: ./.github/workflows/terraform-deploy.yml
     needs:
