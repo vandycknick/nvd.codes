@@ -31,7 +31,7 @@ jobs:
           fetch-depth: 1
 
       - id: setup-terraform
-        uses: ./.github/actions/setup-terraform.yml
+        uses: ./.github/actions/setup-terraform
         with:
           terraform_version: ${{ inputs.terraform-version }}
 
