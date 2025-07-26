@@ -35,6 +35,20 @@ jobs:
         with:
           terraform_version: ${{ inputs.terraform-version }}
 
+      - name: Configure Terraform plugin cache
+        run: |
+          echo "TF_PLUGIN_CACHE_DIR=$HOME/.terraform.d/plugin-cache" >>"$GITHUB_ENV"
+          mkdir --parents "$HOME/.terraform.d/plugin-cache"
+
+      - name: Cache Terraform
+        uses: actions/cache@v4
+        with:
+          path: |
+            ~/.terraform.d/plugin-cache
+          key: terraform-${{ runner.os }}-${{ hashFiles('**/.terraform.lock.hcl') }}
+          restore-keys: |
+            terraform-${{ runner.os }}-
+
       - name: Assume AWS Role
         uses: aws-actions/configure-aws-credentials@v4
         with:
@@ -48,7 +62,7 @@ jobs:
           TF_WORKSPACE: ${{ inputs.environment }}
 
       - name: Terraform Plan
-        run: terraform plan
+        run: terraform plan -out $HOME/plan
         working-directory: ${{ inputs.working-directory }}
         env:
           TF_WORKSPACE: ${{ inputs.environment }}
