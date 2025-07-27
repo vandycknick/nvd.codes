@@ -1,6 +1,5 @@
 .DEFAULT_GOAL: build
 
-NPM_BIN 		:= $(shell yarn bin)
 BUILD_DIR		:= $(shell pwd)/dist
 INFRA_DIR		:= $(shell pwd)/infra
 SHA_256			:= $(shell git rev-parse --short HEAD)
