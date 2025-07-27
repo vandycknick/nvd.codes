@@ -115,7 +115,7 @@ jobs:
       - name: Deploy
         run: |
           PREFIX=$(git rev-parse --short "$GITHUB_SHA")
-          yarn workspace @nvd.sh/deployer execute --bucket staging.nvd.sh --prefix "$PREFIX" --directory ${{ github.workspace }}/dist
+          yarn workspace @nvd.sh/deployer execute --domain staging.nvd.sh --prefix "$PREFIX" --directory ${{ github.workspace }}/dist
 
   infra-init:
     name: Init Infrastructure
