@@ -69,51 +69,53 @@ jobs:
       - name: Upload App
         uses: actions/upload-artifact@v4
         with:
-          name: app
+          name: app-web
           path: ./dist
 
-  # app-deploy:
-  #   name: Deploy production
-  #   runs-on: ubuntu-latest
-  #   environment: production
-  #   needs:
-  #     - app-test
-  #     - app-build
-  #   steps:
-  #     - name: Clone Repository
-  #       uses: actions/checkout@v4
-  #       with:
-  #         fetch-depth: 1
-  #
-  #     - name: Enable Corepack
-  #       run: corepack enable
-  #
-  #     - name: Install Node
-  #       uses: actions/setup-node@v4
-  #       with:
-  #         node-version: 20
-  #         cache: 'yarn'
-  #
-  #     - name: Use latest yarn
-  #       run: make setup.yarn
-  #
-  #     - name: Install Dependencies
-  #       run: make install.yarn
-  #
-  #     - name: Configure AWS Credentials
-  #       uses: aws-actions/configure-aws-credentials@v4
-  #       with:
-  #         aws-region: eu-central-1
-  #         role-to-assume: ${{ secrets.AWS_ROLE_NAME }}
-  #
-  #     - name: Download blog artifact
-  #       uses: actions/download-artifact@v4
-  #       with:
-  #         name: dist-blog
-  #         path: dist
-  #
-  #     - name: Deploy
-  #       run: make deploy
+  app-deploy-staging:
+    name: Deploy production
+    runs-on: ubuntu-latest
+    environment: production
+    needs:
+      - app-build
+      - infra-deploy-staging
+    steps:
+      - name: Clone Repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
+
+      - name: Enable Corepack
+        run: corepack enable
+
+      - name: Install Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: 'yarn'
+
+      - name: Use latest yarn
+        run: make setup.yarn
+
+      - name: Install Dependencies
+        run: make install.yarn
+
+      - name: Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          aws-region: ${{ vars.AWS_REGION }}
+          role-to-assume: ${{ secrets.AWS_ROLE_NAME }}
+
+      - name: Download blog artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: app-web
+          path: dist
+
+      - name: Deploy
+        run: |
+          PREFIX=$(git rev-parse --short "$GITHUB_SHA")
+          yarn workspace @nvd.codes/s3-deploy execute --bucket staging.nvd.sh --prefix "$PREFIX" --directory ./dist
 
   infra-init:
     name: Init Infrastructure
@@ -127,18 +129,8 @@ jobs:
       - id: setup-terraform
         uses: ./.github/actions/setup-terraform
         with:
-          terraform-version: ${{ inputs.terraform-version }}
-
-      - uses: actions/cache@v4
-        name: Cache tflint plugins
-        with:
-          path: ~/.tflint.d/plugins
-          key: ${{ matrix.os }}-tflint-${{ hashFiles('.tflint.hcl') }}
-
-      - uses: terraform-linters/setup-tflint@v4
-        name: InstallTFLint
-        with:
-          tflint_version: v0.52.0
+          terraform-version: 1.12.2
+          tflint-version: v0.52.0
 
       - name: Configure AWS Credentials
         uses: aws-actions/configure-aws-credentials@v4
