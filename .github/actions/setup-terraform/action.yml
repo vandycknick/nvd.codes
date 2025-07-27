@@ -5,7 +5,7 @@ inputs:
     required: true
   tflint-version:
     required: false
-    default: ""
+    default: ''
 runs:
   using: "composite"
   steps:
@@ -31,13 +31,13 @@ runs:
 
     - uses: actions/cache@v4
       name: Cache tflint plugins
-      if: inputs.tflint-version != ""
+      if: inputs.tflint-version != ''
       with:
         path: ~/.tflint.d/plugins
         key: ${{ matrix.os }}-tflint-${{ hashFiles('.tflint.hcl') }}
 
     - uses: terraform-linters/setup-tflint@v4
       name: InstallTFLint
-      if: inputs.tflint-version != ""
+      if: inputs.tflint-version != ''
       with:
         tflint_version: ${{ inputs.tflint-version }}
