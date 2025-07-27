@@ -73,7 +73,7 @@ jobs:
           path: ./dist
 
   app-deploy-staging:
-    name: Deploy production
+    name: Deploy Staging
     runs-on: ubuntu-latest
     environment: production
     needs:
@@ -115,7 +115,7 @@ jobs:
       - name: Deploy
         run: |
           PREFIX=$(git rev-parse --short "$GITHUB_SHA")
-          yarn workspace @nvd.codes/s3-deploy execute --bucket staging.nvd.sh --prefix "$PREFIX" --directory ./dist
+          yarn workspace @nvd.codes/s3-deploy execute --bucket staging.nvd.sh --prefix "$PREFIX" --directory ${{ github.workspace }}/dist
 
   infra-init:
     name: Init Infrastructure
