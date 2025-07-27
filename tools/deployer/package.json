@@ -1,5 +1,5 @@
 {
-  "name": "@nvd.codes/s3-deploy",
+  "name": "@nvd.sh/deployer",
   "private": true,
   "version": "1.0.0",
   "type": "module",
@@ -9,7 +9,7 @@
     "node": ">=16.0.0"
   },
   "scripts": {
-    "execute": "node --experimental-specifier-resolution=node --loader ts-node/esm src/index.ts"
+    "execute": "node --experimental-strip-types src/index.ts"
   },
   "devDependencies": {
     "@types/mime-types": "^3.0.1",
@@ -18,11 +18,11 @@
     "typescript": "^5.8.3"
   },
   "dependencies": {
-    "@aws-sdk/client-s3": "^3.844.0",
-    "@aws-sdk/lib-storage": "^3.844.0",
+    "@aws-sdk/client-cloudfront": "^3.850.0",
+    "@aws-sdk/client-s3": "^3.850.0",
+    "@aws-sdk/lib-storage": "^3.850.0",
     "@nvd/tsconfig": "^1.0.0",
     "mime-types": "^3.0.1",
-    "ts-node": "^10.9.2",
     "yargs": "^18.0.0"
   }
 }

@@ -25,7 +25,7 @@ jobs:
       - name: Install Node
         uses: actions/setup-node@v4
         with:
-          node-version: 22
+          node-version: 24
           cache: 'yarn'
 
       - name: Use latest yarn
@@ -54,7 +54,7 @@ jobs:
       - name: Install Node
         uses: actions/setup-node@v4
         with:
-          node-version: 22
+          node-version: 24
           cache: 'yarn'
 
       - name: Use latest yarn
@@ -91,7 +91,7 @@ jobs:
       - name: Install Node
         uses: actions/setup-node@v4
         with:
-          node-version: 22
+          node-version: 24
           cache: 'yarn'
 
       - name: Use latest yarn
@@ -115,7 +115,7 @@ jobs:
       - name: Deploy
         run: |
           PREFIX=$(git rev-parse --short "$GITHUB_SHA")
-          yarn workspace @nvd.codes/s3-deploy execute --bucket staging.nvd.sh --prefix "$PREFIX" --directory ${{ github.workspace }}/dist
+          yarn workspace @nvd.sh/deployer execute --bucket staging.nvd.sh --prefix "$PREFIX" --directory ${{ github.workspace }}/dist
 
   infra-init:
     name: Init Infrastructure

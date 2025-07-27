@@ -3,6 +3,7 @@
 NPM_BIN 		:= $(shell yarn bin)
 BUILD_DIR		:= $(shell pwd)/dist
 INFRA_DIR		:= $(shell pwd)/infra
+SHA_256			:= $(shell git rev-parse --short HEAD)
 
 .PHONY: setup
 setup:
@@ -70,7 +71,7 @@ preview: build
 
 .PHONY: deploy
 deploy:
-	@yarn workspace @nvd.codes/s3-deploy execute --bucket nvd.sh --prefix be4dd99 --directory ${BUILD_DIR}
+	@yarn workspace @nvd.sh/deployer execute --domain staging.nvd.sh --prefix ${SHA_256} --directory ${BUILD_DIR}
 
 .PHONY: infra.init
 infra.init:

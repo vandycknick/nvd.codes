@@ -13,8 +13,9 @@ variable "alternative_names" {
   description = "Any alternative names that should route through cloudfront and be added to the certificate."
 }
 
-variable "cf_compat" {
-  type        = bool
-  default     = false
-  description = "Used to migrate from nvd.codes to nvd.sh."
+variable "allowed_ip" {
+  description = "The IP address allowed to access the app"
+  type        = string
+  sensitive   = true
+  default     = ""
 }

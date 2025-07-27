@@ -1,0 +1,13 @@
+{
+  "extends": "@nvd/tsconfig",
+  "compilerOptions": {
+    "resolveJsonModule": true,
+    "noEmit": true, // Optional - see note below
+    "target": "esnext",
+    "module": "nodenext",
+    "rewriteRelativeImportExtensions": true,
+    "erasableSyntaxOnly": true,
+    "verbatimModuleSyntax": true,
+    "rootDir": "src"
+  }
+}
