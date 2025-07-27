@@ -75,7 +75,7 @@ jobs:
   app-deploy-staging:
     name: Deploy Staging
     runs-on: ubuntu-latest
-    environment: production
+    environment: staging
     needs:
       - app-build
       - infra-deploy-staging
