@@ -13,9 +13,9 @@ variable "alternative_names" {
   description = "Any alternative names that should route through cloudfront and be added to the certificate."
 }
 
-variable "allowed_ip" {
-  description = "The IP address allowed to access the app"
-  type        = string
-  sensitive   = true
-  default     = ""
-}
+# variable "allowed_ip" {
+#   description = "The IP address allowed to access the app"
+#   type        = string
+#   sensitive   = true
+#   default     = ""
+# }
