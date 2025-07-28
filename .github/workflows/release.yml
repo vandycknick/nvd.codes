@@ -57,6 +57,7 @@ jobs:
     uses: ./.github/workflows/web-deploy.yml
     needs:
       - infra-init
+      - app-build
     with:
       environment: staging
       node-version: 24
