@@ -13,14 +13,14 @@
   },
   "devDependencies": {
     "@types/mime-types": "^3.0.1",
-    "@types/node": "^22.16.3",
+    "@types/node": "^24.1.0",
     "@types/yargs": "^17.0.33",
     "typescript": "^5.8.3"
   },
   "dependencies": {
-    "@aws-sdk/client-cloudfront": "^3.850.0",
-    "@aws-sdk/client-s3": "^3.850.0",
-    "@aws-sdk/lib-storage": "^3.850.0",
+    "@aws-sdk/client-cloudfront": "^3.855.0",
+    "@aws-sdk/client-s3": "^3.855.0",
+    "@aws-sdk/lib-storage": "^3.855.0",
     "@nvd/tsconfig": "^1.0.0",
     "mime-types": "^3.0.1",
     "yargs": "^18.0.0"
