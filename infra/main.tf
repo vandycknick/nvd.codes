@@ -157,6 +157,10 @@ resource "aws_cloudfront_function" "website_sh_dir_indexes" {
     return request;
   }
 EOF
+
+  lifecycle {
+    create_before_destroy = true
+  }
 }
 
 resource "aws_cloudfront_distribution" "website_sh" {
