@@ -1,0 +1,20 @@
+name: Setup Node
+description: Configure node and package manager for website release
+inputs:
+  node-version:
+    required: true
+runs:
+  - name: Enable Corepack
+    run: corepack enable
+
+  - name: Install Node
+    uses: actions/setup-node@v4
+    with:
+      node-version: ${{ inputs.node-version }}
+      cache: 'yarn'
+
+  - name: Use latest yarn
+    run: make setup.yarn
+
+  - name: Install Dependencies
+    run: make install.yarn

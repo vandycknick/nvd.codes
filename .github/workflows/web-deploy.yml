@@ -1,0 +1,50 @@
+on:
+  workflow_call:
+    inputs:
+      node-version:
+        required: true
+        type: string
+
+      environment:
+        required: true
+        type: string
+
+      domain:
+        required: true
+        type: string
+
+    secrets:
+      AWS_ROLE_NAME:
+        required: true
+jobs:
+  deploy:
+    name: Deploy
+    runs-on: ubuntu-latest
+    environment: ${{ inputs.environment }}
+    steps:
+      - name: Clone Repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
+
+      - id: setup-node
+        uses: ./.github/actions/setup-node
+        with:
+          node-version: ${{ inputs.node-version }}
+
+      - name: Download blog artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: app-web
+          path: dist
+
+      - name: Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          aws-region: ${{ vars.AWS_REGION }}
+          role-to-assume: ${{ secrets.AWS_ROLE_NAME }}
+
+      - name: Deploy
+        run: |
+          PREFIX=$(git rev-parse --short "$GITHUB_SHA")
+          yarn workspace @nvd.sh/deployer execute --domain ${{ inputs.domain }} --prefix "$PREFIX" --directory ${{ github.workspace }}/dist
