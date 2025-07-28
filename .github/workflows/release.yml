@@ -162,3 +162,17 @@ jobs:
     secrets:
       AWS_TERRAFORM_ROLE: ${{ secrets.AWS_TERRAFORM_ROLE }}
       CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+
+  infra-deploy-prod:
+    name: Infra Production
+    uses: ./.github/workflows/terraform-deploy.yml
+    needs:
+      - infra-deploy-staging
+      - app-deploy-staging
+    with:
+      environment: production
+      terraform-version: 1.12.2
+      working-directory: ./infra
+    secrets:
+      AWS_TERRAFORM_ROLE: ${{ secrets.AWS_TERRAFORM_ROLE }}
+      CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
