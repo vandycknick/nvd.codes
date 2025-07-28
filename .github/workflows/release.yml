@@ -65,6 +65,18 @@ jobs:
     secrets:
       AWS_ROLE_NAME: ${{ secrets.AWS_ROLE_NAME }}
 
+  app-deploy-prod:
+    name: App Production
+    uses: ./.github/workflows/web-deploy.yml
+    needs:
+      - infra-deploy-prod
+    with:
+      environment: production
+      node-version: 24
+      domain: nvd.sh
+    secrets:
+      AWS_ROLE_NAME: ${{ secrets.AWS_ROLE_NAME }}
+
   infra-init:
     name: Init Infrastructure
     runs-on: ubuntu-latest
