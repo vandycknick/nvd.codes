@@ -115,12 +115,14 @@ jobs:
     name: Pre Checks
     runs-on: ubuntu-latest
     environment: approval
+    needs:
+      - infra-deploy-staging
+      - app-deploy-staging
     steps:
       - name: Deployment start timing
         id: deploy_start
         run: |
           echo "deploy_start_time=$(date +"%Y-%m-%d %H:%M:%S")"
-        ## add additional code here
 
   infra-deploy-prod:
     name: Infra Production
