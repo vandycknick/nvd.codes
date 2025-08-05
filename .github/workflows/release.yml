@@ -142,7 +142,7 @@ jobs:
     uses: ./.github/workflows/web-deploy.yml
     needs:
       - infra-deploy-prod
-      - precheck
+      - pre-check
     with:
       environment: production
       node-version: 24
