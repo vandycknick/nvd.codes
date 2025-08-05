@@ -587,20 +587,20 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@aws-sdk/lib-storage@npm:^3.855.0":
-  version: 3.855.0
-  resolution: "@aws-sdk/lib-storage@npm:3.855.0"
+"@aws-sdk/lib-storage@npm:^3.859.0":
+  version: 3.859.0
+  resolution: "@aws-sdk/lib-storage@npm:3.859.0"
   dependencies:
     "@smithy/abort-controller": "npm:^4.0.4"
-    "@smithy/middleware-endpoint": "npm:^4.1.15"
-    "@smithy/smithy-client": "npm:^4.4.7"
+    "@smithy/middleware-endpoint": "npm:^4.1.17"
+    "@smithy/smithy-client": "npm:^4.4.9"
     buffer: "npm:5.6.0"
     events: "npm:3.3.0"
     stream-browserify: "npm:3.0.0"
     tslib: "npm:^2.6.2"
   peerDependencies:
-    "@aws-sdk/client-s3": ^3.855.0
-  checksum: 10/e2935b42850101ede4346af238a8c1151ddcc3a1da8d9820702405fdf3a27ed863a94f7726440212fd2ca30fae6d2ed8b4d97fa4314a00181c9a778f050d692b
+    "@aws-sdk/client-s3": ^3.859.0
+  checksum: 10/eb05f4030f639fd50ee4b1681ba40e9091e8f38b5da8a4046b350659bdb21119001a58a458bc3029e3e181b356c7311ceead97b4bbdf85bfbd57dd46be23e2d8
   languageName: node
   linkType: hard
 
@@ -2222,7 +2222,7 @@ __metadata:
   dependencies:
     "@aws-sdk/client-cloudfront": "npm:^3.855.0"
     "@aws-sdk/client-s3": "npm:^3.855.0"
-    "@aws-sdk/lib-storage": "npm:^3.855.0"
+    "@aws-sdk/lib-storage": "npm:^3.859.0"
     "@nvd/tsconfig": "npm:^1.0.0"
     "@types/mime-types": "npm:^3.0.1"
     "@types/node": "npm:^24.1.0"
