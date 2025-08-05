@@ -46,6 +46,10 @@ const { title, description, openGraph, twitter, extend } = Astro.props
       extend={extend}
     />
     <link rel="sitemap" href="/sitemap-index.xml" />
+    <script
+      is:inline
+      async
+      src="https://scripts.simpleanalyticscdn.com/latest.js"></script>
     <ClientRouter />
     <script is:inline>
       function updateMode() {
