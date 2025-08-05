@@ -3,9 +3,23 @@ updates:
 - package-ecosystem: "npm"
   directory: "/"
   schedule:
-    interval: "weekly"
+    interval: "daily"
+  groups:
+    npm-updates:
+      applies-to: version-updates
+      patterns:
+        - "*"
+      update-types:
+        - "minor"
+        - "patch"
 
 - package-ecosystem: "terraform"
   directory: "/infra"
   schedule:
     interval: "weekly"
+
+- package-ecosystem: github-actions
+  directory: "/"
+  schedule:
+    interval: weekly
+  open-pull-requests-limit: 3
