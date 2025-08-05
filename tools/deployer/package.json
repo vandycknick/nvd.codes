@@ -13,7 +13,7 @@
   },
   "devDependencies": {
     "@types/mime-types": "^3.0.1",
-    "@types/node": "^24.1.0",
+    "@types/node": "^24.2.0",
     "@types/yargs": "^17.0.33",
     "typescript": "^5.8.3"
   },
