@@ -46,12 +46,6 @@ const { title, description, openGraph, twitter, extend } = Astro.props
       extend={extend}
     />
     <link rel="sitemap" href="/sitemap-index.xml" />
-    <script
-      is:inline
-      async
-      defer
-      data-astro-rerun
-      src="https://scripts.simpleanalyticscdn.com/latest.js"></script>
     <ClientRouter />
     <script is:inline>
       function updateMode() {
@@ -118,12 +112,6 @@ const { title, description, openGraph, twitter, extend } = Astro.props
 
     <Footer />
     <script>
-      document.addEventListener("astro:before-swap", (e) =>
-        [...e.newDocument.head.querySelectorAll('link[as="font"]')].forEach(
-          (link) => link.remove(),
-        ),
-      )
-
       document.addEventListener("astro:after-swap", () => {
         if (
           sessionStorage.scrollY !== undefined &&
@@ -138,5 +126,15 @@ const { title, description, openGraph, twitter, extend } = Astro.props
         sessionStorage.scrollY = window.scrollY
       })
     </script>
+    <script is:inline>
+      document.addEventListener("astro:page-load", () => {
+        if (window.sa_pageview) window.sa_pageview(window.location.pathname)
+      })
+    </script>
+    <script
+      is:inline
+      async
+      data-auto-collect="false"
+      src="https://scripts.simpleanalyticscdn.com/latest.js"></script>
   </body>
 </html>
