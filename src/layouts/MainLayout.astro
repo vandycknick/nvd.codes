@@ -49,6 +49,8 @@ const { title, description, openGraph, twitter, extend } = Astro.props
     <script
       is:inline
       async
+      defer
+      data-astro-rerun
       src="https://scripts.simpleanalyticscdn.com/latest.js"></script>
     <ClientRouter />
     <script is:inline>
