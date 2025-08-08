@@ -62,7 +62,6 @@ check.infra:
 .PHONY: build
 build:
 	@yarn build
-	@yarn postbuild
 
 .PHONY: preview
 preview: build
