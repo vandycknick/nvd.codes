@@ -34,7 +34,7 @@ Going through these, it immediately becomes clear that the cluster does not have
 
 I'll mainly go through getting this up and running with GCR in this article, but the main principle applies to any private registry or Kubernetes ([minikube](https://minikube.sigs.k8s.io/docs/), [microk8s](https://microk8s.io/), native Kubernetes) environment out there.
 
-# Create a service account on GCP to authenticate with the registry.
+## Create a service account on GCP to authenticate with the registry.
 
 First, we will need to dive into some GCP specifics and get a few things in place before we can continue in Kubernetes. I need to create a set of credentials or tokens that need to be added to the cluster for it to be able to authenticate before pulling an image. The best way to get this setup is to create a service account in GCP. A service account is a great fit for this case because it allows scoping the required roles so that the account can only view and download images from the registry. In short user accounts are for real-life humans, while service accounts are for processes or machines to perform unsupervised authentication. Then I can create a set of tokens for the service account, which can be added to the cluster. To create a new service account on GCP, I ran the following command replacing account-name and account-display-name with something meaningful for my context.
 
