@@ -5,7 +5,7 @@ import { ClientRouter } from "astro:transitions"
 
 import "../styles/global.css"
 import Header from "@/components/Header.astro"
-import { QuickSearch } from "@/components/QuickSearch"
+import { Search } from "@/components/Search.tsx"
 import { Footer } from "@/components/Footer"
 
 interface Props {
@@ -94,7 +94,7 @@ const { title, description, openGraph, twitter, extend } = Astro.props
     </script>
   </head>
   <body class="flex flex-col min-h-screen bg-white dark:bg-zinc-950">
-    <QuickSearch client:only="react" />
+    <Search client:only="react" />
 
     <div class="relative">
       <slot name="background" />

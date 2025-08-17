@@ -5,6 +5,7 @@ import { toString } from "mdast-util-to-string"
 import sitemap from "@astrojs/sitemap"
 import expressiveCode from "astro-expressive-code"
 import tailwindcss from "@tailwindcss/vite"
+import orama from "@orama/plugin-astro"
 
 import { pluginCodeOutput } from "./plugins/code-output.ts"
 
@@ -29,6 +30,13 @@ export default defineConfig({
   integrations: [
     react(),
     sitemap(),
+    orama({
+      posts: {
+        pathMatcher: /post\/.+$/,
+        language: "english",
+        contentSelectors: ["article"],
+      },
+    }),
     expressiveCode({
       themes: ["material-theme-darker"],
       plugins: [pluginCodeOutput()],

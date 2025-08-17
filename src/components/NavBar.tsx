@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react"
+import { useEffect, useState, type ReactNode } from "react"
 import { motion } from "framer-motion"
 import { Home, Search } from "lucide-react"
 import { cn } from "@/lib/utils"
@@ -6,13 +6,23 @@ import {
   navigate,
   type TransitionBeforeSwapEvent,
 } from "astro:transitions/client"
+import { mitt } from "@/lib/emitter"
 
-type NavItem = {
+type NavItemLink = {
+  type: "link"
   name?: string
   url: string
-  icon?: "Home" | "Search"
+  icon?: "Home"
   activeLinkMatch?: RegExp
 }
+
+type NavItemSearch = {
+  type: "search"
+  name?: string
+  icon?: "Search"
+}
+
+type NavItem = NavItemLink | NavItemSearch
 
 type NavBarProps = {
   className?: string
@@ -53,27 +63,17 @@ export const NavBar = ({ className, currentPath, items }: NavBarProps) => {
       <div className="flex items-center gap-1 md:gap-2 retina:gap-1 bg-background/5 bg-white dark:bg-black opacity-90 border border-border backdrop-blur-xs py-1 px-1 rounded-full shadow-lg">
         {items.map((item) => {
           const Icon = item.icon ? resolveIcon(item.icon) : undefined
-          const isActive = isActiveTab(
-            currentTab,
-            item.activeLinkMatch ?? item.url,
-          )
+          const isActive =
+            item.type === "link"
+              ? isActiveTab(currentTab, item.activeLinkMatch ?? item.url)
+              : false
 
           return (
-            <a
-              key={item.url}
-              href={item.url}
-              onClick={(e) => {
-                e.preventDefault()
-                if (location.pathname === item.url) return
-                setCurrentTab(item.url)
-                navigate(item.url)
-              }}
-              className={cn(
-                "relative cursor-pointer text-sm md:text-base retina:text-sm font-semibold px-4 py-2 md:py-1 rounded-full transition-colors",
-                "text-foreground/80 hover:text-primary",
-                isActive && "bg-muted text-primary",
-                "self-stretch",
-              )}
+            <NavItemWrapper
+              item={item}
+              active={isActive}
+              changeTab={setCurrentTab}
+              key={item.name}
             >
               <span className="flex items-center h-full">
                 {Icon && (
@@ -107,10 +107,64 @@ export const NavBar = ({ className, currentPath, items }: NavBarProps) => {
                   </div>
                 </motion.div>
               )}
-            </a>
+            </NavItemWrapper>
           )
         })}
       </div>
     </nav>
   )
+}
+
+const NavItemWrapper = ({
+  item,
+  active,
+  changeTab,
+  children,
+}: {
+  item: NavItem
+  active: boolean
+  changeTab: (url: string) => void
+  children: ReactNode
+}) => {
+  switch (item.type) {
+    case "link":
+      return (
+        <a
+          key={item.url}
+          href={item.url}
+          onClick={(e) => {
+            if (location.pathname === item.url) return
+            changeTab(item.url)
+            navigate(item.url)
+            e.preventDefault()
+          }}
+          className={cn(
+            "relative cursor-pointer text-sm md:text-base retina:text-sm font-semibold px-4 py-2 md:py-1 rounded-full transition-colors",
+            "text-foreground/80 hover:text-primary",
+            active && "bg-muted text-primary",
+            "self-stretch",
+          )}
+        >
+          {children}
+        </a>
+      )
+    case "search":
+      return (
+        <button
+          onClick={() => mitt.emit("toggle-search")}
+          className={cn(
+            "relative cursor-pointer text-sm md:text-base retina:text-sm font-semibold px-4 py-2 md:py-1 rounded-full transition-colors",
+            "text-foreground/80 hover:text-primary",
+            active && "bg-muted text-primary",
+            "self-stretch",
+          )}
+        >
+          {children}
+        </button>
+      )
+    default: {
+      const exhaustiveCheck: never = item
+      throw new Error(`Unhandled color case: ${exhaustiveCheck}`)
+    }
+  }
 }

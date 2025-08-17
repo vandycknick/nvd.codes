@@ -19,9 +19,6 @@ const path = new URL(Astro.url).pathname
       <div class="relative flex gap-4">
         <div class="hidden md:flex flex-1">
           <slot name="head-left" />
-          <!-- <AvatarContainer className="hidden md:block"> -->
-          <!--   <Avatar /> -->
-          <!-- </AvatarContainer> -->
         </div>
         <div class="flex flex-1 justify-center">
           <NavBar
@@ -29,37 +26,40 @@ const path = new URL(Astro.url).pathname
             transition:name="navbar"
             transition:persist
             items={[
-              { name: "Home", url: "/", icon: "Home" },
               {
+                type: "link",
+                name: "Home",
+                url: "/",
+                icon: "Home",
+              },
+              {
+                type: "link",
                 name: "Blog",
                 url: "/blog",
                 activeLinkMatch: /(^\/blog[/0-9]*)|(^\/post[/\w-]*)/,
               },
               {
+                type: "link",
                 name: "About",
                 url: "/about",
                 activeLinkMatch: /^\/about(\/)?$/,
               },
               {
+                type: "link",
                 name: "Uses",
                 url: "/uses",
                 activeLinkMatch: /^\/uses(\/)?$/,
               },
               {
-                url: "/search",
+                type: "search",
                 icon: "Search",
-                activeLinkMatch: /^\/search(\/)?$/,
               },
             ]}
             currentPath={path}
             className="h-full"
           />
         </div>
-        <div class="hidden md:flex justify-end flex-1">
-          <!-- <div class="pointer-events-auto"> -->
-          <!--   <ThemeToggle /> -->
-          <!-- </div> -->
-        </div>
+        <div class="hidden md:flex justify-end flex-1"></div>
       </div>
     </Container>
   </div>
