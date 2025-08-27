@@ -4699,12 +4699,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/react@npm:^19.1.11":
-  version: 19.1.11
-  resolution: "@types/react@npm:19.1.11"
+"@types/react@npm:^19.1.12":
+  version: 19.1.12
+  resolution: "@types/react@npm:19.1.12"
   dependencies:
     csstype: "npm:^3.0.2"
-  checksum: 10/a9b8356783a5dd7f37803b9e4021610fe479186d1b8ee9c0c67a0f2f91b853e142349c913d39fd05af77065eb67f098b9b216214d82cdacf99c1589e04ed0d64
+  checksum: 10/c03d595b84faecb15079757555c96871e84ea6eef9a5eddb13ec1f648f718f9624bebc4199e86267edb825b23df97758324ea39ff840d9ad328386f96971f588
   languageName: node
   linkType: hard
 
@@ -5450,9 +5450,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"astro@npm:5.13.3":
-  version: 5.13.3
-  resolution: "astro@npm:5.13.3"
+"astro@npm:5.13.4":
+  version: 5.13.4
+  resolution: "astro@npm:5.13.4"
   dependencies:
     "@astrojs/compiler": "npm:^2.12.2"
     "@astrojs/internal-helpers": "npm:0.7.2"
@@ -5522,7 +5522,7 @@ __metadata:
       optional: true
   bin:
     astro: astro.js
-  checksum: 10/336c3e6f67bb5f30f9575c8e3b3ad3c88f360cb6d04c421c1122db5ac959078fdf1681b3313598938efcca37f584650564f48837cdf8bcac2808a05c04a14c43
+  checksum: 10/ff9710743cb889068231bbb01c24c020092db8775ac22865fe2de8a85b8c1ca4ae3231982fcd977b39fa034ad6f7533464e762fb016f2837c8168f7f10379509
   languageName: node
   linkType: hard
 
@@ -10739,11 +10739,11 @@ __metadata:
     "@tailwindcss/forms": "npm:^0.5.10"
     "@tailwindcss/typography": "npm:^0.5.16"
     "@tailwindcss/vite": "npm:^4.1.12"
-    "@types/react": "npm:^19.1.11"
+    "@types/react": "npm:^19.1.12"
     "@types/react-dom": "npm:^19.1.8"
     "@typescript-eslint/eslint-plugin": "npm:^8.41.0"
     "@typescript-eslint/parser": "npm:^8.41.0"
-    astro: "npm:5.13.3"
+    astro: "npm:5.13.4"
     astro-expressive-code: "npm:^0.41.3"
     astro-seo: "npm:^0.8.4"
     classnames: "npm:^2.5.1"
