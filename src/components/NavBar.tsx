@@ -11,6 +11,7 @@ import { mitt } from "@/lib/emitter"
 type NavItemLink = {
   type: "link"
   name?: string
+  ref?: string
   url: string
   icon?: "Home"
   activeLinkMatch?: RegExp
@@ -19,6 +20,7 @@ type NavItemLink = {
 type NavItemSearch = {
   type: "search"
   name?: string
+  ref?: string
   icon?: "Search"
 }
 
@@ -73,7 +75,7 @@ export const NavBar = ({ className, currentPath, items }: NavBarProps) => {
               item={item}
               active={isActive}
               changeTab={setCurrentTab}
-              key={item.name}
+              key={item.name ?? item.ref}
             >
               <span className="flex items-center h-full">
                 {Icon && (
@@ -151,7 +153,7 @@ const NavItemWrapper = ({
     case "search":
       return (
         <button
-          onClick={() => mitt.emit("toggle-search")}
+          onClick={() => mitt.emit("search-it")}
           className={cn(
             "relative cursor-pointer text-sm md:text-base retina:text-sm font-semibold px-4 py-2 md:py-1 rounded-full transition-colors",
             "text-foreground/80 hover:text-primary",

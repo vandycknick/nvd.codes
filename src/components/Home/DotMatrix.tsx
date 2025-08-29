@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useRef, useState } from "react"
 import { cn } from "@/lib/utils"
+import { mitt } from "@/lib/emitter"
 import fragmentShader from "./shaders/matrix.frag?raw"
 import vertexShader from "./shaders/matrix.vert?raw"
 
@@ -18,25 +19,27 @@ type Opacities = [
 
 type Color = [number, number, number]
 
-const black: [Color, Color] = [
+const dark: [Color, Color] = [
   [255, 255, 255],
   [255, 255, 255],
 ]
-const white: [Color, Color] = [
+const light: [Color, Color] = [
   [0, 0, 0],
   [0, 0, 0],
 ]
 
 export const DotMatrixThemedWebGLAnimation = () => {
   const [colors, setColors] = useState<[Color, Color]>(
-    window.localStorage.isDarkMode === "false" ? white : black,
+    window.localStorage.getItem("theme") === "light" ? light : dark,
   )
 
-  useEffect(() => {
-    document.addEventListener("themeChanged", (({ detail }: CustomEvent) => {
-      setColors(detail === "dark" ? black : white)
-    }) as unknown as EventListener)
-  }, [])
+  useEffect(
+    () =>
+      mitt.on("theme-updated", (e) =>
+        setColors(e.theme === "light" ? light : dark),
+      ),
+    [],
+  )
 
   return (
     <DotMatrixWebGLCanvas

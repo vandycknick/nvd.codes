@@ -81,6 +81,7 @@ export function emitter<Events extends Record<EventType, unknown>>(
 }
 
 export const mitt = emitter<{
-  "toggle-search": undefined
-  "toggle-theme": undefined
+  "search-it": undefined
+  "theme-flip": undefined
+  "theme-updated": { theme: "light" | "dark" }
 }>()

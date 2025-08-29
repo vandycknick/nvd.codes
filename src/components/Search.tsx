@@ -122,10 +122,10 @@ const omniSearch = async (
     case "settings": {
       const settings: OmniResult[] = [
         {
-          id: "toggle-theme",
+          id: "theme-flip",
           type: "text",
           title: "Change Theme",
-          action: () => mitt.emit("toggle-theme"),
+          action: () => mitt.emit("theme-flip"),
         },
       ]
       return term === undefined
@@ -177,8 +177,8 @@ export function Search() {
 
   useEffect(() => {
     const toggleSearch = () => setOpen(!open)
-    mitt.on("toggle-search", toggleSearch)
-    return () => mitt.off("toggle-search", toggleSearch)
+    mitt.on("search-it", toggleSearch)
+    return () => mitt.off("search-it", toggleSearch)
   }, [open])
 
   const { value, refetch, reset, loading } = useAsync(omniSearch)
